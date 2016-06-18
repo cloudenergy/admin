@@ -1,0 +1,1 @@
+angular.module("app").factory("Building",["$resource","Config",function(d,u){return d(u.API+"/building",{},{info:{method:"POST",url:u.API+"/building/info"},add:{method:"POST",url:u.API+"/building/add"},update:{method:"POST",url:u.API+"/building/update"},"delete":{method:"POST",url:u.API+"/building/delete"}})}]);

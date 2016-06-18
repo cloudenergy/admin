@@ -1,0 +1,1 @@
+EMAPP.register.factory("Device",["$resource","Config",function(e,r){return e(r.apiBase+"device",{},{type:{method:"POST",url:r.API+"/device/type"}})}]);

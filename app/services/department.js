@@ -1,0 +1,1 @@
+EMAPP.register.factory("Department",["$resource","Config",function(e,t){return e(t.API+"/department",{},{info:{method:"POST",url:t.API+"/department/info"},add:{method:"POST",url:t.API+"/department/add"},update:{method:"POST",url:t.API+"/department/update"},"delete":{method:"POST",url:t.API+"/department/delete"}})}]);

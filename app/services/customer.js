@@ -1,0 +1,1 @@
+EMAPP.register.factory("Customer",["$resource","Config",function(e,t){return e(t.apiBase+"customer",{},{info:{method:"POST",url:t.API+"/customer/info"},add:{method:"POST",url:t.API+"/customer/add"},update:{method:"POST",url:t.API+"/customer/update"},"delete":{method:"POST",url:t.API+"/customer/delete"}})}]);

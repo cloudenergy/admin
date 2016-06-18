@@ -1,0 +1,1 @@
+EMAPP.register.factory("Driver",["$resource","Config",function(r,e){return r(e.API+"/driver",{},{"enum":{method:"POST",url:e.API+"/driver/enum"}})}]);

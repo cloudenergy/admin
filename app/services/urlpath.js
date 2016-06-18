@@ -1,0 +1,1 @@
+EMAPP.register.factory("UrlPath",["$resource","Config",function(t,e){return t(e.API+"/urlpath",{},{info:{method:"POST",url:e.API+"/urlpath/info"},add:{method:"POST",url:e.API+"/urlpath/add"},update:{method:"POST",url:e.API+"/urlpath/update"},"delete":{method:"POST",url:e.API+"/urlpath/delete"}})}]);

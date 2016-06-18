@@ -1,0 +1,122 @@
+<style>.tree-node {
+        border: 1px solid #dae2ea;
+        background: #f8faff;
+        color: #7c9eb2;
+    }
+    .tree-node-content {
+        margin: 10px;
+    }
+    .tree-handle {
+        padding: 10px;
+        background: #428bca;
+        color: #FFF;
+        margin-right: 10px;
+    }
+
+    .angular-ui-tree-handle:hover {
+    }
+
+    .angular-ui-tree-placeholder {
+        background: #f0f9ff;
+        border: 2px dashed #bed2db;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }</style><script type="text/ng-template" id="sensorSelect.html"><div class="container-fluid">
+        <div align="center" class="" style="padding: 30; border-bottom: 1px solid #E5E5E5; min-height: 16; ">
+            <h3 class="">选择添加的传感器</h3>
+        </div>
+        <div class="" style="margin: 10px 0 40px 0; ">
+            <div class="col-md-6">
+                <input type="text" class="form-control"
+                       id="input-customer-freq"
+                       placeholder="输入传感器ID或名称进行查询"
+                       ng-model="sensorSearchKey">
+            </div>
+            <div class="col-md-4">
+                <a class="btn btn-info" href="#" ng-click="onSearchSensor($event)">
+                    <span class="glyphicon glyphicon-search"></span>
+                    查询
+                </a>
+            </div>
+            <div class="col-md-2">
+                <a class="btn btn-success" href="#" ng-click="OnSelectAll($event)">
+                    <span class="glyphicon glyphicon-asterisk"></span>全选
+                </a>
+            </div>
+        </div>
+        <div align="center" class="" style="position: relative; padding: 15px 30px 0px 30px;">
+            <div class="row-fluid list-group">
+                <a href="#" class="list-group-item"
+                   ng-class="sensor.isEnable ? 'active':''"
+                   ng-click="SwitchSensor($event, sensor)"
+                   ng-repeat="sensor in viewOfSensors | startFrom: (currentPage-1) * popPageSize | limitTo: popPageSize">
+                    {{sensor.title}}
+                </a>
+            </div>
+        </div>
+        <div align="center">
+            <pagination class="pagination-sm"
+                        total-items="viewOfSensors.length" ng-model="currentPage"
+                        items-per-page="popPageSize"
+                        max-size="9"
+                        boundary-links="true"
+                        rotate="false" num-pages="numPages"
+                        previous-text="上页"
+                        next-text="下页"
+                        first-text="首页"
+                        last-text="末页"
+                    ></pagination>
+        </div>
+        <div class="" style="margin-top: 15px; padding: 0px 20px 20px; text-align: center;">
+            <button class="btn btn-primary" ng-click="Ok()">确定</button>
+            <button class="btn btn-warning" ng-click="Cancel()">取消</button>
+        </div>
+    </div></script><script type="text/ng-template" id="driverNodesRenderer.html"><div ui-tree-handle class="tree-node">
+        <div class="tree-node-content">
+            <div class="" ng-show="!node.editing">
+                <a class="btn btn-success btn-xs" data-nodrag ng-click="toggle(this)" ng-show="node.level<=1">
+                    <span class="glyphicon" ng-class="{'glyphicon-chevron-right': collapsed, 'glyphicon-chevron-down': !collapsed}"></span>
+                </a>
+                <a class="btn btn-success btn-xs" data-nodrag ng-show="node.level>1">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+                <span>{{node.title}}</span>
+                <!--<button ng-show="node.level>0" type="button" class="pull-right btn btn-danger btn-xs hint hint&#45;&#45;right hint&#45;&#45;error" data-nodrag data-hint="删除" ng-click="deleteNode(this, node)">-->
+                    <!--<span class="glyphicon glyphicon-trash"></span>-->
+                <!--</button>-->
+                <!--<a class="pull-right btn btn-primary btn-xs hint hint&#45;&#45;bottom hint&#45;&#45;info" data-nodrag ng-click="newSubItem(this, node)"-->
+                   <!--style="margin-right: 8px;"-->
+                   <!--data-hint="添加子分类">-->
+                    <!--<span class="glyphicon glyphicon-plus"></span>-->
+                <!--</a>-->
+                <a ng-show="node.level>=3" class="pull-right btn btn-primary btn-xs hint hint--bottom hint--info" data-nodrag
+                   ng-click="OnSelectSensor(node)"
+                   style="margin-right: 8px;"
+                   data-hint="选择传感器">
+                    <span class="glyphicon glyphicon-th-list"></span>
+                </a>
+                <!--<a ng-show="node.level>0 && node.originid" class="pull-right btn btn-warning btn-xs hint hint&#45;&#45;bottom hint&#45;&#45;warning" data-nodrag ng-click="sensor(node)"-->
+                   <!--style="margin-right: 8px;"-->
+                   <!--data-hint="添加传感器">-->
+                    <!--<span class="glyphicon glyphicon-th"></span>-->
+                <!--</a>-->
+            </div>
+
+            <div class="group-title angular-ui-tree-handle" data-nodrag ng-show="node.editing">
+                <form class="form-inline" role="form">
+                    <div class="form-group">
+                        <!--<label class="sr-only" for="groupName">Group name</label>-->
+                        <input type="text" class="form-control" placeholder="社会属性名称" ng-model="node.title">
+                        <input type="text" class="form-control" placeholder="占用面积" ng-model="node.acreage">
+                    </div>
+                    <button type="submit" class="btn btn-default" ng-click="save(node)">保存</button>
+                    <button type="submit" class="btn btn-default" ng-click="cancelEditing(this, node)">取消</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{hidden: collapsed}">
+        <li ng-repeat="node in node.nodes" ui-tree-node ng-include="'driverNodesRenderer.html'">
+        </li>
+    </ol></script><div class="row"><div class="col-md-12"><div class="panel panel-default"><div class="panel-body"><div class="row"><div class="col-md-6"><select class="form-control" data-ng-options="project._id as project.title for project in projects" data-ng-model="projectSelected" chosen data-placeholder="请选择" style=""></select></div><div class="col-md-4 text-right col-md-offset-2"><a href="#" class="btn btn-success" ng-click="doSaveCustomer($event)">保存</a></div></div><br><div ui-tree id="customer-root"><ol ui-tree-nodes="" ng-model="viewOfDriver"><li ng-repeat="node in viewOfDriver" ui-tree-node ng-include="'driverNodesRenderer.html'"></li></ol></div></div></div></div></div>

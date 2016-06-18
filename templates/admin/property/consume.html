@@ -1,0 +1,47 @@
+<style>.list-group-month {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        height: 142px;
+        border-radius: 2px;
+    }
+
+    .list-group.list-group-month {
+        border: 1px solid #F5F5F5;
+        background-color: #F5F5F5;
+    }
+
+    .list-group-month .list-group-item {
+        height: 36px;
+        line-height: 22px;
+        border-top-color: #FFF;
+        border-right-color: transparent;
+        border-bottom-color: transparent;
+        border-left-color: transparent;
+        background-color: transparent;
+    }
+
+    .list-group-month .list-group-item:hover {
+        background-color: #FFF;
+    }
+
+    .list-group-month .list-group-item:first-child {
+        border-top: 0;
+    }
+
+    .list-group-month .list-group-item:first-child,
+    .list-group-month .list-group-item:last-child {
+        border-radius: 0;
+    }
+
+    .panel-bg-color-consumption {
+        background-color: #fcecd0;
+    }
+
+    .panel-bg-color-earning {
+        background-color: #e9f8d9;
+    }
+
+    .panel-bg-color-balance {
+        background-color: #e5edf9;
+    }</style><div class="panel mb0"><div class="panel-body"><div class="row"><div class="col-xs-3"><div class="h4 mt0 pt0 bb pb5 clearfix">消耗金额</div><div class="list-group-month panel-bg-color-consumption text-center"><div class="inline" style="padding-top:55px" ng-if="self.statistic.consumption"><span class="h3 no-margin text-danger" ng-bind="self.statistic.consumption.sum"></span> <small class="h5 no-margin text-danger">元</small></div></div></div><div class="col-xs-3"><div class="h4 mt0 pt0 bb pb5 clearfix">消耗构成</div><div class="list-group list-group-month mb0" perfect-scrollbar="f.statistic.consumption.category.length>4"><a href="javascript:void(0)" class="list-group-item p10 pt5 pb5" ng-repeat="(key,item) in self.statistic.consumption.category"><i ng-class="self.deviceType[key].icon"></i> {{self.deviceType[key].title}} <span class="pull-right text-primary">{{item.amount}} <small>元</small></span></a></div></div><div class="col-xs-3"><div class="h4 mt0 pt0 bb pb5 clearfix">充值金额</div><div class="list-group-month panel-bg-color-earning text-center"><div class="inline text-right" style="padding-top:45px" ng-if="self.statistic.earning"><span class="h3 no-margin text-success" ng-bind="self.statistic.earning.sum"></span> <small class="h5 no-margin text-success">元</small><div class="pt10"><span class="h4 no-margin" ng-bind="self.statistic.earning.count"></span> <small class="h5 no-margin">笔</small></div></div></div></div><div class="col-xs-3"><div class="h4 mt0 pt0 bb pb5 clearfix">商户余额</div><div class="list-group-month panel-bg-color-balance text-center"><div class="inline text-right" ng-if="self.statistic.balance"><div style="padding-top:45px"><span class="pull-left pr20" style="font-size:14px">期初</span> <span class="h4 no-margin text-primary" ng-bind="self.statistic.balance.from"></span> <small class="h5 no-margin">元</small></div><div class="pt10"><span class="pull-left pr20" style="font-size:14px">期末</span> <span class="h4 no-margin text-primary" ng-bind="self.statistic.balance.to"></span> <small class="h5 no-margin">元</small></div></div></div></div></div></div></div><form class="form-inline mt10 text-right" ng-submit="self.list()"><div class="input-group w150 toggle-active"><span class="input-group-addon"><i class="fa fa-calendar"></i></span> <input type="text" class="form-control" ng-model="self.startDate" datetimepicker="{widgetPositioning:{horizontal:'left'}}" data-link-right="#end_date" id="start_date"></div><div class="input-group"><i class="glyphicon glyphicon-minus"></i></div><div class="input-group w150 toggle-active"><span class="input-group-addon"><i class="fa fa-calendar"></i></span> <input type="text" class="form-control" ng-model="self.endDate" datetimepicker="{widgetPositioning:{horizontal:'left'}}" data-link-left="#start_date" id="end_date"></div><div class="input-group w100 ml5 ng-hide" ng-show="self.category"><ui-select ng-model="self.category.selected" search-enabled="false" remove-selected="false"><ui-select-match placeholder="选择类型">{{$select.selected.title}}</ui-select-match><ui-select-choices repeat="item.key as item in self.category"><div ng-bind-html="item.title"></div></ui-select-choices></ui-select></div><div class="input-group w250 ml10"><span class="input-group-addon pl5 pr5">名称/账号</span> <input type="text" class="form-control" ng-model="self.searchText"></div><div class="input-group ml10"><button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-search"></i> 查询</button></div><div class="input-group ml10"><a href="javascript:void(0)" class="btn btn-sm btn-primary"><i class="fa fa-file-text-o"></i> 导出</a></div></form><div class="panel mt10 mb0"><div class="panel-body"><div class="relative col-xs-12 overflow-hidden no-padding mb15" perfect-scrollbar="!!self.listData"><table class="table table-hover table-nowrap bb no-margin nowrap"><thead><tr><th style="width:80px">序号</th><th>商户名称</th><th>商户账号</th><th class="no-padding" style="width:20px"></th><th style="min-width:230px;max-width:300px">充值金额</th><th style="min-width:230px;max-width:300px">消耗金额</th><th>商户余额</th></tr></thead><tbody><tr ng-repeat="item in self.listData" class="toggle-active" ng-class="{active:self.listData.collapsed===item.key}" ng-click="self.listData.collapsed=(self.listData.collapsed===item.key?null:(item.isnull||item.key))"><td ng-bind="(self.listData.index-1)*self.paging.size+$index+1"></td><td ng-bind="item.title"></td><td ng-bind="item.account"></td><td class="no-padding"><a href="javascript:void(0)" class="emfinance text-muted h4 block mb0 mt10" ng-if="!item.isnull" ng-class="{true:'finance-down',false:'finance-right'}[self.listData.collapsed===item.key]"></a></td><td><span class="h4 no-margin text-success" ng-bind="item.earning.sum||'-'"></span><div class="mt5" uib-collapse="self.listData.collapsed!==item.key" ng-if="item.earning.category"><ul class="list-group no-margin"><li class="list-group-item p5 clearfix" ng-repeat="item in item.earning.category"><div class="pull-left" ng-bind="item.name"></div><div class="pull-right"><span class="text-success mr10" ng-bind="item.amount"></span> <span class="text-muted">{{item.count}} 笔</span></div></li></ul></div></td><td><span class="h4 no-margin text-danger" ng-bind="item.consumption.sum||'-'"></span><div class="mt5" uib-collapse="self.listData.collapsed!==item.key" ng-if="item.consumption.category"><ul class="list-group no-margin"><li class="list-group-item p5 clearfix" ng-repeat="item in item.consumption.category"><div class="pull-left" ng-bind="item.name"></div><div class="pull-right text-primary" ng-bind="item.amount"></div></li></ul></div></td><td><div><span class="text-muted">期初：</span><span class="h5 no-margin text-green" ng-bind="item.balance.from||'-'"></span></div><div><span class="text-muted">期末：</span><span class="h5 no-margin text-orange" ng-bind="item.balance.to||'-'"></span></div></td></tr></tbody></table></div><div class="pull-left"><ui-select style="width:110px" ng-model="self.paging.size" search-enabled="false" remove-selected="false"><ui-select-match placeholder="每页条目">{{$select.selected.title}}</ui-select-match><ui-select-choices position="up" repeat="item.key as item in self.paging.items"><div ng-bind-html="item.title"></div></ui-select-choices></ui-select></div><uib-pagination class="pull-right mt0 mb0" total-items="self.listData.total" ng-model="self.paging.index" items-per-page="self.paging.size" max-size="10" rotate="false" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination></div></div>
