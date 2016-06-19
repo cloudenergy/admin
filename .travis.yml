@@ -12,3 +12,4 @@ after_success:
 - chmod 600 ~/.ssh/id_rsa
 - git remote add deploy ssh://$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PORT$DEPLOY_PATH/production/admin-public.git
 - git push deploy
+script: npm test
