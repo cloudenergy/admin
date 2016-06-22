@@ -1,0 +1,93 @@
+<style>.tree-node {
+        border: 1px solid #dae2ea;
+        background: #f8faff;
+        color: #7c9eb2;
+    }
+    .tree-node-content {
+        margin: 10px;
+    }
+    .tree-handle {
+        padding: 10px;
+        background: #428bca;
+        color: #FFF;
+        margin-right: 10px;
+    }
+
+    .angular-ui-tree-handle:hover {
+    }
+
+    .angular-ui-tree-placeholder {
+        background: #f0f9ff;
+        border: 2px dashed #bed2db;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }</style><script type="text/ng-template" id="energyNodesRenderer.html"><div ui-tree-handle class="tree-node">
+        <div class="tree-node-content">
+            <div class="" data-nodrag ng-show="!node.editing">
+                <a class="btn btn-success btn-xs" data-nodrag ng-click="toggle(this)">
+                    <span class="glyphicon" ng-class="{'glyphicon-chevron-right': collapsed, 'glyphicon-chevron-down': !collapsed}"></span>
+                </a>
+                <span>{{node.title}}</span>
+                <span ng-show="{{node.level>0}}">
+                    <span ng-show="{{node.level==1}}">{{node.unitprice.isnormal ? "普通价格: "+node.unitprice.normal : "阶梯价格: "+node.unitprice.peak+"-"+node.unitprice.valley}}元</span>
+                    <span ng-show="{{node.level>0}}">单位: {{node.unit}}</span>
+                    <span ng-show="{{node.level>1}}">标准煤: {{node.standcol}}</span>
+                </span>
+
+                <a ng-show="{{node.level>1}}" class="pull-right btn btn-danger btn-xs hint hint--right hint--error" data-nodrag ng-click="remove(this)" data-hint="删除">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </a>
+                <a ng-show="{{node.level>=0}}"  class="pull-right btn btn-primary btn-xs hint hint--bottom hint--info" data-nodrag ng-click="newSubItem(this)"
+                   style="margin-right: 8px;"
+                   data-hint="添加子能耗分类">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </a>
+                <a ng-show="{{node.level>0}}" ng-show="{{node.level>0}}" class="pull-right btn btn-primary btn-xs hint hint--bottom hint--info" data-nodrag ng-click="edit(node)"
+                   style="margin-right: 8px;"
+                   data-hint="编辑能耗分类">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </a>
+            </div>
+
+            <div class="group-title angular-ui-tree-handle" data-nodrag ng-show="node.editing">
+                <form class="form-inline" role="form">
+                    <div class="form-group">
+                        <!--<label class="sr-only" for="groupName">Group name</label>-->
+                        <input type="text" class="form-control" placeholder="能耗类型名称" ng-model="node.title">
+                    </div>
+                    <div class="form-group" ng-show="{{node.level==1}}">
+                        <a class="btn btn-info btn-xs hint hint--bottom hint--info"
+                           data-nodrag ng-click="switchUnitPriceType(node)" ng-show="node.unitprice.isnormal" style="margin-right: 8px;"
+                           data-hint="阶梯价格">
+                            <span class="glyphicon glyphicon-time"></span>
+                        </a>
+                        <a class="btn btn-info btn-xs hint hint--bottom hint--info"
+                           data-nodrag ng-click="switchUnitPriceType(node)" ng-show="!node.unitprice.isnormal" style="margin-right: 8px;"
+                           data-hint="普通价格">
+                            <span class="glyphicon glyphicon-info-sign"></span>
+                        </a>
+                        <span ng-show="node.unitprice.isnormal">
+                            <input type="text" class="form-control" ng-model="node.unitprice.normal" placeholder="计费单价" style="width:80px;" />
+                        </span>
+                        <span ng-show="!node.unitprice.isnormal">
+                            <input type="text" class="form-control" placeholder="峰单价" ng-model="node.unitprice.peak" style="width:80px;" />
+                            <input type="text" class="form-control" placeholder="谷单价" ng-model="node.unitprice.valley" style="width:80px;" />
+                        </span>
+                    </div>
+                    <div class="form-group" ng-show="{{node.level==1}}">
+                        <input type="text" class="form-control" placeholder="显示单位" ng-model="node.unit" style="width:80px;" value="0" />
+                    </div>
+                    <div class="form-group" ng-show="{{node.level>1}}">
+                        <input type="text" class="form-control" placeholder="标准煤系数" ng-model="node.standcol">
+                    </div>
+                    <button type="submit" class="btn btn-default" ng-click="save(node)">保存</button>
+                    <button type="submit" class="btn btn-default" ng-click="cancelEditing(node)">取消</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{hidden: collapsed}">
+        <li ng-repeat="node in node.nodes" ui-tree-node ng-include="'energyNodesRenderer.html'">
+        </li>
+    </ol></script><div class="container-fluid"><header-nav></header-nav><ng-include src="'/partials/admin/sidebar.html'"></ng-include><div class="col-xs-12 col-sm-9 adminBody"><ng-include src="'/partials/ui-alert.html'"></ng-include><div class="row"><div class="col-xs-8"><select class="form-control" data-ng-options="project._id as project.title for project in projects" data-ng-model="projectSelected" style=""></select></div><div align="right" class="col-xs-4"><a href="#" class="btn btn-success" ng-click="doSaveEnergy($event)">保存</a></div></div><br><div ui-tree id="energy-root"><ol ui-tree-nodes="" ng-model=" viewOfEnergy"><li ng-repeat="node in viewOfEnergy" ui-tree-node ng-include="'energyNodesRenderer.html'"></li></ol></div></div></div>
