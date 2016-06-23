@@ -1,1 +1,1 @@
-"use strict";angular.module("app").directive("chosen",function(){return{restrict:"EA",link:function(e,n,t){e.$watch(t.chosen,function(){n.trigger("chosen:updated")}),e.$watch(t.ngModel,function(){n.trigger("chosen:updated")}),n.chosen({disable_search_threshold:10})}}});
+"use strict";angular.module("app").directive("chosen",[function(){return{restrict:"EA",link:function(e,n,t){e.$watch(t.chosen,function(){n.trigger("chosen:updated")}),e.$watch(t.ngModel,function(){n.trigger("chosen:updated")}),n.chosen({disable_search_threshold:10})}}}]);
