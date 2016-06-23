@@ -1,0 +1,34 @@
+<style>.detail-status {
+        width: 200px;
+        height: 80px;
+        padding: 10px;
+        padding-top: 15px;
+        border-width: 3px;
+        border-radius: 6px;
+    }
+
+    .detail-status .detail-status-title.text-danger {
+        margin-top: -10px;
+    }
+
+    .detail-status .detail-status-title.text-muted,
+    .detail-status .detail-status-title.text-warning {
+        margin-top: 10px;
+    }
+
+    .detail-status .detail-status-title {
+        font-size: 16px;
+    }
+
+    .detail-status .detail-status-title i {
+        font-size: 20px;
+    }
+
+    .detail-status-line {
+        border-top-style: dotted;
+        border-top-width: 6px;
+    }
+
+    .detail-table>tbody>tr:first-child td {
+        border-top: 0;
+    }</style><div class="modal-header bg-primary brtl brtr p15"><h4 class="modal-title text-center">提现详情</h4></div><div class="modal-body"><div class="form-inline text-center"><div class="form-group detail-status bordered" ng-class="self.classes.create.border"><div class="detail-status-title" ng-class="self.classes.create.title"><i class="fa" ng-class="self.classes.create.icon"></i> {{self.classes.create.text}}</div><div class="text-muted" ng-if="self.detail.timecreate" ng-bind="self.detail.timecreate"></div></div><div class="form-group detail-status-line w100 ml5" ng-class="self.classes.line_check"></div><div class="form-group detail-status bordered" ng-class="self.classes.check.border"><div class="detail-status-title" ng-class="self.classes.check.title"><i class="fa" ng-class="self.classes.check.icon"></i> {{self.classes.check.text}}</div><div class="text-muted" ng-if="self.detail.status==='CHECKFAILED'">原因：{{self.detail.description}}</div><div class="text-muted" ng-if="self.detail.timecheck" ng-bind="self.detail.timecheck"></div></div><div class="form-group detail-status-line w100 ml5" ng-class="self.classes.line_paid"></div><div class="form-group detail-status bordered" ng-class="self.classes.paid.border"><div class="detail-status-title" ng-class="self.classes.paid.title"><i class="fa" ng-class="self.classes.paid.icon"></i> {{self.classes.paid.text}}</div><div class="text-muted" ng-if="self.detail.status==='FAILED'">原因：{{self.detail.description}}</div><div class="text-muted" ng-if="self.detail.timepaid" ng-bind="self.detail.timepaid"></div></div></div><div class="relative col-xs-12 overflow-hidden" perfect-scrollbar="!!self.detail"><table class="table table-hover detail-table mt30 mb10 nowrap"><tbody><tr><td>提现金额 (¥)</td><td ng-bind="self.detail.amount"></td><td>服务费 (¥)</td><td ng-bind="self.detail.servicecharge"></td><td>到账金额 (¥)</td><td ng-bind="self.detail.realamount||'-'"></td></tr><tr><td>收款方</td><td ng-bind="self.detail.peeraccount||'-'"></td><td>收款账户</td><td colspan="3"><div ng-if="self.detail.channelaccount"><i class="emfinance text-danger" ng-class="'finance-'+self.detail.channelaccount.type"></i> <span ng-bind="self.detail.channelaccount.origin"></span> <span>（尾号：{{self.detail.channelaccount.tail_account}}）</span> <span ng-bind="self.detail.channelaccount.name"></span></div></td></tr><tr><td>流水号</td><td ng-bind="self.detail.id||'-'"></td><td>交易号</td><td ng-bind="self.detail.orderno||'-'"></td><td>操作帐号</td><td ng-bind="self.detail.operator||'-'"></td></tr></tbody></table></div><div class="h4 pl10 pt10 pb10 mt30 mb0">服务费信息</div><div class="relative col-xs-12 overflow-hidden" perfect-scrollbar="!!self.detail"><table class="table table-bordered detail-table mb10 nowrap"><thead><tr class="bg-default-dark"><th>名称</th><th>对方</th><th>流水号</th><th>金额 (¥)</th><th>时间</th></tr></thead><tbody><tr><td ng-bind="self.detail.servicechargetype"></td><td ng-bind="self.detail.servicechargeto"></td><td ng-bind="self.detail.servicechargeid||'-'"></td><td ng-bind="self.detail.servicecharge"></td><td ng-bind="self.detail.timepaid||'-'"></td></tr></tbody></table></div></div><div class="modal-footer p10"><button class="btn btn-sm btn-default" type="button" ng-click="self.Cancel()">关闭</button></div>
