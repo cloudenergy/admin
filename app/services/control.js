@@ -1,1 +1,1 @@
-EMAPP.register.factory("Control",["$resource","Config",function(o,r){return o(r.apiBase+"control",{},{Send:{method:"POST",url:r.API+"/control/send"},SensorCommand:{method:"POST",url:r.API+"/control/sensorcommand"}})}]);
+angular.module("app").factory("Control",["$resource","Config",function(o,n){return o(n.apiBase+"control",{},{Send:{method:"POST",url:n.API+"/control/send"},SensorCommand:{method:"POST",url:n.API+"/control/sensorcommand"}})}]);
