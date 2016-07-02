@@ -3,9 +3,11 @@
         background: #f8faff;
         color: #7c9eb2;
     }
+
     .tree-node-content {
         margin: 10px;
     }
+
     .tree-handle {
         padding: 10px;
         background: #428bca;
@@ -13,8 +15,7 @@
         margin-right: 10px;
     }
 
-    .angular-ui-tree-handle:hover {
-    }
+    .angular-ui-tree-handle:hover {}
 
     .angular-ui-tree-placeholder {
         background: #f0f9ff;
@@ -28,15 +29,11 @@
         </div>
         <div class="row mt20" style="">
             <div class="col-lg-6">
-                <input type="text" class="form-control"
-                       id="input-customer-freq"
-                       placeholder="输入传感器ID或名称进行查询"
-                       ng-model="sensorSearchKey">
+                <input type="text" class="form-control" id="input-customer-freq" placeholder="输入传感器ID或名称进行查询" ng-model="sensorSearchKey">
             </div>
             <div class="col-lg-4">
                 <a class="btn btn-info" href="#" ng-click="onSearchSensor($event)">
-                    <span class="glyphicon glyphicon-search"></span>
-                    查询
+                    <span class="glyphicon glyphicon-search"></span> 查询
                 </a>
             </div>
             <div class="col-lg-2 text-right">
@@ -47,26 +44,13 @@
         </div>
         <div align="center" class="" style="position: relative; padding: 15px 30px 0px 30px;">
             <div class="row-fluid list-group">
-                <a href="#" class="list-group-item"
-                   ng-class="sensor.isEnable ? 'active':''"
-                   ng-click="SwitchSensor($event, sensor)"
-                   ng-repeat="sensor in viewOfSensors | startFrom: (currentPage-1) * popPageSize | limitTo: popPageSize">
+                <a href="#" class="list-group-item" ng-class="sensor.isEnable ? 'active':''" ng-click="SwitchSensor($event, sensor)" ng-repeat="sensor in viewOfSensors | startFrom: (currentPage-1) * popPageSize | limitTo: popPageSize">
                     {{sensor.title}}&nbsp;{{sensor.channel}}&nbsp;{{sensor.energyTitle}}
                 </a>
             </div>
         </div>
         <div align="center">
-            <pagination class="pagination-sm"
-                        total-items="viewOfSensors.length" ng-model="currentPage"
-                        items-per-page="popPageSize"
-                        max-size="9"
-                        boundary-links="true"
-                        rotate="false" num-pages="numPages"
-                        previous-text="上页"
-                        next-text="下页"
-                        first-text="首页"
-                        last-text="末页"
-                    ></pagination>
+            <pagination class="pagination-sm" total-items="viewOfSensors.length" ng-model="currentPage" items-per-page="popPageSize" max-size="9" boundary-links="true" rotate="false" num-pages="numPages" previous-text="上页" next-text="下页" first-text="首页" last-text="末页"></pagination>
         </div>
         <div class="" style="margin-top: 15px; padding: 0px 20px 20px; text-align: center;">
             <button class="btn btn-primary" ng-click="Ok()">确定</button>
@@ -83,9 +67,7 @@
                 </a>
                 <span>{{node.name}}</span>
 
-                <a ng-show="node.id" class="pull-right btn btn-warning btn-xs hint hint--bottom hint--warning" data-nodrag ng-click="sensor(node, $index)"
-                   style="margin-right: 8px;"
-                   data-hint="添加传感器">
+                <a ng-show="node.id" class="pull-right btn btn-warning btn-xs hint hint--bottom hint--warning" data-nodrag ng-click="sensor(node, $index)" style="margin-right: 8px;" data-hint="添加传感器">
                     <span class="glyphicon glyphicon-th"></span>
                 </a>
             </div>
@@ -94,4 +76,4 @@
     <ol ui-tree-nodes ng-model="node.nodes" ng-class="{hidden: collapsed}">
         <li ng-repeat="node in node.nodes" ui-tree-node ng-include="'deviceNodesRenderer.html'">
         </li>
-    </ol></script><div class="row"><div class="col-xs-12 col-md-12 adminBody"><div class="panel panel-default"><div class="panel-body"><div class="row"><div class="col-md-6"><select class="form-control" data-ng-options="project._id as project.title for project in projects" chosen data-placeholder="请选择" data-ng-model="projectSelected" style=""></select></div></div><br><div ui-tree id="energy-root"><ol ui-tree-nodes ng-model="viewOfDevice"><li ng-repeat="node in viewOfDevice" ui-tree-node ng-include="'deviceNodesRenderer.html'"></li></ol></div></div></div></div></div>
+    </ol></script><div class="row"><div class="col-xs-12 col-md-12 adminBody"><div class="panel panel-default"><div class="panel-body"><div class="row"><div class="col-md-6"><ui-select style="width:225px" ng-model="projects.title" remove-selected="false"><ui-select-match placeholder="--选择项目--">{{$select.selected.title}}</ui-select-match><ui-select-choices repeat="item._id as item in projects | filter: $select.search"><div ng-bind-html="item.title | highlight: $select.search"></div></ui-select-choices></ui-select></div></div><br><div ui-tree id="energy-root"><ol ui-tree-nodes ng-model="viewOfDevice"><li ng-repeat="node in viewOfDevice" ui-tree-node ng-include="'deviceNodesRenderer.html'"></li></ol></div></div></div></div></div>
