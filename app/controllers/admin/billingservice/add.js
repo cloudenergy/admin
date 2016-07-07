@@ -1,1 +1,59 @@
-angular.module("app").controller("BillingServiceadd",["Config","$scope","$q","$location","$cookies","BillingService","Energycategory","$stateParams","SettingMenu","BillingAccount","Account","md5","API","Auth","UI",function(e,n,r,t,c,o,i,a,l,u,s,g,y,f,p){f.Check(function(){l(function(e){n.menu=e}),n.submit=function(e){var r=new Array;if(_.each(n.energycategory,function(e){e.isEnable&&r.push(e._id)}),!a.project)return void console.log("parameter project is emtpy, please check");var c={title:n.serviceTitle,energycategory:r,project:a.project};y.Query(o.add,c,function(e){e.code?p.AlertError(e.message):(t.path("/admin/billingservice/info"),p.AlertSuccess("保存成功"))})},y.Query(i.info,{},function(e){console.log(e.result),n.energycategory=new Array,_.each(e.result,function(e){n.energycategory.push(e)})}),n.SwitchEnergycategory=function(e,n){e.preventDefault(),n.isEnable?n.isEnable=!1:n.isEnable=!0}})}]);
+angular.module('app').controller('BillingServiceadd', ["Config", "$scope", "$q", "$location", "$cookies", "BillingService", "Energycategory", "$stateParams", "SettingMenu", "BillingAccount", "Account", "md5", "API", "Auth", "UI", function(Config, $scope, $q, $location, $cookies, BillingService, Energycategory, $stateParams, SettingMenu, BillingAccount, Account, md5, API, Auth, UI) {
+    Auth.Check(function() {
+        SettingMenu(function(menu) {
+            $scope.menu = menu;
+        });
+
+        $scope.submit = function(e) {
+            var selectedEnergycategory = new Array();
+            _.each($scope.energycategory, function(v) {
+                if (v.isEnable) {
+                    selectedEnergycategory.push(v._id);
+                }
+            });
+
+            if (!$stateParams.project) {
+                console.log('parameter project is emtpy, please check');
+                return;
+            }
+
+            var saveBillingService = {
+                title: $scope.serviceTitle,
+                energycategory: selectedEnergycategory,
+                project: $stateParams.project
+            };
+            //        console.log(saveBillingService);
+            API.Query(BillingService.add, saveBillingService, function(result) {
+                if (result.code) {
+                    UI.AlertError(result.message);
+                    //
+                } else {
+                    //
+                    $location.path('/admin/billingservice/info');
+                    UI.AlertSuccess('保存成功');
+                }
+            });
+        };
+
+        //Get All EnergyCategory
+        API.Query(Energycategory.info, {}, function(result) {
+            console.log(result.result);
+            $scope.energycategory = new Array();
+            _.each(result.result, function(ec) {
+
+                $scope.energycategory.push(ec);
+            });
+        });
+
+        $scope.SwitchEnergycategory = function(e, ec) {
+            e.preventDefault();
+
+            if (ec.isEnable) {
+                ec.isEnable = false;
+            } else {
+                ec.isEnable = true;
+            }
+        };
+
+    });
+}]);

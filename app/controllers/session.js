@@ -1,1 +1,50 @@
-angular.module("app").controller("session",["$api","$cookies","$state","UI","md5",function(e,t,o,n,a){var s=this,r=/cloudenergy\.me/.test(location.hostname)?".cloudenergy.me":location.hostname,i=function(e){e=e&&e.result||{},angular.forEach(["token","user"],function(o){e[o]&&t.put(o,e[o],{path:"/",domain:r,expires:new Date((new Date).setMonth((new Date).getMonth()+1))})}),e.token?o.go("admin.dashboard"):(o.go("login"),n.AlertError(e.message,"登录失败"))};s.login=function(){var t=this&&this.user,o=this&&this.passwd,s=[];!t&&s.push("帐号"),!o&&s.push("密码"),s=s.join("与"),s&&n.AlertError("请输入您的"+s),!s&&e.auth.login({user:t,passwd:a.createHash(o).toUpperCase()},i,function(e){n.AlertError("服务器错误","错误: "+e.data.code)})}}]);
+angular.module('app').controller('session', ["$api", "$cookies", "$state", "UI", "md5", function($api, $cookies, $state, UI, md5) {
+
+    var self = this,
+        domain = /cloudenergy\.me/.test(location.hostname) ? '.cloudenergy.me' : location.hostname,
+        validate = function(data) {
+
+            //赋值到User对象中
+            data = data && data.result || {};
+
+            //写入cookie
+            angular.forEach(['token', 'user'], function(key) {
+                data[key] && $cookies.put(key, data[key], {
+                    path: '/',
+                    domain: domain,
+                    expires: new Date(new Date().setMonth(new Date().getMonth() + 1))
+                });
+            });
+
+
+            if (data.token) {
+                $state.go('admin.dashboard');
+            } else {
+                $state.go('login');
+                UI.AlertError(data.message, '登录失败');
+            }
+
+        };
+
+    self.login = function() {
+
+        var user = this && this.user,
+            passwd = this && this.passwd,
+            msg = [];
+
+        !user && msg.push('帐号');
+        !passwd && msg.push('密码');
+
+        msg = msg.join('与');
+        msg && UI.AlertError('请输入您的' + msg);
+
+        !msg && $api.auth.login({
+            user: user,
+            passwd: md5.createHash(passwd).toUpperCase()
+        }, validate, function(result) {
+            UI.AlertError('服务器错误', '错误: ' + result.data.code);
+        });
+
+    };
+
+}]);

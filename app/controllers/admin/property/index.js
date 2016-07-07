@@ -1,1 +1,291 @@
-angular.module("app").controller("Property.index",["$scope","$api","$state","$stateParams","$uibModal",function(e,t,n,c,a){function o(){t.business.accountbalance({project:s.projects.selected},function(e){s.accountbalance=e.result||{},s.accountbalance.total=Math.round(100*(s.accountbalance.cash+s.accountbalance.frozen))/100,s.accountbalance.cash=Math.round(100*s.accountbalance.cash)/100,s.accountbalance.frozen=Math.round(100*s.accountbalance.frozen)/100,s.accountbalance.earning=Math.round(100*s.accountbalance.earning)/100,s.accountbalance.withdraw=Math.round(100*s.accountbalance.withdraw)/100})}function i(){t.channelaccount.info({project:s.projects.selected,all:!0,flow:"EXPENSE"},function(e){s.cardInfo=e.result&&e.result[0]||{},s.cardInfo.timecreate=s.cardInfo.timecreate&&moment(1e3*s.cardInfo.timecreate).format("YYYY-M-DD H:mm:ss")||"",s.cardInfo.timeenable=s.cardInfo.timeenable&&moment(1e3*s.cardInfo.timeenable).format("YYYY-M-DD H:mm:ss")||"",s.cardInfo.timeexpire=s.cardInfo.timeexpire&&moment(1e3*s.cardInfo.timeexpire).format("YYYY-M-DD H:mm:ss")||"",s.cardInfo.tail=(s.cardInfo.account||"").replace(/\d+(\d{4})$/,"$1")})}function r(){t.business.projectfundflowstatistic({time:s.viewDate.replace(/\-/g,""),project:s.projects.selected},function(e){e=e.result||{},e.earning&&angular.forEach(e.earning.category,function(e,t){this.push(angular.extend(e,{name:t}))},e.earning.category=[]),e.expenses&&angular.forEach(e.expenses.category,function(e,t){this.push(angular.extend(e,{category:t}))},e.expenses.category=[]),e.consumption&&angular.forEach(e.consumption.category,function(e,t){this.push(angular.extend(e,{category:t}))},e.consumption.category=[]),s.fundflowstatistic=e})}function l(){t.business.fundflow({project:s.projects.selected,from:s.viewDate.replace(/\-/g,"")+"01",to:moment(s.viewDate.replace(/\-/g,"")+"01","YYYYMMDD").add(1,"month").subtract(1,"day").format("YYYYMMDD"),pageindex:1,pagesize:6},function(e){s.fundflow=e.result.detail,angular.forEach(s.fundflow,function(e){e.channelaccount&&e.channelaccount.account&&(e.channelaccount.tail=e.channelaccount.account.replace(/\d+(\d{4})$/,"$1")),e.timecreate=e.timecreate&&moment(1e3*e.timecreate).format("YYYY-M-DD H:mm:ss")||"",e.timecheck=e.timecheck&&moment(1e3*e.timecheck).format("YYYY-M-DD H:mm:ss")||"",e.timepaid=e.timepaid&&moment(1e3*e.timepaid).format("YYYY-M-DD H:mm:ss")||""})})}var s=this,u=EMAPP.Account._id+"_property_index_projectid";s.projectid=c.projectid,s.deviceType=[{key:"ELECTRICITYMETER",title:"电表",icon:"emfinance finance-electricity text-warning"},{key:"COLDWATERMETER",title:"冷水表",icon:"emfinance finance-water text-info"},{key:"HOTWATERMETER",title:"热水表",icon:"emfinance finance-water text-danger"},{key:"ENERGYMETER",title:"能量表",icon:"emfinance finance-power text-danger"},{key:"TEMPRATURECONTROL",title:"温控器",icon:"emfinance finance-temprature text-info"}],angular.forEach(s.deviceType,function(e){this[e.key]=e},s.deviceType),s.category=[{key:"RECHARGING",title:"充值"},{key:"PAYFEES",title:"缴费"},{key:"HANDLINGCHARGE",title:"手续费"},{key:"WITHDRAW",icon:"emfinance finance-withdraw text-danger",title:"提现"},{key:"HANDLINGCHARGERCG",icon:"emfinance finance-serve text-warning",title:"充值服务费"},{key:"HANDLINGCHARGEWTD",icon:"emfinance finance-serve text-warning",title:"提现服务费"},{key:"alipay",icon:"emfinance finance-alipay text-info",title:"支付宝手机支付"},{key:"wx",icon:"emfinance finance-wechat text-success",title:"微信支付"},{key:"wx_pub",icon:"emfinance finance-wechat-official text-success",title:"微信公众号支付"},{key:"bankcard",icon:"emfinance finance-unionpay text-primary",title:"银行卡支付"}],angular.forEach(s.category,function(e){this[e.key]=e},s.category),s.format="YYYY-MM",s.viewDate=moment().format(s.format),e.$watch(function(){return s.viewDate},function(e){s.projects.length&&(r(),l())}),s.projects=[],s.projects.select=function(){localStorage.setItem(u,s.projects.selected),n.go(n.current.name,{projectid:s.projects.selected},{reload:!0})},t.project.info(function(e){e.result=angular.isArray(e.result)?e.result:[e.result],angular.forEach(e.result,function(e){this.push(e),this[e._id]=e},s.projects),s.projects.length&&(!s.projectid&&s.projects.length>1&&localStorage.getItem(u)&&(s.projectid=localStorage.getItem(u)),angular.forEach(s.projects,function(e){e._id===s.projectid&&(s.projects.selected=e._id)}),s.projects.selected=s.projects.selected||s.projects[0]._id,n.$current.data.title="物业财务 - "+s.projects[s.projects.selected].title,o(),i(),r(),l())}),s.getCard=function(e){t.bank.info(function(t){a.open({templateUrl:"modal-property-card.html",controllerAs:"self",controller:["$api","$uibModalInstance",function(n,c){this.bankData=t.result,this.card=e&&angular.copy(e)||{},this.card.locate=angular.isString(this.card.locate)&&JSON.parse(this.card.locate||null)||this.card.locate||{province:"浙江省",city:"杭州市",district:"西湖区"},angular.forEach(this.bankData,$.proxy(function(e){this.bankData[e.id]=e,this.card.origin===e.title&&(this.card.origin=e.id)},this)),this.submit=function(){n.channelaccount.add({id:this.card.id||void 0,flow:this.card.flow||"EXPENSE",belongto:this.card.belongto?void 0:s.projects.selected,name:this.card.name,account:this.card.account,type:this.card.origin,origin:this.bankData[this.card.origin].title,subbranch:this.card.subbranch,locate:this.card.locate},c.close)},this.cancel=function(){c.dismiss("cancel")}}]}).result.then(i)})},s.removeCard=function(e){swal({title:"确认删除此项吗？",text:"卡号："+e.account,type:"warning",showCancelButton:!0,cancelButtonText:"取消",confirmButtonText:"确认",confirmButtonColor:"#ec6c62"},function(){t.channelaccount["delete"]({id:e.id},i)})}}]);
+angular.module('app').controller('Property.index', ["$scope", "$api", "$state", "$stateParams", "$uibModal", function($scope, $api, $state, $stateParams, $uibModal) {
+
+    var self = this,
+        KEY_PROJECT = EMAPP.Account._id + '_property_index_projectid';
+
+    self.projectid = $stateParams.projectid;
+
+    // 电表:ELECTRICITYMETER
+    // 冷水表:COLDWATERMETER
+    // 热水表:HOTWATERMETER
+    // 能量表:ENERGYMETER
+    // 温控器:TEMPRATURECONTROL
+    // 物业费:emfinance finance-property text-success
+    // 租金:emfinance finance-rent text-success
+    self.deviceType = [{
+        key: 'ELECTRICITYMETER',
+        title: '电表',
+        icon: 'emfinance finance-electricity text-warning'
+    }, {
+        key: 'COLDWATERMETER',
+        title: '冷水表',
+        icon: 'emfinance finance-water text-info'
+    }, {
+        key: 'HOTWATERMETER',
+        title: '热水表',
+        icon: 'emfinance finance-water text-danger'
+    }, {
+        key: 'ENERGYMETER',
+        title: '能量表',
+        icon: 'emfinance finance-power text-danger'
+    }, {
+        key: 'TEMPRATURECONTROL',
+        title: '温控器',
+        icon: 'emfinance finance-temprature text-info'
+    }];
+    angular.forEach(self.deviceType, function(item) {
+        this[item.key] = item;
+    }, self.deviceType);
+
+    //类型
+    self.category = [{
+        key: 'RECHARGING',
+        title: '充值'
+    }, {
+        key: 'PAYFEES',
+        title: '缴费'
+    }, {
+        key: 'HANDLINGCHARGE',
+        title: '手续费'
+    }, {
+        key: 'WITHDRAW',
+        icon: 'emfinance finance-withdraw text-danger',
+        title: '提现'
+    }, {
+        key: 'HANDLINGCHARGERCG',
+        icon: 'emfinance finance-serve text-warning',
+        title: '充值服务费'
+    }, {
+        key: 'HANDLINGCHARGEWTD',
+        icon: 'emfinance finance-serve text-warning',
+        title: '提现服务费'
+    }, {
+        key: 'alipay',
+        icon: 'emfinance finance-alipay text-info',
+        title: '支付宝手机支付'
+    }, {
+        key: 'wx',
+        icon: 'emfinance finance-wechat text-success',
+        title: '微信支付'
+    }, {
+        key: 'wx_pub',
+        icon: 'emfinance finance-wechat-official text-success',
+        title: '微信公众号支付'
+    }, {
+        key: 'bankcard',
+        icon: 'emfinance finance-unionpay text-primary',
+        title: '银行卡支付'
+    }];
+    angular.forEach(self.category, function(item) {
+        this[item.key] = item;
+    }, self.category);
+
+    self.format = 'YYYY-MM';
+    self.viewDate = moment().format(self.format);
+
+    $scope.$watch(function() {
+        return self.viewDate
+    }, function(val) {
+        if (self.projects.length) {
+            GetFundflowStatistic();
+            GetFundflow();
+        }
+    });
+
+    self.projects = [];
+    self.projects.select = function() {
+        localStorage.setItem(KEY_PROJECT, self.projects.selected);
+        $state.go($state.current.name, {
+            projectid: self.projects.selected
+        }, {
+            reload: true
+        });
+    };
+
+    /* 获取项目信息 */
+    $api.project.info(function(data) {
+
+        data.result = angular.isArray(data.result) ? data.result : [data.result];
+        angular.forEach(data.result, function(item) {
+            this.push(item);
+            this[item._id] = item;
+        }, self.projects);
+
+        if (self.projects.length) {
+
+            if (!self.projectid && self.projects.length > 1 && localStorage.getItem(KEY_PROJECT)) {
+                self.projectid = localStorage.getItem(KEY_PROJECT);
+            }
+
+            angular.forEach(self.projects, function(item) {
+                if (item._id === self.projectid) {
+                    self.projects.selected = item._id;
+                }
+            });
+            self.projects.selected = self.projects.selected || self.projects[0]._id;
+
+            $state.$current.data.title = '物业财务 - ' + self.projects[self.projects.selected].title;
+
+            GetAccountbalance();
+
+            GetCardList();
+
+            GetFundflowStatistic();
+
+            GetFundflow();
+
+        }
+
+    });
+
+    /* 获取编辑银行卡 */
+    self.getCard = function(item) {
+        $api.bank.info(function(data) {
+            $uibModal.open({
+                // size: size,
+                templateUrl: 'modal-property-card.html',
+                controllerAs: 'self',
+                controller: ["$api", "$uibModalInstance", function($api, $uibModalInstance) {
+
+                    this.bankData = data.result;
+                    this.card = item && angular.copy(item) || {};
+                    this.card.locate = angular.isString(this.card.locate) && JSON.parse(this.card.locate || null) || this.card.locate || {
+                        province: '浙江省',
+                        city: '杭州市',
+                        district: '西湖区'
+                    };
+
+                    angular.forEach(this.bankData, $.proxy(function(item) {
+                        this.bankData[item.id] = item;
+                        if (this.card.origin === item.title) {
+                            this.card.origin = item.id;
+                        }
+                    }, this));
+
+                    this.submit = function() {
+                        $api.channelaccount.add({
+                            id: this.card.id || undefined,
+                            flow: this.card.flow || 'EXPENSE',
+                            belongto: this.card.belongto ? undefined : self.projects.selected,
+                            name: this.card.name,
+                            account: this.card.account,
+                            type: this.card.origin,
+                            origin: this.bankData[this.card.origin].title,
+                            subbranch: this.card.subbranch,
+                            locate: this.card.locate
+                        }, $uibModalInstance.close);
+                    };
+
+                    this.cancel = function() {
+                        $uibModalInstance.dismiss('cancel');
+                    };
+
+                }]
+            }).result.then(GetCardList);
+        });
+    };
+
+    /* 删除银行卡 */
+    self.removeCard = function(item) {
+        swal({
+            title: '确认删除此项吗？',
+            text: '卡号：' + item.account,
+            type: 'warning',
+            showCancelButton: true,
+            cancelButtonText: '取消',
+            confirmButtonText: '确认',
+            confirmButtonColor: '#ec6c62'
+        }, function() {
+            $api.channelaccount.delete({
+                id: item.id
+            }, GetCardList);
+        });
+    };
+
+    /* 获取账户金额 */
+    function GetAccountbalance() {
+        $api.business.accountbalance({
+            project: self.projects.selected
+        }, function(data) {
+            self.accountbalance = data.result || {};
+            self.accountbalance.total = Math.round((self.accountbalance.cash + self.accountbalance.frozen) * 100) / 100;
+            self.accountbalance.cash = Math.round(self.accountbalance.cash * 100) / 100;
+            self.accountbalance.frozen = Math.round(self.accountbalance.frozen * 100) / 100;
+            self.accountbalance.earning = Math.round(self.accountbalance.earning * 100) / 100;
+            self.accountbalance.withdraw = Math.round(self.accountbalance.withdraw * 100) / 100;
+        });
+    }
+
+    /* 获取银行卡信息 */
+    function GetCardList() {
+        $api.channelaccount.info({
+            project: self.projects.selected,
+            all: true,
+            flow: 'EXPENSE'
+        }, function(data) {
+
+            self.cardInfo = data.result && data.result[0] || {};
+
+            self.cardInfo.timecreate = self.cardInfo.timecreate && moment(self.cardInfo.timecreate * 1000).format('YYYY-M-DD H:mm:ss') || '';
+            self.cardInfo.timeenable = self.cardInfo.timeenable && moment(self.cardInfo.timeenable * 1000).format('YYYY-M-DD H:mm:ss') || '';
+            self.cardInfo.timeexpire = self.cardInfo.timeexpire && moment(self.cardInfo.timeexpire * 1000).format('YYYY-M-DD H:mm:ss') || '';
+
+            self.cardInfo.tail = (self.cardInfo.account || '').replace(/\d+(\d{4})$/, '$1');
+
+        });
+    }
+
+    /* 获取项目资金流水统计 */
+    function GetFundflowStatistic() {
+        $api.business.projectfundflowstatistic({
+            time: self.viewDate.replace(/\-/g, ''),
+            project: self.projects.selected
+        }, function(data) {
+            data = data.result || {};
+            // 收入
+            data.earning && angular.forEach(data.earning.category, function(item, key) {
+                this.push(angular.extend(item, {
+                    name: key
+                }));
+            }, data.earning.category = []);
+            // 支出
+            data.expenses && angular.forEach(data.expenses.category, function(item, key) {
+                this.push(angular.extend(item, {
+                    category: key
+                }));
+            }, data.expenses.category = []);
+            // 消耗
+            data.consumption && angular.forEach(data.consumption.category, function(item, key) {
+                this.push(angular.extend(item, {
+                    category: key
+                }));
+            }, data.consumption.category = []);
+            self.fundflowstatistic = data;
+        });
+    }
+
+    /* 获取流水信息 */
+    function GetFundflow() {
+        $api.business.fundflow({
+            project: self.projects.selected,
+            from: self.viewDate.replace(/\-/g, '') + '01',
+            to: moment(self.viewDate.replace(/\-/g, '') + '01', 'YYYYMMDD').add(1, 'month').subtract(1, 'day').format('YYYYMMDD'),
+            pageindex: 1,
+            pagesize: 6
+        }, function(res) {
+            self.fundflow = res.result.detail;
+            angular.forEach(self.fundflow, function(item) {
+
+                if (item.channelaccount && item.channelaccount.account) {
+                    item.channelaccount.tail = item.channelaccount.account.replace(/\d+(\d{4})$/, '$1');
+                }
+
+                item.timecreate = item.timecreate && moment(item.timecreate * 1000).format('YYYY-M-DD H:mm:ss') || '';
+                item.timecheck = item.timecheck && moment(item.timecheck * 1000).format('YYYY-M-DD H:mm:ss') || '';
+                item.timepaid = item.timepaid && moment(item.timepaid * 1000).format('YYYY-M-DD H:mm:ss') || '';
+
+            });
+        });
+    }
+
+}]);

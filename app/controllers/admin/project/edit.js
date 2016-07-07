@@ -1,1 +1,50 @@
-angular.module("app").controller("projectEdit",["$rootScope","$scope","$stateParams","$location","SettingMenu","Project","Auth","API","UI",function(e,t,o,r,u,n,d,c,f){t.ondutyHour=["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23"],t.ondutyMinute=["00","10","20","30","40","50"],t.offdutyHour=["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23"],t.offdutyMinute=["00","10","20","30","40","50"],d.Check(function(){function e(e){f.AlertError(e.data.message)}u(function(e){t.menu=e}),t.Save=function(e){t.project.onduty=t.ondutyHour.selected+":"+t.ondutyMinute.selected,t.project.offduty=t.offdutyHour.selected+":"+t.offdutyMinute.selected,c.Query(n.update,t.project,function(e){e.code?f.AlertError(e.message):(f.AlertSuccess("修改成功"),r.path("/admin/project/info"))},function(e){f.AlertError(e.data.message)})},c.Query(n.info,{id:o.id},function(e){if(e.err)f.AlertError(e.data.message);else{t.project=e.result;var o=moment(t.project.onduty,"H:mm");t.ondutyHour.selected=o.format("H"),t.ondutyMinute.selected=o.format("mm");var r=moment(t.project.offduty,"H:mm");t.offdutyHour.selected=r.format("H"),t.offdutyMinute.selected=r.format("mm")}},e)})}]);
+angular.module('app').controller('projectEdit', ["$rootScope", "$scope", "$stateParams", "$location", "SettingMenu", "Project", "Auth", "API", "UI", function($rootScope, $scope, $stateParams, $location, SettingMenu, Project, Auth, API, UI) {
+    $scope.ondutyHour = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
+    $scope.ondutyMinute = ['00', '10', '20', '30', '40', '50'];
+    $scope.offdutyHour = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
+    $scope.offdutyMinute = ['00', '10', '20', '30', '40', '50'];
+    Auth.Check(function() {
+        SettingMenu(function(menu) {
+            $scope.menu = menu;
+        });
+
+        $scope.Save = function(e) {
+            $scope.project.onduty = $scope.ondutyHour.selected + ":" + $scope.ondutyMinute.selected;
+            $scope.project.offduty = $scope.offdutyHour.selected + ":" + $scope.offdutyMinute.selected;
+
+            API.Query(Project.update, $scope.project, function(result) {
+                if (result.code) {
+                    UI.AlertError(result.message);
+                } else {
+                    UI.AlertSuccess('修改成功');
+                    $location.path('/admin/project/info')
+                }
+            }, function(result) {
+                UI.AlertError(result.data.message)
+            })
+        };
+
+        API.Query(Project.info, {
+            id: $stateParams.id
+        }, function(result) {
+            if (result.err) {
+                UI.AlertError(result.data.message)
+                    //
+            } else {
+                $scope.project = result.result;
+
+                var onDuty = moment($scope.project.onduty, 'H:mm');
+                $scope.ondutyHour.selected = onDuty.format("H");
+                $scope.ondutyMinute.selected = onDuty.format("mm");
+
+                var offDuty = moment($scope.project.offduty, 'H:mm');
+                $scope.offdutyHour.selected = offDuty.format("H");
+                $scope.offdutyMinute.selected = offDuty.format("mm");
+            }
+        }, responseError);
+
+        function responseError(result) {
+            UI.AlertError(result.data.message)
+        }
+    });
+}]);

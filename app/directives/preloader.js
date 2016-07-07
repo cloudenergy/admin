@@ -1,1 +1,44 @@
-"use strict";!function(r,e){angular.module("app").config(["$httpProvider",function(e){e.interceptors.push(["$q",function(e){function n(n){return r--,200===n.status?n:e.reject(n)}return{request:function(e){return r++,e},requestError:function(r){return e.reject(r)},response:n,responseError:n}}])}]).directive("preloader",["$timeout",function(n){return{restrict:"A",scope:!0,link:function(t){t.$watch(function(){return r},function(r){e&&n.cancel(e),0===r?e=n(function(){t.preloader=r},10):t.preloader=r})}}}])}(0);
+'use strict';
+/*
+ * preloader - loading indicator directive
+ */
+(function(count, timeout) {
+    angular.module('app').config(["$httpProvider", function($httpProvider) {
+        $httpProvider.interceptors.push(["$q", function($q) {
+            function response(result) {
+                count--;
+                return result.status === 200 ? result : $q.reject(result);
+            }
+            return {
+                request: function(request) {
+                    count++;
+                    return request;
+                },
+                requestError: function(request) {
+                    return $q.reject(request);
+                },
+                response: response,
+                responseError: response
+            };
+        }]);
+    }]).directive('preloader', ["$timeout", function($timeout) {
+        return {
+            restrict: 'A',
+            scope: true,
+            link: function(scope) {
+                scope.$watch(function() {
+                    return count;
+                }, function(val) {
+                    timeout && $timeout.cancel(timeout);
+                    if (val === 0) {
+                        timeout = $timeout(function() {
+                            scope.preloader = val;
+                        }, 10);
+                    } else {
+                        scope.preloader = val;
+                    }
+                });
+            }
+        };
+    }]);
+}(0));

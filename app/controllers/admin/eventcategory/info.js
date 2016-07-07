@@ -1,1 +1,94 @@
-angular.module("app").controller("eventcategoryIndex",["$rootScope","$scope","SettingMenu","Eventcategory","API","Auth","UI","$q","Project",function(e,t,a,n,o,r,u,l,i){t.gateways={SMS:"短信通知",APP:"Web，APP通知",EMAIL:"邮件通知",WECHAT:"微信通知"},t.isGatewayOn=function(e,t){return-1!=e.enablegateway.indexOf(t)},t.updateGateway=function(e,a,r){var u=e.enablegateway.indexOf(a);r.target.checked&&-1==u?e.enablegateway.push(a):e.enablegateway.splice(u,1);var l={templateid:e.id,gateway:e.enablegateway,project:t.projects.title._id};o.Query(n.update,l,function(e){console.log("update: ",e)})},t.operateStatus={add:{isEnable:!1,url:"/add"},"delete":{isEnable:!1,url:"/delete"},update:{isEnable:!1,url:"/update"}},t.askingRemoveID=void 0,r.Check(t.operateStatus,function(){function e(e){u.AlertError(e.data.message)}o.Query(i.info,function(e){e.err||(t.projects=angular.isArray(e.result)?e.result:[e.result],t.projects.title=t.projects.length?t.projects[0]:null)}),t.$watch("projects.title",function(e){e&&o.Query(n.info,{project:e._id},function(e){e.err||(t.Eventcategory=e.result)})}),t.DoRemove=function(a,r,u){a.preventDefault();var l=u;o.Query(n["delete"],{id:r},function(e){t.Eventcategory.splice(l,1)},e)},t.AskForRemove=function(e,a){e.preventDefault(),t.askingRemoveID=a},t.CancelRemove=function(e,a){e.preventDefault(),t.askingRemoveID=void 0}})}]);
+angular.module('app').controller('eventcategoryIndex', ["$rootScope", "$scope", "SettingMenu", "Eventcategory", "API", "Auth", "UI", "$q", "Project", function($rootScope, $scope, SettingMenu, Eventcategory, API, Auth, UI, $q, Project) {
+
+    $scope.gateways = {
+        SMS: '短信通知',
+        APP: 'Web，APP通知',
+        EMAIL: '邮件通知',
+        WECHAT: '微信通知'
+    }
+
+    $scope.isGatewayOn = function(event, gateway) {
+        return event.enablegateway.indexOf(gateway) != -1;
+    }
+
+    $scope.updateGateway = function(event, gateway, elm) {
+        var index = event.enablegateway.indexOf(gateway);
+        elm.target.checked && index == -1 ? event.enablegateway.push(gateway) : event.enablegateway.splice(index, 1);
+        var data = {
+                templateid: event.id,
+                gateway: event.enablegateway,
+                project: $scope.projects.title._id
+            }
+            // 更新事件
+        API.Query(Eventcategory.update, data, function(res) {
+            console.log('update: ', res);
+        });
+    }
+
+    $scope.operateStatus = {
+        add: {
+            isEnable: false,
+            url: '/add'
+        },
+        delete: {
+            isEnable: false,
+            url: '/delete'
+        },
+        update: {
+            isEnable: false,
+            url: '/update'
+        }
+    };
+
+    $scope.askingRemoveID = undefined;
+
+    Auth.Check($scope.operateStatus, function() {
+
+        API.Query(Project.info, function(res) {
+            if (!res.err) {
+                $scope.projects = angular.isArray(res.result) ? res.result : [res.result];
+                $scope.projects.title = $scope.projects.length ? $scope.projects[0] : null;
+            }
+        });
+
+        $scope.$watch('projects.title', function(n) {
+            if (n) {
+                API.Query(Eventcategory.info, {
+                    project: n._id
+                }, function(result) {
+                    if (result.err) {
+                        //error
+                    } else {
+                        $scope.Eventcategory = result.result;
+                    }
+                });
+            }
+        });
+
+        $scope.DoRemove = function(e, id, index) {
+            e.preventDefault();
+
+            //        index = $rootScope.convertIndex(index);
+            var removeIndex = index;
+            API.Query(Eventcategory.delete, {
+                id: id
+            }, function(result) {
+                $scope.Eventcategory.splice(removeIndex, 1);
+                //            UI.AlertSuccess('删除成功')
+            }, responseError)
+        };
+        $scope.AskForRemove = function(e, id) {
+            e.preventDefault();
+            $scope.askingRemoveID = id;
+        };
+        $scope.CancelRemove = function(e, id) {
+            e.preventDefault();
+            $scope.askingRemoveID = undefined;
+        };
+
+
+        function responseError(result) {
+            UI.AlertError(result.data.message)
+        }
+    });
+}]);

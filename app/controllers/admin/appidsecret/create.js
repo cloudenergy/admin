@@ -1,1 +1,65 @@
-angular.module("app").controller("appidsecretcreate",["$scope","$location","$cookies","SettingMenu","Account","AppIDSecret","API","Auth","UI","Character",function(e,r,a,c,t,p,o,s,n,i){s.Check(function(){c(function(r){e.menu=r}),e.submit=function(a){e.appidsecret={appid:e.appid,appsecret:e.appsecret,character:e.character._id},console.log(e.appidsecret),o.Query(p.add,e.appidsecret,function(e){console.log(e),e.code?n.AlertError(e.message):r.path("/admin/appidsecret/info")})},o.Query(p.apply,{appid:e.appid},function(r){console.log(r),r.code?n.AlertError(r.message):(e.appsecret=r.result.appsecret,e.appid=r.result.appid)}),o.Query(t.info,{id:a.user},function(r){if(r.code)n.AlertError(result.message);else{e.adminUser=r.result;var a=e.adminUser.character&&e.adminUser.character.level;o.Query(i.info,{power:a},function(r){r.code?n.AlertError(r.message):(e.characters=r.result,e.character=e.characters[e.characters.length-1])})}})})}]);
+angular.module('app').controller('appidsecretcreate', ["$scope", "$location", "$cookies", "SettingMenu", "Account", "AppIDSecret", "API", "Auth", "UI", "Character", function($scope, $location, $cookies, SettingMenu, Account, AppIDSecret, API, Auth, UI, Character) {
+
+    Auth.Check(function() {
+        SettingMenu(function(menu) {
+            $scope.menu = menu;
+        });
+
+        $scope.submit = function(e) {
+            $scope.appidsecret = {
+                appid: $scope.appid,
+                appsecret: $scope.appsecret,
+                character: $scope.character._id
+            };
+            console.log($scope.appidsecret);
+            API.Query(AppIDSecret.add, $scope.appidsecret, function(result) {
+                console.log(result);
+                if (result.code) {
+                    //
+                    UI.AlertError(result.message);
+                } else {
+                    //
+                    $location.path('/admin/appidsecret/info');
+                }
+            });
+        };
+
+        API.Query(AppIDSecret.apply, {
+            appid: $scope.appid
+        }, function(result) {
+            console.log(result);
+            if (result.code) {
+                UI.AlertError(result.message);
+            } else {
+                $scope.appsecret = result.result.appsecret;
+                $scope.appid = result.result.appid;
+            }
+        });
+
+        API.Query(Account.info, {
+            'id': $cookies.user
+        }, function(data) {
+            if (data.code) {
+                UI.AlertError(result.message);
+            } else {
+                $scope.adminUser = data.result;
+
+                var power = $scope.adminUser.character && $scope.adminUser.character.level;
+                API.Query(Character.info, {
+                    power: power
+                }, function(result) {
+                    //                console.log(result);
+                    if (result.code) {
+                        UI.AlertError(result.message);
+                        //
+                    } else {
+                        $scope.characters = result.result;
+                        $scope.character = $scope.characters[$scope.characters.length - 1];
+                    }
+                });
+
+                //
+            }
+        });
+    });
+}]);

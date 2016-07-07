@@ -1,1 +1,150 @@
-angular.module("app").controller("sensorAttribute",["$scope","$modalInstance","$q","SensorSUID","ProjectID","Driver","API","Control","SensorAttrib",function(e,r,i,t,n,o,c,d,a){function s(){return e.drivercompanySelected&&e.driverNameSelected&&e.driverVersionSelected?e.drivercompanySelected+"/"+e.driverNameSelected+"/"+e.driverVersionSelected:""}function v(r,i){var n={command:"EMC_VIEW_ADAPTDEVICE",sid:t,driver:r};c.Query(d.Send,n,function(r){console.log(r),r.err||(e.AdaptDevice=[],_.each(r.result,function(r,i){var t=r;e.AdaptDevice.push(t)}),i?e.adaptDeviceSelected=i:e.AdaptDevice.length&&(e.adaptDeviceSelected=e.AdaptDevice[0].code))})}e.Ok=function(){var i=s();if(!i.length)return void r.close();var o={_id:t,driver:i,project:n,ext:e.SensorAttrib.ext||{}};o.ext.adaptdevice=e.adaptDeviceSelected||"",c.Query(a.update,o,function(e){e.err,r.close()})},e.Cancel=function(){r.dismiss("cancel")},e.$watch("drivercompanySelected",function(r){if(r){if(e.DriverNames=e.Drivers[r].driver,!e.DriverNames)return;e.DriverName=[],_.map(e.DriverNames,function(r,i){e.DriverName.push({id:i})})}}),e.$watch("driverNameSelected",function(r){if(r){if(e.DriverVersions=e.DriverNames[r].driver,!e.DriverVersions)return;e.DriverVersion=[],_.map(e.DriverVersions,function(r,i){e.DriverVersion.push({id:i})})}}),e.$watch("driverVersionSelected",function(e){if(e){var r=s();if(!r.length)return;v(r)}}),i.all([c.QueryPromise(o["enum"],{}).$promise,c.QueryPromise(a.info,{sensor:t}).$promise]).then(function(r){if(e.Drivers=r[0].result,e.DriverCompany=[],_.map(e.Drivers,function(r,i){e.DriverCompany.push({id:i})}),e.SensorAttrib=r[1].result||{},e.SensorAttrib){if(e.SensorAttrib.driver){var i=e.SensorAttrib.driver.split("/");e.drivercompanySelected=i[0],e.driverNameSelected=i[1],e.driverVersionSelected=i[2]}var t=null;t=e.SensorAttrib.ext&&e.SensorAttrib.ext.adaptdevice,v(e.SensorAttrib.driver,t)}})}]);
+/**
+ * Created by Joey on 14-6-27.
+ */
+angular.module('app').controller('sensorAttribute', ["$scope", "$modalInstance", "$q", "SensorSUID", "ProjectID", "Driver", "API", "Control", "SensorAttrib", function($scope, $modalInstance, $q, SensorSUID, ProjectID, Driver, API, Control, SensorAttrib) {
+    function FullDriverPath() {
+        if (!$scope.drivercompanySelected || !$scope.driverNameSelected || !$scope.driverVersionSelected) {
+            return "";
+        }
+        return $scope.drivercompanySelected + '/' + $scope.driverNameSelected + '/' + $scope.driverVersionSelected;
+    }
+
+    $scope.Ok = function() {
+        var driver = FullDriverPath();
+        if (!driver.length) {
+            $modalInstance.close();
+            return;
+        }
+
+        //var sharemode = $scope.shareMode;
+
+        //
+        var reqData = {
+            _id: SensorSUID,
+            driver: driver,
+            project: ProjectID,
+            ext: $scope.SensorAttrib.ext || {}
+        };
+        reqData.ext['adaptdevice'] = $scope.adaptDeviceSelected || '';
+        API.Query(SensorAttrib.update, reqData, function(result) {
+            if (result.err) {} else {}
+            $modalInstance.close();
+        });
+    };
+    $scope.Cancel = function() {
+        $modalInstance.dismiss('cancel');
+    };
+
+    function GetAdaptDevice(driverPath, defaultAdaptDevice) {
+        var obj = {
+            "command": "EMC_VIEW_ADAPTDEVICE",
+            "sid": SensorSUID,
+            "driver": driverPath
+        };
+        API.Query(Control.Send, obj, function(result) {
+            console.log(result);
+            if (result.err) {} else {
+                $scope.AdaptDevice = [];
+                _.each(result.result, function(v, k) {
+                    var obj = v;
+                    $scope.AdaptDevice.push(obj);
+                });
+
+                if (defaultAdaptDevice) {
+                    $scope.adaptDeviceSelected = defaultAdaptDevice;
+                } else if ($scope.AdaptDevice.length) {
+                    $scope.adaptDeviceSelected = $scope.AdaptDevice[0].code;
+                }
+            }
+        });
+    }
+
+    //选择驱动厂商
+    $scope.$watch('drivercompanySelected', function(driverCompany) {
+        if (driverCompany) {
+            //UI.PutPageItem('sensor.energytype', energyType);
+            //
+            //$scope.driverNameSelected = "";
+            //$scope.driverVersionSelected = "";
+
+            $scope.DriverNames = $scope.Drivers[driverCompany].driver;
+            if (!$scope.DriverNames) {
+                return;
+            }
+
+            $scope.DriverName = [];
+            _.map($scope.DriverNames, function(v, k) {
+                $scope.DriverName.push({
+                    id: k
+                });
+            });
+        }
+    });
+    //选择驱动名称
+    $scope.$watch('driverNameSelected', function(driverName) {
+        if (driverName) {
+            //UI.PutPageItem('sensor.energytype', energyType);
+            //
+            //$scope.driverVersionSelected = "";
+
+            $scope.DriverVersions = $scope.DriverNames[driverName].driver;
+            if (!$scope.DriverVersions) {
+                return;
+            }
+
+            $scope.DriverVersion = [];
+            _.map($scope.DriverVersions, function(v, k) {
+                $scope.DriverVersion.push({
+                    id: k
+                });
+            });
+        }
+    });
+    //选择版本后，获取传感器适配型号
+    $scope.$watch('driverVersionSelected', function(driverVersion) {
+        if (driverVersion) {
+            //
+            var driverPath = FullDriverPath();
+            if (!driverPath.length) {
+                return;
+            }
+
+            GetAdaptDevice(driverPath);
+        }
+    });
+
+    $q.all([
+        API.QueryPromise(Driver.enum, {}).$promise,
+        API.QueryPromise(SensorAttrib.info, {
+            sensor: SensorSUID
+        }).$promise
+    ]).then(
+        function(result) {
+            //
+            $scope.Drivers = result[0].result;
+            $scope.DriverCompany = [];
+            _.map($scope.Drivers, function(v, k) {
+                $scope.DriverCompany.push({
+                    id: k
+                });
+            });
+
+            $scope.SensorAttrib = result[1].result || {};
+
+            if ($scope.SensorAttrib) {
+                if ($scope.SensorAttrib.driver) {
+                    //
+                    var pathArray = $scope.SensorAttrib.driver.split('/');
+                    $scope.drivercompanySelected = pathArray[0];
+                    $scope.driverNameSelected = pathArray[1];
+                    $scope.driverVersionSelected = pathArray[2];
+                }
+
+                var adaptDevice = null;
+                adaptDevice = $scope.SensorAttrib.ext && $scope.SensorAttrib.ext.adaptdevice;
+                GetAdaptDevice($scope.SensorAttrib.driver, adaptDevice);
+                //$scope.shareMode = $scope.SensorAttrib.sharemode;
+            }
+        });
+    //$scope.shareMode = 'BYCOUNT';
+}]);

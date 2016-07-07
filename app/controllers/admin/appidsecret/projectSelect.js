@@ -1,1 +1,53 @@
-angular.module("app").controller("ProjectSelect",["$scope","$modalInstance","Projects","ProjectIDs","Config",function(e,c,t,n,o){e.Ok=function(){var t=[];_.each(e.viewOfProjects,function(e){e.isEnable&&t.push(e)}),c.close(t)},e.Cancel=function(){c.dismiss("cancel")},e.SwitchProject=function(e,c){e.preventDefault(),c.isEnable?c.isEnable=!1:c.isEnable=!0},e.onSearchProject=function(c){c.preventDefault(),e.UpdateViewOfProject(e.projectSearchKey)},e.UpdateViewOfProject=function(c){e.viewOfProjects=[],c?_.each(t,function(t){t.title.match(c)&&e.viewOfProjects.push(t)}):e.viewOfProjects=_.union(e.viewOfProjects,t),_.each(e.viewOfProjects,function(e){e.isEnable=_.contains(n,e._id)})},e.UpdateViewOfProject()}]);
+/**
+ * Created by Joey on 14-6-27.
+ */
+angular.module('app').controller('ProjectSelect', ["$scope", "$modalInstance", "Projects", "ProjectIDs", "Config", function($scope, $modalInstance, Projects, ProjectIDs, Config) {
+    $scope.Ok = function() {
+        var SelectProjects = [];
+        _.each($scope.viewOfProjects, function(project) {
+            if (project.isEnable) {
+                SelectProjects.push(project);
+            }
+        });
+        $modalInstance.close(SelectProjects);
+    };
+    $scope.Cancel = function() {
+        $modalInstance.dismiss('cancel');
+    };
+
+    $scope.SwitchProject = function(e, project) {
+        e.preventDefault();
+
+        if (project.isEnable) {
+            project.isEnable = false;
+        } else {
+            project.isEnable = true;
+        }
+    };
+
+    $scope.onSearchProject = function(e) {
+        e.preventDefault();
+
+        $scope.UpdateViewOfProject($scope.projectSearchKey);
+    };
+
+    $scope.UpdateViewOfProject = function(key) {
+        //
+        $scope.viewOfProjects = [];
+        if (!key) {
+            $scope.viewOfProjects = _.union($scope.viewOfProjects, Projects);
+        } else {
+            _.each(Projects, function(project) {
+                if (project.title.match(key)) {
+                    $scope.viewOfProjects.push(project);
+                }
+            });
+        }
+
+        //Set Select Building
+        _.each($scope.viewOfProjects, function(project) {
+            project.isEnable = _.contains(ProjectIDs, project._id);
+        });
+    };
+    $scope.UpdateViewOfProject();
+}]);

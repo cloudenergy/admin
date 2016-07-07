@@ -1,1 +1,42 @@
-angular.module("app").controller("Buildingcreate",["$scope","$location","$stateParams","SettingMenu","Building","Auth","API","Project","UI",function(n,t,i,e,o,u,r,c,a){u.Check(function(){e(function(t){n.menu=t}),n.submit=function(i){n.projects.selected=n.projects.selected._id,r.Query(o.add,n.building,function(n){n.code?a.AlertError(n.message):(t.path("/admin/building/info"),a.AlertSuccess("保存成功"))},function(n){a.AlertError(n.data.message)})};i.project;r.Query(c.info,function(t){t.err||(n.projects=angular.isArray(t.result)?t.result:[t.result],n.building=n.building||{},n.projects.selected=_.find(n.projects,function(n){return n._id==i.project}))}),n.avgConsumptionChange=function(){n.building.totalConsumption=n.building.acreage*n.building.avgConsumption},n.totalConsumptionChange=function(){n.building.avgConsumption=n.building.totalConsumption/n.building.acreage}})}]);
+angular.module('app').controller('Buildingcreate', ["$scope", "$location", "$stateParams", "SettingMenu", "Building", "Auth", "API", "Project", "UI", function($scope, $location, $stateParams, SettingMenu, Building, Auth, API, Project, UI) {
+    Auth.Check(function() {
+        SettingMenu(function(menu) {
+            $scope.menu = menu;
+        });
+
+        $scope.submit = function(e) {
+            $scope.projects.selected = $scope.projects.selected._id;
+            API.Query(Building.add, $scope.building, function(result) {
+                if (result.code) {
+                    UI.AlertError(result.message);
+                } else {
+                    $location.path('/admin/building/info')
+                    UI.AlertSuccess('保存成功');
+                }
+            }, function(result) {
+                UI.AlertError(result.data.message)
+            });
+        };
+
+        var projectID = $stateParams.project;
+
+        API.Query(Project.info, function(result) {
+            if (result.err) {
+                //
+            } else {
+                $scope.projects = angular.isArray(result.result) ? result.result : [result.result];
+                $scope.building = $scope.building || {};
+                $scope.projects.selected = _.find($scope.projects, function(project) {
+                    return project._id == $stateParams.project;
+                });
+            }
+        })
+
+        $scope.avgConsumptionChange = function() {
+            $scope.building.totalConsumption = $scope.building.acreage * $scope.building.avgConsumption;
+        }
+        $scope.totalConsumptionChange = function() {
+            $scope.building.avgConsumption = $scope.building.totalConsumption / $scope.building.acreage;
+        }
+    });
+}]);

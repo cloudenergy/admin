@@ -1,1 +1,91 @@
-angular.module("app").controller("accountEdit",["$scope","$stateParams","$q","$location","SettingMenu","Account","md5","API","Auth","UI","Character","Config",function(e,a,r,c,t,n,i,o,s,l,u,d){s.Check(function(){t(function(a){e.menu=a}),e.submit=function(a){var r={_id:e.account._id};if(e.newpasswd!=e.repeatnewpasswd)return void l.AlertError("二次密码输入不一致，请重新输入");if(e.newpasswd&&e.newpasswd.length){var t=i.createHash(e.newpasswd).toUpperCase();r.passwd=t}return e.characters.level?(r.character=e.characters.level._id,r.title=e.account.title,r.mobile=e.account.mobile,r.email=e.account.email,r.message=Object.keys(e.warning).filter(function(a){return e.warning[a]?a:""}).join(","),e.account.initpath&&(r.initpath=e.account.initpath),void o.Query(n.update,r,function(e){l.AlertSuccess("账户更新成功"),c.path("/admin/account/info")},function(e){e.code&&l.AlertError(e.message)})):void l.AlertError("请选择创建账户的权限级别")},r.all([o.QueryPromise(n.info,{id:EMAPP.Account._id}).$promise,o.QueryPromise(n.info,{id:a.id}).$promise]).then(function(a){e.adminUser=a[0].result,e.account=a[1].result;var r=e.account.message?e.account.message.split(","):[];e.warning={},angular.forEach(r,function(a,r){e.warning[a]=!0});var c=e.adminUser.character&&e.adminUser.character.level;o.Query(u.info,{power:c},function(a){a.code?l.AlertError(a.message):(e.characters=a.result,e.characters.level=e.account.character&&e.account.character.level,void 0==e.characters.level?e.characters.level=e.characters[e.characters.length-1]:e.characters.level=_.find(e.characters,function(a){return a.level==e.characters.level}))})})})}]);
+angular.module('app').controller('accountEdit', ["$scope", "$stateParams", "$q", "$location", "SettingMenu", "Account", "md5", "API", "Auth", "UI", "Character", "Config", function($scope, $stateParams, $q, $location, SettingMenu, Account, md5, API, Auth, UI, Character, Config) {
+
+    Auth.Check(function() {
+        SettingMenu(function(menu) {
+            $scope.menu = menu;
+        });
+
+        $scope.submit = function(e) {
+            var updateObj = {
+                _id: $scope.account._id
+            };
+            if ($scope.newpasswd != $scope.repeatnewpasswd) {
+                UI.AlertError('二次密码输入不一致，请重新输入');
+                return;
+            } else if ($scope.newpasswd && $scope.newpasswd.length) {
+                var passwdMD5 = md5.createHash($scope.newpasswd).toUpperCase();
+                //            $scope.account.passwd = passwdMD5;
+                updateObj['passwd'] = passwdMD5;
+            }
+
+            if (!$scope.characters.level) {
+                UI.AlertError('请选择创建账户的权限级别');
+                return;
+            }
+
+            updateObj['character'] = $scope.characters.level._id;
+            updateObj['title'] = $scope.account.title;
+            updateObj['mobile'] = $scope.account.mobile;
+            updateObj['email'] = $scope.account.email;
+
+            updateObj['message'] = Object.keys($scope.warning).filter(function(item) {
+                return $scope.warning[item] ? item : '';
+            }).join(',');
+
+            if ($scope.account.initpath) {
+                updateObj['initpath'] = $scope.account.initpath;
+            }
+
+            API.Query(Account.update, updateObj, function(result) {
+                UI.AlertSuccess('账户更新成功');
+                $location.path('/admin/account/info')
+            }, function(result) {
+                if (result.code) {
+                    UI.AlertError(result.message);
+                }
+            })
+        };
+
+        $q.all([
+                API.QueryPromise(Account.info, {
+                    id: EMAPP.Account._id
+                }).$promise, API.QueryPromise(Account.info, {
+                    id: $stateParams.id
+                }).$promise
+            ])
+            .then(function(result) {
+                $scope.adminUser = result[0].result;
+                $scope.account = result[1].result;
+
+                var message = $scope.account.message ? $scope.account.message.split(',') : [];
+                $scope.warning = {};
+                angular.forEach(message, function(value, key) {
+                    $scope.warning[value] = true;
+                });
+
+                var power = $scope.adminUser.character && $scope.adminUser.character.level;
+                API.Query(Character.info, {
+                    power: power
+                }, function(result) {
+                    if (result.code) {
+                        UI.AlertError(result.message);
+                        //
+                    } else {
+                        $scope.characters = result.result;
+                        $scope.characters.level = $scope.account.character && $scope.account.character.level;
+                        if ($scope.characters.level == undefined) {
+                            $scope.characters.level = $scope.characters[$scope.characters.length - 1];
+                        } else {
+                            $scope.characters.level = _.find($scope.characters, function(character) {
+                                return character.level == $scope.characters.level;
+                            });
+                        }
+                    }
+                });
+            });
+
+        function responseError(result) {
+            UI.AlertError(result.message)
+        }
+    });
+}]);

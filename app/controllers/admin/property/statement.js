@@ -1,1 +1,133 @@
-angular.module("app").controller("Property.statement",["$scope","$api","$state","$stateParams","$timeout","$q",function(t,e,i,n,a,l){var o=this,r=EMAPP.Account._id+"_property_statement_pagesize";o.tab=n.tab||"daily",o.projectid=n.projectid,o.format="daily"===o.tab?"YYYY-MM":"YYYY",o.viewDate=moment().format(o.format),t.$watch(function(){return o.viewDate},function(t){o.listData&&o.list()}),t.$watch(function(){return o.paging.index},function(){o.list()}),t.$watch(function(){return o.paging.size},function(t){localStorage.setItem(r,t),o.listData&&o.list()}),e.project.info({id:o.projectid},function(t){o.projectname=t.result.title,i.$current.parent.data.title="物业财务 - "+t.result.title}),o.paging={index:1,size:parseInt(localStorage.getItem(r)||10),items:[{key:10,title:"每页10条"},{key:15,title:"每页15条"},{key:30,title:"每页30条"},{key:50,title:"每页50条"},{key:100,title:"每页100条"}]},o.list=function(){e.business[o.tab+"fundsummary"]({project:o.projectid,time:o.viewDate.replace(/\-/g,""),pageindex:o.paging.index,pagesize:o.paging.size},function(t){t=t.result||{},angular.forEach(t.detail,function(t){Object.keys(t.earning).length||Object.keys(t.expenses).length||Object.keys(t.projectbalance).length||Object.keys(t.consumption).length||Object.keys(t.departmentbalance).length||(t.isnull=!0)}),o.listData=t.detail||[],o.listData.index=(t.paging||{}).pageindex||1,o.listData.total=(t.paging||{}).count||0})},o.exportBill=function(t){delete t.downloadFileBill,"daily"===o.tab?e["export"].projectdailybill({project:o.projectid,time:t.time},function(e){e.result.fn&&(t.downloadFileBill=e.result.fn,t.downloadNameBill=o.projectname+"_"+i.$current.data.title+"_日账单_"+t.time)}):e["export"].projectmonthlybill({project:o.projectid,time:t.time},function(e){e.result.fn&&(t.downloadFileBill=e.result.fn,t.downloadNameBill=o.projectname+"_"+i.$current.data.title+"_月账单_"+t.time)})},o.exportReceipt=function(t){delete t.downloadFileReceipt,"daily"===o.tab?e["export"].projectdailyreceipt({project:o.projectid,time:t.time},function(e){e.result.fn&&(t.downloadFileReceipt=e.result.fn,t.downloadNameReceipt=o.projectname+"_"+i.$current.data.title+"_日回单_"+t.time)}):e["export"].projectmonthlyreceipt({project:o.projectid,time:t.time},function(e){e.result.fn&&(t.downloadFileReceipt=e.result.fn,t.downloadNameReceipt=o.projectname+"_"+i.$current.data.title+"_月回单_"+t.time)})}}]);
+angular.module('app').controller('Property.statement', ["$scope", "$api", "$state", "$stateParams", "$timeout", "$q", function($scope, $api, $state, $stateParams, $timeout, $q) {
+
+    var self = this,
+        KEY_PAGESIZE = EMAPP.Account._id + '_property_statement_pagesize';
+
+    self.tab = $stateParams.tab || 'daily';
+    self.projectid = $stateParams.projectid;
+    self.format = self.tab === 'daily' ? 'YYYY-MM' : 'YYYY';
+    self.viewDate = moment().format(self.format);
+
+    $scope.$watch(function() {
+        return self.viewDate
+    }, function(val) {
+        self.listData && self.list();
+    });
+    $scope.$watch(function() {
+        return self.paging.index;
+    }, function() {
+        self.list();
+    });
+    $scope.$watch(function() {
+        return self.paging.size;
+    }, function(val) {
+        localStorage.setItem(KEY_PAGESIZE, val);
+        self.listData && self.list();
+    });
+
+    //设置面包屑
+    $api.project.info({
+        id: self.projectid
+    }, function(data) {
+        self.projectname = data.result.title;
+        $state.$current.parent.data.title = '物业财务 - ' + data.result.title;
+    });
+
+    //分页设置
+    self.paging = {
+        index: 1,
+        size: parseInt(localStorage.getItem(KEY_PAGESIZE) || 10),
+        items: [{
+            key: 10,
+            title: '每页10条'
+        }, {
+            key: 15,
+            title: '每页15条'
+        }, {
+            key: 30,
+            title: '每页30条'
+        }, {
+            key: 50,
+            title: '每页50条'
+        }, {
+            key: 100,
+            title: '每页100条'
+        }]
+    };
+
+    self.list = function() {
+        $api.business[self.tab + 'fundsummary']({
+            project: self.projectid,
+            time: self.viewDate.replace(/\-/g, ''),
+            pageindex: self.paging.index,
+            pagesize: self.paging.size
+        }, function(data) {
+
+            data = data.result || {};
+
+            angular.forEach(data.detail, function(item) {
+                if (!Object.keys(item.earning).length && !Object.keys(item.expenses).length && !Object.keys(item.projectbalance).length && !Object.keys(item.consumption).length && !Object.keys(item.departmentbalance).length) {
+                    item.isnull = true;
+                }
+            });
+
+            self.listData = data.detail || [];
+            self.listData.index = (data.paging || {}).pageindex || 1;
+            self.listData.total = (data.paging || {}).count || 0;
+
+        });
+    };
+
+    // 账单
+    self.exportBill = function(item) {
+        delete item.downloadFileBill;
+        if (self.tab === 'daily') {
+            $api.export.projectdailybill({
+                project: self.projectid,
+                time: item.time
+            }, function(data) {
+                if (data.result.fn) {
+                    item.downloadFileBill = data.result.fn;
+                    item.downloadNameBill = self.projectname + '_' + $state.$current.data.title + '_日账单_' + item.time;
+                }
+            });
+        } else {
+            $api.export.projectmonthlybill({
+                project: self.projectid,
+                time: item.time
+            }, function(data) {
+                if (data.result.fn) {
+                    item.downloadFileBill = data.result.fn;
+                    item.downloadNameBill = self.projectname + '_' + $state.$current.data.title + '_月账单_' + item.time;
+                }
+            });
+        }
+    };
+
+    // 回单
+    self.exportReceipt = function(item) {
+        delete item.downloadFileReceipt;
+        if (self.tab === 'daily') {
+            $api.export.projectdailyreceipt({
+                project: self.projectid,
+                time: item.time
+            }, function(data) {
+                if (data.result.fn) {
+                    item.downloadFileReceipt = data.result.fn;
+                    item.downloadNameReceipt = self.projectname + '_' + $state.$current.data.title + '_日回单_' + item.time;
+                }
+            });
+        } else {
+            $api.export.projectmonthlyreceipt({
+                project: self.projectid,
+                time: item.time
+            }, function(data) {
+                if (data.result.fn) {
+                    item.downloadFileReceipt = data.result.fn;
+                    item.downloadNameReceipt = self.projectname + '_' + $state.$current.data.title + '_月回单_' + item.time;
+                }
+            });
+        }
+    };
+
+}]);

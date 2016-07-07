@@ -1,1 +1,96 @@
-angular.module("app").controller("BuildingInfo",["$scope","SettingMenu","Building","API","Auth","Project","UI",function(e,t,n,i,o,r,u){e.operateStatus={create:{isEnable:!1,url:"/create"},"delete":{isEnable:!1,url:"/delete"},edit:{isEnable:!1,url:"/edit"}},e.askingRemoveID=void 0;var l="building.project";o.Check(e.operateStatus,function(){function o(t){i.Query(n.info,{project:t},function(t){t.err||(e.buildings=t.result,console.log(e.buildings))})}function c(e){u.AlertError(e.data.message)}t(function(t){e.menu=t}),e.DoRemove=function(t,o,r){t.preventDefault(),i.Query(n["delete"],{id:o},function(t){t.code||e.buildings.splice(r,1)},c)},e.AskForRemove=function(t,n){t.preventDefault(),e.askingRemoveID=n},e.CancelRemove=function(t,n){t.preventDefault(),e.askingRemoveID=void 0},i.Query(r.info,function(t){if(t.err);else{e.projects=angular.isArray(t.result)?t.result:[t.result],e.projects.length>0&&(e.projects.title=e.projects[0]._id);var n=u.GetPageItem(l);n?(n=_.find(e.projects,function(e){return e._id==n}),e.projects.title=n._id):e.projects.length>0&&(e.projects.title=e.projects[0]._id)}}),e.$watch("projects.title",function(e){e&&(u.PutPageItem(l,e),o(e))})})}]);
+angular.module('app').controller('BuildingInfo', ["$scope", "SettingMenu", "Building", "API", "Auth", "Project", "UI", function($scope, SettingMenu, Building, API, Auth, Project, UI) {
+    $scope.operateStatus = {
+        create: {
+            isEnable: false,
+            url: '/create'
+        },
+        delete: {
+            isEnable: false,
+            url: '/delete'
+        },
+        edit: {
+            isEnable: false,
+            url: '/edit'
+        }
+    };
+
+    $scope.askingRemoveID = undefined;
+    var DefalutProjectStoreKey = 'building.project';
+
+    Auth.Check($scope.operateStatus, function() {
+        SettingMenu(function(menu) {
+            $scope.menu = menu;
+        });
+
+        $scope.DoRemove = function(e, id, index) {
+            e.preventDefault();
+
+            API.Query(Building.delete, {
+                id: id
+            }, function(result) {
+                if (result.code) {
+
+                } else {
+                    $scope.buildings.splice(index, 1);
+                };
+            }, responseError)
+        };
+        $scope.AskForRemove = function(e, id) {
+            e.preventDefault();
+            $scope.askingRemoveID = id;
+        };
+        $scope.CancelRemove = function(e, id) {
+            e.preventDefault();
+            $scope.askingRemoveID = undefined;
+        };
+
+        function GetBuilding(projectID) {
+            API.Query(Building.info, {
+                project: projectID
+            }, function(result) {
+                if (result.err) {
+                    //error
+                } else {
+                    $scope.buildings = result.result;
+                    console.log($scope.buildings);
+                }
+            })
+        }
+
+        API.Query(Project.info, function(result) {
+            if (result.err) {
+                //error
+            } else {
+                $scope.projects = angular.isArray(result.result) ? result.result : [result.result];
+                if ($scope.projects.length > 0) {
+                    $scope.projects.title = $scope.projects[0]._id;
+                }
+
+                //Set Default Building
+                var defaultProject = UI.GetPageItem(DefalutProjectStoreKey);
+                if (defaultProject) {
+                    defaultProject = _.find($scope.projects, function(project) {
+                        return project._id == defaultProject;
+                    });
+                    $scope.projects.title = defaultProject._id;
+                } else {
+                    if ($scope.projects.length > 0) {
+                        $scope.projects.title = $scope.projects[0]._id;
+                    }
+                }
+            }
+        });
+
+        //选择项目后联动查询建筑
+        $scope.$watch('projects.title', function(projectID) {
+            if (projectID) {
+                UI.PutPageItem(DefalutProjectStoreKey, projectID);
+                GetBuilding(projectID);
+            }
+        });
+
+        function responseError(result) {
+            UI.AlertError(result.data.message)
+        }
+    });
+}]);

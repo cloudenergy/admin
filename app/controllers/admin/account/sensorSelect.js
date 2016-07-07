@@ -1,1 +1,109 @@
-angular.module("app").controller("SensorSelect",["$scope","$modalInstance","API","Sensor","ProjectID","SensorIDs","Config",function(e,n,s,i,o,r,c){var t;e.Ok=function(){var s=[],i=[];e.viewOfSensors[0].isEnable?s=e.viewOfSensors[0]._id:_.each(e.viewOfSensors,function(e){var n="";e.project&&(n=_.isObject(e.project)?e.project&&e.project._id+"."||"":e.project+"."||""),e.isEnable?s.push(n+e._id):i.push(n+e._id)}),n.close({select:s,unselect:i})},e.Cancel=function(){n.dismiss("cancel")},e.SwitchSensor=function(n,s){n.preventDefault(),"*"==s._id?(_.each(e.viewOfSensors,function(e){e.isEnable=!1}),s.isEnable=!s.isEnable):(e.viewOfSensors[0].isEnable=!1,s.isEnable=!s.isEnable)},e.onSearchSensor=function(n){n.preventDefault(),e.UpdateViewOfSensors(e.sensorSearchKey)},e.UpdateViewOfSensors=function(n){e.viewOfSensors=[{_id:"*",title:"所有传感器"}],n?_.each(t,function(s){s.title.match(n)&&e.viewOfSensors.push(s)}):e.viewOfSensors=_.union(e.viewOfSensors,t);var s=!1;_.each(e.viewOfSensors,function(e){_.contains(r,e._id)?(s=!0,e.isEnable=!0):e.isEnable=!1}),s||(e.viewOfSensors[0].isEnable=!0)};var a=[];_.each(r,function(e){a.push(e.replace(/.+\./g,""))}),r=a,s.Query(i.channelinfo,{project:o},function(n){n.err||(t=n.result,e.UpdateViewOfSensors())})}]);
+/**
+ * Created by Joey on 14-6-27.
+ */
+angular.module('app').controller('SensorSelect', ["$scope", "$modalInstance", "API", "Sensor", "ProjectID", "SensorIDs", "Config", function($scope, $modalInstance, API, Sensor, ProjectID, SensorIDs, Config) {
+    var Sensors;
+
+    $scope.Ok = function() {
+        var SelectSensors = [];
+        var UnSelectSensors = [];
+        if ($scope.viewOfSensors[0].isEnable) {
+            //
+            SelectSensors = $scope.viewOfSensors[0]._id;
+        } else {
+            _.each($scope.viewOfSensors, function(sensor) {
+                var prefix = '';
+                if (sensor.project) {
+                    //
+                    if (_.isObject(sensor.project)) {
+                        prefix = sensor.project && sensor.project._id + '.' || '';
+                    } else {
+                        prefix = sensor.project + '.' || '';
+                    }
+                }
+
+                if (sensor.isEnable) {
+                    SelectSensors.push(prefix + sensor._id);
+                } else {
+                    UnSelectSensors.push(prefix + sensor._id);
+                }
+            });
+        }
+        $modalInstance.close({
+            select: SelectSensors,
+            unselect: UnSelectSensors
+        });
+    };
+    $scope.Cancel = function() {
+        $modalInstance.dismiss('cancel');
+    };
+
+    $scope.SwitchSensor = function(e, sensor) {
+        e.preventDefault();
+
+        if (sensor._id == '*') {
+            _.each($scope.viewOfSensors, function(p) {
+                p.isEnable = false;
+            });
+            sensor.isEnable = !sensor.isEnable;
+        } else {
+            $scope.viewOfSensors[0].isEnable = false;
+            sensor.isEnable = !sensor.isEnable;
+        }
+    };
+
+    $scope.onSearchSensor = function(e) {
+        e.preventDefault();
+
+        $scope.UpdateViewOfSensors($scope.sensorSearchKey);
+    };
+
+    $scope.UpdateViewOfSensors = function(key) {
+        //
+        $scope.viewOfSensors = [{
+            _id: '*',
+            title: '所有传感器'
+        }];
+        if (!key) {
+            $scope.viewOfSensors = _.union($scope.viewOfSensors, Sensors);
+        } else {
+            _.each(Sensors, function(sensor) {
+                if (sensor.title.match(key)) {
+                    $scope.viewOfSensors.push(sensor);
+                }
+            });
+        }
+
+        //Set Select Sensor
+        var isSelectedOne = false;
+        _.each($scope.viewOfSensors, function(sensor) {
+            if (_.contains(SensorIDs, sensor._id)) {
+                isSelectedOne = true;
+                sensor.isEnable = true;
+            } else {
+                sensor.isEnable = false;
+            }
+        });
+        if (!isSelectedOne) {
+            $scope.viewOfSensors[0].isEnable = true;
+        }
+    };
+
+    //if(SensorIDs && SensorIDs.length) {
+    var newSensorIDs = [];
+    _.each(SensorIDs, function(sensor) {
+        newSensorIDs.push(sensor.replace(/.+\./g, ''));
+    });
+    SensorIDs = newSensorIDs;
+
+    API.Query(Sensor.channelinfo, {
+        project: ProjectID
+    }, function(result) {
+        if (result.err) {} else {
+            Sensors = result.result;
+            $scope.UpdateViewOfSensors();
+        }
+    });
+    //}
+
+}]);

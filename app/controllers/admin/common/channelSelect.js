@@ -1,1 +1,120 @@
-angular.module("app").controller("ChannelSelect",["$scope","$rootScope","$uibModalInstance","API","Sensor","ProjectID","SelectedSensors",function(e,n,i,s,o,r,t){var a;e.currentPage=1,e.project=r,e.Ok=function(){var n=[],s=!0;e.viewOfSensors[0].isEnable?n=[e.viewOfSensors[0]]:(_.each(e.viewOfSensors,function(e){e.isEnable&&(s=!1,n.push(e))}),s&&e.Cancel()),i.close(n)},e.Cancel=function(){i.dismiss("cancel")},e.SwitchSensor=function(n,i){if(n.preventDefault(),"*"==i._id)i.isEnable=!i.isEnable,_.each(e.viewOfSensors,function(e){e.isEnable=i.isEnable}),t=[];else{var s=_.find(t,function(e){return e._id==i._id});s?t=_.without(t,s):t.push(i),e.viewOfSensors[0].isEnable=!1,i.isEnable=!i.isEnable}},e.onSearchSensor=function(n){n.preventDefault(),e.UpdateViewOfSensors(e.sensorSearchKey)},e.OnSelectAll=function(i){i.preventDefault();for(var s=(e.currentPage-1)*n.popPageSize,o=e.currentPage*n.popPageSize,r=s;o>r;r++)e.viewOfSensors[r].isEnable=!0},e.UpdateViewOfSensors=function(n){e.viewOfSensors=[{_id:"*",title:"所有传感器",isEnable:!!t.indexOf("*")}],n?_.each(a,function(i){i.title.match(n)?e.viewOfSensors.push(i):i.channel&&i.channel.match(n)&&e.viewOfSensors.push(i)}):e.viewOfSensors=_.union(e.viewOfSensors,a),_.each(e.viewOfSensors,function(e){e.isEnable=_.find(t,function(n){return _.isObject(n)?n._id==e._id:n==r+"."+e._id})})},s.Query(o.channelinfo,{project:r},function(n){n.err||(a=n.result,e.UpdateViewOfSensors())}.bind(this))}]);
+/**
+ * Created by Joey on 14-6-27.
+ */
+angular.module('app').controller('ChannelSelect', ["$scope", "$rootScope", "$uibModalInstance", "API", "Sensor", "ProjectID", "SelectedSensors", function($scope, $rootScope, $uibModalInstance, API, Sensor, ProjectID, SelectedSensors) {
+    var Sensors;
+    $scope.currentPage = 1;
+    $scope.project = ProjectID;
+
+    $scope.Ok = function() {
+
+        var selectSensors = [];
+        var isUnmodified = true;
+        if ($scope.viewOfSensors[0].isEnable) {
+            //
+            selectSensors = [$scope.viewOfSensors[0]];
+        } else {
+            _.each($scope.viewOfSensors, function(sensor) {
+                if (sensor.isEnable) {
+                    isUnmodified = false;
+                    selectSensors.push(sensor);
+                }
+            });
+
+            //selectSensors = _.union(selectSensors, SelectedSensors);
+
+            if (isUnmodified) {
+                $scope.Cancel()
+            }
+        }
+
+        $uibModalInstance.close(selectSensors);
+    };
+    $scope.Cancel = function() {
+        $uibModalInstance.dismiss('cancel');
+    };
+
+    $scope.SwitchSensor = function(e, sensor) {
+        e.preventDefault();
+
+        if (sensor._id == '*') {
+            sensor.isEnable = !sensor.isEnable;
+            _.each($scope.viewOfSensors, function(p) {
+                p.isEnable = sensor.isEnable;
+            });
+            // sensor.isEnable = !sensor.isEnable;
+            SelectedSensors = [];
+        } else {
+            var findSensor = _.find(SelectedSensors, function(ss) {
+                return ss._id == sensor._id;
+            });
+            if (!findSensor) {
+                SelectedSensors.push(sensor);
+            } else {
+                SelectedSensors = _.without(SelectedSensors, findSensor);
+            }
+            $scope.viewOfSensors[0].isEnable = false;
+            sensor.isEnable = !sensor.isEnable;
+        }
+    };
+
+    $scope.onSearchSensor = function(e) {
+        e.preventDefault();
+        $scope.UpdateViewOfSensors($scope.sensorSearchKey);
+    };
+
+    $scope.OnSelectAll = function(e) {
+        e.preventDefault();
+
+        // console.log($scope.currentPage, $rootScope.popPageSize);
+        var startIndex = ($scope.currentPage - 1) * $rootScope.popPageSize;
+        var stopIndex = $scope.currentPage * $rootScope.popPageSize;
+        for (var i = startIndex; i < stopIndex; i++) {
+            $scope.viewOfSensors[i].isEnable = true;
+        }
+    };
+
+    $scope.UpdateViewOfSensors = function(key) {
+        //
+        $scope.viewOfSensors = [{
+            _id: '*',
+            title: '所有传感器',
+            isEnable: SelectedSensors.indexOf('*') ? true : false
+        }];
+
+        if (!key) {
+            $scope.viewOfSensors = _.union($scope.viewOfSensors, Sensors);
+        } else {
+            _.each(Sensors, function(sensor) {
+                if (sensor.title.match(key)) {
+                    $scope.viewOfSensors.push(sensor);
+                } else if (sensor.channel && sensor.channel.match(key)) {
+                    $scope.viewOfSensors.push(sensor);
+                }
+            });
+        }
+
+        //Set Select Sensor
+        _.each($scope.viewOfSensors, function(sensor) {
+            sensor.isEnable = _.find(SelectedSensors, function(SelectSensor) {
+                if (_.isObject(SelectSensor)) {
+                    return SelectSensor._id == sensor._id;
+                } else {
+                    return SelectSensor == ProjectID + '.' + sensor._id;
+                }
+            });
+        });
+    };
+    //
+    API.Query(Sensor.channelinfo, {
+        project: ProjectID
+    }, function(result) {
+        // console.log(result);
+        if (result.err) {
+
+        } else {
+            Sensors = result.result;
+            $scope.UpdateViewOfSensors();
+        }
+    }.bind(this));
+}]);

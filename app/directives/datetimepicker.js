@@ -1,1 +1,87 @@
-angular.module("app").directive("datetimepicker",["$timeout","$ocLazyLoad",function($timeout,$ocLazyLoad){var pluginLoad=$ocLazyLoad.load([{insertBefore:"#load_styles_before",files:["http://static.cloudenergy.me/libs/eonasdan-bootstrap-datetimepicker-4.17.37/build/css/bootstrap-datetimepicker.min.css"]},{files:["http://static.cloudenergy.me/libs/eonasdan-bootstrap-datetimepicker-4.17.37/build/js/bootstrap-datetimepicker.min.js"]}]);return{restrict:"A",require:"?ngModel",link:function(scope,element,attrs,ctrl){pluginLoad.then(function(){var linkLeft,linkRight,options={locale:"zh-CN",format:"YYYY-MM-DD",maxDate:new Date,widgetPositioning:{horizontal:"right"}};angular.forEach(element.data(),function(val,key){/^\$/.test(key)||(/^\{.*\}$/.test(val)||/^\[.*\]$/.test(val)?eval("this[key]="+val):this[key]=val)},options),scope.$watch(attrs.datetimepicker,function(e){attrs.datetimepicker&&!angular.isDefined(e)||(angular.isObject(e)&&angular.extend(options,e),linkLeft=options.linkLeft&&$(options.linkLeft),linkRight=options.linkRight&&$(options.linkRight),delete options.linkLeft,delete options.linkRight,element.datetimepicker(options),!options.inline&&$timeout(function(){var e=linkLeft&&linkLeft.length&&linkLeft.data("DateTimePicker"),t=linkRight&&linkRight.length&&linkRight.data("DateTimePicker"),a=element.data("DateTimePicker"),i=function(i,n){e&&(e.maxDate(i),e.date()&&a.minDate(e.date()),n&&e.date(moment(Math.max(moment(i).subtract(n,"days"),e.date())))),t&&(t.minDate(i),t.date()&&a.maxDate(t.date()),n&&t.date(moment(Math.min(moment(i).add(n,"days"),t.date(),moment()))))};element.off("dp.change").on("dp.change",function(e){ctrl&&ctrl.$setViewValue(e.target.value),i(e.date,attrs.rangeDay&&scope.$eval(attrs.rangeDay))}).off("dp.show").on("dp.show",function(e){(element.is("input")?element.parent():element).addClass("focus"),i(a.date(),attrs.rangeDay&&scope.$eval(attrs.rangeDay))}).off("dp.hide").on("dp.hide",function(){(element.is("input")?element.parent():element).removeClass("focus")})}))})})}}}]);
+angular.module('app').directive('datetimepicker', ["$timeout", "$ocLazyLoad", function($timeout, $ocLazyLoad) {
+
+    var pluginLoad = $ocLazyLoad.load([{
+        insertBefore: '#load_styles_before',
+        files: ['http://static.cloudenergy.me/libs/eonasdan-bootstrap-datetimepicker-4.17.37/build/css/bootstrap-datetimepicker.min.css']
+    }, {
+        files: ['http://static.cloudenergy.me/libs/eonasdan-bootstrap-datetimepicker-4.17.37/build/js/bootstrap-datetimepicker.min.js']
+    }]);
+
+    return {
+        restrict: 'A',
+        require: '?ngModel',
+        link: function(scope, element, attrs, ctrl) {
+            pluginLoad.then(function() {
+
+                var linkLeft,
+                    linkRight,
+                    options = {
+                        locale: 'zh-CN',
+                        format: 'YYYY-MM-DD',
+                        maxDate: new Date(),
+                        widgetPositioning: {
+                            horizontal: 'right'
+                        }
+                    };
+
+                angular.forEach(element.data(), function(val, key) {
+                    if (!/^\$/.test(key)) {
+                        if (/^\{.*\}$/.test(val) || /^\[.*\]$/.test(val)) {
+                            eval('this[key]=' + val);
+                        } else {
+                            this[key] = val;
+                        }
+                    }
+                }, options);
+
+                scope.$watch(attrs.datetimepicker, function(val) {
+
+                    if (!attrs.datetimepicker || angular.isDefined(val)) {
+
+                        angular.isObject(val) && angular.extend(options, val);
+
+                        linkLeft = options.linkLeft && $(options.linkLeft);
+                        linkRight = options.linkRight && $(options.linkRight);
+
+                        delete options.linkLeft;
+                        delete options.linkRight;
+
+                        element.datetimepicker(options);
+
+                        !options.inline && $timeout(function() {
+
+                            var linkLeftData = linkLeft && linkLeft.length && linkLeft.data('DateTimePicker'),
+                                linkRightData = linkRight && linkRight.length && linkRight.data('DateTimePicker'),
+                                elementData = element.data('DateTimePicker'),
+                                rangeDate = function(now, rangeDay) {
+                                    if (linkLeftData) {
+                                        linkLeftData.maxDate(now);
+                                        linkLeftData.date() && elementData.minDate(linkLeftData.date());
+                                        rangeDay && linkLeftData.date(moment(Math.max(moment(now).subtract(rangeDay, 'days'), linkLeftData.date())));
+                                    }
+                                    if (linkRightData) {
+                                        linkRightData.minDate(now);
+                                        linkRightData.date() && elementData.maxDate(linkRightData.date());
+                                        rangeDay && linkRightData.date(moment(Math.min(moment(now).add(rangeDay, 'days'), linkRightData.date(), moment())));
+                                    }
+                                };
+
+                            element.off('dp.change').on('dp.change', function(event) {
+                                ctrl && ctrl.$setViewValue(event.target.value);
+                                rangeDate(event.date, attrs.rangeDay && scope.$eval(attrs.rangeDay));
+                            }).off('dp.show').on('dp.show', function(event) {
+                                (element.is('input') ? element.parent() : element).addClass('focus');
+                                rangeDate(elementData.date(), attrs.rangeDay && scope.$eval(attrs.rangeDay));
+                            }).off('dp.hide').on('dp.hide', function() {
+                                (element.is('input') ? element.parent() : element).removeClass('focus');
+                            });
+
+                        });
+
+                    }
+                });
+            });
+        }
+    };
+
+}]);

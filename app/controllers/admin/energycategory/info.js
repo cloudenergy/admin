@@ -1,1 +1,59 @@
-angular.module("app").controller("energycategoryinfo",["$rootScope","$scope","SettingMenu","Energycategory","API","Auth","UI",function(e,n,t,o,r,a,u){n.operateStatus={add:{isEnable:!1,url:"/add"},"delete":{isEnable:!1,url:"/delete"},update:{isEnable:!1,url:"/update"}},n.askingRemoveID=void 0,a.Check(n.operateStatus,function(){function e(e){u.AlertError(e.data.message)}t(function(e){n.menu=e}),r.Query(o.info,function(e){e.err||(n.Energycategory=e.result)}),n.DoRemove=function(t,a,u){t.preventDefault();var i=u;r.Query(o["delete"],{id:a},function(e){n.Energycategory.splice(i,1)},e)},n.AskForRemove=function(e,t){e.preventDefault(),n.askingRemoveID=t},n.CancelRemove=function(e,t){e.preventDefault(),n.askingRemoveID=void 0}})}]);
+angular.module('app').controller('energycategoryinfo', ["$rootScope", "$scope", "SettingMenu", "Energycategory", "API", "Auth", "UI", function($rootScope, $scope, SettingMenu, Energycategory, API, Auth, UI) {
+
+    $scope.operateStatus = {
+        add: {
+            isEnable: false,
+            url: '/add'
+        },
+        delete: {
+            isEnable: false,
+            url: '/delete'
+        },
+        update: {
+            isEnable: false,
+            url: '/update'
+        }
+    };
+
+    $scope.askingRemoveID = undefined;
+
+    Auth.Check($scope.operateStatus, function() {
+        SettingMenu(function(menu) {
+            $scope.menu = menu;
+        });
+
+        API.Query(Energycategory.info, function(result) {
+            if (result.err) {
+                //error
+            } else {
+                $scope.Energycategory = result.result;
+            }
+        });
+
+        $scope.DoRemove = function(e, id, index) {
+            e.preventDefault();
+
+            //        index = $rootScope.convertIndex(index);
+            var removeIndex = index;
+            API.Query(Energycategory.delete, {
+                id: id
+            }, function(result) {
+                $scope.Energycategory.splice(removeIndex, 1);
+                //            UI.AlertSuccess('删除成功')
+            }, responseError)
+        };
+        $scope.AskForRemove = function(e, id) {
+            e.preventDefault();
+            $scope.askingRemoveID = id;
+        };
+        $scope.CancelRemove = function(e, id) {
+            e.preventDefault();
+            $scope.askingRemoveID = undefined;
+        };
+
+
+        function responseError(result) {
+            UI.AlertError(result.data.message)
+        }
+    });
+}]);

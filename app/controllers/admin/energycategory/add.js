@@ -1,1 +1,22 @@
-angular.module("app").controller("energycategoryadd",["$rootScope","$scope","$location","SettingMenu","Energycategory","Auth","API","UI",function(e,n,r,o,t,a,c,u){a.Check(function(){o(function(e){n.menu=e}),n.submit=function(e){var o=new Array;o.push(n.energycategory),c.Query(t.add,o,function(e){e.err?u.AlertError(e.data.message):(u.AlertSuccess("保存成功"),r.path("/admin/energycategory/info"))})}})}]);
+angular.module('app').controller('energycategoryadd', ["$rootScope", "$scope", "$location", "SettingMenu", "Energycategory", "Auth", "API", "UI", function($rootScope, $scope, $location, SettingMenu, Energycategory, Auth, API, UI) {
+    Auth.Check(function() {
+        SettingMenu(function(menu) {
+            $scope.menu = menu;
+        });
+
+        $scope.submit = function(e) {
+            var energycategoryArray = new Array();
+            energycategoryArray.push($scope.energycategory);
+            API.Query(Energycategory.add, energycategoryArray, function(result) {
+                if (result.err) {
+                    UI.AlertError(result.data.message)
+                        //
+                } else {
+                    UI.AlertSuccess('保存成功');
+
+                    $location.path('/admin/energycategory/info')
+                }
+            });
+        }
+    });
+}]);

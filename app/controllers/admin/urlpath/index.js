@@ -1,1 +1,180 @@
-angular.module("app").controller("urlpathInfo",["$scope","$q","SettingMenu","UrlPath","API","Auth","UI",function(e,n,o,i,t,d,u){var r,a=new Array;d.Check(function(){function d(e){u.AlertError(e.data.message)}o(function(n){e.menu=n}),e.doSave=function(o){function d(e,n){if("/"!=e._id&&(n+=e._id),void 0!=e.authtype){var o={_id:e._id,desc:e.desc,authtype:e.authtype,needlogin:e.needlogin,enable:e.enable};o._id=n,console.log(n,"node: ",o),u.push(o)}void 0!=e.nodes&&e.nodes.length>0&&_.each(e.nodes,function(e){d(e,n+"/")})}o.preventDefault();var u=new Array;d(e.urlpath[0],""),console.log(a);var r=new Array;_.each(a,function(e){r.push(e.url._id)}),t.QueryPromise(i["delete"],{id:r}),n.all([t.QueryPromise(i["delete"],{id:r}).promise,t.QueryPromise(i.update,u).promise]).then(function(e){console.log(e)})},e.insert=function(e){},t.Query(i.info,{},function(n){if(n.err);else{r=n.result;var o={_id:"/",nodes:new Array};_.each(r,function(e){var n=e._id.split("/"),i=o;_.each(n,function(o,t){if(""!=o){var d=n.length==t+1,u=_.find(i.nodes,function(e){return e._id==o});void 0==u&&(u=d?{_id:o,url:e,desc:e.desc||"",enable:e.enable,needlogin:e.needlogin,authtype:e.authtype,nodes:new Array}:{_id:o,desc:e.desc||"",nodes:new Array},i.nodes.push(u)),i=u}})}),console.log(o),e.urlpath=[o]}},d),e.RemoveNode=function(e,n){e.remove(),a.push(n)},e.enable=function(e){e.enable=!e.enable},e.toggle=function(e){e.toggle()},e.newSubItem=function(e){var n=e.node;n.nodes.push({_id:"",authtype:"NONE",needlogin:!0,enable:!0,editing:!0,isnew:!0,nodes:[]})},e.edit=function(e){e.editing=!0},e.needLogin=function(e){e.needlogin=!e.needlogin},e.SetAuthType=function(e,n){e.authtype=n},e.cancelEditing=function(n,o){o._id.length?o.editing=!1:e.RemoveNode(n,o)},e.save=function(e){e.editing=!1,e.isnew=!1}})}]);
+angular.module('app').controller('urlpathInfo', ["$scope", "$q", "SettingMenu", "UrlPath", "API", "Auth", "UI", function($scope, $q, SettingMenu, UrlPath, API, Auth, UI) {
+
+    var removeNodes = new Array();
+    var pastUrlPath;
+
+    Auth.Check(function() {
+        SettingMenu(function(menu) {
+            $scope.menu = menu;
+        });
+
+        $scope.doSave = function(e) {
+            e.preventDefault();
+
+            var nodes = new Array();
+
+            function TraverseNode(node, path) {
+                //
+                if (node._id != '/') {
+                    path += node._id;
+                }
+                if (node.authtype != undefined) {
+                    //terminal node
+                    var urlpath = {
+                        _id: node._id,
+                        desc: node.desc,
+                        authtype: node.authtype,
+                        needlogin: node.needlogin,
+                        enable: node.enable
+                    };
+                    urlpath._id = path;
+                    console.log(path, 'node: ', urlpath);
+                    nodes.push(urlpath);
+                }
+                if (node.nodes != undefined && node.nodes.length > 0) {
+                    //path
+                    _.each(node.nodes, function(subNode) {
+                        TraverseNode(subNode, path + '/');
+                    });
+                }
+            }
+
+            TraverseNode($scope.urlpath[0], '');
+            console.log(removeNodes);
+            var removeNodeIDs = new Array();
+            _.each(removeNodes, function(node) {
+                removeNodeIDs.push(node.url._id);
+            });
+            API.QueryPromise(UrlPath.delete, {
+                id: removeNodeIDs
+            })
+
+            $q.all([
+                API.QueryPromise(UrlPath.delete, {
+                    id: removeNodeIDs
+                }).promise,
+                API.QueryPromise(UrlPath.update, nodes).promise
+            ]).then(
+                function(result) {
+                    console.log(result);
+                }
+            );
+            //        API.Query(UrlPath.update, nodes, function(data){
+            //            if(data.err){}
+            //            else{
+            //                UI.AlertSuccess('更新成功')
+            //            }
+            //        });
+        };
+
+        $scope.insert = function(event) {
+            //
+        };
+
+        //        UrlPath.info(function(data) {
+        API.Query(UrlPath.info, {}, function(data) {
+            if (data.err) {} else {
+                pastUrlPath = data.result;
+                var urlPath = {
+                    _id: '/',
+                    nodes: new Array()
+                };
+                _.each(pastUrlPath, function(url) {
+                    var pathNode = url._id.split('/');
+                    var traverseNode = urlPath;
+                    _.each(pathNode, function(node, index) {
+                        if (node == '') {
+                            return;
+                        }
+
+                        //是否最后一个节点
+                        var isFinalNode = (pathNode.length == index + 1);
+                        var existsNode = _.find(traverseNode.nodes, function(v) {
+                            return v._id == node;
+                        });
+                        if (existsNode == undefined) {
+                            if (isFinalNode) {
+                                //
+                                existsNode = {
+                                    _id: node,
+                                    url: url,
+                                    desc: url.desc || '',
+                                    enable: url.enable,
+                                    needlogin: url.needlogin,
+                                    authtype: url.authtype,
+                                    nodes: new Array()
+                                }
+                            } else {
+                                existsNode = {
+                                    _id: node,
+                                    desc: url.desc || '',
+                                    nodes: new Array()
+                                }
+                            }
+                            traverseNode.nodes.push(existsNode);
+                        }
+                        traverseNode = existsNode;
+                    })
+                });
+                console.log(urlPath);
+                $scope.urlpath = [urlPath];
+            }
+        }, responseError)
+
+        //Action
+        $scope.RemoveNode = function(scope, node) {
+            scope.remove();
+            removeNodes.push(node);
+        };
+
+        $scope.enable = function(node) {
+            node.enable = !node.enable;
+        };
+
+        $scope.toggle = function(scope) {
+            scope.toggle();
+        };
+
+        $scope.newSubItem = function(scope) {
+            var nodeData = scope.node;
+            nodeData.nodes.push({
+                _id: '',
+                authtype: "NONE",
+                needlogin: true,
+                enable: true,
+                editing: true,
+                isnew: true,
+                nodes: []
+            });
+        };
+
+        $scope.edit = function(node) {
+            node.editing = true;
+        };
+
+        $scope.needLogin = function(node) {
+            node.needlogin = !node.needlogin;
+        };
+
+        $scope.SetAuthType = function(node, type) {
+            node.authtype = type;
+        };
+
+        $scope.cancelEditing = function(scope, node) {
+            if (!node._id.length) {
+                $scope.RemoveNode(scope, node);
+            } else {
+                node.editing = false;
+            }
+        };
+
+        $scope.save = function(node) {
+            node.editing = false;
+            node.isnew = false;
+        };
+
+        function responseError(result) {
+            UI.AlertError(result.data.message)
+        }
+    });
+}]);

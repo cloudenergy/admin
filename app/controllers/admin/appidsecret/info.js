@@ -1,1 +1,69 @@
-angular.module("app").controller("appidsecretInfo",["$scope","$cookies","$location","SettingMenu","AppIDSecret","API","Auth","UI","Config",function(e,t,n,o,r,a,u,c,i){e.operateStatus={create:{isEnable:!1,url:"/create"},"delete":{isEnable:!1,url:"/delete"},edit:{isEnable:!1,url:"/edit"},roleres:{isEnable:!1,url:"/roleres"}},e.askingRemoveID=void 0,u.Check(e.operateStatus,function(){function n(e){c.AlertError(e.data.message)}a.Query(r.info,{},function(t){t.err||(e.accounts=t.result,console.log(e.accounts))},n),e.DoRemove=function(t,o,u){t.preventDefault();var i=c.GetAbsoluteIndex(e.currentPage,u);a.Query(r["delete"],{id:o},function(t){e.accounts.splice(i,1)},n)},e.AskForRemove=function(t,n){t.preventDefault(),e.askingRemoveID=n},e.CancelRemove=function(t,n){t.preventDefault(),e.askingRemoveID=void 0},e.$watch("currentPage",function(t){return t?void c.PutPageIndex(void 0,e.currentPage):void(e.currentPage=c.GetPageIndex())}),e.adminUser=t.user})}]);
+angular.module('app').controller('appidsecretInfo', ["$scope", "$cookies", "$location", "SettingMenu", "AppIDSecret", "API", "Auth", "UI", "Config", function($scope, $cookies, $location, SettingMenu, AppIDSecret, API, Auth, UI, Config) {
+
+    $scope.operateStatus = {
+        create: {
+            isEnable: false,
+            url: '/create'
+        },
+        delete: {
+            isEnable: false,
+            url: '/delete'
+        },
+        edit: {
+            isEnable: false,
+            url: '/edit'
+        },
+        roleres: {
+            isEnable: false,
+            url: '/roleres'
+        }
+    };
+
+    $scope.askingRemoveID = undefined;
+
+
+    Auth.Check($scope.operateStatus, function() {
+
+        API.Query(AppIDSecret.info, {}, function(result) {
+            if (result.err) {
+                //error
+            } else {
+                $scope.accounts = result.result;
+                console.log($scope.accounts);
+            }
+        }, responseError);
+
+        $scope.DoRemove = function(e, id, index) {
+            e.preventDefault();
+
+            var removeIndex = UI.GetAbsoluteIndex($scope.currentPage, index);
+            API.Query(AppIDSecret.delete, {
+                id: id
+            }, function(result) {
+                $scope.accounts.splice(removeIndex, 1);
+                //            UI.AlertSuccess('删除成功')
+            }, responseError)
+        };
+        $scope.AskForRemove = function(e, id) {
+            e.preventDefault();
+            $scope.askingRemoveID = id;
+        };
+        $scope.CancelRemove = function(e, id) {
+            e.preventDefault();
+            $scope.askingRemoveID = undefined;
+        };
+        $scope.$watch('currentPage', function(currentPage) {
+            if (!currentPage) {
+                $scope.currentPage = UI.GetPageIndex();
+                return;
+            }
+            UI.PutPageIndex(undefined, $scope.currentPage);
+        });
+
+        function responseError(result) {
+            UI.AlertError(result.data.message)
+        }
+
+        $scope.adminUser = $cookies.user;
+    });
+}]);

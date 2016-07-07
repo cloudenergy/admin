@@ -1,1 +1,7 @@
-angular.module("app").factory("Auth",["$http",function(t){return{login:function(){return t.get("index.html")}}}]);
+angular.module('app').factory('Auth', ["$http", function($http) {
+    return {
+        login: function() {
+            return $http.get('index.html');
+        }
+    };
+}]);

@@ -1,1 +1,37 @@
-angular.module("app").controller("CollectorCreate",["$scope","$location","SettingMenu","Collector","Project","API","Auth","$stateParams","UI",function(o,r,t,e,c,n,l,a,i){l.Check(function(){function t(o){i.AlertError(o.data.message)}o.submit=function(){var c=angular.copy(o.collector);c.project=c.project._id,n.Query(e.add,c,function(o){o.code?i.AlertWarning(o.message):r.path("/admin/collector/info")},t)};a.project;o.isEdit=!1,n.Query(c.info,function(r){r.err||(o.projects=angular.isArray(r.result)?r.result:[r.result],o.collector=o.collector||{},o.collector.project=_.find(o.projects,function(o){return o._id==a.project}))})})}]);
+angular.module('app').controller('CollectorCreate', ["$scope", "$location", "SettingMenu", "Collector", "Project", "API", "Auth", "$stateParams", "UI", function($scope, $location, SettingMenu, Collector, Project, API, Auth, $stateParams, UI) {
+    Auth.Check(function() {
+
+        $scope.submit = function() {
+            var collector = angular.copy($scope.collector)
+            collector.project = collector.project._id;
+
+            API.Query(Collector.add, collector, function(result) {
+                if (result.code) {
+                    //
+                    UI.AlertWarning(result.message);
+                } else {
+                    $location.path('/admin/collector/info')
+                }
+            }, responseError)
+        }
+
+        var projectID = $stateParams.project;
+        $scope.isEdit = false;
+        API.Query(Project.info, function(result) {
+            if (result.err) {
+                //
+            } else {
+                $scope.projects = angular.isArray(result.result) ? result.result : [result.result];
+                $scope.collector = $scope.collector || {};
+                $scope.collector.project = _.find($scope.projects, function(project) {
+                    return project._id == $stateParams.project;
+                });
+            }
+        })
+
+
+        function responseError(result) {
+            UI.AlertError(result.data.message)
+        }
+    });
+}]);

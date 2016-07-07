@@ -1,1 +1,20 @@
-angular.module("app").factory("BillingService",["$resource","Config",function(e,i){return e(i.API+"/billingservice",{},{info:{method:"POST",url:i.API+"/billingservice/info"},add:{method:"POST",url:i.API+"/billingservice/add"},update:{method:"POST",url:i.API+"/billingservice/update"},"delete":{method:"POST",url:i.API+"/billingservice/delete"}})}]);
+angular.module('app').factory('BillingService', ["$resource", "Config", function($resource, Config) {
+    return $resource(Config.API + '/billingservice', {}, {
+        info: {
+            method: 'POST',
+            url: Config.API + '/billingservice/info'
+        },
+        add: {
+            method: 'POST',
+            url: Config.API + '/billingservice/add'
+        },
+        update: {
+            method: 'POST',
+            url: Config.API + '/billingservice/update'
+        },
+        delete: {
+            method: 'POST',
+            url: Config.API + '/billingservice/delete'
+        }
+    })
+}]);

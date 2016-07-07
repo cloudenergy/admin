@@ -1,1 +1,229 @@
-angular.module("app").controller("Property.record",["$scope","$timeout","$api","$state","$stateParams",function(t,e,a,n,i){function o(){return{project:r.projectid||void 0,key:r.searchText||void 0,from:r.startDate.replace(/\-/g,""),to:r.endDate.replace(/\-/g,""),flow:{"in":"EARNING",out:"EXPENSE"}[r.tab],category:r.category.selected||void 0,status:r.status.selected||void 0,amount:[void 0===r.amount.start?null:parseFloat(r.amount.start),void 0===r.amount.end?null:parseFloat(r.amount.end)]}}var r=this,c=EMAPP.Account._id+"_property_record_pagesize";t.$watchGroup([function(){return r.startDate},function(){return r.endDate}],function(){r.dateRange.temp?e(function(){delete r.dateRange.temp},10):delete r.dateRange.selected,r.listData&&r.list()}),t.$watch(function(){return r.paging.index},function(){r.list()}),t.$watch(function(){return r.paging.size},function(t){localStorage.setItem(c,t),r.listData&&r.list()}),r.tab=i.tab||"all",r.projectid=i.projectid,r.startDate=moment().format("YYYY-MM-01"),r.endDate=moment().format("YYYY-MM-DD"),r.amount={},r.dateRange=["今天","昨天","最近7天","最近30天"],r.dateRange.select=function(t){switch(r.dateRange.temp=!0,r.dateRange.selected=t){case 0:r.startDate=r.endDate=moment().format("YYYY-MM-DD");break;case 1:r.startDate=r.endDate=moment().subtract(1,"days").format("YYYY-MM-DD");break;case 2:r.startDate=moment().subtract(7,"days").format("YYYY-MM-DD"),r.endDate=moment().format("YYYY-MM-DD");break;case 3:r.startDate=moment().subtract(30,"days").format("YYYY-MM-DD"),r.endDate=moment().format("YYYY-MM-DD")}},r.status=[{title:"全部状态"},{key:"CHECKING",title:"等待审核","class":"primary"},{key:"CHECKFAILED",title:"审核失败","class":"warning"},{key:"PROCESSING",title:"正在处理","class":"info"},{key:"FAILED",title:"处理失败","class":"danger"},{key:"SUCCESS",title:"完成","class":"success"}],angular.forEach(r.status,function(t){this[t.key]={title:t.title,"class":t["class"]}},r.status),r.category=[{title:"全部类型"},{key:"RECHARGING",title:"充值"},{key:"WITHDRAW",title:"提现"},{key:"PAYFEES",title:"缴费"},{key:"HANDLINGCHARGE",title:"手续费"},{key:"HANDLINGCHARGERCG",title:"充值服务费"},{key:"HANDLINGCHARGEWTD",title:"提现服务费"},{key:"alipay",title:"支付宝手机支付"},{key:"wx",title:"微信支付"},{key:"wx_pub",title:"微信公众号支付"},{key:"bankcard",title:"银行卡支付"}],angular.forEach(r.category,function(t){this[t.key]=t},r.category),r.category.selected=i.category||void 0,a.project.info({id:r.projectid},function(t){r.projectname=t.result.title,n.$current.parent.data.title="物业财务 - "+t.result.title}),r.paging={index:1,size:parseInt(localStorage.getItem(c)||10),items:[{key:10,title:"每页10条"},{key:15,title:"每页15条"},{key:30,title:"每页30条"},{key:50,title:"每页50条"},{key:100,title:"每页100条"}]},r.list=function(){a.$request&&a.$request.$cancelRequest(),a.$request=a.business.fundflow(angular.extend(o(),{pageindex:r.paging.index,pagesize:r.paging.size}),function(t){delete a.$request,t=t.result||{},angular.forEach(t.detail,function(t){t.channelaccount&&t.channelaccount.account&&(t.channelaccount.tail=t.channelaccount.account.replace(/\d+(\d{4})$/,"$1")),t.timecreate=t.timecreate&&moment(1e3*t.timecreate).format("YYYY-M-DD H:mm:ss")||"",t.timecheck=t.timecheck&&moment(1e3*t.timecheck).format("YYYY-M-DD H:mm:ss")||"",t.timepaid=t.timepaid&&moment(1e3*t.timepaid).format("YYYY-M-DD H:mm:ss")||""}),r.listData=t.detail||[],r.listData.index=(t.paging||{}).pageindex||1,r.listData.total=(t.paging||{}).count||0,r.statistic=t.statistic||{}})},r.exportProjectflow=function(){delete r.downloadFile,a["export"].projectflow(angular.extend(o(),{type:{all:"ALL","in":"EARNING",out:"EXPENSES"}[r.tab]}),function(t){if(t.result.fn){var e=o();r.downloadFile=t.result.fn,r.downloadName=r.projectname+"_"+n.$current.data.title+"_"+e.from+"_"+e.to}})}}]);
+angular.module('app').controller('Property.record', ["$scope", "$timeout", "$api", "$state", "$stateParams", function($scope, $timeout, $api, $state, $stateParams) {
+
+    var self = this,
+        KEY_PAGESIZE = EMAPP.Account._id + '_property_record_pagesize';
+
+    $scope.$watchGroup([function() {
+        return self.startDate;
+    }, function() {
+        return self.endDate;
+    }], function() {
+        if (self.dateRange.temp) {
+            $timeout(function() {
+                delete self.dateRange.temp;
+            }, 10);
+        } else {
+            delete self.dateRange.selected;
+        }
+        self.listData && self.list();
+    });
+    $scope.$watch(function() {
+        return self.paging.index;
+    }, function() {
+        self.list();
+    });
+    $scope.$watch(function() {
+        return self.paging.size;
+    }, function(val) {
+        localStorage.setItem(KEY_PAGESIZE, val);
+        self.listData && self.list();
+    });
+
+    self.tab = $stateParams.tab || 'all';
+    self.projectid = $stateParams.projectid;
+
+    self.startDate = moment().format('YYYY-MM-01');
+    self.endDate = moment().format('YYYY-MM-DD');
+
+    //金额过滤
+    self.amount = {};
+
+    //日期范围
+    self.dateRange = ['今天', '昨天', '最近7天', '最近30天'];
+    self.dateRange.select = function(key) {
+        self.dateRange.temp = true;
+        switch (self.dateRange.selected = key) {
+            case 0:
+                self.startDate = self.endDate = moment().format('YYYY-MM-DD');
+                break;
+            case 1:
+                self.startDate = self.endDate = moment().subtract(1, 'days').format('YYYY-MM-DD');
+                break;
+            case 2:
+                self.startDate = moment().subtract(7, 'days').format('YYYY-MM-DD');
+                self.endDate = moment().format('YYYY-MM-DD');
+                break;
+            case 3:
+                self.startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
+                self.endDate = moment().format('YYYY-MM-DD');
+                break;
+        }
+    };
+
+    //状态
+    self.status = [{
+        title: '全部状态'
+    }, {
+        key: 'CHECKING',
+        title: '等待审核',
+        class: 'primary'
+    }, {
+        key: 'CHECKFAILED',
+        title: '审核失败',
+        class: 'warning'
+    }, {
+        key: 'PROCESSING',
+        title: '正在处理',
+        class: 'info'
+    }, {
+        key: 'FAILED',
+        title: '处理失败',
+        class: 'danger'
+    }, {
+        key: 'SUCCESS',
+        title: '完成',
+        class: 'success'
+    }];
+    angular.forEach(self.status, function(item) {
+        this[item.key] = {
+            title: item.title,
+            class: item.class
+        };
+    }, self.status);
+
+    //类型
+    self.category = [{
+        title: '全部类型'
+    }, {
+        key: 'RECHARGING',
+        title: '充值'
+    }, {
+        key: 'WITHDRAW',
+        title: '提现'
+    }, {
+        key: 'PAYFEES',
+        title: '缴费'
+    }, {
+        key: 'HANDLINGCHARGE',
+        title: '手续费'
+    }, {
+        key: 'HANDLINGCHARGERCG',
+        title: '充值服务费'
+    }, {
+        key: 'HANDLINGCHARGEWTD',
+        title: '提现服务费'
+    }, {
+        key: 'alipay',
+        title: '支付宝手机支付'
+    }, {
+        key: 'wx',
+        title: '微信支付'
+    }, {
+        key: 'wx_pub',
+        title: '微信公众号支付'
+    }, {
+        key: 'bankcard',
+        title: '银行卡支付'
+    }];
+    angular.forEach(self.category, function(item) {
+        this[item.key] = item;
+    }, self.category);
+    self.category.selected = $stateParams.category || undefined;
+
+    //设置面包屑
+    $api.project.info({
+        id: self.projectid
+    }, function(data) {
+        self.projectname = data.result.title;
+        $state.$current.parent.data.title = '物业财务 - ' + data.result.title;
+    });
+
+    //分页设置
+    self.paging = {
+        index: 1,
+        size: parseInt(localStorage.getItem(KEY_PAGESIZE) || 10),
+        items: [{
+            key: 10,
+            title: '每页10条'
+        }, {
+            key: 15,
+            title: '每页15条'
+        }, {
+            key: 30,
+            title: '每页30条'
+        }, {
+            key: 50,
+            title: '每页50条'
+        }, {
+            key: 100,
+            title: '每页100条'
+        }]
+    };
+
+    self.list = function() {
+        $api.$request && $api.$request.$cancelRequest();
+        $api.$request = $api.business.fundflow(angular.extend(GetOptions(), {
+            pageindex: self.paging.index,
+            pagesize: self.paging.size
+        }), function(data) {
+
+            delete $api.$request;
+
+            data = data.result || {};
+
+            angular.forEach(data.detail, function(item) {
+                if (item.channelaccount && item.channelaccount.account) {
+                    item.channelaccount.tail = item.channelaccount.account.replace(/\d+(\d{4})$/, '$1');
+                }
+                item.timecreate = item.timecreate && moment(item.timecreate * 1000).format('YYYY-M-DD H:mm:ss') || '';
+                item.timecheck = item.timecheck && moment(item.timecheck * 1000).format('YYYY-M-DD H:mm:ss') || '';
+                item.timepaid = item.timepaid && moment(item.timepaid * 1000).format('YYYY-M-DD H:mm:ss') || '';
+            });
+
+            self.listData = data.detail || [];
+            self.listData.index = (data.paging || {}).pageindex || 1;
+            self.listData.total = (data.paging || {}).count || 0;
+
+            self.statistic = data.statistic || {};
+
+        });
+    };
+
+    self.exportProjectflow = function() {
+        delete self.downloadFile;
+        $api.export.projectflow(angular.extend(GetOptions(), {
+            type: {
+                all: 'ALL',
+                in: 'EARNING',
+                out: 'EXPENSES'
+            }[self.tab]
+        }), function(data) {
+            if (data.result.fn) {
+                var options = GetOptions();
+                self.downloadFile = data.result.fn;
+                self.downloadName = self.projectname + '_' + $state.$current.data.title + '_' + options.from + '_' + options.to;
+            }
+        });
+    };
+
+    function GetOptions() {
+        return {
+            project: self.projectid || undefined,
+            key: self.searchText || undefined, //项目名或账户名
+            from: self.startDate.replace(/\-/g, ''), //查询起始'YYYYMMDD'
+            to: self.endDate.replace(/\-/g, ''), //查询截止'YYYYMMDD'
+            flow: {
+                // all: undefined,
+                in: 'EARNING',
+                out: 'EXPENSE'
+            }[self.tab], //流水方向(收入EARNING/支出EXPENSE)
+            category: self.category.selected || undefined, //流水类型
+            status: self.status.selected || undefined, //流水状态
+            amount: [
+                self.amount.start === undefined ? null : parseFloat(self.amount.start),
+                self.amount.end === undefined ? null : parseFloat(self.amount.end)
+            ]
+        };
+    }
+
+}]);

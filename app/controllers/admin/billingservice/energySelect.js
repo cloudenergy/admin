@@ -1,1 +1,28 @@
-angular.module("app").controller("EnergySelect",["$scope","$modalInstance","ServiceEnergycategories","Config",function(e,n,c,i){e.ServiceEnergycategories=c,e.Ok=function(){var c=[];_.each(e.ServiceEnergycategories,function(e){e.isEnable&&c.push(e._id)}),n.close(c)},e.Cancel=function(){n.dismiss("cancel")},e.SwitchServiceEnergycategories=function(e,n){e.preventDefault(),n.isEnable?n.isEnable=!1:n.isEnable=!0}}]);
+/**
+ * Created by Joey on 14-6-27.
+ */
+angular.module('app').controller('EnergySelect', ["$scope", "$modalInstance", "ServiceEnergycategories", "Config", function($scope, $modalInstance, ServiceEnergycategories, Config) {
+    $scope.ServiceEnergycategories = ServiceEnergycategories;
+    $scope.Ok = function() {
+        var SelectedEnergycategories = [];
+        _.each($scope.ServiceEnergycategories, function(sec) {
+            if (sec.isEnable) {
+                SelectedEnergycategories.push(sec._id);
+            }
+        });
+        $modalInstance.close(SelectedEnergycategories);
+    };
+    $scope.Cancel = function() {
+        $modalInstance.dismiss('cancel');
+    };
+
+    $scope.SwitchServiceEnergycategories = function(e, sec) {
+        e.preventDefault();
+
+        if (sec.isEnable) {
+            sec.isEnable = false;
+        } else {
+            sec.isEnable = true;
+        }
+    };
+}]);

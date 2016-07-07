@@ -1,1 +1,48 @@
-angular.module("app").controller("SensorSync",["$scope","$modalInstance","API","Sensor","SensorIns",function(e,a,n,s,t){e.sensorTitle=t.title,t.channel&&(e.sensorTitle+="-"+t.channel),e.sensorStatus=t.status,e.sensorLastUpdate=moment(t.lastupdate).format("YYYY/MM/DD HH:mm:ss"),e.sensorRealData=t.realdata,e.sensorLastTotal=t.lasttotal,e.Cancel=function(){a.dismiss("cancel")},e.SwitchSensor=function(e,a){e.preventDefault(),a.isEnable?a.isEnable=!1:a.isEnable=!0},e.onSearchSensor=function(a){a.preventDefault(),e.UpdateViewOfSensors(e.sensorSearchKey)},e.Sync=function(){var a={id:t.id,lasttotal:t.realdata,lastvalue:0};n.Query(s.update,a,function(a){a.err||(e.sensorLastTotal=e.sensorRealData)})}}]);
+/**
+ * Created by Joey on 14-6-27.
+ */
+angular.module('app').controller('SensorSync', ["$scope", "$modalInstance", "API", "Sensor", "SensorIns", function($scope, $modalInstance, API, Sensor, SensorIns) {
+    $scope.sensorTitle = SensorIns.title;
+    if (SensorIns.channel) {
+        $scope.sensorTitle += "-" + SensorIns.channel;
+    }
+
+    $scope.sensorStatus = SensorIns.status;
+    $scope.sensorLastUpdate = moment(SensorIns.lastupdate).format('YYYY/MM/DD HH:mm:ss');
+    $scope.sensorRealData = SensorIns.realdata;
+    $scope.sensorLastTotal = SensorIns.lasttotal;
+
+    $scope.Cancel = function() {
+        $modalInstance.dismiss('cancel');
+    };
+
+    $scope.SwitchSensor = function(e, sensor) {
+        e.preventDefault();
+
+        if (sensor.isEnable) {
+            sensor.isEnable = false;
+        } else {
+            sensor.isEnable = true;
+        }
+    };
+
+    $scope.onSearchSensor = function(e) {
+        e.preventDefault();
+
+        $scope.UpdateViewOfSensors($scope.sensorSearchKey);
+    };
+
+    $scope.Sync = function() {
+        var updateObj = {
+            id: SensorIns.id,
+            lasttotal: SensorIns.realdata,
+            lastvalue: 0
+        };
+
+        API.Query(Sensor.update, updateObj, function(result) {
+            if (result.err) {} else {
+                $scope.sensorLastTotal = $scope.sensorRealData;
+            }
+        });
+    }
+}]);

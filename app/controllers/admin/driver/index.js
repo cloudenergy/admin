@@ -1,1 +1,236 @@
-angular.module("app").controller("DriverIndex",["$scope","SettingMenu","$q","$modal","Energy","API","Auth","Project","UI","Customer","base64","Sensor","Driver",function(e,t,r,i,n,o,l,c,s,u,a,d,f){var v="customer.project",p={},g={};l.Check(function(){function n(e,t,r){if(t){var i=[];return _.each(t,function(t){e?t.id=e.id+"/"+t.name:t.id=t.name,t.title=t.name,t.level=r,t.nodes=n(t,t.driver,r+1),t.childrens=null,t.parent=e,i.push(t)}),i.sort(function(e,t){return e.index>t.index?1:-1}),i}}function l(t){p={},g={},e.projects.title=t,o.Query(u.info,{project:t},function(t){if(t.err);else{var r=t.result;if(r){var i=n(null,r.socities,1);e.viewOfDriver=[{nodes:i,title:"社会属性",level:0}],console.log(e.viewOfDriver)}else e.viewOfDriver=[{nodes:[],title:"社会属性",level:0}]}},a)}function a(e){s.AlertError(e.data.message)}t(function(t){e.menu=t}),e.doSaveCustomer=function(t){t.preventDefault();var r=function(e,t){var i={};return _.each(t,function(e,t){var n={id:e.id,title:e.title,acreage:e.acreage||0,index:t};e.originid&&e.originid!=e.id&&(g[e.originid]=e.id);var o=r(n,e.nodes);o&&(n.childrens=o),i[e.id]=n}),i},i=r(null,e.viewOfDriver[0].nodes);console.log(i,p,g);var n={socities:i,project:e.projects.title};console.log(n),o.Query(u.update,n,function(t){console.log(t),t.err?a(t.err):o.Query(d.info,{project:e.projects.title},function(t){t.err||(UpdateSensorSocities(),l(e.projects.title))})})},r.all([o.QueryPromise(c.info,{}).$promise,o.QueryPromise(f["enum"],{}).$promise]).then(function(t){e.projects=angular.isArray(t[0].result)?t[0].result:[t[0].result];var r=s.GetPageItem(v);r?(r=_.find(e.projects,function(e){return e._id==r}),e.projects.title=r._id):e.projects.length>0&&(e.projects.title=e.projects[0]._id),e.Drivers=t[1].result;var i=n(null,e.Drivers,1);e.viewOfDriver=[{nodes:i,title:"驱动列表",level:0}],console.log(e.viewOfDriver)}),e.$watch("projects.title",function(t){t&&(s.PutPageItem(v,t),e.projects.title=t)}),e.save=function(e){if(!e.title.length)return alert("请输入分类名称"),!1;if(e.parent){var t=_.find(e.parent.nodes,function(t){return t.id&&t.id.length&&!t.editing?t.title==e.title?(alert("已有相同名称，请确认"),!0):!1:void 0});if(t)return!1}e.editing=!1,e.originid||(e.origintitle=e.title);var r=function(e){e.id=GenereateID(e.parent,e.title),p[e.id]&&(p[e.id]=null),_.each(e.nodes,function(e){r(e)})};r(e),console.log(e,p)},e.OnSelectSensor=function(t){console.log(t);var r=i.open({templateUrl:"sensorSelect.html",controller:"SensorSelect",size:"lg",resolve:{ProjectID:function(){return e.projects.title},Driver:function(){return t.id}}});r.result.then(function(e){},function(){})}})}]);
+angular.module('app').controller('DriverIndex', ["$scope", "SettingMenu", "$q", "$modal", "Energy", "API", "Auth", "Project", "UI", "Customer", "base64", "Sensor", "Driver", function($scope, SettingMenu, $q, $modal, Energy, API, Auth, Project, UI, Customer, base64, Sensor, Driver) {
+
+    var DefalutProjectStoreKey = 'customer.project';
+
+    var removeCustomer = {};
+    var updateSocities = {};
+
+
+    Auth.Check(function() {
+
+        SettingMenu(function(menu) {
+            $scope.menu = menu;
+        });
+
+        $scope.doSaveCustomer = function(e) {
+            e.preventDefault();
+
+            var SerilizeToCustomer = function(parentNode, nodes) {
+                //
+                var customerNodes = {};
+                _.each(nodes, function(node, index) {
+                    //
+                    var customerNode = {
+                        id: node.id,
+                        title: node.title,
+                        acreage: node.acreage || 0,
+                        index: index
+                    };
+                    if (node.originid && node.originid != node.id) {
+                        updateSocities[node.originid] = node.id;
+                    }
+                    var childrens = SerilizeToCustomer(customerNode, node.nodes);
+                    if (childrens) {
+                        customerNode['childrens'] = childrens;
+                    }
+
+                    customerNodes[node.id] = customerNode;
+                });
+                return customerNodes;
+            };
+
+            var customerTree = SerilizeToCustomer(null, $scope.viewOfDriver[0].nodes);
+            console.log(customerTree, removeCustomer, updateSocities);
+            var projectCustomer = {
+                socities: customerTree,
+                project: $scope.projects.title
+            };
+            console.log(projectCustomer);
+            API.Query(Customer.update, projectCustomer, function(result) {
+                //
+                console.log(result);
+                if (result.err) {
+                    responseError(result.err);
+                } else {
+                    //Update Sensor's Socity
+                    API.Query(Sensor.info, {
+                        project: $scope.projects.title
+                    }, function(result) {
+                        if (result.err) {} else {
+                            //
+                            UpdateSensorSocities();
+                            GetDriver($scope.projects.title);
+                        }
+                    });
+                }
+            });
+        };
+
+        function InitialDriverForPage(parent, driver, level) {
+            if (!driver) {
+                return undefined;
+            }
+
+            var driverArray = [];
+            _.each(driver, function(v) {
+                if (parent) {
+                    v.id = parent.id + '/' + v.name;
+                } else {
+                    v.id = v.name;
+                }
+                v.title = v.name;
+                v.level = level;
+                v.nodes = InitialDriverForPage(v, v.driver, level + 1);
+                v.childrens = null;
+                v.parent = parent;
+
+
+                driverArray.push(v);
+            });
+            driverArray.sort(function(a, b) {
+                return a.index > b.index ? 1 : -1
+            });
+            return driverArray;
+        }
+
+        function GetDriver(projectID) {
+            //
+            removeCustomer = {};
+            updateSocities = {};
+            $scope.projects.title = projectID;
+            API.Query(Customer.info, {
+                project: projectID
+            }, function(result) {
+                if (result.err) {
+                    //
+                } else {
+                    var customers = result.result;
+
+                    if (customers) {
+                        var viewOfDriver = InitialDriverForPage(null, customers.socities, 1);
+                        $scope.viewOfDriver = [{
+                            nodes: viewOfDriver,
+                            title: '社会属性',
+                            level: 0
+                        }];
+                        console.log($scope.viewOfDriver);
+                    } else {
+                        $scope.viewOfDriver = [{
+                            nodes: [],
+                            title: '社会属性',
+                            level: 0
+                        }];
+                    }
+                }
+            }, responseError)
+        }
+
+        $q.all([
+            API.QueryPromise(Project.info, {}).$promise,
+            API.QueryPromise(Driver.enum, {}).$promise
+        ]).then(
+            function(result) {
+                //
+                $scope.projects = angular.isArray(result[0].result) ? result[0].result : [result[0].result];
+
+                var defaultProject = UI.GetPageItem(DefalutProjectStoreKey);
+                if (defaultProject) {
+                    defaultProject = _.find($scope.projects, function(project) {
+                        return project._id == defaultProject;
+                    });
+                    $scope.projects.title = defaultProject._id;
+                } else {
+                    if ($scope.projects.length > 0) {
+                        $scope.projects.title = $scope.projects[0]._id;
+                    }
+                }
+
+                //
+                $scope.Drivers = result[1].result;
+                //Build Drivers TreeNode
+                var viewOfDriver = InitialDriverForPage(null, $scope.Drivers, 1);
+                $scope.viewOfDriver = [{
+                    nodes: viewOfDriver,
+                    title: '驱动列表',
+                    level: 0
+                }];
+                console.log($scope.viewOfDriver);
+            });
+
+        //选择项目后联动查询能耗类型
+        $scope.$watch('projects.title', function(projectID) {
+            if (projectID) {
+                UI.PutPageItem(DefalutProjectStoreKey, projectID);
+                $scope.projects.title = projectID;
+            }
+        });
+
+        $scope.save = function(node) {
+            if (!node.title.length) {
+                alert('请输入分类名称');
+                return false;
+            }
+            //查找同层是否有相同名称
+            if (node.parent) {
+                var isFind = _.find(node.parent.nodes, function(n) {
+                    if (!n.id || !n.id.length || n.editing) {
+                        return;
+                    }
+                    if (n.title == node.title) {
+                        alert('已有相同名称，请确认');
+                        return true;
+                    }
+                    return false;
+                });
+                if (isFind) {
+                    return false;
+                }
+            }
+
+            node.editing = false;
+            if (!node.originid) {
+                node.origintitle = node.title;
+            }
+            var recursionUpdate = function(node) {
+                node.id = GenereateID(node.parent, node.title);
+                //find if node.is is exists in removeList(Just to prevent remove/add same node)
+                if (removeCustomer[node.id]) {
+                    removeCustomer[node.id] = null;
+                }
+                _.each(node.nodes, function(n) {
+                    recursionUpdate(n);
+                });
+            };
+            recursionUpdate(node);
+
+            console.log(node, removeCustomer);
+        };
+
+        $scope.OnSelectSensor = function(node) {
+            console.log(node);
+            //将当前属性添加到选中的传感器
+            var modalInstance = $modal.open({
+                templateUrl: 'sensorSelect.html',
+                controller: 'SensorSelect',
+                size: 'lg',
+                resolve: {
+                    ProjectID: function() {
+                        return $scope.projects.title
+                    },
+                    Driver: function() {
+                        return node.id;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function(sensors) {
+                //
+            }, function() {});
+        };
+
+        function responseError(result) {
+            UI.AlertError(result.data.message)
+        }
+
+    });
+}]);

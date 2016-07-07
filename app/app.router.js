@@ -1,1 +1,1393 @@
-angular.module("app").config(["$locationProvider","$stateProvider","$urlRouterProvider",function(e,t,a){e.html5Mode(!0),a.otherwise("/admin/dashboard"),t.state("home",{url:"/",controller:["$state","$cookies",function(e,t){t.token?e.go("login"):e.go("admin.dashboard")}]}).state("login",{url:"/admin/login",templateUrl:"templates/login.html?rev=686c58d34b",controller:"session",controllerAs:"self",resolve:{deps:["$ocLazyLoad",function(e){return e.load([{insertBefore:"#load_styles_before",files:["http://static.cloudenergy.me/libs/sweetalert-1.1.3/dist/sweetalert.css"]},{serie:!0,files:["http://static.cloudenergy.me/libs/angular-md5-0.1.10/angular-md5.min.js","http://static.cloudenergy.me/libs/sweetalert-1.1.3/dist/sweetalert.min.js","app/services/user.js?rev=7c4a70b151","app/services/ui.js?rev=27f1e40289","app/controllers/session.js?rev=72fc087c7a"]}])}]},data:{appClasses:"bg-white usersession"}}).state("logout",{url:"/admin/logout",controller:["$cookies","$state","$api",function(e,t,a){a.auth.logout({cookie:e.getAll(),redirect:"/"},function(){angular.forEach(["token","user"],function(t){e.remove(t,{path:"/",domain:""}),e.remove(t,{path:"/",domain:".cloudenergy.me"}),e.remove(t,{path:"/",domain:"admin.cloudenergy.me"}),e.remove(t,{path:"/",domain:".admin.cloudenergy.me"})}),t.go("login")})}]}).state("admin",{"abstract":!0,templateUrl:"templates/common/layout.html?rev=817dbd1404",url:"/admin",controller:"admin",controllerAs:"self",resolve:{deps:["$ocLazyLoad",function(e){return e.load([{insertBefore:"#load_styles_before",files:["http://static.cloudenergy.me/libs/sweetalert-1.1.3/dist/sweetalert.css","http://static.cloudenergy.me/libs/angular-ui-select-0.18.0/dist/select.min.css"]},{serie:!0,files:["http://static.cloudenergy.me/libs/moment-2.14.1/min/moment.min.js","http://static.cloudenergy.me/libs/moment-2.14.1/locale/zh-cn.js"]},{files:["http://static.cloudenergy.me/libs/angular-md5-0.1.10/angular-md5.min.js","http://static.cloudenergy.me/libs/sweetalert-1.1.3/dist/sweetalert.min.js","http://static.cloudenergy.me/libs/angular-ui-select-0.18.0/dist/select.min.js","app/directives/perfect-scrollbar.js?rev=987b5e429c","app/filters/filters.js?rev=818a275ce9","app/services/ui.js?rev=27f1e40289","app/services/user.js?rev=7c4a70b151","app/services/api.js?rev=a51a0c9d28","app/services/authentication.js?rev=fd22270cf8","app/services/account.js?rev=0860d6447d","app/services/setting-menu.js?rev=e466d4f413","app/controllers/admin.js?rev=13eb2c5921"]}])}]}}).state("admin.dashboard",{url:"/dashboard",templateUrl:"templates/dash.html?rev=295add2668",data:{title:"技术支持: 0571-85374789"}}).state("admin.character",{template:"<div ui-view></div>","abstract":!0,url:"/character",data:{redirect:"admin.character.info"},resolve:{deps:["$ocLazyLoad",function(e){return e.load("app/services/character.js?rev=75a8817883")}]}}).state("admin.character.info",{url:"/info",data:{title:"角色管理"},controller:"characterInfo",templateUrl:"templates/admin/character/info.html?rev=bd75833058",resolve:{deps:["$ocLazyLoad",function(e){return e.load("app/controllers/admin/character/info.js?rev=37498bd0df")}]}}).state("admin.character.manage",{url:"/manage/:id",data:{title:"角色编辑"},controller:"characterManage",templateUrl:"templates/admin/character/manage.html?rev=e32729cf6b",resolve:{deps:["$ocLazyLoad",function(e){return e.load([{insertBefore:"#load_styles_before",files:["http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.css"]},{files:["http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js","app/controllers/admin/character/manage.js?rev=6d689e2559","app/services/urlpath.js?rev=743c888d55","app/services/project.js?rev=09fa316e9b","app/services/building.js?rev=9df06e6819","app/services/customer.js?rev=77f662bd55","app/services/collector.js?rev=08ae10cf80","app/services/sensor.js?rev=c072ceb580"]}])}]}}).state("admin.project",{template:"<div ui-view></div>","abstract":!0,url:"/project",data:{redirect:"admin.project.info"},resolve:{deps:["$ocLazyLoad",function(e){return e.load("app/services/project.js?rev=09fa316e9b")}]}}).state("admin.project.info",{url:"/info",data:{title:"项目管理"},controller:"projectInfo",templateUrl:"templates/admin/project/info.html?rev=7e2e129b33",resolve:{deps:["$ocLazyLoad",function(e){return e.load("app/controllers/admin/project/info.js?rev=d16fa58353")}]}}).state("admin.project.create",{url:"/create",templateUrl:"templates/admin/project/create.html?rev=1cfe70c5f0",data:{title:"创建项目"},controller:"projectCreate",resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/services/energycategory.js?rev=0da30293f9","app/controllers/admin/project/create.js?rev=ada46baa3f"])}]}}).state("admin.project.edit",{url:"/edit/:id",templateUrl:"templates/admin/project/edit.html?rev=8136aad5af",data:{title:"编辑项目"},controller:"projectEdit",resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/controllers/admin/project/edit.js?rev=b3dc80a152"])}]}}).state("admin.appidsecret",{template:"<div ui-view></div>","abstract":!0,url:"/appidsecret",data:{redirect:"admin.appidsecret.info"},resolve:{deps:["$ocLazyLoad",function(e){return e.load("app/services/appidsecret.js?rev=f0bd0aabf5")}]}}).state("admin.appidsecret.info",{url:"/info",templateUrl:"templates/admin/appidsecret/info.html?rev=21a274c0dc",data:{title:"管理AppID"},controller:"appidsecretInfo",resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/controllers/admin/appidsecret/info.js?rev=df66d48f83"])}]}}).state("admin.appidsecret.create",{url:"/create",templateUrl:"templates/admin/appidsecret/create.html?rev=c26a64c272",data:{title:"创建AppID"},controller:"appidsecretcreate",resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/services/character.js?rev=75a8817883","app/services/billingaccount.js?rev=26c9fd0b19","app/controllers/admin/appidsecret/create.js?rev=ac1b4920d0"])}]}}).state("admin.appidsecret.edit",{url:"/edit/:id",templateUrl:"templates/admin/appidsecret/edit.html?rev=b6efb2c5e2",data:{title:"编辑AppID"},controller:"appidsecretedit",resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/services/character.js?rev=75a8817883","app/controllers/admin/appidsecret/edit.js?rev=fa7fef75ff"])}]}}).state("admin.appidsecret.roleres",{url:"/roleres/:id",templateUrl:"templates/admin/appidsecret/roleres.html?rev=f67769af22",data:{title:"AppID权限"},controller:"appidsecretroleres",resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/services/character.js?rev=75a8817883","app/services/project.js?rev=09fa316e9b","app/services/building.js?rev=9df06e6819","app/services/sensor.js?rev=c072ceb580","app/services/billingservice.js?rev=6c67a9dfbf","app/services/energycategory.js?rev=0da30293f9","app/controllers/admin/appidsecret/buildingSelect.js?rev=a06d30e096","app/controllers/admin/appidsecret/projectSelect.js?rev=4ba4a853c6","app/controllers/admin/appidsecret/sensorSelect.js?rev=9c120fd3b9","app/controllers/admin/appidsecret/roleres.js?rev=847d4a2aa6"])}]}}).state("admin.account",{template:"<div ui-view></div>","abstract":!0,url:"/account",data:{redirect:"admin.account.info"},resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/services/account.js?rev=0860d6447d","app/services/billingaccount.js?rev=26c9fd0b19","app/services/character.js?rev=75a8817883"])}]}}).state("admin.account.info",{url:"/info",controller:"accountInfo",templateUrl:"templates/admin/account/info.html?rev=4e1af174ca",data:{title:"账户管理"},resolve:{deps:["$ocLazyLoad",function(e){return e.load("app/controllers/admin/account/info.js?rev=25b9ad2be5")}]}}).state("admin.account.create",{url:"/create",controller:"accountCreate",templateUrl:"templates/admin/account/create.html?rev=e3a9c7439e",data:{title:"新建账户"},resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/controllers/admin/account/create.js?rev=2acb625ec9"])}]}}).state("admin.account.edit",{url:"/edit/:id",controller:"accountEdit",templateUrl:"templates/admin/account/edit.html?rev=e0daf95025",data:{title:"编辑账户"},resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/controllers/admin/account/edit.js?rev=c71677f486"])}]}}).state("admin.account.roleres",{url:"/roleres/:id",controller:"accountroleres",templateUrl:"templates/admin/account/roleres.html?rev=3f63df09d4",data:{title:"账户权限"},resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/services/billingservice.js?rev=6c67a9dfbf","app/services/energycategory.js?rev=0da30293f9","app/services/project.js?rev=09fa316e9b","app/services/building.js?rev=9df06e6819","app/services/sensor.js?rev=c072ceb580","app/controllers/admin/account/buildingSelect.js?rev=1e936df90f","app/controllers/admin/account/projectSelect.js?rev=a99f1d0d52","app/controllers/admin/account/sensorSelect.js?rev=02ee382975","app/controllers/admin/account/roleres.js?rev=03a05cd330"])}]}}).state("admin.account.amount",{url:"/amount/:account/:redirect/:project",controller:"accountamount",templateUrl:"templates/admin/account/amount.html?rev=9a9a786462",data:{title:"账户金额"},resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/services/log.js?rev=687525b82e","app/services/payment.js?rev=3d2a00d515","app/controllers/admin/account/amount.js?rev=a279f7f87d"])}],channels:["$api","$q","$stateParams",function(e,t,a){var r=t.defer();return e.payment.channelinfo({type:"manual",project:a.project,flow:"EARNING"},function(e){return r.resolve(e)}),r.promise}]}}).state("admin.billingservice",{template:"<div ui-view></div>","abstract":!0,url:"/billingservice",data:{redirect:"admin.billingservice.info"},resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/services/project.js?rev=09fa316e9b","app/services/pab.js?rev=fd6d74fab8","app/services/device.js?rev=bc2a1dc916","app/services/billingservice.js?rev=6c67a9dfbf","app/services/energycategory.js?rev=0da30293f9"])}]}}).state("admin.billingservice.info",{url:"/info",templateUrl:"templates/admin/billingservice/info.html?rev=542e491ccd",data:{title:"计费策略"},controller:"BillingServiceInfo",resolve:{deps:["$ocLazyLoad",function(e){return e.load("app/controllers/admin/billingservice/info.js?rev=090a3eb57f")}]}}).state("admin.billingservice.manage",{url:"/manage/:id",templateUrl:"templates/admin/billingservice/manage.html?rev=ed212aa795",data:{title:"管理策略"},controller:"BillingServicemanage",resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/controllers/admin/billingservice/energySelect.js?rev=671dcf0e9e","app/controllers/admin/billingservice/manage.js?rev=5a94ec1fe9"])}]}}).state("admin.billingservice.add",{url:"/add/:project",templateUrl:"templates/admin/billingservice/add.html?rev=0ae629d065",data:{title:"添加策略"},controller:"BillingServiceadd",resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/services/billingaccount.js?rev=26c9fd0b19","app/controllers/admin/billingservice/energySelect.js?rev=671dcf0e9e","app/controllers/admin/billingservice/add.js?rev=4adb25637b"])}]}}).state("admin.urlpath",{template:"<div ui-view></div>","abstract":!0,url:"/urlpath",data:{redirect:"admin.urlpath.info"},resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/services/urlpath.js?rev=743c888d55"])}]}}).state("admin.urlpath.info",{url:"/info",controller:"urlpathInfo",templateUrl:"templates/admin/urlpath/index.html?rev=531adafb03",data:{title:"地址管理"},resolve:{deps:["$ocLazyLoad",function(e){return e.load([{insertBefore:"#load_styles_before",files:["http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.css"]},{files:["http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js","app/controllers/admin/urlpath/index.js?rev=84f3634664"]}])}]}}).state("admin.building",{template:"<div ui-view></div>","abstract":!0,url:"/building",data:{redirect:"admin.building.info"},resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/services/project.js?rev=09fa316e9b","app/services/building.js?rev=9df06e6819"])}]}}).state("admin.building.info",{url:"/info",templateUrl:"templates/admin/building/info.html?rev=109d6e69b7",data:{title:"建筑管理"},controller:"BuildingInfo",resolve:{deps:["$ocLazyLoad",function(e){return e.load("app/controllers/admin/building/info.js?rev=c1d8c8606c")}]}}).state("admin.building.edit",{url:"/edit/:id",templateUrl:"templates/admin/building/edit.html?rev=00084d2aea",data:{title:"建筑编辑"},controller:"Buildingedit",resolve:{deps:["$ocLazyLoad",function(e){return e.load("app/controllers/admin/building/edit.js?rev=56827c8433")}]}}).state("admin.building.create",{url:"/create/:project",templateUrl:"templates/admin/building/create.html?rev=86416c1c51",data:{title:"建筑编辑"},controller:"Buildingcreate",resolve:{deps:["$ocLazyLoad",function(e){return e.load("app/controllers/admin/building/create.js?rev=c1cc5b090c")}]}}).state("admin.department",{templateUrl:"templates/admin/department/base.html?rev=b72ea2a3b5","abstract":!0,url:"/department",data:{redirect:"admin.department.info"},resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/services/project.js?rev=09fa316e9b","app/services/billingaccount.js?rev=26c9fd0b19","app/services/export.js?rev=f5d9163836","app/services/department.js?rev=8941d51caf"])}]}}).state("admin.department.info",{url:"/info",templateUrl:"templates/admin/department/info.html?rev=122c52f9f1",data:{title:"户管理"},controller:"departmentInfo",resolve:{deps:["$ocLazyLoad",function(e){return e.load([{name:"ngUpload",files:["http://static.cloudenergy.me/libs/ngUpload-0.5.18/ng-upload.min.js"]}]).then(function(){return e.load(["app/services/sensor.js?rev=c072ceb580","app/controllers/admin/department/info.js?rev=665c83ef90"])})}]}}).state("admin.department.create",{url:"/create/:project",templateUrl:"templates/admin/department/create.html?rev=733c561ce2",data:{title:"添加户"},controller:"departmentcreate",resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/services/sensor.js?rev=c072ceb580","app/controllers/admin/common/accountSelect.js?rev=784a7f2636","app/controllers/admin/common/channelSelect.js?rev=297c7ad0ec","app/controllers/admin/department/create.js?rev=12cba930f2"])}]}}).state("admin.department.edit",{url:"/edit/:id",templateUrl:"templates/admin/department/edit.html?rev=ed2c5c0aa6",data:{title:"编辑商户"},controller:"departmentedit",resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/services/sensor.js?rev=c072ceb580","app/controllers/admin/common/accountSelect.js?rev=784a7f2636","app/controllers/admin/common/channelSelect.js?rev=297c7ad0ec","app/controllers/admin/department/edit.js?rev=572875f3eb"])}]}}).state("admin.customer",{template:"<div ui-view></div>","abstract":!0,url:"/customer",data:{redirect:"admin.customer.index"},resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/services/project.js?rev=09fa316e9b","app/services/energy.js?rev=bdf6e9b523","app/services/customer.js?rev=77f662bd55","app/services/sensor.js?rev=c072ceb580"])}]}}).state("admin.customer.index",{url:"/index",templateUrl:"templates/admin/customer/index.html?rev=6c5a29f0af",data:{title:"社会属性"},controller:"CustomerIndex",resolve:{deps:["$ocLazyLoad",function(e){return e.load([{insertBefore:"#load_styles_before",files:["http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.css"]},{files:["http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js","app/controllers/admin/customer/sensorSelect.js?rev=0256d157b8","app/controllers/admin/customer/index.js?rev=eafcad1440"]}])}]}}).state("admin.driver",{template:"<div ui-view></div>","abstract":!0,url:"/driver",data:{redirect:"admin.driver.index"},resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/services/energy.js?rev=bdf6e9b523","app/services/project.js?rev=09fa316e9b","app/services/customer.js?rev=77f662bd55","app/services/driver.js?rev=28792de55e","app/services/sensor.js?rev=c072ceb580"])}]}}).state("admin.driver.index",{url:"/index",templateUrl:"templates/admin/driver/index.html?rev=dd05dd1c80",data:{title:"驱动设置"},controller:"DriverIndex",resolve:{deps:["$ocLazyLoad",function(e){return e.load([{insertBefore:"#load_styles_before",files:["http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.css"]},{files:["http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js","http://static.cloudenergy.me/libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js","app/services/sensorAttrib.js?rev=0c5a510b91","app/controllers/admin/driver/sensorSelect.js?rev=4074516668","app/controllers/admin/driver/index.js?rev=e0ef4a6db4"]}])}]}}).state("admin.collector",{template:"<div ui-view></div>","abstract":!0,url:"/collector",data:{redirect:"admin.collector.info"},resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/services/project.js?rev=09fa316e9b","app/services/collector.js?rev=08ae10cf80"])}]}}).state("admin.collector.info",{url:"/info",templateUrl:"templates/admin/collector/info.html?rev=58d8c8e4b4",controller:"CollectorIndex",data:{title:"采集器管理"},resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/controllers/admin/collector/info.js?rev=cede5d40a3"])}]}}).state("admin.collector.create",{url:"/create/:project",templateUrl:"templates/admin/collector/simple.html?rev=7441f69e5c",controller:"CollectorCreate",data:{title:"添加采集器"},resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/controllers/admin/collector/create.js?rev=05586726f9"])}]}}).state("admin.collector.edit",{url:"/edit/:id",templateUrl:"templates/admin/collector/simple.html?rev=7441f69e5c",controller:"CollectorEdit",data:{title:"采集器编辑"},resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/controllers/admin/collector/edit.js?rev=3a43b72bb0"])}]}}).state("admin.energy",{template:"<div ui-view></div>","abstract":!0,url:"/energy",data:{redirect:"admin.energy.index"},resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/services/project.js?rev=09fa316e9b","app/services/energycategory.js?rev=0da30293f9","app/services/energy.js?rev=bdf6e9b523","app/services/sensor.js?rev=c072ceb580"])}]}}).state("admin.energy.index",{url:"/index",templateUrl:"templates/admin/energy/index.html?rev=e8ff6235f8",data:{title:"能耗分类"},controller:"EnergyIndex",resolve:{deps:["$ocLazyLoad",function(e){return e.load([{insertBefore:"#load_styles_before",files:["http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.css"]},{files:["http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js","http://static.cloudenergy.me/libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js","app/controllers/admin/energy/sensorSelect.js?rev=e1d6f4ab27","app/controllers/admin/energy/index.js?rev=d5108159d3"]}])}]}}).state("admin.device",{template:"<div ui-view></div>","abstract":!0,url:"/device",data:{redirect:"admin.device.index"},resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/services/project.js?rev=09fa316e9b","app/services/energycategory.js?rev=0da30293f9","app/services/energy.js?rev=bdf6e9b523","app/services/sensor.js?rev=c072ceb580","app/services/device.js?rev=bc2a1dc916"])}]}}).state("admin.device.index",{url:"/index",templateUrl:"templates/admin/device/index.html?rev=f6aa0a5b15",data:{title:"设备类型"},controller:"DeviceIndex",resolve:{deps:["$ocLazyLoad",function(e){return e.load([{insertBefore:"#load_styles_before",files:["http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.css"]},{files:["http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js","http://static.cloudenergy.me/libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js","app/controllers/admin/device/index.js?rev=fd80db9395","app/controllers/admin/device/sensorSelect.js?rev=f196f3d6e7","app/controllers/admin/energy/index.js?rev=d5108159d3"]}])}]}}).state("admin.energycategory",{template:"<div ui-view></div>","abstract":!0,url:"/energycategory",data:{redirect:"admin.energycategory.info"},resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/services/project.js?rev=09fa316e9b","app/services/energycategory.js?rev=0da30293f9","app/services/energycategory.js?rev=0da30293f9","app/services/sensor.js?rev=c072ceb580"])}]}}).state("admin.energycategory.info",{url:"/info",templateUrl:"templates/admin/energycategory/info.html?rev=37627829e8",data:{title:"能耗配置"},controller:"energycategoryinfo",resolve:{deps:["$ocLazyLoad",function(e){return e.load(["http://static.cloudenergy.me/libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js","app/controllers/admin/energycategory/info.js?rev=c718761085"])}]}}).state("admin.energycategory.add",{url:"/add",templateUrl:"templates/admin/energycategory/add.html?rev=88149c82b9",data:{title:"添加配置"},controller:"energycategoryadd",resolve:{deps:["$ocLazyLoad",function(e){return e.load(["http://static.cloudenergy.me/libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js","app/controllers/admin/energycategory/add.js?rev=d1dacdcd35"])}]}}).state("admin.energycategory.update",{url:"/update/:id",templateUrl:"templates/admin/energycategory/update.html?rev=489e6fb8c4",data:{title:"编辑配置"},controller:"energycategoryupdate",resolve:{deps:["$ocLazyLoad",function(e){return e.load(["http://static.cloudenergy.me/libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js","app/controllers/admin/energycategory/update.js?rev=8e8b22dfdb"])}]}}).state("admin.sensor",{template:"<div ui-view></div>","abstract":!0,url:"/sensor",data:{redirect:"admin.sensor.info"},resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/services/building.js?rev=9df06e6819","app/services/sensor.js?rev=c072ceb580"])}]}}).state("admin.sensor.info",{url:"/info",templateUrl:"templates/admin/sensor/info.html?rev=2388413213",data:{title:"传感器管理"},controller:"SensorIndex",resolve:{deps:["$ocLazyLoad",function(e){return e.load([{insertBefore:"#load_styles_before",files:["http://static.cloudenergy.me/libs/angular-xeditable-0.2.0/dist/css/xeditable.min.css"]},{name:"ngUpload",files:["http://static.cloudenergy.me/libs/ngUpload-0.5.18/ng-upload.min.js"]},{name:"xeditable",files:["http://static.cloudenergy.me/libs/angular-xeditable-0.2.0/dist/js/xeditable.min.js","app/services/driver.js?rev=28792de55e","app/services/control.js?rev=b56dc1781d","app/services/sensorAttrib.js?rev=0c5a510b91","app/controllers/admin/sensor/sensorSync.js?rev=42bf4a13b8","app/controllers/admin/sensor/sensorAttribute.js?rev=c334ededc5","app/controllers/admin/sensor/info.js?rev=dbc5c83bbc","app/directives/jstree.js?rev=9e4e1c054d"]}])}]}}).state("admin.sensor.create",{url:"/create/:building",templateUrl:"templates/admin/sensor/create.html?rev=ec603f2ff6",data:{title:"添加传感器"},controller:"SensorCreate",resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/services/collector.js?rev=08ae10cf80","app/services/energy.js?rev=bdf6e9b523","app/services/customer.js?rev=77f662bd55","app/controllers/admin/sensor/create.js?rev=518405a9fb"])}]}}).state("admin.sensor.edit",{url:"/edit/:id",templateUrl:"templates/admin/sensor/edit.html?rev=8c9ea778fd",data:{title:"编辑传感器"},controller:"SensorEdit",resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/services/collector.js?rev=08ae10cf80","app/services/energy.js?rev=bdf6e9b523","app/services/customer.js?rev=77f662bd55","app/controllers/admin/sensor/edit.js?rev=c8c773393f"])}]}}).state("admin.eventcategory",{template:"<div ui-view></div>","abstract":!0,url:"/eventcategory",data:{redirect:"admin.eventcategory.info"},resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/services/project.js?rev=09fa316e9b","app/services/eventcategory.js?rev=14a24cd0a3"])}]}}).state("admin.eventcategory.info",{url:"/info",templateUrl:"templates/admin/eventcategory/info.html?rev=d9b688d954",data:{title:"事件配置"},controller:"eventcategoryIndex",resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/controllers/admin/eventcategory/info.js?rev=14fd96f47a"])}]}}).state("admin.eventcategory.add",{url:"/add",templateUrl:"templates/admin/eventcategory/add.html?rev=bda3521d53",data:{title:"事件添加"},controller:"eventcategoryAdd",resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/controllers/admin/eventcategory/add.js?rev=e3bfbca3cb"])}]}}).state("admin.eventcategory.update",{url:"/update/:id",templateUrl:"templates/admin/eventcategory/update.html?rev=919ea89b84",data:{title:"事件编辑"},controller:"eventcategoryUpdate",resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/controllers/admin/eventcategory/update.js?rev=bbcfe1f955"])}]}}).state("admin.finance",{"abstract":!0,url:"/finance",template:"<div ui-view></div>",data:{redirect:"admin.finance.index"},resolve:{deps:["$ocLazyLoad",function(e){return e.load([{insertBefore:"#load_styles_before",files:["http://static.cloudenergy.me/libs/angular-ui-grid-3.2.1/ui-grid.min.css"]},{files:["http://static.cloudenergy.me/libs/angular-ui-grid-3.2.1/ui-grid.min.js","app/directives/datetimepicker.js?rev=af3d39d80e","app/directives/auto-height.js?rev=829c91de2b"]}])}]}}).state("admin.finance.index",{url:"/index",templateUrl:"templates/admin/finance/index.html?rev=1770a47dfb",data:{title:"平台财务"},controller:"Finance",controllerAs:"self",resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/controllers/admin/finance/index.js?rev=302d8b49c7"])}]}}).state("admin.finance.record",{template:"<div ui-view></div>","abstract":!0,url:"/record"}).state("admin.finance.record.in",{url:"/in",templateUrl:"templates/admin/finance/record-in.html?rev=aa9ff2b37a",data:{title:"收入"},controller:"Finance.record.in",controllerAs:"self",resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/controllers/admin/finance/record-in.js?rev=25b36c5294"])}]}}).state("admin.finance.record.in.project",{url:"/:projectid",data:{title:"项目"},views:{"@admin.finance.record":{templateUrl:"templates/admin/finance/record-in.html?rev=aa9ff2b37a",controller:"Finance.record.in",controllerAs:"self"}}}).state("admin.finance.record.out",{url:"/out",templateUrl:"templates/admin/finance/record-out.html?rev=70bf969c2d",data:{title:"支出"},controller:"Finance.record.out",controllerAs:"self",resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/controllers/admin/finance/record-out.js?rev=a21e827b0f"])}]}}).state("admin.finance.record.out.project",{url:"/:projectid",data:{title:"项目"},views:{"@admin.finance.record":{templateUrl:"templates/admin/finance/record-out.html?rev=70bf969c2d",controller:"Finance.record.out",controllerAs:"self"}}}).state("admin.finance.record.out.project.detail",{url:"/:orderno",data:{title:"申请信息"},views:{"@admin.finance.record":{templateUrl:"templates/admin/finance/record-detail.html?rev=50ebfacb3e",controller:"Finance.record.out.detail",controllerAs:"self"}},resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/controllers/admin/finance/record-detail.js?rev=222f9e3e58"])}]}}).state("admin.finance.card",{url:"/card",templateUrl:"templates/admin/finance/card.html?rev=2b2d672cc4",data:{title:"银行卡管理"},controller:"Finance.card",controllerAs:"self",resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/controllers/admin/finance/card.js?rev=ca267d9e0d"])}]}}).state("admin.finance.card.detail",{url:"/:id",data:{title:"申请详情"},views:{"@admin.finance":{templateUrl:"templates/admin/finance/card-detail.html?rev=1d94458d19",controller:"Finance.card.detail",controllerAs:"self"}},resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/controllers/admin/finance/card-detail.js?rev=4ef9f41845"])}]}}).state("admin.finance.project",{url:"/project",templateUrl:"templates/admin/finance/project/list.html?rev=a3474e12f2",data:{title:"项目列表"},controller:"Finance.project.list",controllerAs:"self",resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/controllers/admin/finance/project/list.js?rev=aa60ccefe8"])}]}}).state("admin.finance.project.info",{url:"/:projectid",data:{title:"项目首页"},views:{"@admin.finance":{templateUrl:"templates/admin/finance/project/index.html?rev=9c5bdf0cb4",controller:"Finance.project.index",controllerAs:"self"}},resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/directives/distpicker.js?rev=da856d951a","app/controllers/admin/finance/project/index.js?rev=063c5a162f"])}]}}).state("admin.finance.project.info.record",{url:"/record/:tab",data:{title:"收支明细"},views:{"@admin.finance":{templateUrl:"templates/admin/finance/project/record.html?rev=9dfb680402",controller:"Finance.project.record",controllerAs:"self"}},resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/controllers/admin/finance/project/record.js?rev=12b4d60213"])}]}}).state("admin.finance.project.info.withdraw",{url:"/withdraw",data:{title:"转账"},views:{"@admin.finance":{templateUrl:"templates/admin/finance/project/withdraw.html?rev=6627f300bc",controller:"Finance.project.withdraw",controllerAs:"self"}},resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/controllers/admin/finance/project/withdraw.js?rev=455c57f980"])}]}}).state("admin.property",{"abstract":!0,url:"/property",template:"<div ui-view></div>",data:{redirect:"admin.property.index"},resolve:{deps:["$ocLazyLoad",function(e){return e.load([{insertBefore:"#load_styles_before",files:["//at.alicdn.com/t/font_1465708483_208262.css"]},{files:["app/directives/datetimepicker.js?rev=af3d39d80e","app/directives/auto-height.js?rev=829c91de2b","app/directives/modal-download.js?rev=08ba327b73","app/controllers/admin/property/withdraw-detail.js?rev=ca3f6ea635","app/controllers/admin/property/record-success.js?rev=d802792775"]}])}]}}).state("admin.property.index",{url:"/:projectid",templateUrl:"templates/admin/property/index.html?rev=4e00fd9cdb",data:{title:"物业财务"},controller:"Property.index",controllerAs:"self",resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/directives/distpicker.js?rev=da856d951a","app/controllers/admin/property/index.js?rev=2186e5bae8"])}]}}).state("admin.property.withdraw",{url:"/withdraw/:projectid",templateUrl:"templates/admin/property/withdraw.html?rev=8802b5ab93",data:{title:"申请提现"},controller:"Property.withdraw",controllerAs:"self",resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/controllers/admin/property/withdraw.js?rev=2b2273f60a"])}]}}).state("admin.property.record",{url:"/record/:tab/:projectid/:category",templateUrl:"templates/admin/property/record.html?rev=de01f556f3",data:{title:"收支明细"},controller:"Property.record",controllerAs:"self",resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/controllers/admin/property/record.js?rev=ef7deae1e0"])}]}}).state("admin.property.statement",{url:"/statement/:tab/:projectid",templateUrl:"templates/admin/property/statement.html?rev=46b410b8b7",data:{title:"对账单"},controller:"Property.statement",controllerAs:"self",resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/controllers/admin/property/statement.js?rev=eafbd4468e"])}]}}).state("admin.property.consume",{url:"/consume/:projectid",templateUrl:"templates/admin/property/consume.html?rev=74a9fe170d",data:{title:"消耗明细"},controller:"Property.consume",controllerAs:"self",resolve:{deps:["$ocLazyLoad",function(e){return e.load(["app/controllers/admin/property/consume.js?rev=a2a8075f30"])}]}})}]).run(["$rootScope","$state","$cookies",function(e,t,a){e.$on("$stateChangeStart",function(e,r){a.token?a.token&&"login"===r.name&&(e.preventDefault&&e.preventDefault(),t.go("admin.dashboard")):"login"!==r.name&&"logout"!==r.name&&(e.preventDefault&&e.preventDefault(),t.go("login"))})}]);
+angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouterProvider", function($locationProvider, $stateProvider, $urlRouterProvider) {
+    // html5 mode
+    $locationProvider.html5Mode(true);
+    // For unmatched routes
+    $urlRouterProvider.otherwise('/admin/dashboard');
+    // Application routes
+    $stateProvider.state('home', {
+        url: '/',
+        controller: ["$state", "$cookies", function($state, $cookies) {
+            if (!$cookies.token) {
+                $state.go('admin.dashboard');
+            } else {
+                $state.go('login');
+            }
+        }]
+    }).state('login', {
+        url: '/admin/login',
+        templateUrl: 'templates/login.html?rev=686c58d34b',
+        controller: 'session',
+        controllerAs: 'self',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([{
+                    insertBefore: '#load_styles_before',
+                    files: [
+                        'http://static.cloudenergy.me/libs/sweetalert-1.1.3/dist/sweetalert.css'
+                    ]
+                }, {
+                    serie: true,
+                    files: [
+                        'http://static.cloudenergy.me/libs/angular-md5-0.1.10/angular-md5.min.js',
+                        'http://static.cloudenergy.me/libs/sweetalert-1.1.3/dist/sweetalert.min.js',
+                        'app/services/user.min.js?rev=70c6db7442',
+                        'app/services/ui.min.js?rev=177c56b661',
+                        'app/controllers/session.min.js?rev=28a3d11f28'
+                    ]
+                }]);
+            }]
+        },
+        data: {
+            appClasses: 'bg-white usersession'
+        }
+    }).state('logout', {
+        url: '/admin/logout',
+        controller: ["$cookies", "$state", "$api", function($cookies, $state, $api) {
+            $api.auth.logout({
+                cookie: $cookies.getAll(),
+                redirect: '/'
+            }, function() {
+                angular.forEach(['token', 'user'], function(key) {
+                    $cookies.remove(key, {
+                        path: '/',
+                        domain: ''
+                    });
+                    $cookies.remove(key, {
+                        path: '/',
+                        domain: '.cloudenergy.me'
+                    });
+                    $cookies.remove(key, {
+                        path: '/',
+                        domain: 'admin.cloudenergy.me'
+                    });
+                    $cookies.remove(key, {
+                        path: '/',
+                        domain: '.admin.cloudenergy.me'
+                    });
+                });
+                $state.go('login');
+            });
+        }]
+    }).state('admin', {
+        abstract: true,
+        templateUrl: 'templates/common/layout.html?rev=817dbd1404',
+        url: '/admin',
+        controller: 'admin',
+        controllerAs: 'self',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([{
+                    insertBefore: '#load_styles_before',
+                    files: [
+                        'http://static.cloudenergy.me/libs/sweetalert-1.1.3/dist/sweetalert.css',
+                        'http://static.cloudenergy.me/libs/angular-ui-select-0.18.0/dist/select.min.css'
+                    ]
+                }, {
+                    serie: true,
+                    files: [
+                        'http://static.cloudenergy.me/libs/moment-2.14.1/min/moment.min.js',
+                        'http://static.cloudenergy.me/libs/moment-2.14.1/locale/zh-cn.js'
+                    ]
+                }, {
+                    // cache: false,
+                    // serie: true,
+                    files: [
+                        'http://static.cloudenergy.me/libs/angular-md5-0.1.10/angular-md5.min.js',
+                        'http://static.cloudenergy.me/libs/sweetalert-1.1.3/dist/sweetalert.min.js',
+                        'http://static.cloudenergy.me/libs/angular-ui-select-0.18.0/dist/select.min.js',
+                        'app/directives/perfect-scrollbar.min.js?rev=5e1c25bf0e',
+                        'app/filters/filters.min.js?rev=269f8d3097',
+                        'app/services/ui.min.js?rev=177c56b661',
+                        'app/services/user.min.js?rev=70c6db7442',
+                        'app/services/api.min.js?rev=0abc6298e1',
+                        'app/services/authentication.min.js?rev=0f36778387',
+                        'app/services/account.min.js?rev=41e7b7bd99',
+                        'app/services/setting-menu.min.js?rev=5636d7a49e',
+                        'app/controllers/admin.min.js?rev=2a1e2ff25f'
+                    ]
+                }]);
+            }]
+        }
+    }).state('admin.dashboard', {
+        url: '/dashboard',
+        templateUrl: 'templates/dash.html?rev=295add2668',
+        data: {
+            title: '技术支持: 0571-85374789'
+        }
+    }).state('admin.character', {
+        template: '<div ui-view></div>',
+        abstract: true,
+        url: '/character',
+        data: {
+            redirect: 'admin.character.info'
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load('app/services/character.min.js?rev=903e2446e0');
+            }]
+        }
+    }).state('admin.character.info', {
+        url: '/info',
+        data: {
+            title: '角色管理'
+        },
+        controller: 'characterInfo',
+        templateUrl: 'templates/admin/character/info.html?rev=bd75833058',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load('app/controllers/admin/character/info.min.js?rev=0654144af3');
+            }]
+        }
+    }).state('admin.character.manage', {
+        url: '/manage/:id',
+        data: {
+            title: '角色编辑'
+        },
+        controller: 'characterManage',
+        templateUrl: 'templates/admin/character/manage.html?rev=e32729cf6b',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([{
+                    insertBefore: '#load_styles_before',
+                    files: [
+                        'http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.css'
+                    ]
+                }, {
+                    files: [
+                        'http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js',
+                        'app/controllers/admin/character/manage.min.js?rev=67f4aa381b',
+                        'app/services/urlpath.min.js?rev=2dd7ea139b',
+                        'app/services/project.min.js?rev=0a6c0a1013',
+                        'app/services/building.min.js?rev=591e1b39a8',
+                        'app/services/customer.min.js?rev=aad33b141e',
+                        'app/services/collector.min.js?rev=946b23467a',
+                        'app/services/sensor.min.js?rev=8d65776b26'
+                    ]
+                }]);
+            }]
+        }
+    }).state('admin.project', {
+        template: '<div ui-view></div>',
+        abstract: true,
+        url: '/project',
+        data: {
+            redirect: 'admin.project.info'
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load('app/services/project.min.js?rev=0a6c0a1013');
+            }]
+        }
+    }).state('admin.project.info', {
+        url: '/info',
+        // controller : 'projectInfo',
+        data: {
+            title: '项目管理'
+        },
+        controller: 'projectInfo', // This view will use AppCtrl loaded below in the resolve
+        templateUrl: 'templates/admin/project/info.html?rev=7e2e129b33',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load('app/controllers/admin/project/info.min.js?rev=f22dd08b5c');
+            }]
+        }
+    }).state('admin.project.create', {
+        url: '/create',
+        templateUrl: 'templates/admin/project/create.html?rev=1cfe70c5f0',
+        data: {
+            title: '创建项目'
+        },
+        controller: 'projectCreate',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/services/energycategory.min.js?rev=6508426e02',
+                    'app/controllers/admin/project/create.min.js?rev=21ebf5e9b9'
+                ]);
+            }]
+        }
+    }).state('admin.project.edit', {
+        url: '/edit/:id',
+        templateUrl: 'templates/admin/project/edit.html?rev=8136aad5af',
+        data: {
+            title: '编辑项目'
+        },
+        controller: 'projectEdit',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/controllers/admin/project/edit.min.js?rev=85ba288fd9'
+                ]);
+            }]
+        }
+    }).state('admin.appidsecret', {
+        template: '<div ui-view></div>',
+        abstract: true,
+        url: '/appidsecret',
+        data: {
+            redirect: 'admin.appidsecret.info'
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load('app/services/appidsecret.min.js?rev=e7cad27e0f');
+            }]
+        }
+    }).state('admin.appidsecret.info', {
+        url: '/info',
+        templateUrl: 'templates/admin/appidsecret/info.html?rev=21a274c0dc',
+        data: {
+            title: '管理AppID'
+        },
+        controller: 'appidsecretInfo',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/controllers/admin/appidsecret/info.min.js?rev=aaaa037c47'
+                ]);
+            }]
+        }
+    }).state('admin.appidsecret.create', {
+        url: '/create',
+        templateUrl: 'templates/admin/appidsecret/create.html?rev=c26a64c272',
+        data: {
+            title: '创建AppID'
+        },
+        controller: 'appidsecretcreate',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/services/character.min.js?rev=903e2446e0',
+                    'app/services/billingaccount.min.js?rev=acccca264b',
+                    'app/controllers/admin/appidsecret/create.min.js?rev=516a435c06'
+                ]);
+            }]
+        }
+    }).state('admin.appidsecret.edit', {
+        url: '/edit/:id',
+        templateUrl: 'templates/admin/appidsecret/edit.html?rev=b6efb2c5e2',
+        data: {
+            title: '编辑AppID'
+        },
+        controller: 'appidsecretedit',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/services/character.min.js?rev=903e2446e0',
+                    'app/controllers/admin/appidsecret/edit.min.js?rev=0282fff2db'
+                ]);
+            }]
+        }
+    }).state('admin.appidsecret.roleres', {
+        url: '/roleres/:id',
+        templateUrl: 'templates/admin/appidsecret/roleres.html?rev=f67769af22',
+        data: {
+            title: 'AppID权限'
+        },
+        controller: 'appidsecretroleres',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/services/character.min.js?rev=903e2446e0',
+                    'app/services/project.min.js?rev=0a6c0a1013',
+                    'app/services/building.min.js?rev=591e1b39a8',
+                    'app/services/sensor.min.js?rev=8d65776b26',
+                    'app/services/billingservice.min.js?rev=966c517551',
+                    'app/services/energycategory.min.js?rev=6508426e02',
+                    'app/controllers/admin/appidsecret/buildingSelect.min.js?rev=975627a5d4',
+                    'app/controllers/admin/appidsecret/projectSelect.min.js?rev=66a287809d',
+                    'app/controllers/admin/appidsecret/sensorSelect.min.js?rev=779c92dd36',
+                    'app/controllers/admin/appidsecret/roleres.min.js?rev=4742158feb'
+                ]);
+            }]
+        }
+    }).state('admin.account', {
+        template: '<div ui-view></div>',
+        abstract: true,
+        url: '/account',
+        data: {
+            redirect: 'admin.account.info'
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/services/account.min.js?rev=41e7b7bd99',
+                    'app/services/billingaccount.min.js?rev=acccca264b',
+                    'app/services/character.min.js?rev=903e2446e0'
+                ]);
+            }]
+        }
+    }).state('admin.account.info', {
+        url: '/info',
+        controller: 'accountInfo',
+        templateUrl: 'templates/admin/account/info.html?rev=4e1af174ca',
+        data: {
+            title: '账户管理'
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load('app/controllers/admin/account/info.min.js?rev=5c4c86cfe0');
+            }]
+        }
+    }).state('admin.account.create', {
+        url: '/create',
+        controller: 'accountCreate',
+        templateUrl: 'templates/admin/account/create.html?rev=e3a9c7439e',
+        data: {
+            title: '新建账户'
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/controllers/admin/account/create.min.js?rev=cbe434b489'
+                ]);
+            }]
+        }
+    }).state('admin.account.edit', {
+        url: '/edit/:id',
+        controller: 'accountEdit',
+        templateUrl: 'templates/admin/account/edit.html?rev=e0daf95025',
+        data: {
+            title: '编辑账户'
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/controllers/admin/account/edit.min.js?rev=69516309c0'
+                ]);
+            }]
+        }
+    }).state('admin.account.roleres', {
+        url: '/roleres/:id',
+        controller: 'accountroleres',
+        templateUrl: 'templates/admin/account/roleres.html?rev=3f63df09d4',
+        data: {
+            title: '账户权限'
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/services/billingservice.min.js?rev=966c517551',
+                    'app/services/energycategory.min.js?rev=6508426e02',
+                    'app/services/project.min.js?rev=0a6c0a1013',
+                    'app/services/building.min.js?rev=591e1b39a8',
+                    'app/services/sensor.min.js?rev=8d65776b26',
+                    'app/controllers/admin/account/buildingSelect.min.js?rev=b7819c49a3',
+                    'app/controllers/admin/account/projectSelect.min.js?rev=41a5ff788c',
+                    'app/controllers/admin/account/sensorSelect.min.js?rev=72bae5138e',
+                    'app/controllers/admin/account/roleres.min.js?rev=277d88d87b'
+                ]);
+            }]
+        }
+    }).state('admin.account.amount', {
+        url: '/amount/:account/:redirect/:project',
+        controller: 'accountamount',
+        templateUrl: 'templates/admin/account/amount.html?rev=9a9a786462',
+        data: {
+            title: '账户金额'
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/services/log.min.js?rev=e5b9a0ee6e',
+                    'app/services/payment.min.js?rev=194dc4eeca',
+                    'app/controllers/admin/account/amount.min.js?rev=d384f41afe'
+                ]);
+            }],
+            channels: ["$api", "$q", "$stateParams", function($api, $q, $stateParams) {
+                var defer = $q.defer();
+                $api.payment.channelinfo({
+                    type: 'manual',
+                    project: $stateParams.project,
+                    flow: 'EARNING'
+                }, function(res) {
+                    return defer.resolve(res);
+                });
+                return defer.promise;
+            }]
+        }
+    }).state('admin.billingservice', {
+        template: '<div ui-view></div>',
+        abstract: true,
+        url: '/billingservice',
+        data: {
+            redirect: 'admin.billingservice.info'
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/services/project.min.js?rev=0a6c0a1013',
+                    'app/services/pab.min.js?rev=bb51301194',
+                    'app/services/device.min.js?rev=9cc2e58661',
+                    'app/services/billingservice.min.js?rev=966c517551',
+                    'app/services/energycategory.min.js?rev=6508426e02'
+                ]);
+            }]
+        }
+    }).state('admin.billingservice.info', {
+        url: '/info',
+        templateUrl: 'templates/admin/billingservice/info.html?rev=542e491ccd',
+        data: {
+            title: '计费策略'
+        },
+        controller: 'BillingServiceInfo',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load('app/controllers/admin/billingservice/info.min.js?rev=f70ba9be83');
+            }]
+        }
+    }).state('admin.billingservice.manage', {
+        url: '/manage/:id',
+        templateUrl: 'templates/admin/billingservice/manage.html?rev=ed212aa795',
+        data: {
+            title: '管理策略'
+        },
+        controller: 'BillingServicemanage',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/controllers/admin/billingservice/energySelect.min.js?rev=bbd07ed93a',
+                    'app/controllers/admin/billingservice/manage.min.js?rev=305227f5d8'
+                ]);
+            }]
+        }
+    }).state('admin.billingservice.add', {
+        url: '/add/:project',
+        templateUrl: 'templates/admin/billingservice/add.html?rev=0ae629d065',
+        data: {
+            title: '添加策略'
+        },
+        controller: 'BillingServiceadd',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/services/billingaccount.min.js?rev=acccca264b',
+                    'app/controllers/admin/billingservice/energySelect.min.js?rev=bbd07ed93a',
+                    'app/controllers/admin/billingservice/add.min.js?rev=730c580d88'
+                ]);
+            }]
+        }
+    }).state('admin.urlpath', {
+        template: '<div ui-view></div>',
+        abstract: true,
+        url: '/urlpath',
+        data: {
+            redirect: 'admin.urlpath.info'
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/services/urlpath.min.js?rev=2dd7ea139b'
+                ]);
+            }]
+        }
+    }).state('admin.urlpath.info', {
+        url: '/info',
+        controller: 'urlpathInfo',
+        templateUrl: 'templates/admin/urlpath/index.html?rev=531adafb03',
+        data: {
+            title: '地址管理'
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([{
+                    insertBefore: '#load_styles_before',
+                    files: [
+                        'http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.css'
+                    ]
+                }, {
+                    files: [
+                        'http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js',
+                        'app/controllers/admin/urlpath/index.min.js?rev=0517a3a049'
+                    ]
+                }]);
+            }]
+        }
+    }).state('admin.building', {
+        template: '<div ui-view></div>',
+        abstract: true,
+        url: '/building',
+        data: {
+            redirect: 'admin.building.info'
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/services/project.min.js?rev=0a6c0a1013',
+                    'app/services/building.min.js?rev=591e1b39a8'
+                ]);
+            }]
+        }
+    }).state('admin.building.info', {
+        url: '/info',
+        templateUrl: 'templates/admin/building/info.html?rev=109d6e69b7',
+        data: {
+            title: '建筑管理'
+        },
+        controller: 'BuildingInfo',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load('app/controllers/admin/building/info.min.js?rev=cc6faa0520');
+            }]
+        }
+    }).state('admin.building.edit', {
+        url: '/edit/:id',
+        templateUrl: 'templates/admin/building/edit.html?rev=00084d2aea',
+        data: {
+            title: '建筑编辑'
+        },
+        controller: 'Buildingedit',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load('app/controllers/admin/building/edit.min.js?rev=2aabdb13d7');
+            }]
+        }
+    }).state('admin.building.create', {
+        url: '/create/:project',
+        templateUrl: 'templates/admin/building/create.html?rev=86416c1c51',
+        data: {
+            title: '建筑编辑'
+        },
+        controller: 'Buildingcreate',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load('app/controllers/admin/building/create.min.js?rev=1a4db566bc');
+            }]
+        }
+    }).state('admin.department', {
+        templateUrl: 'templates/admin/department/base.html?rev=b72ea2a3b5',
+        abstract: true,
+        url: '/department',
+        data: {
+            redirect: 'admin.department.info'
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/services/project.min.js?rev=0a6c0a1013',
+                    'app/services/billingaccount.min.js?rev=acccca264b',
+                    'app/services/export.min.js?rev=3a863d8de1',
+                    'app/services/department.min.js?rev=9fc5f2812b'
+                ]);
+            }]
+        }
+    }).state('admin.department.info', {
+        url: '/info',
+        templateUrl: 'templates/admin/department/info.html?rev=122c52f9f1',
+        data: {
+            title: '户管理'
+        },
+        controller: 'departmentInfo',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([{
+                    name: 'ngUpload',
+                    files: [
+                        'http://static.cloudenergy.me/libs/ngUpload-0.5.18/ng-upload.min.js'
+                    ]
+                }]).then(function() {
+                    return $ocLazyLoad.load([
+                        'app/services/sensor.min.js?rev=8d65776b26',
+                        'app/controllers/admin/department/info.min.js?rev=bbddba5492'
+                    ]);
+                });
+            }]
+        }
+    }).state('admin.department.create', {
+        url: '/create/:project',
+        templateUrl: 'templates/admin/department/create.html?rev=733c561ce2',
+        data: {
+            title: '添加户'
+        },
+        controller: 'departmentcreate',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/services/sensor.min.js?rev=8d65776b26',
+                    'app/controllers/admin/common/accountSelect.min.js?rev=f790145200',
+                    'app/controllers/admin/common/channelSelect.min.js?rev=b7ed65b0f2',
+                    'app/controllers/admin/department/create.min.js?rev=7fe96d12a1'
+                ]);
+            }]
+        }
+    }).state('admin.department.edit', {
+        url: '/edit/:id',
+        templateUrl: 'templates/admin/department/edit.html?rev=ed2c5c0aa6',
+        data: {
+            title: '编辑商户'
+        },
+        controller: 'departmentedit',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/services/sensor.min.js?rev=8d65776b26',
+                    'app/controllers/admin/common/accountSelect.min.js?rev=f790145200',
+                    'app/controllers/admin/common/channelSelect.min.js?rev=b7ed65b0f2',
+                    'app/controllers/admin/department/edit.min.js?rev=9627c4a617'
+                ]);
+            }]
+        }
+    }).state('admin.customer', {
+        template: '<div ui-view></div>',
+        abstract: true,
+        url: '/customer',
+        data: {
+            redirect: 'admin.customer.index'
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/services/project.min.js?rev=0a6c0a1013',
+                    'app/services/energy.min.js?rev=ef3fe92cff',
+                    'app/services/customer.min.js?rev=aad33b141e',
+                    'app/services/sensor.min.js?rev=8d65776b26'
+                ]);
+            }]
+        }
+    }).state('admin.customer.index', {
+        url: '/index',
+        templateUrl: 'templates/admin/customer/index.html?rev=6c5a29f0af',
+        data: {
+            title: '社会属性'
+        },
+        controller: 'CustomerIndex',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([{
+                    insertBefore: '#load_styles_before',
+                    files: [
+                        'http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.css'
+                    ]
+                }, {
+                    files: [
+                        'http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js',
+                        // 'http://static.cloudenergy.me/libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js',
+                        'app/controllers/admin/customer/sensorSelect.min.js?rev=f908df2a98',
+                        'app/controllers/admin/customer/index.min.js?rev=eaaa52e008'
+                    ]
+                }]);
+            }]
+        }
+    }).state('admin.driver', {
+        template: '<div ui-view></div>',
+        abstract: true,
+        url: '/driver',
+        data: {
+            redirect: 'admin.driver.index'
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/services/energy.min.js?rev=ef3fe92cff',
+                    'app/services/project.min.js?rev=0a6c0a1013',
+                    'app/services/customer.min.js?rev=aad33b141e',
+                    'app/services/driver.min.js?rev=10fba7c5a6',
+                    'app/services/sensor.min.js?rev=8d65776b26'
+                ]);
+            }]
+        }
+    }).state('admin.driver.index', {
+        url: '/index',
+        templateUrl: 'templates/admin/driver/index.html?rev=dd05dd1c80',
+        data: {
+            title: '驱动设置'
+        },
+        controller: 'DriverIndex',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([{
+                    insertBefore: '#load_styles_before',
+                    files: [
+                        'http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.css'
+                    ]
+                }, {
+                    files: [
+                        'http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js',
+                        'http://static.cloudenergy.me/libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js',
+                        'app/services/sensorAttrib.min.js?rev=fff9d59294',
+                        'app/controllers/admin/driver/sensorSelect.min.js?rev=834618ec58',
+                        'app/controllers/admin/driver/index.min.js?rev=fce14acec9'
+                    ]
+                }]);
+            }]
+        }
+    }).state('admin.collector', {
+        template: '<div ui-view></div>',
+        abstract: true,
+        url: '/collector',
+        data: {
+            redirect: 'admin.collector.info'
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/services/project.min.js?rev=0a6c0a1013',
+                    'app/services/collector.min.js?rev=946b23467a'
+                ]);
+            }]
+        }
+    }).state('admin.collector.info', {
+        url: '/info',
+        templateUrl: 'templates/admin/collector/info.html?rev=58d8c8e4b4',
+        controller: 'CollectorIndex',
+        data: {
+            title: '采集器管理'
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/controllers/admin/collector/info.min.js?rev=fce3600ade'
+                ]);
+            }]
+        }
+    }).state('admin.collector.create', {
+        url: '/create/:project',
+        templateUrl: 'templates/admin/collector/simple.html?rev=7441f69e5c',
+        controller: 'CollectorCreate',
+        data: {
+            title: '添加采集器'
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/controllers/admin/collector/create.min.js?rev=200b92db0b'
+                ]);
+            }]
+        }
+    }).state('admin.collector.edit', {
+        url: '/edit/:id',
+        templateUrl: 'templates/admin/collector/simple.html?rev=7441f69e5c',
+        controller: 'CollectorEdit',
+        data: {
+            title: '采集器编辑'
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/controllers/admin/collector/edit.min.js?rev=d3e8dd47e3'
+                ]);
+            }]
+        }
+    }).state('admin.energy', {
+        template: '<div ui-view></div>',
+        abstract: true,
+        url: '/energy',
+        data: {
+            redirect: 'admin.energy.index'
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/services/project.min.js?rev=0a6c0a1013',
+                    'app/services/energycategory.min.js?rev=6508426e02',
+                    'app/services/energy.min.js?rev=ef3fe92cff',
+                    'app/services/sensor.min.js?rev=8d65776b26'
+                ]);
+            }]
+        }
+    }).state('admin.energy.index', {
+        url: '/index',
+        templateUrl: 'templates/admin/energy/index.html?rev=e8ff6235f8',
+        data: {
+            title: '能耗分类'
+        },
+        controller: 'EnergyIndex',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([{
+                    insertBefore: '#load_styles_before',
+                    files: [
+                        'http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.css'
+                    ]
+                }, {
+                    files: [
+                        'http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js',
+                        'http://static.cloudenergy.me/libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js',
+                        'app/controllers/admin/energy/sensorSelect.min.js?rev=10cae57a00',
+                        'app/controllers/admin/energy/index.min.js?rev=5d1251684d'
+                    ]
+                }]);
+            }]
+        }
+    }).state('admin.device', {
+        template: '<div ui-view></div>',
+        abstract: true,
+        url: '/device',
+        data: {
+            redirect: 'admin.device.index'
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/services/project.min.js?rev=0a6c0a1013',
+                    'app/services/energycategory.min.js?rev=6508426e02',
+                    'app/services/energy.min.js?rev=ef3fe92cff',
+                    'app/services/sensor.min.js?rev=8d65776b26',
+                    'app/services/device.min.js?rev=9cc2e58661'
+                ]);
+            }]
+        }
+    }).state('admin.device.index', {
+        url: '/index',
+        templateUrl: 'templates/admin/device/index.html?rev=f6aa0a5b15',
+        data: {
+            title: '设备类型'
+        },
+        controller: 'DeviceIndex',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([{
+                    insertBefore: '#load_styles_before',
+                    files: [
+                        'http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.css'
+                    ]
+                }, {
+                    files: [
+                        'http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js',
+                        'http://static.cloudenergy.me/libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js',
+                        'app/controllers/admin/device/index.min.js?rev=94d84a5c5b',
+                        'app/controllers/admin/device/sensorSelect.min.js?rev=5f2d7909c1',
+                        'app/controllers/admin/energy/index.min.js?rev=5d1251684d'
+                    ]
+                }]);
+            }]
+        }
+    }).state('admin.energycategory', {
+        template: '<div ui-view></div>',
+        abstract: true,
+        url: '/energycategory',
+        data: {
+            redirect: 'admin.energycategory.info'
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/services/project.min.js?rev=0a6c0a1013',
+                    'app/services/energycategory.min.js?rev=6508426e02',
+                    'app/services/energycategory.min.js?rev=6508426e02',
+                    'app/services/sensor.min.js?rev=8d65776b26'
+                ]);
+            }]
+        }
+    }).state('admin.energycategory.info', {
+        url: '/info',
+        templateUrl: 'templates/admin/energycategory/info.html?rev=37627829e8',
+        data: {
+            title: '能耗配置'
+        },
+        controller: 'energycategoryinfo',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'http://static.cloudenergy.me/libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js',
+                    'app/controllers/admin/energycategory/info.min.js?rev=17dc617ca7'
+                ]);
+            }]
+        }
+    }).state('admin.energycategory.add', {
+        url: '/add',
+        templateUrl: 'templates/admin/energycategory/add.html?rev=88149c82b9',
+        data: {
+            title: '添加配置'
+        },
+        controller: 'energycategoryadd',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'http://static.cloudenergy.me/libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js',
+                    'app/controllers/admin/energycategory/add.min.js?rev=966139c59b'
+                ]);
+            }]
+        }
+    }).state('admin.energycategory.update', {
+        url: '/update/:id',
+        templateUrl: 'templates/admin/energycategory/update.html?rev=489e6fb8c4',
+        data: {
+            title: '编辑配置'
+        },
+        controller: 'energycategoryupdate',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'http://static.cloudenergy.me/libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js',
+                    'app/controllers/admin/energycategory/update.min.js?rev=8d6fef96ad'
+                ]);
+            }]
+        }
+    }).state('admin.sensor', {
+        template: '<div ui-view></div>',
+        abstract: true,
+        url: '/sensor',
+        data: {
+            redirect: 'admin.sensor.info'
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/services/building.min.js?rev=591e1b39a8',
+                    'app/services/sensor.min.js?rev=8d65776b26'
+                ]);
+            }]
+        }
+    }).state('admin.sensor.info', {
+        url: '/info',
+        templateUrl: 'templates/admin/sensor/info.html?rev=2388413213',
+        data: {
+            title: '传感器管理'
+        },
+        controller: 'SensorIndex',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([{
+                    insertBefore: '#load_styles_before',
+                    files: [
+                        'http://static.cloudenergy.me/libs/angular-xeditable-0.2.0/dist/css/xeditable.min.css'
+                    ]
+                }, {
+                    name: 'ngUpload',
+                    files: [
+                        'http://static.cloudenergy.me/libs/ngUpload-0.5.18/ng-upload.min.js'
+                    ]
+                }, {
+                    name: 'xeditable',
+                    files: [
+                        'http://static.cloudenergy.me/libs/angular-xeditable-0.2.0/dist/js/xeditable.min.js',
+                        'app/services/driver.min.js?rev=10fba7c5a6',
+                        'app/services/control.min.js?rev=9fbeff12b2',
+                        'app/services/sensorAttrib.min.js?rev=fff9d59294',
+                        'app/controllers/admin/sensor/sensorSync.min.js?rev=1625994458',
+                        'app/controllers/admin/sensor/sensorAttribute.min.js?rev=b33bf70857',
+                        'app/controllers/admin/sensor/info.min.js?rev=6651b7f13f',
+                        'app/directives/jstree.min.js?rev=bf552e4c33'
+                    ]
+                }]);
+            }]
+        }
+    }).state('admin.sensor.create', {
+        url: '/create/:building',
+        templateUrl: 'templates/admin/sensor/create.html?rev=ec603f2ff6',
+        data: {
+            title: '添加传感器'
+        },
+        controller: 'SensorCreate',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/services/collector.min.js?rev=946b23467a',
+                    'app/services/energy.min.js?rev=ef3fe92cff',
+                    'app/services/customer.min.js?rev=aad33b141e',
+                    'app/controllers/admin/sensor/create.min.js?rev=6b4919dd92'
+                ]);
+            }]
+        }
+    }).state('admin.sensor.edit', {
+        url: '/edit/:id',
+        templateUrl: 'templates/admin/sensor/edit.html?rev=8c9ea778fd',
+        data: {
+            title: '编辑传感器'
+        },
+        controller: 'SensorEdit',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/services/collector.min.js?rev=946b23467a',
+                    'app/services/energy.min.js?rev=ef3fe92cff',
+                    'app/services/customer.min.js?rev=aad33b141e',
+                    'app/controllers/admin/sensor/edit.min.js?rev=7795559968'
+                ]);
+            }]
+        }
+    }).state('admin.eventcategory', {
+        template: '<div ui-view></div>',
+        abstract: true,
+        url: '/eventcategory',
+        data: {
+            redirect: 'admin.eventcategory.info'
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/services/project.min.js?rev=0a6c0a1013',
+                    'app/services/eventcategory.min.js?rev=06fa8c256f'
+                ]);
+            }]
+        }
+    }).state('admin.eventcategory.info', {
+        url: '/info',
+        templateUrl: 'templates/admin/eventcategory/info.html?rev=d9b688d954',
+        data: {
+            title: '事件配置'
+        },
+        controller: 'eventcategoryIndex',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/controllers/admin/eventcategory/info.min.js?rev=5e1512f6c8'
+                ]);
+            }]
+        }
+    }).state('admin.eventcategory.add', {
+        url: '/add',
+        templateUrl: 'templates/admin/eventcategory/add.html?rev=bda3521d53',
+        data: {
+            title: '事件添加'
+        },
+        controller: 'eventcategoryAdd',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/controllers/admin/eventcategory/add.min.js?rev=f2de6f5278'
+                ]);
+            }]
+        }
+    }).state('admin.eventcategory.update', {
+        url: '/update/:id',
+        templateUrl: 'templates/admin/eventcategory/update.html?rev=919ea89b84',
+        data: {
+            title: '事件编辑'
+        },
+        controller: 'eventcategoryUpdate',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/controllers/admin/eventcategory/update.min.js?rev=a477049451'
+                ]);
+            }]
+        }
+    }).state('admin.finance', {
+        abstract: true,
+        url: '/finance',
+        template: '<div ui-view></div>',
+        data: {
+            redirect: 'admin.finance.index'
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([{
+                    insertBefore: '#load_styles_before',
+                    files: [
+                        'http://static.cloudenergy.me/libs/angular-ui-grid-3.2.1/ui-grid.min.css'
+                    ]
+                }, {
+                    files: [
+                        'http://static.cloudenergy.me/libs/angular-ui-grid-3.2.1/ui-grid.min.js',
+                        'app/directives/datetimepicker.min.js?rev=ad9e0f1675',
+                        'app/directives/auto-height.min.js?rev=b13007069a'
+                    ]
+                }]);
+            }]
+        }
+    }).state('admin.finance.index', {
+        url: '/index',
+        templateUrl: 'templates/admin/finance/index.html?rev=1770a47dfb',
+        data: {
+            title: '平台财务'
+        },
+        controller: 'Finance',
+        controllerAs: 'self',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/controllers/admin/finance/index.min.js?rev=eafe311a5c'
+                ]);
+            }]
+        }
+    }).state('admin.finance.record', {
+        template: '<div ui-view></div>',
+        abstract: true,
+        url: '/record'
+    }).state('admin.finance.record.in', {
+        url: '/in',
+        templateUrl: 'templates/admin/finance/record-in.html?rev=aa9ff2b37a',
+        data: {
+            title: '收入'
+        },
+        controller: 'Finance.record.in',
+        controllerAs: 'self',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/controllers/admin/finance/record-in.min.js?rev=34035d5f21'
+                ]);
+            }]
+        }
+    }).state('admin.finance.record.in.project', {
+        url: '/:projectid',
+        data: {
+            title: '项目'
+        },
+        views: {
+            '@admin.finance.record': {
+                templateUrl: 'templates/admin/finance/record-in.html?rev=aa9ff2b37a',
+                controller: 'Finance.record.in',
+                controllerAs: 'self'
+            }
+        }
+    }).state('admin.finance.record.out', {
+        url: '/out',
+        templateUrl: 'templates/admin/finance/record-out.html?rev=70bf969c2d',
+        data: {
+            title: '支出'
+        },
+        controller: 'Finance.record.out',
+        controllerAs: 'self',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/controllers/admin/finance/record-out.min.js?rev=5dc4b5fa92'
+                ]);
+            }]
+        }
+    }).state('admin.finance.record.out.project', {
+        url: '/:projectid',
+        data: {
+            title: '项目'
+        },
+        views: {
+            '@admin.finance.record': {
+                templateUrl: 'templates/admin/finance/record-out.html?rev=70bf969c2d',
+                controller: 'Finance.record.out',
+                controllerAs: 'self'
+            }
+        }
+    }).state('admin.finance.record.out.project.detail', {
+        url: '/:orderno',
+        data: {
+            title: '申请信息'
+        },
+        views: {
+            '@admin.finance.record': {
+                templateUrl: 'templates/admin/finance/record-detail.html?rev=50ebfacb3e',
+                controller: 'Finance.record.out.detail',
+                controllerAs: 'self'
+            }
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/controllers/admin/finance/record-detail.min.js?rev=273ac4ce7a'
+                ]);
+            }]
+        }
+    }).state('admin.finance.card', {
+        url: '/card',
+        templateUrl: 'templates/admin/finance/card.html?rev=2b2d672cc4',
+        data: {
+            title: '银行卡管理'
+        },
+        controller: 'Finance.card',
+        controllerAs: 'self',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/controllers/admin/finance/card.min.js?rev=e086c4842f'
+                ]);
+            }]
+        }
+    }).state('admin.finance.card.detail', {
+        url: '/:id',
+        data: {
+            title: '申请详情'
+        },
+        views: {
+            '@admin.finance': {
+                templateUrl: 'templates/admin/finance/card-detail.html?rev=1d94458d19',
+                controller: 'Finance.card.detail',
+                controllerAs: 'self'
+            }
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/controllers/admin/finance/card-detail.min.js?rev=d3f08bf3f0'
+                ]);
+            }]
+        }
+    }).state('admin.finance.project', {
+        url: '/project',
+        templateUrl: 'templates/admin/finance/project/list.html?rev=a3474e12f2',
+        data: {
+            title: '项目列表'
+        },
+        controller: 'Finance.project.list',
+        controllerAs: 'self',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/controllers/admin/finance/project/list.min.js?rev=15f32688b9'
+                ]);
+            }]
+        }
+    }).state('admin.finance.project.info', {
+        url: '/:projectid',
+        data: {
+            title: '项目首页'
+        },
+        views: {
+            '@admin.finance': {
+                templateUrl: 'templates/admin/finance/project/index.html?rev=9c5bdf0cb4',
+                controller: 'Finance.project.index',
+                controllerAs: 'self'
+            }
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/directives/distpicker.min.js?rev=be11eee5dd',
+                    'app/controllers/admin/finance/project/index.min.js?rev=5d48668150'
+                ]);
+            }]
+        }
+    }).state('admin.finance.project.info.record', {
+        url: '/record/:tab',
+        data: {
+            title: '收支明细'
+        },
+        views: {
+            '@admin.finance': {
+                templateUrl: 'templates/admin/finance/project/record.html?rev=9dfb680402',
+                controller: 'Finance.project.record',
+                controllerAs: 'self'
+            }
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/controllers/admin/finance/project/record.min.js?rev=f52fca6dac'
+                ]);
+            }]
+        }
+    }).state('admin.finance.project.info.withdraw', {
+        url: '/withdraw',
+        data: {
+            title: '转账'
+        },
+        views: {
+            '@admin.finance': {
+                templateUrl: 'templates/admin/finance/project/withdraw.html?rev=6627f300bc',
+                controller: 'Finance.project.withdraw',
+                controllerAs: 'self'
+            }
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/controllers/admin/finance/project/withdraw.min.js?rev=7b01748977'
+                ]);
+            }]
+        }
+    }).state('admin.property', {
+        abstract: true,
+        url: '/property',
+        template: '<div ui-view></div>',
+        data: {
+            redirect: 'admin.property.index'
+        },
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([{
+                    insertBefore: '#load_styles_before',
+                    files: [
+                        '//at.alicdn.com/t/font_1465708483_208262.css'
+                    ]
+                }, {
+                    // serie: true,
+                    files: [
+                        'app/directives/datetimepicker.min.js?rev=ad9e0f1675',
+                        'app/directives/auto-height.min.js?rev=b13007069a',
+                        'app/directives/modal-download.min.js?rev=c526f60567',
+                        'app/controllers/admin/property/withdraw-detail.min.js?rev=6010a29633',
+                        'app/controllers/admin/property/record-success.min.js?rev=9373f44877'
+                    ]
+                }]);
+            }]
+        }
+    }).state('admin.property.index', {
+        url: '/:projectid',
+        templateUrl: 'templates/admin/property/index.html?rev=4e00fd9cdb',
+        data: {
+            title: '物业财务'
+        },
+        controller: 'Property.index',
+        controllerAs: 'self',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/directives/distpicker.min.js?rev=be11eee5dd',
+                    'app/controllers/admin/property/index.min.js?rev=44a0fa449d'
+                ]);
+            }]
+        }
+    }).state('admin.property.withdraw', {
+        url: '/withdraw/:projectid',
+        templateUrl: 'templates/admin/property/withdraw.html?rev=8802b5ab93',
+        data: {
+            title: '申请提现'
+        },
+        controller: 'Property.withdraw',
+        controllerAs: 'self',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/controllers/admin/property/withdraw.min.js?rev=e26582e10f'
+                ]);
+            }]
+        }
+    }).state('admin.property.record', {
+        url: '/record/:tab/:projectid/:category',
+        templateUrl: 'templates/admin/property/record.html?rev=de01f556f3',
+        data: {
+            title: '收支明细'
+        },
+        controller: 'Property.record',
+        controllerAs: 'self',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/controllers/admin/property/record.min.js?rev=967ba1b9bb'
+                ]);
+            }]
+        }
+    }).state('admin.property.statement', {
+        url: '/statement/:tab/:projectid',
+        templateUrl: 'templates/admin/property/statement.html?rev=46b410b8b7',
+        data: {
+            title: '对账单'
+        },
+        controller: 'Property.statement',
+        controllerAs: 'self',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/controllers/admin/property/statement.min.js?rev=fd5ced5899'
+                ]);
+            }]
+        }
+    }).state('admin.property.consume', {
+        url: '/consume/:projectid',
+        templateUrl: 'templates/admin/property/consume.html?rev=74a9fe170d',
+        data: {
+            title: '消耗明细'
+        },
+        controller: 'Property.consume',
+        controllerAs: 'self',
+        resolve: {
+            deps: ["$ocLazyLoad", function($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    'app/controllers/admin/property/consume.min.js?rev=191e892810'
+                ]);
+            }]
+        }
+    });
+}]).run(["$rootScope", "$state", "$cookies", function($rootScope, $state, $cookies) {
+    $rootScope.$on('$stateChangeStart', function(event, toState) {
+        if (!$cookies.token) {
+            if (toState.name !== 'login' && toState.name !== 'logout') {
+                event.preventDefault && event.preventDefault();
+                $state.go('login');
+            }
+        } else if ($cookies.token && toState.name === 'login') {
+            event.preventDefault && event.preventDefault();
+            $state.go('admin.dashboard');
+        }
+    });
+}]);

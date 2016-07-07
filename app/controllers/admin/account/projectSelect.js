@@ -1,1 +1,70 @@
-angular.module("app").controller("ProjectSelect",["$scope","$modalInstance","Projects","ProjectIDs","Config",function(e,c,t,i,n){e.Ok=function(){var t;e.viewOfProjects[0].isEnable?t=e.viewOfProjects[0]._id:(t=[],_.each(e.viewOfProjects,function(e){e.isEnable&&t.push(e)})),c.close(t)},e.Cancel=function(){c.dismiss("cancel")},e.SwitchProject=function(c,t){c.preventDefault(),"*"==t._id?(_.each(e.viewOfProjects,function(e){e.isEnable=!1}),t.isEnable=!t.isEnable):(e.viewOfProjects[0].isEnable=!1,t.isEnable=!t.isEnable)},e.onSearchProject=function(c){c.preventDefault(),e.UpdateViewOfProject(e.projectSearchKey)},e.UpdateViewOfProject=function(c){e.viewOfProjects=[{_id:"*",title:"所有权限"}],c?_.each(t,function(t){t.title.match(c)&&e.viewOfProjects.push(t)}):e.viewOfProjects=_.union(e.viewOfProjects,t),console.log(e.viewOfProjects),i&&i.length&&_.each(e.viewOfProjects,function(e){e.isEnable=_.contains(i,e._id)})},e.UpdateViewOfProject()}]);
+/**
+ * Created by Joey on 14-6-27.
+ */
+angular.module('app').controller('ProjectSelect', ["$scope", "$modalInstance", "Projects", "ProjectIDs", "Config", function($scope, $modalInstance, Projects, ProjectIDs, Config) {
+    $scope.Ok = function() {
+        var SelectProjects;
+        if ($scope.viewOfProjects[0].isEnable) {
+            //
+            SelectProjects = $scope.viewOfProjects[0]._id;
+        } else {
+            SelectProjects = [];
+            _.each($scope.viewOfProjects, function(project) {
+                if (project.isEnable) {
+                    SelectProjects.push(project);
+                }
+            });
+        }
+        $modalInstance.close(SelectProjects);
+    };
+    $scope.Cancel = function() {
+        $modalInstance.dismiss('cancel');
+    };
+
+    $scope.SwitchProject = function(e, project) {
+        e.preventDefault();
+
+
+        if (project._id == '*') {
+            _.each($scope.viewOfProjects, function(p) {
+                p.isEnable = false;
+            });
+            project.isEnable = !project.isEnable;
+        } else {
+            $scope.viewOfProjects[0].isEnable = false;
+            project.isEnable = !project.isEnable;
+        }
+    };
+
+    $scope.onSearchProject = function(e) {
+        e.preventDefault();
+
+        $scope.UpdateViewOfProject($scope.projectSearchKey);
+    };
+
+    $scope.UpdateViewOfProject = function(key) {
+        //
+        $scope.viewOfProjects = [{
+            _id: '*',
+            title: '所有权限'
+        }];
+        if (!key) {
+            $scope.viewOfProjects = _.union($scope.viewOfProjects, Projects);
+        } else {
+            _.each(Projects, function(project) {
+                if (project.title.match(key)) {
+                    $scope.viewOfProjects.push(project);
+                }
+            });
+        }
+        console.log($scope.viewOfProjects);
+
+        //Set Select Building
+        if (ProjectIDs && ProjectIDs.length) {
+            _.each($scope.viewOfProjects, function(project) {
+                project.isEnable = _.contains(ProjectIDs, project._id);
+            });
+        }
+    };
+    $scope.UpdateViewOfProject();
+}]);

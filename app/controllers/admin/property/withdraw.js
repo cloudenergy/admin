@@ -1,1 +1,106 @@
-angular.module("app").controller("Property.withdraw",["$api","$filter","$timeout","$state","$stateParams","$uibModal",function(t,a,n,c,e,o){var r,u=this;u.projectid=e.projectid,u.cardSelected=null,u.calAmount=function(){r&&n.cancel(r),r=n(function(){u.amount=u.amount&&Math.round(100*u.amount)/100||u.amount},666)},t.project.info({id:u.projectid},function(t){u.project=t.result,c.$current.parent.data.title="物业财务 - "+t.result.title}),t.business.accountbalance({project:u.projectid},function(t){u.accountbalance=t.result||{},u.accountbalance.total=Math.round(100*(u.accountbalance.cash+u.accountbalance.frozen))/100,u.accountbalance.cash=Math.round(100*u.accountbalance.cash)/100,u.accountbalance.frozen=Math.round(100*u.accountbalance.frozen)/100,u.accountbalance.earning=Math.round(100*u.accountbalance.earning)/100,u.accountbalance.withdraw=Math.round(100*u.accountbalance.withdraw)/100}),t.channelaccount.info({project:u.projectid,all:!0,flow:"EXPENSE",status:"SUCCESS"},function(t){u.cardData=t.result||[]}),u.inject=function(){return u.amount&&(u.amount=Math.round(100*u.amount)/100),u.cardSelected&&u.amount?void t.payment.handlingcharge({channelaccount:u.cardSelected.id,amount:u.amount},function(a){u.fee=a.result.amount,o.open({templateUrl:"withdraw_request_confirmation.html",controllerAs:"self",controller:["$uibModalInstance","UI","data",function(t,a,n){this.submit=function(){t.close(this.detail)},this.cancel=function(){t.dismiss("cancel")},this.detail=n,this.detail.timecreate=moment().unix(),this.detail.applicant=EMAPP.Account._id}],resolve:{data:function(){return{card:u.cardSelected,amount:u.amount,fee:u.fee,project:u.projectid}}},size:"md"}).result.then(function(a){t.withdraw.apply({project:a.project,amount:a.amount,channelaccount:a.card.id},function(t){0==t.code?(swal("成功","已提交成功","success"),c.go("admin.property.withdraw",{projectid:u.projectid},{reload:!0})):swal("错误",t.message,"error")})})}):!1}}]);
+angular.module('app').controller('Property.withdraw', ["$api", "$filter", "$timeout", "$state", "$stateParams", "$uibModal", function($api, $filter, $timeout, $state, $stateParams, $uibModal) {
+
+    var self = this,
+        timer;
+
+    // self.amount = 100;
+    self.projectid = $stateParams.projectid;
+    self.cardSelected = null;
+
+    self.calAmount = function() {
+        timer && $timeout.cancel(timer);
+        timer = $timeout(function() {
+            self.amount = self.amount && (Math.round(self.amount * 100) / 100) || self.amount;
+        }, 666);
+    };
+
+    $api.project.info({
+        id: self.projectid
+    }, function(data) {
+        self.project = data.result;
+        $state.$current.parent.data.title = '物业财务 - ' + data.result.title;
+    });
+
+    $api.business.accountbalance({
+        project: self.projectid
+    }, function(data) {
+        self.accountbalance = data.result || {};
+        self.accountbalance.total = Math.round((self.accountbalance.cash + self.accountbalance.frozen) * 100) / 100;
+        self.accountbalance.cash = Math.round(self.accountbalance.cash * 100) / 100;
+        self.accountbalance.frozen = Math.round(self.accountbalance.frozen * 100) / 100;
+        self.accountbalance.earning = Math.round(self.accountbalance.earning * 100) / 100;
+        self.accountbalance.withdraw = Math.round(self.accountbalance.withdraw * 100) / 100;
+    });
+
+    $api.channelaccount.info({
+        project: self.projectid,
+        all: true,
+        flow: 'EXPENSE',
+        status: 'SUCCESS'
+    }, function(data) {
+        self.cardData = data.result || [];
+    });
+
+    self.inject = function() {
+        if (self.amount) {
+            self.amount = Math.round(self.amount * 100) / 100;
+        }
+        if (!self.cardSelected || !self.amount) {
+            return false;
+        }
+
+        $api.payment.handlingcharge({
+            channelaccount: self.cardSelected.id,
+            amount: self.amount
+        }, function(res) {
+
+            self.fee = res.result.amount;
+
+            $uibModal.open({
+                templateUrl: 'withdraw_request_confirmation.html',
+                controllerAs: 'self',
+                controller: ["$uibModalInstance", "UI", "data", function($uibModalInstance, UI, data) {
+                    this.submit = function() {
+                        $uibModalInstance.close(this.detail);
+                    };
+                    this.cancel = function() {
+                        $uibModalInstance.dismiss('cancel')
+                    };
+                    this.detail = data;
+                    this.detail.timecreate = moment().unix();
+                    this.detail.applicant = EMAPP.Account._id;
+                }],
+                resolve: {
+                    data: function() {
+                        return {
+                            card: self.cardSelected,
+                            amount: self.amount,
+                            fee: self.fee,
+                            project: self.projectid
+                        }
+                    }
+                },
+                size: 'md'
+            }).result.then(function(result) {
+                $api.withdraw.apply({
+                    project: result.project,
+                    amount: result.amount,
+                    channelaccount: result.card.id
+                }, function(res) {
+                    if (res.code == 0) {
+                        swal("成功", "已提交成功", "success");
+                        $state.go('admin.property.withdraw', {
+                            projectid: self.projectid
+                        }, {
+                            reload: true
+                        });
+                    } else {
+                        swal("错误", res.message, "error");
+                    }
+                });
+            });
+
+        });
+    };
+
+}]);

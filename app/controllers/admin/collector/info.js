@@ -1,1 +1,93 @@
-angular.module("app").controller("CollectorIndex",["$scope","$rootScope","SettingMenu","Collector","API","Auth","Project","UI",function(e,t,r,n,o,u,c,i){e.operateStatus={create:{isEnable:!1,url:"/create"},"delete":{isEnable:!1,url:"/delete"},edit:{isEnable:!1,url:"/edit"}},e.currentPage=1,e.askingRemoveID=void 0,u.Check(e.operateStatus,function(){function t(t){o.Query(n.info,{project:t},function(t){t.err||(e.items=t.result)})}function u(e){i.AlertError(e.data.message)}r(function(t){e.menu=t}),e.DoRemove=function(t,r,c){t.preventDefault();var a=i.GetAbsoluteIndex(e.currentPage,c);o.Query(n["delete"],{id:r},function(t){e.items.splice(a,1)},u)},e.AskForRemove=function(t,r){t.preventDefault(),e.askingRemoveID=r},e.CancelRemove=function(t,r){t.preventDefault(),e.askingRemoveID=void 0},o.Query(c.info,function(t){if(t.err);else{e.projects=angular.isArray(t.result)?t.result:[t.result];var r=i.GetPageItem("collector");r?(r=_.find(e.projects,function(e){return e._id==r}),e.projects.title=r._id):e.projects.length>0&&(e.projects.title=e.projects[0]._id)}}),e.$watch("projects.title",function(e){e&&(i.PutPageItem("collector",e),t(e))}),e.$watch("currentPage",function(t){return t?void i.PutPageIndex(void 0,e.currentPage):void(e.currentPage=i.GetPageIndex())})})}]);
+angular.module('app').controller('CollectorIndex', ["$scope", "$rootScope", "SettingMenu", "Collector", "API", "Auth", "Project", "UI", function($scope, $rootScope, SettingMenu, Collector, API, Auth, Project, UI) {
+    $scope.operateStatus = {
+        create: {
+            isEnable: false,
+            url: '/create'
+        },
+        delete: {
+            isEnable: false,
+            url: '/delete'
+        },
+        edit: {
+            isEnable: false,
+            url: '/edit'
+        }
+    };
+
+    $scope.currentPage = 1;
+    $scope.askingRemoveID = undefined;
+
+    Auth.Check($scope.operateStatus, function() {
+        SettingMenu(function(menu) {
+            $scope.menu = menu;
+        })
+
+        $scope.DoRemove = function(e, id, index) {
+            e.preventDefault();
+
+            var removeIndex = UI.GetAbsoluteIndex($scope.currentPage, index);
+            API.Query(Collector.delete, {
+                id: id
+            }, function(result) {
+                $scope.items.splice(removeIndex, 1);
+                //            UI.AlertSuccess('删除成功')
+            }, responseError)
+        };
+        $scope.AskForRemove = function(e, id) {
+            e.preventDefault();
+            $scope.askingRemoveID = id;
+        };
+        $scope.CancelRemove = function(e, id) {
+            e.preventDefault();
+            $scope.askingRemoveID = undefined;
+        };
+
+        function GetCollector(projectID) {
+            API.Query(Collector.info, {
+                project: projectID
+            }, (function(result) {
+                if (result.err) {} else {
+                    $scope.items = result.result;
+                }
+            }));
+        }
+
+        API.Query(Project.info, function(result) {
+            if (result.err) {
+                //error
+            } else {
+                $scope.projects = angular.isArray(result.result) ? result.result : [result.result];
+                var defaultProject = UI.GetPageItem('collector');
+                if (defaultProject) {
+                    defaultProject = _.find($scope.projects, function(project) {
+                        return project._id == defaultProject;
+                    });
+                    $scope.projects.title = defaultProject._id;
+                } else {
+                    if ($scope.projects.length > 0) {
+                        $scope.projects.title = $scope.projects[0]._id;
+                    }
+                }
+            }
+        })
+
+        //选择项目后联动查询建筑
+        $scope.$watch('projects.title', function(projectID) {
+            if (projectID) {
+                UI.PutPageItem('collector', projectID);
+                GetCollector(projectID);
+            }
+        });
+        $scope.$watch('currentPage', function(currentPage) {
+            if (!currentPage) {
+                $scope.currentPage = UI.GetPageIndex();
+                return;
+            }
+            UI.PutPageIndex(undefined, $scope.currentPage);
+        });
+
+        function responseError(result) {
+            UI.AlertError(result.data.message)
+        }
+    });
+}]);

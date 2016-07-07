@@ -1,1 +1,108 @@
-angular.module("app").controller("SensorSelect",["$scope","$rootScope","$modalInstance","API","ProjectID","Driver","SensorAttrib","Sensor",function(e,n,r,o,i,s,t,a){var c;e.Ok=function(){var n=[];_.each(e.viewOfSensors,function(e){e.isEnable&&e.driver!=s&&n.push({_id:e._id,driver:s})}),o.Query(t.update,n,function(e){e.err||r.close({})})},e.Cancel=function(){r.dismiss("cancel")},e.SwitchSensor=function(e,n){e.preventDefault(),n.isEnable?n.isEnable=!1:n.isEnable=!0},e.onSearchSensor=function(n){n.preventDefault(),e.UpdateViewOfSensors(e.sensorSearchKey)},e.OnSelectAll=function(r){r.preventDefault(),console.log(e.currentPage,n.popPageSize);for(var o=(e.currentPage-1)*n.popPageSize,i=e.currentPage*n.popPageSize,s=o;i>s;s++)e.viewOfSensors[s].isEnable=!0},e.UpdateViewOfSensors=function(n){e.viewOfSensors=[],n?_.each(c,function(r){(r.title.match(n)||r.channel.match(n))&&e.viewOfSensors.push(r)}):e.viewOfSensors=_.toArray(c),_.each(e.viewOfSensors,function(e){e.driver==s?e.isEnable=!0:e.isEnable=!1}),console.log(e.viewOfSensors)},o.Query(t.info,{project:i},function(n){if(console.log(n),n.err);else{var r=[];c={},_.each(n.result,function(e){var n=e._id.substr(0,12)+".{12}"+e._id.substr(12)+".{2}";r.push(n),c[e._id]=e}),o.Query(a.info,{sids:r},function(n){n.err||(_.each(n.result,function(e){var n=o.ParseSensorID(e.sid),r=n.buildingID+n.gatewayID+n.meterID;c[r]&&(c[r].title=e.title)}),e.UpdateViewOfSensors())})}})}]);
+/**
+ * Created by Joey on 14-6-27.
+ */
+angular.module('app').controller('SensorSelect', ["$scope", "$rootScope", "$modalInstance", "API", "ProjectID", "Driver", "SensorAttrib", "Sensor", function($scope, $rootScope, $modalInstance, API, ProjectID, Driver, SensorAttrib, Sensor) {
+    var Sensors;
+
+    $scope.Ok = function() {
+        var sensorAttribUpdateArray = [];
+        _.each($scope.viewOfSensors, function(sensor) {
+            if (sensor.isEnable && sensor.driver != Driver) {
+                sensorAttribUpdateArray.push({
+                    _id: sensor._id,
+                    driver: Driver
+                });
+            }
+        });
+        API.Query(SensorAttrib.update, sensorAttribUpdateArray, function(result) {
+            if (result.err) {} else {
+                $modalInstance.close({});
+            }
+        });
+    };
+    $scope.Cancel = function() {
+        $modalInstance.dismiss('cancel');
+    };
+
+    $scope.SwitchSensor = function(e, sensor) {
+        e.preventDefault();
+
+        if (sensor.isEnable) {
+            sensor.isEnable = false;
+        } else {
+            sensor.isEnable = true;
+        }
+    };
+
+    $scope.onSearchSensor = function(e) {
+        e.preventDefault();
+
+        $scope.UpdateViewOfSensors($scope.sensorSearchKey);
+    };
+
+    $scope.OnSelectAll = function(e) {
+        e.preventDefault();
+
+        console.log($scope.currentPage, $rootScope.popPageSize);
+        var startIndex = ($scope.currentPage - 1) * $rootScope.popPageSize;
+        var stopIndex = $scope.currentPage * $rootScope.popPageSize;
+        for (var i = startIndex; i < stopIndex; i++) {
+            $scope.viewOfSensors[i].isEnable = true;
+        }
+    };
+
+    $scope.UpdateViewOfSensors = function(key) {
+        //
+        $scope.viewOfSensors = [];
+        if (!key) {
+            $scope.viewOfSensors = _.toArray(Sensors);
+        } else {
+            _.each(Sensors, function(sensor) {
+                if (sensor.title.match(key) || sensor.channel.match(key)) {
+                    $scope.viewOfSensors.push(sensor);
+                }
+            });
+        }
+
+        //Set Select Sensor
+        _.each($scope.viewOfSensors, function(sensor) {
+            if (sensor.driver == Driver) {
+                sensor.isEnable = true;
+            } else {
+                sensor.isEnable = false;
+            }
+        });
+
+        console.log($scope.viewOfSensors);
+    };
+
+    API.Query(SensorAttrib.info, {
+        project: ProjectID
+    }, function(result) {
+        console.log(result);
+        if (result.err) {} else {
+            var query = [];
+            Sensors = {};
+            _.each(result.result, function(sensor) {
+                var key = sensor._id.substr(0, 12) + '.{12}' + sensor._id.substr(12) + '.{2}';
+                query.push(key);
+                Sensors[sensor._id] = sensor;
+            });
+            API.Query(Sensor.info, {
+                sids: query
+            }, function(result) {
+                if (result.err) {} else {
+                    _.each(result.result, function(sensor) {
+                        var SensorGUID = API.ParseSensorID(sensor.sid);
+                        var key = SensorGUID.buildingID + SensorGUID.gatewayID + SensorGUID.meterID;
+                        if (Sensors[key]) {
+                            Sensors[key].title = sensor.title;
+                        }
+                    });
+
+                    $scope.UpdateViewOfSensors();
+                }
+            });
+        }
+    });
+}]);
