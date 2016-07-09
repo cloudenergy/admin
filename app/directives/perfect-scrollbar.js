@@ -2,9 +2,9 @@ angular.module('app').directive('perfectScrollbar', ["$ocLazyLoad", "$timeout", 
 
     var pluginLoad = $ocLazyLoad.load([{
         insertBefore: '#load_styles_before',
-        files: ['http://static.cloudenergy.me/libs/perfect-scrollbar-0.6.11/css/perfect-scrollbar.min.css']
+        files: ['https://static.cloudenergy.me/libs/perfect-scrollbar-0.6.11/css/perfect-scrollbar.min.css']
     }, {
-        files: ['http://static.cloudenergy.me/libs/perfect-scrollbar-0.6.11/js/perfect-scrollbar.jquery.min.js']
+        files: ['https://static.cloudenergy.me/libs/perfect-scrollbar-0.6.11/js/perfect-scrollbar.jquery.min.js']
     }]);
 
     return {

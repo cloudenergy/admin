@@ -2,9 +2,9 @@ angular.module('app').directive('datetimepicker', ["$timeout", "$ocLazyLoad", fu
 
     var pluginLoad = $ocLazyLoad.load([{
         insertBefore: '#load_styles_before',
-        files: ['http://static.cloudenergy.me/libs/eonasdan-bootstrap-datetimepicker-4.17.37/build/css/bootstrap-datetimepicker.min.css']
+        files: ['https://static.cloudenergy.me/libs/eonasdan-bootstrap-datetimepicker-4.17.37/build/css/bootstrap-datetimepicker.min.css']
     }, {
-        files: ['http://static.cloudenergy.me/libs/eonasdan-bootstrap-datetimepicker-4.17.37/build/js/bootstrap-datetimepicker.min.js']
+        files: ['https://static.cloudenergy.me/libs/eonasdan-bootstrap-datetimepicker-4.17.37/build/js/bootstrap-datetimepicker.min.js']
     }]);
 
     return {

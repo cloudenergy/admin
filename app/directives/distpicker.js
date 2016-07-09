@@ -3,8 +3,8 @@ angular.module('app').directive('distpicker', ["$ocLazyLoad", "$timeout", functi
     var pluginLoad = $ocLazyLoad.load([{
         serie: true,
         files: [
-            'http://static.cloudenergy.me/libs/distpicker-1.0.4/dist/distpicker.data.min.js',
-            'http://static.cloudenergy.me/libs/distpicker-1.0.4/dist/distpicker.min.js'
+            'https://static.cloudenergy.me/libs/distpicker-1.0.4/dist/distpicker.data.min.js',
+            'https://static.cloudenergy.me/libs/distpicker-1.0.4/dist/distpicker.min.js'
         ]
     }]);
 

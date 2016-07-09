@@ -2,9 +2,9 @@ angular.module('app').directive('jstree', ["$ocLazyLoad", function($ocLazyLoad) 
 
     var jstreeLoad = $ocLazyLoad.load([{
         insertBefore: '#load_styles_before',
-        files: ['http://static.cloudenergy.me/libs/jstree-3.3.1/dist/themes/default/style.min.css']
+        files: ['https://static.cloudenergy.me/libs/jstree-3.3.1/dist/themes/default/style.min.css']
     }, {
-        files: ['http://static.cloudenergy.me/libs/jstree-3.3.1/dist/jstree.min.js']
+        files: ['https://static.cloudenergy.me/libs/jstree-3.3.1/dist/jstree.min.js']
     }]);
 
     return {

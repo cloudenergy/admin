@@ -23,13 +23,13 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                 return $ocLazyLoad.load([{
                     insertBefore: '#load_styles_before',
                     files: [
-                        'http://static.cloudenergy.me/libs/sweetalert-1.1.3/dist/sweetalert.css'
+                        'https://static.cloudenergy.me/libs/sweetalert-1.1.3/dist/sweetalert.css'
                     ]
                 }, {
                     serie: true,
                     files: [
-                        'http://static.cloudenergy.me/libs/angular-md5-0.1.10/angular-md5.min.js',
-                        'http://static.cloudenergy.me/libs/sweetalert-1.1.3/dist/sweetalert.min.js',
+                        'https://static.cloudenergy.me/libs/angular-md5-0.1.10/angular-md5.min.js',
+                        'https://static.cloudenergy.me/libs/sweetalert-1.1.3/dist/sweetalert.min.js',
                         'app/services/user.min.js?rev=70c6db7442',
                         'app/services/ui.min.js?rev=177c56b661',
                         'app/controllers/session.min.js?rev=28a3d11f28'
@@ -79,23 +79,23 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                 return $ocLazyLoad.load([{
                     insertBefore: '#load_styles_before',
                     files: [
-                        'http://static.cloudenergy.me/libs/sweetalert-1.1.3/dist/sweetalert.css',
-                        'http://static.cloudenergy.me/libs/angular-ui-select-0.18.0/dist/select.min.css'
+                        'https://static.cloudenergy.me/libs/sweetalert-1.1.3/dist/sweetalert.css',
+                        'https://static.cloudenergy.me/libs/angular-ui-select-0.18.0/dist/select.min.css'
                     ]
                 }, {
                     serie: true,
                     files: [
-                        'http://static.cloudenergy.me/libs/moment-2.14.1/min/moment.min.js',
-                        'http://static.cloudenergy.me/libs/moment-2.14.1/locale/zh-cn.js'
+                        'https://static.cloudenergy.me/libs/moment-2.14.1/min/moment.min.js',
+                        'https://static.cloudenergy.me/libs/moment-2.14.1/locale/zh-cn.js'
                     ]
                 }, {
                     // cache: false,
                     // serie: true,
                     files: [
-                        'http://static.cloudenergy.me/libs/angular-md5-0.1.10/angular-md5.min.js',
-                        'http://static.cloudenergy.me/libs/sweetalert-1.1.3/dist/sweetalert.min.js',
-                        'http://static.cloudenergy.me/libs/angular-ui-select-0.18.0/dist/select.min.js',
-                        'app/directives/perfect-scrollbar.min.js?rev=5e1c25bf0e',
+                        'https://static.cloudenergy.me/libs/angular-md5-0.1.10/angular-md5.min.js',
+                        'https://static.cloudenergy.me/libs/sweetalert-1.1.3/dist/sweetalert.min.js',
+                        'https://static.cloudenergy.me/libs/angular-ui-select-0.18.0/dist/select.min.js',
+                        'app/directives/perfect-scrollbar.min.js?rev=d1e4bdddc5',
                         'app/filters/filters.min.js?rev=269f8d3097',
                         'app/services/ui.min.js?rev=177c56b661',
                         'app/services/user.min.js?rev=70c6db7442',
@@ -150,11 +150,11 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                 return $ocLazyLoad.load([{
                     insertBefore: '#load_styles_before',
                     files: [
-                        'http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.css'
+                        'https://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.css'
                     ]
                 }, {
                     files: [
-                        'http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js',
+                        'https://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js',
                         'app/controllers/admin/character/manage.min.js?rev=67f4aa381b',
                         'app/services/urlpath.min.js?rev=2dd7ea139b',
                         'app/services/project.min.js?rev=0a6c0a1013',
@@ -492,11 +492,11 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                 return $ocLazyLoad.load([{
                     insertBefore: '#load_styles_before',
                     files: [
-                        'http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.css'
+                        'https://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.css'
                     ]
                 }, {
                     files: [
-                        'http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js',
+                        'https://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js',
                         'app/controllers/admin/urlpath/index.min.js?rev=0517a3a049'
                     ]
                 }]);
@@ -582,7 +582,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                 return $ocLazyLoad.load([{
                     name: 'ngUpload',
                     files: [
-                        'http://static.cloudenergy.me/libs/ngUpload-0.5.18/ng-upload.min.js'
+                        'https://static.cloudenergy.me/libs/ngUpload-0.5.18/ng-upload.min.js'
                     ]
                 }]).then(function() {
                     return $ocLazyLoad.load([
@@ -655,12 +655,12 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                 return $ocLazyLoad.load([{
                     insertBefore: '#load_styles_before',
                     files: [
-                        'http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.css'
+                        'https://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.css'
                     ]
                 }, {
                     files: [
-                        'http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js',
-                        // 'http://static.cloudenergy.me/libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js',
+                        'https://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js',
+                        // 'https://static.cloudenergy.me/libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js',
                         'app/controllers/admin/customer/sensorSelect.min.js?rev=f908df2a98',
                         'app/controllers/admin/customer/index.min.js?rev=eaaa52e008'
                     ]
@@ -697,12 +697,12 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                 return $ocLazyLoad.load([{
                     insertBefore: '#load_styles_before',
                     files: [
-                        'http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.css'
+                        'https://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.css'
                     ]
                 }, {
                     files: [
-                        'http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js',
-                        'http://static.cloudenergy.me/libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js',
+                        'https://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js',
+                        'https://static.cloudenergy.me/libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js',
                         'app/services/sensorAttrib.min.js?rev=fff9d59294',
                         'app/controllers/admin/driver/sensorSelect.min.js?rev=834618ec58',
                         'app/controllers/admin/driver/index.min.js?rev=fce14acec9'
@@ -796,12 +796,12 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                 return $ocLazyLoad.load([{
                     insertBefore: '#load_styles_before',
                     files: [
-                        'http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.css'
+                        'https://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.css'
                     ]
                 }, {
                     files: [
-                        'http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js',
-                        'http://static.cloudenergy.me/libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js',
+                        'https://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js',
+                        'https://static.cloudenergy.me/libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js',
                         'app/controllers/admin/energy/sensorSelect.min.js?rev=10cae57a00',
                         'app/controllers/admin/energy/index.min.js?rev=5d1251684d'
                     ]
@@ -838,12 +838,12 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                 return $ocLazyLoad.load([{
                     insertBefore: '#load_styles_before',
                     files: [
-                        'http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.css'
+                        'https://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.css'
                     ]
                 }, {
                     files: [
-                        'http://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js',
-                        'http://static.cloudenergy.me/libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js',
+                        'https://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js',
+                        'https://static.cloudenergy.me/libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js',
                         'app/controllers/admin/device/index.min.js?rev=94d84a5c5b',
                         'app/controllers/admin/device/sensorSelect.min.js?rev=5f2d7909c1',
                         'app/controllers/admin/energy/index.min.js?rev=5d1251684d'
@@ -878,7 +878,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'http://static.cloudenergy.me/libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js',
+                    'https://static.cloudenergy.me/libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js',
                     'app/controllers/admin/energycategory/info.min.js?rev=17dc617ca7'
                 ]);
             }]
@@ -893,7 +893,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'http://static.cloudenergy.me/libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js',
+                    'https://static.cloudenergy.me/libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js',
                     'app/controllers/admin/energycategory/add.min.js?rev=966139c59b'
                 ]);
             }]
@@ -908,7 +908,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'http://static.cloudenergy.me/libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js',
+                    'https://static.cloudenergy.me/libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js',
                     'app/controllers/admin/energycategory/update.min.js?rev=8d6fef96ad'
                 ]);
             }]
@@ -940,24 +940,24 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                 return $ocLazyLoad.load([{
                     insertBefore: '#load_styles_before',
                     files: [
-                        'http://static.cloudenergy.me/libs/angular-xeditable-0.2.0/dist/css/xeditable.min.css'
+                        'https://static.cloudenergy.me/libs/angular-xeditable-0.2.0/dist/css/xeditable.min.css'
                     ]
                 }, {
                     name: 'ngUpload',
                     files: [
-                        'http://static.cloudenergy.me/libs/ngUpload-0.5.18/ng-upload.min.js'
+                        'https://static.cloudenergy.me/libs/ngUpload-0.5.18/ng-upload.min.js'
                     ]
                 }, {
                     name: 'xeditable',
                     files: [
-                        'http://static.cloudenergy.me/libs/angular-xeditable-0.2.0/dist/js/xeditable.min.js',
+                        'https://static.cloudenergy.me/libs/angular-xeditable-0.2.0/dist/js/xeditable.min.js',
                         'app/services/driver.min.js?rev=10fba7c5a6',
                         'app/services/control.min.js?rev=9fbeff12b2',
                         'app/services/sensorAttrib.min.js?rev=fff9d59294',
                         'app/controllers/admin/sensor/sensorSync.min.js?rev=1625994458',
                         'app/controllers/admin/sensor/sensorAttribute.min.js?rev=b33bf70857',
                         'app/controllers/admin/sensor/info.min.js?rev=6651b7f13f',
-                        'app/directives/jstree.min.js?rev=bf552e4c33'
+                        'app/directives/jstree.min.js?rev=2a332f4b56'
                     ]
                 }]);
             }]
@@ -1065,12 +1065,12 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                 return $ocLazyLoad.load([{
                     insertBefore: '#load_styles_before',
                     files: [
-                        'http://static.cloudenergy.me/libs/angular-ui-grid-3.2.1/ui-grid.min.css'
+                        'https://static.cloudenergy.me/libs/angular-ui-grid-3.2.1/ui-grid.min.css'
                     ]
                 }, {
                     files: [
-                        'http://static.cloudenergy.me/libs/angular-ui-grid-3.2.1/ui-grid.min.js',
-                        'app/directives/datetimepicker.min.js?rev=ad9e0f1675',
+                        'https://static.cloudenergy.me/libs/angular-ui-grid-3.2.1/ui-grid.min.js',
+                        'app/directives/datetimepicker.min.js?rev=3c390403e5',
                         'app/directives/auto-height.min.js?rev=b13007069a'
                     ]
                 }]);
@@ -1232,7 +1232,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/directives/distpicker.min.js?rev=be11eee5dd',
+                    'app/directives/distpicker.min.js?rev=47a8e0bc0d',
                     'app/controllers/admin/finance/project/index.min.js?rev=5d48668150'
                 ]);
             }]
@@ -1292,7 +1292,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                 }, {
                     // serie: true,
                     files: [
-                        'app/directives/datetimepicker.min.js?rev=ad9e0f1675',
+                        'app/directives/datetimepicker.min.js?rev=3c390403e5',
                         'app/directives/auto-height.min.js?rev=b13007069a',
                         'app/directives/modal-download.min.js?rev=c526f60567',
                         'app/controllers/admin/property/withdraw-detail.min.js?rev=6010a29633',
@@ -1312,7 +1312,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/directives/distpicker.min.js?rev=be11eee5dd',
+                    'app/directives/distpicker.min.js?rev=47a8e0bc0d',
                     'app/controllers/admin/property/index.min.js?rev=44a0fa449d'
                 ]);
             }]
