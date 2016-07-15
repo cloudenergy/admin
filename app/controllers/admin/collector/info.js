@@ -46,7 +46,7 @@ angular.module('app').controller('CollectorIndex', ["$scope", "$rootScope", "Set
             API.Query(Collector.info, {
                 project: projectID
             }, (function(result) {
-                if (result.err) {} else {
+                if (!result.err) {
                     $scope.items = result.result;
                 }
             }));
@@ -62,17 +62,17 @@ angular.module('app').controller('CollectorIndex', ["$scope", "$rootScope", "Set
                     defaultProject = _.find($scope.projects, function(project) {
                         return project._id == defaultProject;
                     });
-                    $scope.projects.title = defaultProject._id;
+                    $scope.projects.selected = defaultProject._id;
                 } else {
                     if ($scope.projects.length > 0) {
-                        $scope.projects.title = $scope.projects[0]._id;
+                        $scope.projects.selected = $scope.projects[0]._id;
                     }
                 }
             }
         })
 
         //选择项目后联动查询建筑
-        $scope.$watch('projects.title', function(projectID) {
+        $scope.$watch('projects.selected', function(projectID) {
             if (projectID) {
                 UI.PutPageItem('collector', projectID);
                 GetCollector(projectID);

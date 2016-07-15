@@ -10,7 +10,7 @@ angular.module('app').controller('departmentedit', ["$scope", "$location", "$sta
             }
 
             var projectID = $scope.department.project;
-            $scope.department['resource'] = {
+            $scope.department.resource = {
                 project: [projectID],
                 sensor: []
             };
@@ -28,7 +28,7 @@ angular.module('app').controller('departmentedit', ["$scope", "$location", "$sta
             $scope.department.offduty = $scope.offDutyHour.selected + ":" + $scope.offDutyMinute.selected;
             if ($scope.department.password) {
                 $scope.department.password = md5.createHash($scope.department.password).toUpperCase();
-            };
+            }
             // $scope.department.account = $scope.departmentAccount;
 
             API.Query(Department.update, $scope.department, function(result) {
@@ -81,8 +81,6 @@ angular.module('app').controller('departmentedit', ["$scope", "$location", "$sta
             });
 
             modalInstance.result.then(function(selectSensors) {
-                //
-                console.log(selectSensors);
                 $scope.SelectSensors = selectSensors;
             }, function() {});
         };
@@ -106,7 +104,7 @@ angular.module('app').controller('departmentedit', ["$scope", "$location", "$sta
                 angular.forEach(message, function(value, key) {
                     $scope.warning[value] = true;
                 });
-            };
+            }
 
             var onDuty = moment($scope.department.onduty, 'H:mm');
             $scope.onDutyHour.selected = onDuty.format("H");
@@ -125,7 +123,7 @@ angular.module('app').controller('departmentedit', ["$scope", "$location", "$sta
                 API.Query(Sensor.channelinfo, {
                     ids: sensorIDs
                 }, function(result) {
-                    if (result.err) {} else {
+                    if (!result.err) {
                         $scope.SelectSensors = result.result;
                     }
                 });

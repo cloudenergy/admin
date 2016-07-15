@@ -15,7 +15,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }]
     }).state('login', {
         url: '/admin/login',
-        templateUrl: 'templates/login.html?rev=686c58d34b',
+        templateUrl: 'templates/login.html?rev=2480a6b353',
         controller: 'session',
         controllerAs: 'self',
         resolve: {
@@ -519,14 +519,14 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.building.info', {
         url: '/info',
-        templateUrl: 'templates/admin/building/info.html?rev=109d6e69b7',
+        templateUrl: 'templates/admin/building/info.html?rev=39808e892c',
         data: {
             title: '建筑管理'
         },
         controller: 'BuildingInfo',
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
-                return $ocLazyLoad.load('app/controllers/admin/building/info.min.js?rev=cc6faa0520');
+                return $ocLazyLoad.load('app/controllers/admin/building/info.min.js?rev=0245d4a8b7');
             }]
         }
     }).state('admin.building.edit', {
@@ -550,7 +550,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         controller: 'Buildingcreate',
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
-                return $ocLazyLoad.load('app/controllers/admin/building/create.min.js?rev=1a4db566bc');
+                return $ocLazyLoad.load('app/controllers/admin/building/create.min.js?rev=1b3c420542');
             }]
         }
     }).state('admin.department', {
@@ -572,7 +572,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.department.info', {
         url: '/info',
-        templateUrl: 'templates/admin/department/info.html?rev=122c52f9f1',
+        templateUrl: 'templates/admin/department/info.html?rev=c9a2411be1',
         data: {
             title: '户管理'
         },
@@ -622,7 +622,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                     'app/services/sensor.min.js?rev=8d65776b26',
                     'app/controllers/admin/common/accountSelect.min.js?rev=f790145200',
                     'app/controllers/admin/common/channelSelect.min.js?rev=b7ed65b0f2',
-                    'app/controllers/admin/department/edit.min.js?rev=9627c4a617'
+                    'app/controllers/admin/department/edit.min.js?rev=185e92c5aa'
                 ]);
             }]
         }
@@ -727,7 +727,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.collector.info', {
         url: '/info',
-        templateUrl: 'templates/admin/collector/info.html?rev=58d8c8e4b4',
+        templateUrl: 'templates/admin/collector/info.html?rev=fce7044c43',
         controller: 'CollectorIndex',
         data: {
             title: '采集器管理'
@@ -735,7 +735,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/collector/info.min.js?rev=fce3600ade'
+                    'app/controllers/admin/collector/info.min.js?rev=eaa5ad988d'
                 ]);
             }]
         }

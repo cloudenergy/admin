@@ -14,7 +14,7 @@ angular.module('app').controller('departmentcreate', ["$scope", "$location", "$s
             if ($scope.department.account < 10) {
                 UI.AlertError('用户名不能低于10位');
                 return
-            };
+            }
 
             if ($scope.department.password != $scope.repassword) {
                 swal('错误', '两次输入的密码不一致', 'warning');
@@ -26,7 +26,7 @@ angular.module('app').controller('departmentcreate', ["$scope", "$location", "$s
                 return;
             }
 
-            $scope.department['resource'] = {
+            $scope.department.resource = {
                 project: [projectID],
                 sensor: []
             };
@@ -41,8 +41,8 @@ angular.module('app').controller('departmentcreate', ["$scope", "$location", "$s
                 }
             });
 
-            $scope.department.onduty = $scope.ondutyHour.selected + ":" + $scope.ondutyMinute.selected;
-            $scope.department.offduty = $scope.offdutyHour.selected + ":" + $scope.offdutyMinute.selected;
+            $scope.department.onduty = $scope.ondutyHour.selected + ':' + $scope.ondutyMinute.selected;
+            $scope.department.offduty = $scope.offdutyHour.selected + ':' + $scope.offdutyMinute.selected;
 
             $scope.department.message = Object.keys($scope.warning).filter(function(item) {
                 return $scope.warning[item] ? item : '';
@@ -171,14 +171,14 @@ angular.module('app').controller('departmentcreate', ["$scope", "$location", "$s
 
                 if (result.result.onduty) {
                     var onDuty = moment(result.result.onduty, 'H:mm');
-                    $scope.ondutyHour.selected = onDuty.format("H");
-                    $scope.ondutyMinute.selected = onDuty.format("mm");
+                    $scope.ondutyHour.selected = onDuty.format('H');
+                    $scope.ondutyMinute.selected = onDuty.format('mm');
                 }
 
                 if (result.result.offduty) {
                     var offDuty = moment(result.result.offduty, 'H:mm');
-                    $scope.offdutyHour.selected = offDuty.format("H");
-                    $scope.offdutyMinute.selected = offDuty.format("mm");
+                    $scope.offdutyHour.selected = offDuty.format('H');
+                    $scope.offdutyMinute.selected = offDuty.format('mm');
                 }
             }
         })

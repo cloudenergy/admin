@@ -28,12 +28,10 @@ angular.module('app').controller('BuildingInfo', ["$scope", "SettingMenu", "Buil
             API.Query(Building.delete, {
                 id: id
             }, function(result) {
-                if (result.code) {
-
-                } else {
+                if (!result.code) {
                     $scope.buildings.splice(index, 1);
-                };
-            }, responseError)
+                }
+            }, responseError);
         };
         $scope.AskForRemove = function(e, id) {
             e.preventDefault();
@@ -52,9 +50,8 @@ angular.module('app').controller('BuildingInfo', ["$scope", "SettingMenu", "Buil
                     //error
                 } else {
                     $scope.buildings = result.result;
-                    console.log($scope.buildings);
                 }
-            })
+            });
         }
 
         API.Query(Project.info, function(result) {
@@ -63,7 +60,7 @@ angular.module('app').controller('BuildingInfo', ["$scope", "SettingMenu", "Buil
             } else {
                 $scope.projects = angular.isArray(result.result) ? result.result : [result.result];
                 if ($scope.projects.length > 0) {
-                    $scope.projects.title = $scope.projects[0]._id;
+                    $scope.projects.selected = $scope.projects[0]._id;
                 }
 
                 //Set Default Building
@@ -72,17 +69,17 @@ angular.module('app').controller('BuildingInfo', ["$scope", "SettingMenu", "Buil
                     defaultProject = _.find($scope.projects, function(project) {
                         return project._id == defaultProject;
                     });
-                    $scope.projects.title = defaultProject._id;
+                    $scope.projects.selected = defaultProject._id;
                 } else {
                     if ($scope.projects.length > 0) {
-                        $scope.projects.title = $scope.projects[0]._id;
+                        $scope.projects.selected = $scope.projects[0]._id;
                     }
                 }
             }
         });
 
         //选择项目后联动查询建筑
-        $scope.$watch('projects.title', function(projectID) {
+        $scope.$watch('projects.selected', function(projectID) {
             if (projectID) {
                 UI.PutPageItem(DefalutProjectStoreKey, projectID);
                 GetBuilding(projectID);
@@ -90,7 +87,7 @@ angular.module('app').controller('BuildingInfo', ["$scope", "SettingMenu", "Buil
         });
 
         function responseError(result) {
-            UI.AlertError(result.data.message)
+            UI.AlertError(result.data.message);
         }
     });
 }]);

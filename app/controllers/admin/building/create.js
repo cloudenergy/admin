@@ -5,20 +5,18 @@ angular.module('app').controller('Buildingcreate', ["$scope", "$location", "$sta
         });
 
         $scope.submit = function(e) {
-            $scope.projects.selected = $scope.projects.selected._id;
+            $scope.building.project = $scope.projects.selected._id;
             API.Query(Building.add, $scope.building, function(result) {
                 if (result.code) {
                     UI.AlertError(result.message);
                 } else {
-                    $location.path('/admin/building/info')
+                    $location.path('/admin/building/info');
                     UI.AlertSuccess('保存成功');
                 }
             }, function(result) {
-                UI.AlertError(result.data.message)
+                UI.AlertError(result.data.message);
             });
         };
-
-        var projectID = $stateParams.project;
 
         API.Query(Project.info, function(result) {
             if (result.err) {
@@ -30,13 +28,13 @@ angular.module('app').controller('Buildingcreate', ["$scope", "$location", "$sta
                     return project._id == $stateParams.project;
                 });
             }
-        })
+        });
 
         $scope.avgConsumptionChange = function() {
             $scope.building.totalConsumption = $scope.building.acreage * $scope.building.avgConsumption;
-        }
+        };
         $scope.totalConsumptionChange = function() {
             $scope.building.avgConsumption = $scope.building.totalConsumption / $scope.building.acreage;
-        }
+        };
     });
 }]);
