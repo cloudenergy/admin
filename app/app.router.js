@@ -594,7 +594,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.department.create', {
         url: '/create/:project',
-        templateUrl: 'templates/admin/department/create.html?rev=733c561ce2',
+        templateUrl: 'templates/admin/department/create.html?rev=e90b2856ea',
         data: {
             title: '添加户'
         },
@@ -605,13 +605,13 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                     'app/services/sensor.min.js?rev=8d65776b26',
                     'app/controllers/admin/common/accountSelect.min.js?rev=f790145200',
                     'app/controllers/admin/common/channelSelect.min.js?rev=b7ed65b0f2',
-                    'app/controllers/admin/department/create.min.js?rev=7fe96d12a1'
+                    'app/controllers/admin/department/create.min.js?rev=100a257772'
                 ]);
             }]
         }
     }).state('admin.department.edit', {
         url: '/edit/:id',
-        templateUrl: 'templates/admin/department/edit.html?rev=ed2c5c0aa6',
+        templateUrl: 'templates/admin/department/edit.html?rev=fbc40c3b20',
         data: {
             title: '编辑商户'
         },
@@ -622,7 +622,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                     'app/services/sensor.min.js?rev=8d65776b26',
                     'app/controllers/admin/common/accountSelect.min.js?rev=f790145200',
                     'app/controllers/admin/common/channelSelect.min.js?rev=b7ed65b0f2',
-                    'app/controllers/admin/department/edit.min.js?rev=185e92c5aa'
+                    'app/controllers/admin/department/edit.min.js?rev=4feea4cf4b'
                 ]);
             }]
         }
@@ -828,7 +828,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.device.index', {
         url: '/index',
-        templateUrl: 'templates/admin/device/index.html?rev=f6aa0a5b15',
+        templateUrl: 'templates/admin/device/index.html?rev=56904958a5',
         data: {
             title: '设备类型'
         },
@@ -844,8 +844,8 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                     files: [
                         'https://static.cloudenergy.me/libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js',
                         'https://static.cloudenergy.me/libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js',
-                        'app/controllers/admin/device/index.min.js?rev=94d84a5c5b',
-                        'app/controllers/admin/device/sensorSelect.min.js?rev=5f2d7909c1',
+                        'app/controllers/admin/device/index.min.js?rev=8978bf8e21',
+                        'app/controllers/admin/device/sensorSelect.min.js?rev=49126901e4',
                         'app/controllers/admin/energy/index.min.js?rev=5d1251684d'
                     ]
                 }]);

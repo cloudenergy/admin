@@ -1,6 +1,9 @@
-angular.module('app').controller('departmentedit', ["$scope", "$location", "$stateParams", "$uibModal", "$api", "SettingMenu", "Department", "Auth", "API", "Sensor", "UI", "md5", function($scope, $location, $stateParams, $uibModal, $api, SettingMenu, Department, Auth, API, Sensor, UI, md5) {
+angular.module('app').controller('departmentedit', ["$scope", "$state", "$stateParams", "$uibModal", "$api", "SettingMenu", "Department", "Auth", "API", "Sensor", "UI", "md5", function($scope, $state, $stateParams, $uibModal, $api, SettingMenu, Department, Auth, API, Sensor, UI, md5) {
     $scope.ondutyHour = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
     $scope.ondutyMinute = ['00', '10', '20', '30', '40', '50'];
+    $scope.offdutyHour = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
+    $scope.offdutyMinute = ['00', '10', '20', '30', '40', '50'];
+
     Auth.Check(function() {
 
         $scope.submit = function(e) {
@@ -24,8 +27,8 @@ angular.module('app').controller('departmentedit', ["$scope", "$location", "$sta
                 return $scope.warning[item] ? item : '';
             }).join(',');
 
-            $scope.department.onduty = $scope.onDutyHour.selected + ":" + $scope.onDutyMinute.selected;
-            $scope.department.offduty = $scope.offDutyHour.selected + ":" + $scope.offDutyMinute.selected;
+            $scope.department.onduty = $scope.ondutyHour.selected + ':' + $scope.ondutyMinute.selected;
+            $scope.department.offduty = $scope.offdutyHour.selected + ':' + $scope.offdutyMinute.selected;
             if ($scope.department.password) {
                 $scope.department.password = md5.createHash($scope.department.password).toUpperCase();
             }
@@ -36,7 +39,7 @@ angular.module('app').controller('departmentedit', ["$scope", "$location", "$sta
                     UI.AlertError(result.message);
                 } else {
                     UI.AlertSuccess('更新成功');
-                    $location.path('/admin/department/info');
+                    $state.go('admin.department.info');
                 }
             });
         };
@@ -56,8 +59,6 @@ angular.module('app').controller('departmentedit', ["$scope", "$location", "$sta
             });
 
             modalInstance.result.then(function(selectAccounts) {
-                //
-                console.log(selectAccounts);
                 $scope.SelectAccounts = selectAccounts;
                 $scope.departmentAccount = selectAccounts._id;
             }, function() {});
@@ -107,12 +108,12 @@ angular.module('app').controller('departmentedit', ["$scope", "$location", "$sta
             }
 
             var onDuty = moment($scope.department.onduty, 'H:mm');
-            $scope.onDutyHour.selected = onDuty.format("H");
-            $scope.onDutyMinute.selected = onDuty.format("mm");
+            $scope.ondutyHour.selected = onDuty.format('H');
+            $scope.ondutyMinute.selected = onDuty.format('mm');
 
             var offDuty = moment($scope.department.offduty, 'H:mm');
-            $scope.offDutyHour.selected = offDuty.format("H");
-            $scope.offDutyMinute.selected = offDuty.format("mm");
+            $scope.offdutyHour.selected = offDuty.format('H');
+            $scope.offdutyMinute.selected = offDuty.format('mm');
 
             if ($scope.department.resource && $scope.department.resource.sensor) {
                 //

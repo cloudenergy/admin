@@ -1,63 +1,47 @@
-angular.module('app').controller('DeviceIndex', ["$scope", "SettingMenu", "$q", "$modal", "Energy", "API", "Auth", "Project", "UI", "Device", "base64", "Sensor", function($scope, SettingMenu, $q, $modal, Energy, API, Auth, Project, UI, Device, base64, Sensor) {
+angular.module('app').controller('DeviceIndex', ["$scope", "$uibModal", "$api", "Auth", "UI", function($scope, $uibModal, $api, Auth, UI) {
 
-    var removeEnergycategory = {};
-    var updateEnergycategory = {};
     var DefalutProjectStoreKey = 'department.project';
 
     Auth.Check(function() {
 
-        SettingMenu(function(menu) {
-            $scope.menu = menu;
-        });
-
         function GetDevice(projectID) {
-            var viewOfDevice = [];
-            _.each($scope.device, function(dev) {
-                viewOfDevice.push({
-                    id: dev.id,
-                    name: dev.name,
-                    childrens: [],
-                    ischild: false,
-                    level: 1
+
+            $api.device.type({
+                project: projectID || undefined
+            }, function(data) {
+
+                $scope.device = data.result;
+
+                var viewOfDevice = [];
+                angular.forEach($scope.device, function(dev) {
+                    viewOfDevice.push({
+                        id: dev.id,
+                        name: dev.name,
+                        childrens: [],
+                        ischild: false,
+                        level: 1
+                    });
                 });
+
+                $scope.viewOfDevice = [{
+                    nodes: viewOfDevice,
+                    name: '设备类型',
+                    level: 0
+                }];
+
             });
 
-            $scope.viewOfDevice = [{
-                nodes: viewOfDevice,
-                title: '设备类型',
-                level: 0
-            }];
-
-            removeEnergycategory = {};
-            updateEnergycategory = {};
-            $scope.projects.title = projectID;
         }
 
-        $q.all([
-            API.QueryPromise(Project.info, {}).$promise,
-            API.QueryPromise(Device.type, {}).$promise
-        ]).then(function(result) {
-            if (result[0].err || result[1].err) {
-                //
-            } else {
-                $scope.projects = angular.isArray(result[0].result) ? result[0].result : [result[0].result];
-                var defaultProject = UI.GetPageItem(DefalutProjectStoreKey);
-                if (defaultProject) {
-                    defaultProject = _.find($scope.projects, function(project) {
-                        return project._id == defaultProject;
-                    });
-                    $scope.projects.title = defaultProject._id;
-                } else {
-                    if ($scope.projects.length > 0) {
-                        $scope.projects.title = $scope.projects[0]._id;
-                    }
-                }
-                $scope.device = result[1].result;
-            }
+        $api.project.info(function(data) {
+            $scope.projects = angular.isArray(data.result) ? data.result : data.result && [data.result] || [];
+            angular.forEach($scope.projects, function(item) {
+                this[item._id] = item;
+            }, $scope.projects);
+            $scope.projects.selected = ($scope.projects[UI.GetPageItem(DefalutProjectStoreKey)] || $scope.projects[0] || {})._id;
         });
-
         //选择项目后联动查询能耗类型
-        $scope.$watch('projects.title', function(projectID) {
+        $scope.$watch('projects.selected', function(projectID) {
             if (projectID) {
                 UI.PutPageItem(DefalutProjectStoreKey, projectID);
                 GetDevice(projectID);
@@ -65,15 +49,14 @@ angular.module('app').controller('DeviceIndex', ["$scope", "SettingMenu", "$q", 
         });
 
         $scope.sensor = function(node, index) {
-            console.log(node, index);
             //将当前属性添加到选中的传感器
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 templateUrl: 'sensorSelect.html',
                 controller: 'SensorSelect',
                 size: 'lg',
                 resolve: {
                     ProjectID: function() {
-                        return $scope.projects.title
+                        return $scope.projects.selected
                     },
                     DeviceType: function() {
                         return node.id;

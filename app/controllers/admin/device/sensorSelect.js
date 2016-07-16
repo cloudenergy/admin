@@ -1,7 +1,7 @@
 /**
  * Created by Joey on 14-6-27.
  */
-angular.module('app').controller('SensorSelect', ["$scope", "$rootScope", "$modalInstance", "API", "Sensor", "ProjectID", "Config", "DeviceType", function($scope, $rootScope, $modalInstance, API, Sensor, ProjectID, Config, DeviceType) {
+angular.module('app').controller('SensorSelect', ["$scope", "$rootScope", "$uibModalInstance", "API", "Sensor", "ProjectID", "Config", "DeviceType", function($scope, $rootScope, $uibModalInstance, API, Sensor, ProjectID, Config, DeviceType) {
     var Sensors;
     $scope.currentPage = 1;
 
@@ -18,10 +18,10 @@ angular.module('app').controller('SensorSelect', ["$scope", "$rootScope", "$moda
                     _id: sensor._id,
                     devicetype: DeviceType
                 };
-                console.log('Add: ', sensorUpdateObj);
+
                 API.Query(Sensor.update, sensorUpdateObj, function(result) {
                     if (result.err) {} else {
-                        $modalInstance.close({});
+                        $uibModalInstance.close({});
                     }
                 });
             } else {
@@ -29,20 +29,20 @@ angular.module('app').controller('SensorSelect', ["$scope", "$rootScope", "$moda
                     _id: sensor._id,
                     devicetype: DeviceType
                 };
-                console.log('Clear: ', sensorUpdateObj);
+
                 API.Query(Sensor.update, sensorUpdateObj, function(result) {
                     if (result.err) {} else {
-                        $modalInstance.close({});
+                        $uibModalInstance.close({});
                     }
                 });
             }
         });
         if (isUnmodified) {
-            $modalInstance.close({});
+            $uibModalInstance.close({});
         }
     };
     $scope.Cancel = function() {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
     };
 
     $scope.SwitchSensor = function(e, sensor) {
@@ -63,8 +63,6 @@ angular.module('app').controller('SensorSelect', ["$scope", "$rootScope", "$moda
 
     $scope.OnSelectAll = function(e) {
         e.preventDefault();
-
-        console.log($scope.currentPage, $rootScope.popPageSize);
         var startIndex = ($scope.currentPage - 1) * $rootScope.popPageSize;
         var stopIndex = $scope.currentPage * $rootScope.popPageSize;
         for (var i = startIndex; i < stopIndex; i++) {
@@ -99,7 +97,6 @@ angular.module('app').controller('SensorSelect', ["$scope", "$rootScope", "$moda
     API.Query(Sensor.channelinfo, {
         project: ProjectID
     }, function(result) {
-        console.log(result);
         if (result.err) {} else {
             Sensors = result.result;
             $scope.UpdateViewOfSensors();

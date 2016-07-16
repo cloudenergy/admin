@@ -1,8 +1,9 @@
-angular.module('app').controller('departmentcreate', ["$scope", "$location", "$stateParams", "$uibModal", "SettingMenu", "Department", "Auth", "API", "Project", "UI", "Sensor", "md5", function($scope, $location, $stateParams, $uibModal, SettingMenu, Department, Auth, API, Project, UI, Sensor, md5) {
+angular.module('app').controller('departmentcreate', ["$scope", "$state", "$stateParams", "$uibModal", "SettingMenu", "Department", "Auth", "API", "Project", "UI", "Sensor", "md5", function($scope, $state, $stateParams, $uibModal, SettingMenu, Department, Auth, API, Project, UI, Sensor, md5) {
     $scope.ondutyHour = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
     $scope.ondutyMinute = ['00', '10', '20', '30', '40', '50'];
     $scope.offdutyHour = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
     $scope.offdutyMinute = ['00', '10', '20', '30', '40', '50'];
+
     Auth.Check(function() {
         $scope.department = {
             character: 'NONE'
@@ -12,7 +13,7 @@ angular.module('app').controller('departmentcreate', ["$scope", "$location", "$s
         $scope.warning = {};
         $scope.submit = function(e) {
             if ($scope.department.account < 10) {
-                UI.AlertError('用户名不能低于10位');
+                UI.AlertWarning('用户名不能低于10位');
                 return
             }
 
@@ -22,7 +23,12 @@ angular.module('app').controller('departmentcreate', ["$scope", "$location", "$s
             }
 
             if ($scope.SelectSensors && $scope.SelectSensors.length && !$scope.department.account) {
-                alert('请选择所属账户');
+                UI.AlertWarning('请选择所属账户');
+                return;
+            }
+
+            if (!$scope.department.password) {
+                UI.AlertWarning('请设置密码');
                 return;
             }
 
@@ -49,6 +55,7 @@ angular.module('app').controller('departmentcreate', ["$scope", "$location", "$s
             }).join(',');
 
             $scope.department.project = projectID;
+
             $scope.department.password = md5.createHash($scope.department.password).toUpperCase();
 
             API.Query(Department.add, $scope.department, function(result) {
@@ -56,9 +63,10 @@ angular.module('app').controller('departmentcreate', ["$scope", "$location", "$s
                     UI.AlertError(result.message);
                 } else {
                     UI.AlertSuccess('保存成功');
-                    $location.path('/admin/department/info');
+                    $state.go('admin.department.info');
                 }
             });
+
         };
 
         $scope.OnSelectAccount = function(e) {
