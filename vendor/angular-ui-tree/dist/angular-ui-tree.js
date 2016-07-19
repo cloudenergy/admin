@@ -1,5 +1,5 @@
 /**
- * @license Angular UI Tree v2.15.0
+ * @license Angular UI Tree v2.17.0
  * (c) 2010-2016. https://github.com/angular-ui-tree/angular-ui-tree
  * License: MIT
  */
@@ -58,6 +58,7 @@
         $scope.$type = 'uiTreeNode';
         $scope.$$allowNodeDrop = false;
         $scope.collapsed = false;
+        $scope.expandOnHover = false;
 
         $scope.init = function (controllersArr) {
           var treeNodesCtrl = controllersArr[0];
@@ -130,6 +131,7 @@
 
         $scope.toggle = function () {
           $scope.collapsed = !$scope.collapsed;
+          $scope.$treeScope.$callbacks.toggle($scope.collapsed, $scope);
         };
 
         $scope.collapse = function () {
@@ -445,6 +447,21 @@
               return true;
             };
 
+            callbacks.expandTimeoutStart = function()
+            {
+
+            };
+
+            callbacks.expandTimeoutCancel = function()
+            {
+
+            };
+
+            callbacks.expandTimeoutEnd = function()
+            {
+
+            };
+
             callbacks.removed = function (node) {
 
             };
@@ -491,6 +508,15 @@
              * @returns {Boolean|Promise} Truthy (or rejected Promise) to cancel node move; falsy (or resolved promise)
              */
             callbacks.beforeDrop = function (event) {
+
+            };
+
+            /**
+             * Callback is fired when a user toggles node (but after processing the toggle action)
+             * @param sourceNodeScope
+             * @param collapsed
+             */
+            callbacks.toggle = function (collapsed, sourceNodeScope) {
 
             };
 
@@ -546,8 +572,8 @@
 
   angular.module('ui.tree')
 
-    .directive('uiTreeNode', ['treeConfig', 'UiTreeHelper', '$window', '$document', '$timeout', '$q', '$rootElement',
-      function (treeConfig, UiTreeHelper, $window, $document, $timeout, $q, $rootElement) {
+    .directive('uiTreeNode', ['treeConfig', 'UiTreeHelper', '$window', '$document', '$timeout', '$q',
+      function (treeConfig, UiTreeHelper, $window, $document, $timeout, $q) {
         return {
           require: ['^uiTreeNodes', '^uiTree'],
           restrict: 'A',
@@ -591,6 +617,7 @@
             scope.init(controllersArr);
 
             scope.collapsed = !!UiTreeHelper.getNodeAttribute(scope, 'collapsed') || treeConfig.defaultCollapsed;
+			scope.expandOnHover = !!UiTreeHelper.getNodeAttribute(scope, 'expandOnHover');
             scope.sourceOnly = scope.nodropEnabled || scope.$treeScope.nodropEnabled;
 
             scope.$watch(attrs.collapsed, function (val) {
@@ -602,6 +629,17 @@
             scope.$watch('collapsed', function (val) {
               UiTreeHelper.setNodeAttribute(scope, 'collapsed', val);
               attrs.$set('collapsed', val);
+            });
+
+            scope.$watch(attrs.expandOnHover, function(val) {
+              if ((typeof val) == 'boolean') {
+                scope.expandOnHover = val;
+              }
+            });
+
+			scope.$watch('expandOnHover', function (val) {
+              UiTreeHelper.setNodeAttribute(scope, 'expandOnHover', val);
+              attrs.$set('expandOnHover', val);
             });
 
             scope.$on('angular-ui-tree:collapse-all', function () {
@@ -727,7 +765,7 @@
                 dragElm.append(element);
               }
 
-              $rootElement.append(dragElm);
+              $document.find('body').append(dragElm);
 
               dragElm.css({
                 'left': eventObj.pageX - pos.offsetX + 'px',
@@ -764,6 +802,7 @@
                 targetNode,
                 targetElm,
                 isEmpty,
+                scrollDownBy,
                 targetOffset,
                 targetBefore;
 
@@ -808,8 +847,9 @@
                 bottom_scroll = top_scroll + (window.innerHeight || $window.document.clientHeight || $window.document.clientHeight);
 
                 // to scroll down if cursor y-position is greater than the bottom position the vertical scroll
-                if (bottom_scroll < eventObj.pageY && bottom_scroll <= document_height) {
-                  window.scrollBy(0, 10);
+                if (bottom_scroll < eventObj.pageY && bottom_scroll < document_height) {
+                  scrollDownBy = Math.min(document_height - bottom_scroll, 10);
+                  window.scrollBy(0, scrollDownBy);
                 }
 
                 // to scroll top if cursor y-position is less than the top position the vertical scroll
@@ -968,6 +1008,31 @@
                       dragInfo.moveTo(targetNode.$nodesScope, targetNode.$nodesScope.childNodes(), 0);
                     }
                   } else if (targetNode.dragEnabled()) { // drag enabled
+                      if (angular.isDefined(scope.expandTimeoutOn) && scope.expandTimeoutOn !== targetNode.id) {
+                        $timeout.cancel(scope.expandTimeout);
+                        delete scope.expandTimeout;
+                        delete scope.expandTimeoutOn;
+
+                        scope.$callbacks.expandTimeoutCancel();
+                      }
+
+                      if (targetNode.collapsed) {
+                        if (scope.expandOnHover === true || (angular.isNumber(scope.expandOnHover) && scope.expandOnHover === 0)) {
+                          targetNode.collapsed = false;
+                        } else if (scope.expandOnHover !== false && angular.isNumber(scope.expandOnHover) && scope.expandOnHover > 0) {
+                          if (angular.isUndefined(scope.expandTimeoutOn)) {
+                            scope.expandTimeoutOn = targetNode.$id;
+
+                            scope.$callbacks.expandTimeoutStart();
+                            scope.expandTimeout = $timeout(function()
+                            {
+                              scope.$callbacks.expandTimeoutEnd();
+                              targetNode.collapsed = false;
+                            }, scope.expandOnHover);
+                          }
+                        }
+                      }
+
                     targetElm = targetNode.$element; // Get the element of ui-tree-node
                     targetOffset = UiTreeHelper.offset(targetElm);
                     targetBefore = targetNode.horizontal ? eventObj.pageX < (targetOffset.left + UiTreeHelper.width(targetElm) / 2)
@@ -1000,6 +1065,8 @@
               var dragEventArgs = dragInfo.eventArgs(elements, pos);
               e.preventDefault();
               unbindDragMoveEvents();
+
+              $timeout.cancel(scope.expandTimeout);
 
               scope.$treeScope.$apply(function () {
                 $q.when(scope.$treeScope.$callbacks.beforeDrop(dragEventArgs))
