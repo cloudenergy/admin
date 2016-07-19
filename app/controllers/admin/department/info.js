@@ -263,10 +263,6 @@ angular.module('app').controller('departmentInfo', ["$scope", "$timeout", "$uibM
             // };
 
             // $window.open(Config.downloadURL + 'test.txt');
-
-            //API.Query(Export.DepartmentStatistic, obj, function(result){
-            //    console.log(result);
-            //});
         };
 
     });

@@ -46,9 +46,6 @@ angular.module('app').factory('SettingMenu', ["$cookies", "API", "Account", func
                     title: '社会属性',
                     state: 'admin.customer.index'
                 }, {
-                    title: '驱动设置',
-                    state: 'admin.driver.index'
-                }, {
                     title: '采集器管理',
                     state: 'admin.collector.info'
                 }, {
@@ -57,9 +54,6 @@ angular.module('app').factory('SettingMenu', ["$cookies", "API", "Account", func
                 }, {
                     title: '能耗分类',
                     state: 'admin.energy.index'
-                }, {
-                    title: '传感器类型',
-                    state: 'admin.device.index'
                 }, {
                     title: '传感器管理',
                     state: 'admin.sensor.info'

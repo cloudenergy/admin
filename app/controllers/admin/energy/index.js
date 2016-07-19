@@ -1,4 +1,4 @@
-angular.module('app').controller('EnergyIndex', ["$scope", "SettingMenu", "$q", "$modal", "Energy", "API", "Auth", "Project", "UI", "Energycategory", "base64", "Sensor", function($scope, SettingMenu, $q, $modal, Energy, API, Auth, Project, UI, Energycategory, base64, Sensor) {
+angular.module('app').controller('EnergyIndex', ["$scope", "SettingMenu", "$q", "$uibModal", "Energy", "API", "Auth", "Project", "UI", "Energycategory", "base64", "Sensor", function($scope, SettingMenu, $q, $uibModal, Energy, API, Auth, Project, UI, Energycategory, base64, Sensor) {
 
     var DefalutProjectStoreKey = 'energy.project';
     var removeEnergycategory = {};
@@ -57,15 +57,14 @@ angular.module('app').controller('EnergyIndex', ["$scope", "SettingMenu", "$q", 
                 });
                 energy = tmpEnergy;
             }
-            console.log(energy);
+
             var projectEnergy = {
                 energy: energy,
-                _id: $scope.projects.title
+                _id: $scope.projects.selected
             };
 
             API.Query(Energy.update, projectEnergy, function(result) {
-                //
-                console.log(result);
+
                 if (result.err) {
                     responseError(err);
                 }
@@ -84,9 +83,7 @@ angular.module('app').controller('EnergyIndex', ["$scope", "SettingMenu", "$q", 
                         }
                     };
                     API.Query(Sensor.update, updateSensor, function(result) {
-                        if (result.err) {} else {
-                            console.log(result);
-                        }
+
                     })
                 });
 
@@ -95,7 +92,7 @@ angular.module('app').controller('EnergyIndex', ["$scope", "SettingMenu", "$q", 
                     var queryObj = {
                         energy: API.RootEnergycategory(k),
                         energyPath: k,
-                        project: $scope.projects.title
+                        project: $scope.projects.selected
                     };
                     var updateObj = {
                         'set': {
@@ -103,13 +100,13 @@ angular.module('app').controller('EnergyIndex', ["$scope", "SettingMenu", "$q", 
                             energyPath: v
                         }
                     };
-                    console.log(queryObj, updateObj);
+
                     API.Query(Sensor.update, {
                         query: queryObj,
                         queryoperate: updateObj
                     }, function(result) {});
                 });
-                GetEnergy($scope.projects.title);
+                GetEnergy($scope.projects.selected);
 
                 UI.AlertSuccess('保存成功');
             });
@@ -145,12 +142,12 @@ angular.module('app').controller('EnergyIndex', ["$scope", "SettingMenu", "$q", 
         function GetEnergy(projectID) {
             removeEnergycategory = {};
             updateEnergycategory = {};
-            $scope.projects.title = projectID;
+            $scope.projects.selected = projectID;
             API.Query(Energy.info, {
                 project: projectID
             }, function(data) {
                 if (data.err) {} else {
-                    console.log(data.result);
+
                     var energy = data.result.energy;
                     if (!energy) {
                         energy = {};
@@ -196,10 +193,10 @@ angular.module('app').controller('EnergyIndex', ["$scope", "SettingMenu", "$q", 
                     defaultProject = _.find($scope.projects, function(project) {
                         return project._id == defaultProject;
                     });
-                    $scope.projects.title = defaultProject._id;
+                    $scope.projects.selected = defaultProject._id;
                 } else {
                     if ($scope.projects.length > 0) {
-                        $scope.projects.title = $scope.projects[0]._id;
+                        $scope.projects.selected = $scope.projects[0]._id;
                     }
                 }
                 $scope.energycategory = result[1].result;
@@ -207,7 +204,7 @@ angular.module('app').controller('EnergyIndex', ["$scope", "SettingMenu", "$q", 
         });
 
         //选择项目后联动查询能耗类型
-        $scope.$watch('projects.title', function(projectID) {
+        $scope.$watch('projects.selected', function(projectID) {
             if (projectID) {
                 UI.PutPageItem(DefalutProjectStoreKey, projectID);
                 GetEnergy(projectID);
@@ -233,7 +230,7 @@ angular.module('app').controller('EnergyIndex', ["$scope", "SettingMenu", "$q", 
             };
 
             recursionDelete(node);
-            console.log(removeEnergycategory);
+
             scope.remove();
         };
 
@@ -314,19 +311,18 @@ angular.module('app').controller('EnergyIndex', ["$scope", "SettingMenu", "$q", 
             };
             recursionUpdate(node);
 
-            console.log(node, removeEnergycategory);
         };
 
         $scope.sensor = function(node, index) {
-            console.log(node, index);
+
             //将当前属性添加到选中的传感器
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 templateUrl: 'sensorSelect.html',
                 controller: 'SensorSelect',
                 size: 'lg',
                 resolve: {
                     ProjectID: function() {
-                        return $scope.projects.title
+                        return $scope.projects.selected
                     },
                     EnergycategoryID: function() {
                         return node.id;
