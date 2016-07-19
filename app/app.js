@@ -12,7 +12,7 @@ window.EMAPP = angular.module('app', [
     popPageSize: 8,
     API: localStorage.testapi ? '/testapi' : '/api'
 }).run(["$rootScope", "$cookies", "$state", "$stateParams", "Config", function($rootScope, $cookies, $state, $stateParams, Config) {
-    document.title = '云能源管理平台';
+    document.title = '智慧云能源管理平台';
     $rootScope.$cookies = $cookies;
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;

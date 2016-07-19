@@ -110,7 +110,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.dashboard', {
         url: '/dashboard',
-        templateUrl: 'templates/dash.html?rev=295add2668',
+        templateUrl: 'templates/dash.html?rev=05cc799ea4',
         data: {
             title: '技术支持: 0571-85374789'
         }
@@ -1076,7 +1076,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/finance/record-detail.min.js?rev=273ac4ce7a'
+                    'app/controllers/admin/finance/record-detail.min.js?rev=cdade4567d'
                 ]);
             }]
         }
