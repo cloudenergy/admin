@@ -103,7 +103,7 @@ angular.module('app').controller('admin', ["$scope", "$cookies", "$q", "$state",
         name: $cookies.get('user')
     };
 
-    $scope.wwwLink = location.origin.replace('admin.', 'www.');
+    $scope.wwwLink = location.origin.replace('preadmin.', 'pre.').replace('admin.', 'www.');
 
     if ($localStorage.layout) {
         self.app.layout = $localStorage.layout;

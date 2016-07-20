@@ -102,7 +102,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                         'app/services/api.min.js?rev=0abc6298e1',
                         'app/services/authentication.min.js?rev=0f36778387',
                         'app/services/account.min.js?rev=41e7b7bd99',
-                        'app/controllers/admin.min.js?rev=d43ac385f3'
+                        'app/controllers/admin.min.js?rev=805eb0236f'
                     ]
                 }]);
             }]
