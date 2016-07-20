@@ -1,4 +1,4 @@
-angular.module('app').controller('accountInfo', ["$scope", "$location", "SettingMenu", "Account", "API", "Auth", "$cookies", "UI", "Config", function($scope, $location, SettingMenu, Account, API, Auth, $cookies, UI, Config) {
+angular.module('app').controller('accountInfo', ["$scope", "$location", "Account", "API", "Auth", "$cookies", "UI", "Config", function($scope, $location, Account, API, Auth, $cookies, UI, Config) {
 
     $scope.operateStatus = {
         create: {
@@ -26,9 +26,6 @@ angular.module('app').controller('accountInfo', ["$scope", "$location", "Setting
     $scope.askingRemoveID = undefined;
 
     Auth.Check($scope.operateStatus, function() {
-        SettingMenu(function(menu) {
-            $scope.menu = menu;
-        });
 
         $scope.currentPage = UI.GetPageIndex();
 

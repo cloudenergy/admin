@@ -1,8 +1,5 @@
-angular.module('app').controller('Buildingcreate', ["$scope", "$location", "$stateParams", "SettingMenu", "Building", "Auth", "API", "Project", "UI", function($scope, $location, $stateParams, SettingMenu, Building, Auth, API, Project, UI) {
+angular.module('app').controller('Buildingcreate', ["$scope", "$location", "$stateParams", "Building", "Auth", "API", "Project", "UI", function($scope, $location, $stateParams, Building, Auth, API, Project, UI) {
     Auth.Check(function() {
-        SettingMenu(function(menu) {
-            $scope.menu = menu;
-        });
 
         $scope.submit = function(e) {
             $scope.building.project = $scope.projects.selected._id;

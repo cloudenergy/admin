@@ -1,9 +1,6 @@
-angular.module('app').controller('accountEdit', ["$scope", "$stateParams", "$q", "$location", "SettingMenu", "Account", "md5", "API", "Auth", "UI", "Character", "Config", function($scope, $stateParams, $q, $location, SettingMenu, Account, md5, API, Auth, UI, Character, Config) {
+angular.module('app').controller('accountEdit', ["$scope", "$stateParams", "$q", "$location", "Account", "md5", "API", "Auth", "UI", "Character", "Config", function($scope, $stateParams, $q, $location, Account, md5, API, Auth, UI, Character, Config) {
 
     Auth.Check(function() {
-        SettingMenu(function(menu) {
-            $scope.menu = menu;
-        });
 
         $scope.submit = function(e) {
             var updateObj = {
@@ -15,7 +12,7 @@ angular.module('app').controller('accountEdit', ["$scope", "$stateParams", "$q",
             } else if ($scope.newpasswd && $scope.newpasswd.length) {
                 var passwdMD5 = md5.createHash($scope.newpasswd).toUpperCase();
                 //            $scope.account.passwd = passwdMD5;
-                updateObj['passwd'] = passwdMD5;
+                updateObj.passwd = passwdMD5;
             }
 
             if (!$scope.characters.level) {
@@ -23,17 +20,17 @@ angular.module('app').controller('accountEdit', ["$scope", "$stateParams", "$q",
                 return;
             }
 
-            updateObj['character'] = $scope.characters.level._id;
-            updateObj['title'] = $scope.account.title;
-            updateObj['mobile'] = $scope.account.mobile;
-            updateObj['email'] = $scope.account.email;
+            updateObj.character = $scope.characters.level._id;
+            updateObj.title = $scope.account.title;
+            updateObj.mobile = $scope.account.mobile;
+            updateObj.email = $scope.account.email;
 
-            updateObj['message'] = Object.keys($scope.warning).filter(function(item) {
+            updateObj.message = Object.keys($scope.warning).filter(function(item) {
                 return $scope.warning[item] ? item : '';
             }).join(',');
 
             if ($scope.account.initpath) {
-                updateObj['initpath'] = $scope.account.initpath;
+                updateObj.initpath = $scope.account.initpath;
             }
 
             API.Query(Account.update, updateObj, function(result) {

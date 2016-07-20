@@ -1,9 +1,5 @@
-angular.module('app').controller('BillingServiceadd', ["Config", "$scope", "$q", "$location", "$cookies", "BillingService", "Energycategory", "$stateParams", "SettingMenu", "BillingAccount", "Account", "md5", "API", "Auth", "UI", function(Config, $scope, $q, $location, $cookies, BillingService, Energycategory, $stateParams, SettingMenu, BillingAccount, Account, md5, API, Auth, UI) {
+angular.module('app').controller('BillingServiceadd', ["Config", "$scope", "$q", "$location", "$cookies", "BillingService", "Energycategory", "$stateParams", "BillingAccount", "Account", "md5", "API", "Auth", "UI", function(Config, $scope, $q, $location, $cookies, BillingService, Energycategory, $stateParams, BillingAccount, Account, md5, API, Auth, UI) {
     Auth.Check(function() {
-        SettingMenu(function(menu) {
-            $scope.menu = menu;
-        });
-
         $scope.submit = function(e) {
             var selectedEnergycategory = new Array();
             _.each($scope.energycategory, function(v) {

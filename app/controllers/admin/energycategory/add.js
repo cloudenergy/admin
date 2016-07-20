@@ -1,8 +1,5 @@
-angular.module('app').controller('energycategoryadd', ["$rootScope", "$scope", "$location", "SettingMenu", "Energycategory", "Auth", "API", "UI", function($rootScope, $scope, $location, SettingMenu, Energycategory, Auth, API, UI) {
+angular.module('app').controller('energycategoryadd', ["$rootScope", "$scope", "$location", "Energycategory", "Auth", "API", "UI", function($rootScope, $scope, $location, Energycategory, Auth, API, UI) {
     Auth.Check(function() {
-        SettingMenu(function(menu) {
-            $scope.menu = menu;
-        });
 
         $scope.submit = function(e) {
             var energycategoryArray = new Array();

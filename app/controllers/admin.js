@@ -1,4 +1,4 @@
-angular.module('app').controller('admin', ["$scope", "$cookies", "$q", "$state", "$localStorage", "SettingMenu", function($scope, $cookies, $q, $state, $localStorage, SettingMenu) {
+angular.module('app').controller('admin', ["$scope", "$cookies", "$q", "$state", "$localStorage", "$api", function($scope, $cookies, $q, $state, $localStorage, $api) {
 
     var self = this,
         icons = {
@@ -20,7 +20,59 @@ angular.module('app').controller('admin', ["$scope", "$cookies", "$q", "$state",
             finance: 'dollar',
             property: 'dollar'
         },
-        promiseAccount = $q.defer(),
+        menu = [{
+            title: '首页',
+            state: 'admin.dashboard',
+            ignore: true
+        }, {
+            title: '角色管理',
+            state: 'admin.character.info'
+        }, {
+            title: '项目管理',
+            state: 'admin.project.info'
+        }, {
+            title: 'APPID.SECRET',
+            state: 'admin.appidsecret.info'
+        }, {
+            title: '账户管理',
+            state: 'admin.account.info'
+        }, {
+            title: '计费策略',
+            state: 'admin.billingservice.info'
+        }, {
+            title: '地址管理',
+            state: 'admin.urlpath.info'
+        }, {
+            title: '建筑管理',
+            state: 'admin.building.info'
+        }, {
+            title: '户管理',
+            state: 'admin.department.info'
+        }, {
+            title: '社会属性',
+            state: 'admin.customer.index'
+        }, {
+            title: '采集器管理',
+            state: 'admin.collector.info'
+        }, {
+            title: '能耗配置',
+            state: 'admin.energycategory.info'
+        }, {
+            title: '能耗分类',
+            state: 'admin.energy.index'
+        }, {
+            title: '传感器管理',
+            state: 'admin.sensor.info'
+        }, {
+            title: '事件配置',
+            state: 'admin.eventcategory.info'
+        }, {
+            title: '平台财务',
+            state: 'admin.finance.index'
+        }, {
+            title: '物业财务',
+            state: 'admin.property.index'
+        }],
         promiseList = [];
 
     self.layoutLoaded = {};
@@ -46,6 +98,13 @@ angular.module('app').controller('admin', ["$scope", "$cookies", "$q", "$state",
         isConfigOpen: false
     };
 
+    $scope.user = {
+        avatar: 'images/avatar.jpg',
+        name: $cookies.get('user')
+    };
+
+    $scope.wwwLink = location.origin.replace('admin.', 'www.');
+
     if ($localStorage.layout) {
         self.app.layout = $localStorage.layout;
     } else {
@@ -67,24 +126,43 @@ angular.module('app').controller('admin', ["$scope", "$cookies", "$q", "$state",
         /^templates\/common/.test(src) && self.layoutLoaded[src] && self.layoutLoaded[src].resolve();
     });
 
-    $q.all(promiseList.concat([promiseAccount.promise])).then(function() {
-        self.layoutLoaded = true
-    });
+    $q.all(promiseList.concat([$api.account.info({
+        id: $cookies.get('user')
+    }, function(data) {
 
-    $scope.user = {
-        avatar: 'images/avatar.jpg',
-        name: $cookies.get('user')
-    };
+        EMAPP.Account = data.result || {};
+        EMAPP.Rule = {};
 
-    SettingMenu(function(menu) {
-        promiseAccount.resolve();
-        angular.forEach(self.menu = menu, function(item) {
-            item.prefix = /^(\w+\.\w+)?/.exec(item.state)[0] || '';
-            item.icon = icons[item.state.split('.')[1]] || 'circle';
-        });
+        (function each(rule, level, keys) {
+            angular.forEach(rule, function(item, key) {
+                if (key !== 'leaf') {
+                    if (level === 0) {
+                        each(item, level + 1, [key]);
+                    } else {
+                        if (item.leaf) {
+                            EMAPP.Rule[keys.concat([key]).join('.')] = true;
+                        } else {
+                            each(item, level + 1, keys.concat([key]));
+                        }
+                    }
+                }
+            });
+        }(EMAPP.Account.character.rule['/'], 0));
+
+        angular.forEach(menu, function(item) {
+            if (item.ignore || EMAPP.Rule[item.state]) {
+                item.prefix = /^(\w+\.\w+)?/.exec(item.state)[0] || '';
+                item.icon = icons[item.state.split('.')[1]] || 'circle';
+                this.push(item);
+            }
+        }, self.menu = []);
+
         self.menu.active = function(state) {
-            return /(\w+\.\w+)?/.exec(state)[0] === /(\w+\.\w+)?/.exec($state.$current.name)[0]
+            return /(\w+\.\w+)?/.exec(state)[0] === /(\w+\.\w+)?/.exec($state.$current.name)[0];
         };
+
+    }).$promise])).then(function() {
+        self.layoutLoaded = true;
     });
 
 }]);

@@ -1,4 +1,4 @@
-angular.module('app').controller('energycategoryinfo', ["$rootScope", "$scope", "SettingMenu", "Energycategory", "API", "Auth", "UI", function($rootScope, $scope, SettingMenu, Energycategory, API, Auth, UI) {
+angular.module('app').controller('energycategoryinfo', ["$rootScope", "$scope", "Energycategory", "API", "Auth", "UI", function($rootScope, $scope, Energycategory, API, Auth, UI) {
 
     $scope.operateStatus = {
         add: {
@@ -18,9 +18,6 @@ angular.module('app').controller('energycategoryinfo', ["$rootScope", "$scope", 
     $scope.askingRemoveID = undefined;
 
     Auth.Check($scope.operateStatus, function() {
-        SettingMenu(function(menu) {
-            $scope.menu = menu;
-        });
 
         API.Query(Energycategory.info, function(result) {
             if (result.err) {

@@ -1,4 +1,4 @@
-angular.module('app').controller('energycategoryupdate', ["$rootScope", "$scope", "$stateParams", "$location", "SettingMenu", "Energycategory", "Auth", "API", "UI", function($rootScope, $scope, $stateParams, $location, SettingMenu, Energycategory, Auth, API, UI) {
+angular.module('app').controller('energycategoryupdate', ["$rootScope", "$scope", "$stateParams", "$location", "Energycategory", "Auth", "API", "UI", function($rootScope, $scope, $stateParams, $location, Energycategory, Auth, API, UI) {
     Auth.Check(function() {
 
         $scope.submit = function(e) {

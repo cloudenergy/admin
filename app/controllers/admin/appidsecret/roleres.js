@@ -1,4 +1,4 @@
-angular.module('app').controller('appidsecretroleres', ["Config", "$scope", "$stateParams", "$q", "$modal", "$cookies", "$location", "SettingMenu", "Account", "AppIDSecret", "md5", "API", "Auth", "UI", "BillingService", "Energycategory", "Project", "Building", function(Config, $scope, $stateParams, $q, $modal, $cookies, $location, SettingMenu, Account, AppIDSecret, md5, API, Auth, UI, BillingService, Energycategory, Project, Building) {
+angular.module('app').controller('appidsecretroleres', ["Config", "$scope", "$stateParams", "$q", "$modal", "$cookies", "$location", "Account", "AppIDSecret", "md5", "API", "Auth", "UI", "BillingService", "Energycategory", "Project", "Building", function(Config, $scope, $stateParams, $q, $modal, $cookies, $location, Account, AppIDSecret, md5, API, Auth, UI, BillingService, Energycategory, Project, Building) {
 
     var originProject;
     Auth.Check(function() {

@@ -9,6 +9,9 @@ angular.module('app').config(["$provide", function($provide) {
             login: {},
             logout: {}
         }],
+        account: ['account', , {
+            info: {}
+        }],
         control: ['control', , {
             send: {},
             statusquery: {}

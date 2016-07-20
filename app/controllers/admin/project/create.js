@@ -1,4 +1,4 @@
-angular.module('app').controller('projectCreate', ["$rootScope", "$scope", "$state", "SettingMenu", "Project", "Energycategory", "Auth", "API", "UI", function($rootScope, $scope, $state, SettingMenu, Project, Energycategory, Auth, API, UI) {
+angular.module('app').controller('projectCreate', ["$rootScope", "$scope", "$state", "Project", "Energycategory", "Auth", "API", "UI", function($rootScope, $scope, $state, Project, Energycategory, Auth, API, UI) {
     $scope.ondutyHour = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
     $scope.ondutyMinute = ['00', '10', '20', '30', '40', '50'];
     $scope.offdutyHour = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
@@ -8,9 +8,6 @@ angular.module('app').controller('projectCreate', ["$rootScope", "$scope", "$sta
     $scope.offdutyHour.selected = '17';
     $scope.offdutyMinute.selected = '00';
     Auth.Check(function() {
-        SettingMenu(function(menu) {
-            $scope.menu = menu;
-        });
 
         $scope.submit = function(e) {
             var projectArray = new Array();

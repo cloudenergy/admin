@@ -1,8 +1,5 @@
-angular.module('app').controller('Buildingedit', ["$scope", "$stateParams", "$location", "SettingMenu", "Building", "Auth", "API", "Project", "UI", function($scope, $stateParams, $location, SettingMenu, Building, Auth, API, Project, UI) {
+angular.module('app').controller('Buildingedit', ["$scope", "$stateParams", "$location", "Building", "Auth", "API", "Project", "UI", function($scope, $stateParams, $location, Building, Auth, API, Project, UI) {
     Auth.Check(function() {
-        SettingMenu(function(menu) {
-            $scope.menu = menu;
-        })
 
         $scope.submit = function(e) {
             $scope.building.project = $scope.building.project._id;
@@ -14,9 +11,9 @@ angular.module('app').controller('Buildingedit', ["$scope", "$stateParams", "$lo
                     UI.AlertSuccess('保存成功');
                 }
             }, function(result) {
-                UI.AlertError(result.data.message)
-            })
-        }
+                UI.AlertError(result.data.message);
+            });
+        };
 
         API.Query(Building.info, {
             id: $stateParams.id
@@ -35,19 +32,19 @@ angular.module('app').controller('Buildingedit', ["$scope", "$stateParams", "$lo
                             return project._id == $scope.building.project._id;
                         });
                     }
-                })
+                });
             }
-        }, responseError)
+        }, responseError);
 
         function responseError(result) {
-            UI.AlertError(result.data.message)
+            UI.AlertError(result.data.message);
         }
 
         $scope.avgConsumptionChange = function() {
             $scope.building.totalConsumption = $scope.building.acreage * $scope.building.avgConsumption;
-        }
+        };
         $scope.totalConsumptionChange = function() {
             $scope.building.avgConsumption = $scope.building.totalConsumption / $scope.building.acreage;
-        }
+        };
     });
 }]);

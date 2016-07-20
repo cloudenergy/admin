@@ -1,12 +1,9 @@
-angular.module('app').controller('urlpathInfo', ["$scope", "$q", "SettingMenu", "UrlPath", "API", "Auth", "UI", function($scope, $q, SettingMenu, UrlPath, API, Auth, UI) {
+angular.module('app').controller('urlpathInfo', ["$scope", "$q", "UrlPath", "API", "Auth", "UI", function($scope, $q, UrlPath, API, Auth, UI) {
 
     var removeNodes = new Array();
     var pastUrlPath;
 
     Auth.Check(function() {
-        SettingMenu(function(menu) {
-            $scope.menu = menu;
-        });
 
         $scope.doSave = function(e) {
             e.preventDefault();

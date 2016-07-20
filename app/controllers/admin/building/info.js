@@ -1,4 +1,4 @@
-angular.module('app').controller('BuildingInfo', ["$scope", "SettingMenu", "Building", "API", "Auth", "Project", "UI", function($scope, SettingMenu, Building, API, Auth, Project, UI) {
+angular.module('app').controller('BuildingInfo', ["$scope", "Building", "API", "Auth", "Project", "UI", function($scope, Building, API, Auth, Project, UI) {
     $scope.operateStatus = {
         create: {
             isEnable: false,
@@ -18,9 +18,6 @@ angular.module('app').controller('BuildingInfo', ["$scope", "SettingMenu", "Buil
     var DefalutProjectStoreKey = 'building.project';
 
     Auth.Check($scope.operateStatus, function() {
-        SettingMenu(function(menu) {
-            $scope.menu = menu;
-        });
 
         $scope.DoRemove = function(e, id, index) {
             e.preventDefault();

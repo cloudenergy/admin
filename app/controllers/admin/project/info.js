@@ -1,4 +1,4 @@
-angular.module('app').controller('projectInfo', ["$rootScope", "$scope", "SettingMenu", "Project", "API", "Auth", "UI", function($rootScope, $scope, SettingMenu, Project, API, Auth, UI) {
+angular.module('app').controller('projectInfo', ["$rootScope", "$scope", "Project", "API", "Auth", "UI", function($rootScope, $scope, Project, API, Auth, UI) {
 
     $scope.operateStatus = {
         create: {
@@ -18,9 +18,6 @@ angular.module('app').controller('projectInfo', ["$rootScope", "$scope", "Settin
     $scope.askingRemoveID = undefined;
 
     Auth.Check($scope.operateStatus, function() {
-        SettingMenu(function(menu) {
-            $scope.menu = menu;
-        });
 
         API.Query(Project.info, function(result) {
             if (result.err) {

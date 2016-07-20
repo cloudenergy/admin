@@ -1,4 +1,4 @@
-angular.module('app').controller('CollectorIndex', ["$scope", "$rootScope", "SettingMenu", "Collector", "API", "Auth", "Project", "UI", function($scope, $rootScope, SettingMenu, Collector, API, Auth, Project, UI) {
+angular.module('app').controller('CollectorIndex', ["$scope", "$rootScope", "Collector", "API", "Auth", "Project", "UI", function($scope, $rootScope, Collector, API, Auth, Project, UI) {
     $scope.operateStatus = {
         create: {
             isEnable: false,
@@ -18,9 +18,6 @@ angular.module('app').controller('CollectorIndex', ["$scope", "$rootScope", "Set
     $scope.askingRemoveID = undefined;
 
     Auth.Check($scope.operateStatus, function() {
-        SettingMenu(function(menu) {
-            $scope.menu = menu;
-        })
 
         $scope.DoRemove = function(e, id, index) {
             e.preventDefault();

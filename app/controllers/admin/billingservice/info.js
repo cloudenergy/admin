@@ -1,4 +1,4 @@
-angular.module('app').controller('BillingServiceInfo', ["$scope", "$q", "$stateParams", "Energycategory", "$location", "SettingMenu", "Project", "Account", "API", "Auth", "$cookies", "UI", "Pab", "BillingService", "Config", function($scope, $q, $stateParams, Energycategory, $location, SettingMenu, Project, Account, API, Auth, $cookies, UI, Pab, BillingService, Config) {
+angular.module('app').controller('BillingServiceInfo', ["$scope", "$q", "$stateParams", "Energycategory", "$location", "Project", "Account", "API", "Auth", "$cookies", "UI", "Pab", "BillingService", "Config", function($scope, $q, $stateParams, Energycategory, $location, Project, Account, API, Auth, $cookies, UI, Pab, BillingService, Config) {
 
     $scope.operateStatus = {
         add: {
@@ -21,9 +21,6 @@ angular.module('app').controller('BillingServiceInfo', ["$scope", "$q", "$stateP
     $scope.askingRemoveID = undefined;
 
     Auth.Check($scope.operateStatus, function() {
-        SettingMenu(function(menu) {
-            $scope.menu = menu;
-        });
 
         $scope.onSearchAccount = function(e) {
             e.preventDefault();

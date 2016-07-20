@@ -1,8 +1,5 @@
-angular.module('app').controller('SensorEdit', ["$scope", "$stateParams", "$location", "SettingMenu", "Sensor", "Collector", "Energy", "Customer", "Building", "API", "Auth", "UI", function($scope, $stateParams, $location, SettingMenu, Sensor, Collector, Energy, Customer, Building, API, Auth, UI) {
+angular.module('app').controller('SensorEdit', ["$scope", "$stateParams", "$location", "Sensor", "Collector", "Energy", "Customer", "Building", "API", "Auth", "UI", function($scope, $stateParams, $location, Sensor, Collector, Energy, Customer, Building, API, Auth, UI) {
     Auth.Check(function() {
-        SettingMenu(function(menu) {
-            $scope.menu = menu;
-        });
 
         var page = $stateParams.page;
         var selectEnergycategory;

@@ -1,8 +1,6 @@
-angular.module('app').controller('SensorCreate', ["$scope", "$location", "SettingMenu", "Sensor", "Collector", "Energy", "Customer", "Building", "API", "Auth", "UI", "$stateParams", function($scope, $location, SettingMenu, Sensor, Collector, Energy, Customer, Building, API, Auth, UI, $stateParams) {
+angular.module('app').controller('SensorCreate', ["$scope", "$location", "Sensor", "Collector", "Energy", "Customer", "Building", "API", "Auth", "UI", "$stateParams", function($scope, $location, Sensor, Collector, Energy, Customer, Building, API, Auth, UI, $stateParams) {
     Auth.Check(function() {
-        SettingMenu(function(menu) {
-            $scope.menu = menu;
-        });
+
         $scope.sensor = {
             mask: false,
             comi: 'd*1'

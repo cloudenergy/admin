@@ -1,4 +1,4 @@
-angular.module('app').controller('eventcategoryUpdate', ["$rootScope", "$scope", "$stateParams", "$location", "SettingMenu", "Eventcategory", "Auth", "API", "UI", function($rootScope, $scope, $stateParams, $location, SettingMenu, Eventcategory, Auth, API, UI) {
+angular.module('app').controller('eventcategoryUpdate', ["$rootScope", "$scope", "$stateParams", "$location", "Eventcategory", "Auth", "API", "UI", function($rootScope, $scope, $stateParams, $location, Eventcategory, Auth, API, UI) {
     Auth.Check(function() {
 
         $scope.submit = function(e) {

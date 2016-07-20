@@ -1,16 +1,14 @@
-angular.module('app').controller('accountCreate', ["$scope", "$q", "$location", "$cookies", "SettingMenu", "BillingAccount", "Account", "md5", "API", "Auth", "UI", "Character", function($scope, $q, $location, $cookies, SettingMenu, BillingAccount, Account, md5, API, Auth, UI, Character) {
+angular.module('app').controller('accountCreate', ["$scope", "$q", "$location", "$cookies", "BillingAccount", "Account", "md5", "API", "Auth", "UI", "Character", function($scope, $q, $location, $cookies, BillingAccount, Account, md5, API, Auth, UI, Character) {
 
     Auth.Check(function() {
-        SettingMenu(function(menu) {
-            $scope.menu = menu;
-        });
+
         $scope.warning = {};
 
         $scope.submit = function(e) {
             if ($scope.account.user.length < 6) {
                 UI.AlertError('用户名不能低于6位');
-                return
-            };
+                return;
+            }
 
             if ($scope.newpasswd != $scope.repeatnewpasswd) {
                 UI.AlertError('二次密码输入不一致，请重新输入');

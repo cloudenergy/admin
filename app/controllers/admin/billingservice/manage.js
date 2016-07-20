@@ -1,4 +1,4 @@
-angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParams", "$q", "$modal", "$cookies", "$location", "SettingMenu", "Account", "md5", "API", "Auth", "UI", "BillingService", "Energycategory", "Config", function($scope, $stateParams, $q, $modal, $cookies, $location, SettingMenu, Account, md5, API, Auth, UI, BillingService, Energycategory, Config) {
+angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParams", "$q", "$modal", "$cookies", "$location", "Account", "md5", "API", "Auth", "UI", "BillingService", "Energycategory", "Config", function($scope, $stateParams, $q, $modal, $cookies, $location, Account, md5, API, Auth, UI, BillingService, Energycategory, Config) {
     Auth.Check(function() {
 
         $scope.askingRemoveID = undefined;

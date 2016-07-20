@@ -1,4 +1,4 @@
-angular.module('app').controller('characterInfo', ["$rootScope", "$scope", "SettingMenu", "API", "Auth", "$cookies", "UI", "Character", "Config", function($rootScope, $scope, SettingMenu, API, Auth, $cookies, UI, Character, Config) {
+angular.module('app').controller('characterInfo', ["$rootScope", "$scope", "API", "Auth", "$cookies", "UI", "Character", "Config", function($rootScope, $scope, API, Auth, $cookies, UI, Character, Config) {
 
     $scope.operateStatus = {
         manage: {
@@ -14,9 +14,6 @@ angular.module('app').controller('characterInfo', ["$rootScope", "$scope", "Sett
     $scope.askingRemoveID = undefined;
     $scope.MaxLevel = 0;
     Auth.Check($scope.operateStatus, function() {
-        SettingMenu(function(menu) {
-            $scope.menu = menu;
-        });
 
         API.Query(Character.info, {}, function(result) {
             if (result.err) {

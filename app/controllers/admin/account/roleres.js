@@ -1,10 +1,7 @@
-angular.module('app').controller('accountroleres', ["$scope", "$stateParams", "$q", "$modal", "$cookies", "$location", "SettingMenu", "Account", "API", "Auth", "UI", "Project", "Building", function($scope, $stateParams, $q, $modal, $cookies, $location, SettingMenu, Account, API, Auth, UI, Project, Building) {
+angular.module('app').controller('accountroleres', ["$scope", "$stateParams", "$q", "$modal", "$cookies", "$location", "Account", "API", "Auth", "UI", "Project", "Building", function($scope, $stateParams, $q, $modal, $cookies, $location, Account, API, Auth, UI, Project, Building) {
 
     var originProject;
     Auth.Check(function() {
-        SettingMenu(function(menu) {
-            $scope.menu = menu;
-        });
 
         $scope.askingRemoveID = null;
         var adminUser = $cookies.user;

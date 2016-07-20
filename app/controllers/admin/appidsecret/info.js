@@ -1,4 +1,4 @@
-angular.module('app').controller('appidsecretInfo', ["$scope", "$cookies", "$location", "SettingMenu", "AppIDSecret", "API", "Auth", "UI", "Config", function($scope, $cookies, $location, SettingMenu, AppIDSecret, API, Auth, UI, Config) {
+angular.module('app').controller('appidsecretInfo', ["$scope", "$cookies", "$location", "AppIDSecret", "API", "Auth", "UI", "Config", function($scope, $cookies, $location, AppIDSecret, API, Auth, UI, Config) {
 
     $scope.operateStatus = {
         create: {

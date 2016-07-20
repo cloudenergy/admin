@@ -1,4 +1,4 @@
-angular.module('app').controller('departmentedit', ["$scope", "$state", "$stateParams", "$uibModal", "$api", "SettingMenu", "Department", "Auth", "API", "Sensor", "UI", "md5", function($scope, $state, $stateParams, $uibModal, $api, SettingMenu, Department, Auth, API, Sensor, UI, md5) {
+angular.module('app').controller('departmentedit', ["$scope", "$state", "$stateParams", "$uibModal", "$api", "Department", "Auth", "API", "Sensor", "UI", "md5", function($scope, $state, $stateParams, $uibModal, $api, Department, Auth, API, Sensor, UI, md5) {
     $scope.ondutyHour = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
     $scope.ondutyMinute = ['00', '10', '20', '30', '40', '50'];
     $scope.offdutyHour = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];

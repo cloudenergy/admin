@@ -1,4 +1,4 @@
-angular.module('app').controller('eventcategoryIndex', ["$rootScope", "$scope", "SettingMenu", "Eventcategory", "API", "Auth", "UI", "$q", "Project", function($rootScope, $scope, SettingMenu, Eventcategory, API, Auth, UI, $q, Project) {
+angular.module('app').controller('eventcategoryIndex', ["$rootScope", "$scope", "Eventcategory", "API", "Auth", "UI", "$q", "Project", function($rootScope, $scope, Eventcategory, API, Auth, UI, $q, Project) {
 
     $scope.gateways = {
         SMS: '短信通知',

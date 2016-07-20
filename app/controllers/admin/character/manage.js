@@ -1,4 +1,4 @@
-angular.module('app').controller('characterManage', ["$scope", "$stateParams", "$location", "SettingMenu", "UrlPath", "$cookies", "Account", "$q", "Project", "Building", "Customer", "Collector", "Sensor", "Auth", "API", "UI", "Character", function($scope, $stateParams, $location, SettingMenu, UrlPath, $cookies, Account, $q, Project, Building, Customer, Collector, Sensor, Auth, API, UI, Character) {
+angular.module('app').controller('characterManage', ["$scope", "$stateParams", "$location", "UrlPath", "$cookies", "Account", "$q", "Project", "Building", "Customer", "Collector", "Sensor", "Auth", "API", "UI", "Character", function($scope, $stateParams, $location, UrlPath, $cookies, Account, $q, Project, Building, Customer, Collector, Sensor, Auth, API, UI, Character) {
 
     var characterAuthTree = {};
 

@@ -1,4 +1,4 @@
-angular.module('app').controller('CollectorCreate', ["$scope", "$location", "SettingMenu", "Collector", "Project", "API", "Auth", "$stateParams", "UI", function($scope, $location, SettingMenu, Collector, Project, API, Auth, $stateParams, UI) {
+angular.module('app').controller('CollectorCreate', ["$scope", "$location", "Collector", "Project", "API", "Auth", "$stateParams", "UI", function($scope, $location, Collector, Project, API, Auth, $stateParams, UI) {
     Auth.Check(function() {
 
         $scope.submit = function() {

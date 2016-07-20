@@ -1,9 +1,6 @@
-angular.module('app').controller('appidsecretcreate', ["$scope", "$location", "$cookies", "SettingMenu", "Account", "AppIDSecret", "API", "Auth", "UI", "Character", function($scope, $location, $cookies, SettingMenu, Account, AppIDSecret, API, Auth, UI, Character) {
+angular.module('app').controller('appidsecretcreate', ["$scope", "$location", "$cookies", "Account", "AppIDSecret", "API", "Auth", "UI", "Character", function($scope, $location, $cookies, Account, AppIDSecret, API, Auth, UI, Character) {
 
     Auth.Check(function() {
-        SettingMenu(function(menu) {
-            $scope.menu = menu;
-        });
 
         $scope.submit = function(e) {
             $scope.appidsecret = {

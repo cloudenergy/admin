@@ -1,14 +1,10 @@
-angular.module('app').controller('EnergyIndex', ["$scope", "SettingMenu", "$q", "$uibModal", "Energy", "API", "Auth", "Project", "UI", "Energycategory", "base64", "Sensor", function($scope, SettingMenu, $q, $uibModal, Energy, API, Auth, Project, UI, Energycategory, base64, Sensor) {
+angular.module('app').controller('EnergyIndex', ["$scope", "$q", "$uibModal", "Energy", "API", "Auth", "Project", "UI", "Energycategory", "base64", "Sensor", function($scope, $q, $uibModal, Energy, API, Auth, Project, UI, Energycategory, base64, Sensor) {
 
     var DefalutProjectStoreKey = 'energy.project';
     var removeEnergycategory = {};
     var updateEnergycategory = {};
 
     Auth.Check(function() {
-
-        SettingMenu(function(menu) {
-            $scope.menu = menu;
-        });
 
         function TitleToCode(title) {
             return base64.encode(title);
@@ -39,7 +35,7 @@ angular.module('app').controller('EnergyIndex', ["$scope", "SettingMenu", "$q", 
                     }
                     var childrens = SerilizeToEnergy(energyNode, node.nodes);
                     if (!_.isEmpty(childrens)) {
-                        energyNode['childrens'] = childrens;
+                        energyNode.childrens = childrens;
                     }
                     energyNodes[energyNode.id] = energyNode;
                 });
