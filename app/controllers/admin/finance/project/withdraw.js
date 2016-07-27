@@ -5,12 +5,8 @@ angular.module('app').controller('Finance.project.withdraw', ["$scope", "$api", 
     self.projectid = $stateParams.projectid;
     self.cardSelected = null;
 
-    $api.project.info({
-        id: self.projectid
-    }, function(data) {
-        self.project = data.result;
-        $state.$current.parent.data.title = data.result.title;
-    });
+    self.project = EMAPP.Project[self.projectid];
+    $state.$current.parent.data.title = self.project.title;
 
     $api.business.accountbalance({
         project: self.projectid

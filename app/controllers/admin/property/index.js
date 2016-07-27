@@ -1,9 +1,6 @@
-angular.module('app').controller('Property.index', ["$scope", "$api", "$state", "$stateParams", "$uibModal", function($scope, $api, $state, $stateParams, $uibModal) {
+angular.module('app').controller('Property.index', ["$scope", "$api", "$uibModal", function($scope, $api, $uibModal) {
 
-    var self = this,
-        KEY_PROJECT = EMAPP.Account._id + '_property_index_projectid';
-
-    self.projectid = $stateParams.projectid;
+    var self = this;
 
     // 电表:ELECTRICITYMETER
     // 冷水表:COLDWATERMETER
@@ -83,58 +80,22 @@ angular.module('app').controller('Property.index', ["$scope", "$api", "$state", 
     self.format = 'YYYY-MM';
     self.viewDate = moment().format(self.format);
 
-    $scope.$watch(function() {
-        return self.viewDate
-    }, function(val) {
-        if (self.projects.length) {
+    $scope.$watch('self.viewDate', function(val) {
+        if (self.fundflow) {
             GetFundflowStatistic();
             GetFundflow();
         }
     });
 
-    self.projects = [];
-    self.projects.select = function() {
-        localStorage.setItem(KEY_PROJECT, self.projects.selected);
-        $state.go($state.current.name, {
-            projectid: self.projects.selected
-        }, {
-            reload: true
-        });
-    };
+    $scope.$watch('Project.selected', function(item) {
 
-    /* 获取项目信息 */
-    $api.project.info(function(data) {
+        GetAccountbalance();
 
-        data.result = angular.isArray(data.result) ? data.result : [data.result];
-        angular.forEach(data.result, function(item) {
-            this.push(item);
-            this[item._id] = item;
-        }, self.projects);
+        GetCardList();
 
-        if (self.projects.length) {
+        GetFundflowStatistic();
 
-            if (!self.projectid && self.projects.length > 1 && localStorage.getItem(KEY_PROJECT)) {
-                self.projectid = localStorage.getItem(KEY_PROJECT);
-            }
-
-            angular.forEach(self.projects, function(item) {
-                if (item._id === self.projectid) {
-                    self.projects.selected = item._id;
-                }
-            });
-            self.projects.selected = self.projects.selected || self.projects[0]._id;
-
-            $state.$current.data.title = '物业财务 - ' + self.projects[self.projects.selected].title;
-
-            GetAccountbalance();
-
-            GetCardList();
-
-            GetFundflowStatistic();
-
-            GetFundflow();
-
-        }
+        GetFundflow();
 
     });
 
@@ -166,7 +127,7 @@ angular.module('app').controller('Property.index', ["$scope", "$api", "$state", 
                         $api.channelaccount.add({
                             id: this.card.id || undefined,
                             flow: this.card.flow || 'EXPENSE',
-                            belongto: this.card.belongto ? undefined : self.projects.selected,
+                            belongto: this.card.belongto ? undefined : EMAPP.Project.selected._id,
                             name: this.card.name,
                             account: this.card.account,
                             type: this.card.origin,
@@ -205,7 +166,7 @@ angular.module('app').controller('Property.index', ["$scope", "$api", "$state", 
     /* 获取账户金额 */
     function GetAccountbalance() {
         $api.business.accountbalance({
-            project: self.projects.selected
+            project: EMAPP.Project.selected._id
         }, function(data) {
             self.accountbalance = data.result || {};
             self.accountbalance.total = Math.round((self.accountbalance.cash + self.accountbalance.frozen) * 100) / 100;
@@ -219,7 +180,7 @@ angular.module('app').controller('Property.index', ["$scope", "$api", "$state", 
     /* 获取银行卡信息 */
     function GetCardList() {
         $api.channelaccount.info({
-            project: self.projects.selected,
+            project: EMAPP.Project.selected._id,
             all: true,
             flow: 'EXPENSE'
         }, function(data) {
@@ -239,7 +200,7 @@ angular.module('app').controller('Property.index', ["$scope", "$api", "$state", 
     function GetFundflowStatistic() {
         $api.business.projectfundflowstatistic({
             time: self.viewDate.replace(/\-/g, ''),
-            project: self.projects.selected
+            project: EMAPP.Project.selected._id
         }, function(data) {
             data = data.result || {};
             // 收入
@@ -267,7 +228,7 @@ angular.module('app').controller('Property.index', ["$scope", "$api", "$state", 
     /* 获取流水信息 */
     function GetFundflow() {
         $api.business.fundflow({
-            project: self.projects.selected,
+            project: EMAPP.Project.selected._id,
             from: self.viewDate.replace(/\-/g, '') + '01',
             to: moment(self.viewDate.replace(/\-/g, '') + '01', 'YYYYMMDD').add(1, 'month').subtract(1, 'day').format('YYYYMMDD'),
             pageindex: 1,

@@ -35,12 +35,9 @@ angular.module('app').controller('Finance.record.in', ["$scope", "$filter", "$te
     };
 
     if (self.projectid) {
-        $api.project.info({
-            id: self.projectid
-        }, function(data) {
-            self.projectname = data.result.title;
-            $state.$current.data.title = self.projectname;
-        });
+
+        $state.$current.data.title = self.projectname = EMAPP.Project[self.projectid].title;
+
         $api.business.accountbalance({
             project: self.projectid
         }, function(data) {
@@ -53,6 +50,7 @@ angular.module('app').controller('Finance.record.in', ["$scope", "$filter", "$te
             self.accountbalance.cash = Math.round(self.accountbalance.cash * 100) / 100;
             self.accountbalance.frozen = Math.round(self.accountbalance.frozen * 100) / 100;
         });
+
     }
 
     self.list = function(loadMore) {

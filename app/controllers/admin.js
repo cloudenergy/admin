@@ -1,4 +1,4 @@
-angular.module('app').controller('admin', ["$scope", "$cookies", "$q", "$state", "$localStorage", "$api", function($scope, $cookies, $q, $state, $localStorage, $api) {
+angular.module('app').controller('admin', ["$scope", "$rootScope", "$cookies", "$q", "$state", "$localStorage", "$api", function($scope, $rootScope, $cookies, $q, $state, $localStorage, $api) {
 
     var self = this,
         icons = {
@@ -113,7 +113,7 @@ angular.module('app').controller('admin', ["$scope", "$cookies", "$q", "$state",
 
     $scope.$watch('self.app.layout', function() {
         $localStorage.layout = self.app.layout;
-    }, true);
+    });
 
     $scope.$on('$includeContentRequested', function(event, src) {
         if (/^templates\/common/.test(src)) {
@@ -126,43 +126,63 @@ angular.module('app').controller('admin', ["$scope", "$cookies", "$q", "$state",
         /^templates\/common/.test(src) && self.layoutLoaded[src] && self.layoutLoaded[src].resolve();
     });
 
-    $q.all(promiseList.concat([$api.account.info({
-        id: $cookies.get('user')
-    }, function(data) {
+    $q.all(promiseList.concat([
+        $api.account.info({
+            id: $cookies.get('user')
+        }, function(data) {
 
-        EMAPP.Account = data.result || {};
-        EMAPP.Rule = {};
+            EMAPP.Account = data.result || {};
+            EMAPP.Rule = {};
 
-        (function each(rule, level, keys) {
-            angular.forEach(rule, function(item, key) {
-                if (key !== 'leaf') {
-                    if (level === 0) {
-                        each(item, level + 1, [key]);
-                    } else {
-                        if (item.leaf) {
-                            EMAPP.Rule[keys.concat([key]).join('.')] = true;
+            (function each(rule, level, keys) {
+                angular.forEach(rule, function(item, key) {
+                    if (key !== 'leaf') {
+                        if (level === 0) {
+                            each(item, level + 1, [key]);
                         } else {
-                            each(item, level + 1, keys.concat([key]));
+                            if (item.leaf) {
+                                EMAPP.Rule[keys.concat([key]).join('.')] = true;
+                            } else {
+                                each(item, level + 1, keys.concat([key]));
+                            }
                         }
                     }
+                });
+            }(EMAPP.Account.character.rule['/'], 0));
+
+            angular.forEach(menu, function(item) {
+                if (item.ignore || EMAPP.Rule[item.state]) {
+                    item.prefix = /^(\w+\.\w+)?/.exec(item.state)[0] || '';
+                    item.icon = icons[item.state.split('.')[1]] || 'circle';
+                    this.push(item);
                 }
-            });
-        }(EMAPP.Account.character.rule['/'], 0));
+            }, self.menu = []);
 
-        angular.forEach(menu, function(item) {
-            if (item.ignore || EMAPP.Rule[item.state]) {
-                item.prefix = /^(\w+\.\w+)?/.exec(item.state)[0] || '';
-                item.icon = icons[item.state.split('.')[1]] || 'circle';
-                this.push(item);
+        }).$promise,
+        $api.project.info(function(data) {
+            EMAPP.Project = angular.isArray(data.result) ? data.result : [data.result];
+        }).$promise
+    ])).then(function() {
+
+        var KEY_PROJECT = EMAPP.Account._id + '_root_project_selected',
+            selected = $localStorage[KEY_PROJECT];
+
+        angular.forEach(EMAPP.Project, function(item) {
+            EMAPP.Project[item._id] = item;
+            if (selected === item._id) {
+                EMAPP.Project.selected = item;
             }
-        }, self.menu = []);
+        });
 
-        self.menu.active = function(state) {
-            return /(\w+\.\w+)?/.exec(state)[0] === /(\w+\.\w+)?/.exec($state.$current.name)[0];
-        };
+        EMAPP.Project.selected = EMAPP.Project.selected || EMAPP.Project[0] || {};
+        $rootScope.Project = EMAPP.Project;
 
-    }).$promise])).then(function() {
+        $rootScope.$watch('Project.selected', function(item) {
+            $localStorage[KEY_PROJECT] = item._id;
+        });
+
         self.layoutLoaded = true;
+
     });
 
 }]);

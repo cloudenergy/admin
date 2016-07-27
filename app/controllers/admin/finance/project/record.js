@@ -51,11 +51,7 @@ angular.module('app').controller('Finance.project.record', ["$scope", "$api", "$
         };
     }, self.status);
 
-    $api.project.info({
-        id: self.projectid
-    }, function(data) {
-        self.projectname = $state.$current.parent.data.title = data.result.title;
-    });
+    self.projectname = $state.$current.parent.data.title = EMAPP.Project[self.projectid].title;
 
     //筛选
     self.filter = function() {

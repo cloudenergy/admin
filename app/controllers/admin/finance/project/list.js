@@ -23,7 +23,7 @@ angular.module('app').controller('Finance.project.list', ["$filter", "$timeout",
         }, function(data) {
             self.gridOptions.data = angular.isArray(data.result) ? data.result : [data.result];
             self.gridApi.grid.element.height('auto');
-        })
+        });
     };
 
     self.list();

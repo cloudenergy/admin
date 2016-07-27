@@ -1,9 +1,7 @@
-angular.module('app').controller('Property.consume', ["$scope", "$api", "$state", "$stateParams", function($scope, $api, $state, $stateParams) {
+angular.module('app').controller('Property.consume', ["$scope", "$api", "$state", function($scope, $api, $state) {
 
     var self = this,
         KEY_PAGESIZE = EMAPP.Account._id + '_property_consume_pagesize';
-
-    self.projectid = $stateParams.projectid;
 
     self.searchText = '';
     self.startDate = moment().format('YYYY-MM-01');
@@ -20,10 +18,10 @@ angular.module('app').controller('Property.consume', ["$scope", "$api", "$state"
     $scope.$watch(function() {
         return self.endDate;
     }, function() {
-        // if (self.listData) {
-        GetStatistic();
-        self.list();
-        // }
+        if (self.listData) {
+            GetStatistic();
+            self.list();
+        }
     });
     $scope.$watch(function() {
         return self.category.selected;
@@ -40,6 +38,12 @@ angular.module('app').controller('Property.consume', ["$scope", "$api", "$state"
     }, function(val) {
         localStorage.setItem(KEY_PAGESIZE, val);
         self.listData && self.list();
+    });
+
+    $scope.$watch('Project.selected', function(item) {
+        self.projectid = item._id;
+        GetStatistic();
+        self.list();
     });
 
     // 电表:ELECTRICITYMETER
@@ -95,14 +99,6 @@ angular.module('app').controller('Property.consume', ["$scope", "$api", "$state"
     angular.forEach(self.category, function(item) {
         this[item.key] = item;
     }, self.category);
-
-    //设置面包屑
-    $api.project.info({
-        id: self.projectid
-    }, function(data) {
-        self.projectname = data.result.title;
-        $state.$current.parent.data.title = '物业财务 - ' + data.result.title;
-    });
 
     //分页设置
     self.paging = {

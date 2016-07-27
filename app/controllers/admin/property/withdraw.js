@@ -1,10 +1,9 @@
-angular.module('app').controller('Property.withdraw', ["$api", "$filter", "$timeout", "$state", "$stateParams", "$uibModal", function($api, $filter, $timeout, $state, $stateParams, $uibModal) {
+angular.module('app').controller('Property.withdraw', ["$scope", "$api", "$timeout", "$uibModal", function($scope, $api, $timeout, $uibModal) {
 
     var self = this,
         timer;
 
     // self.amount = 100;
-    self.projectid = $stateParams.projectid;
     self.cardSelected = null;
 
     self.calAmount = function() {
@@ -13,33 +12,6 @@ angular.module('app').controller('Property.withdraw', ["$api", "$filter", "$time
             self.amount = self.amount && (Math.round(self.amount * 100) / 100) || self.amount;
         }, 666);
     };
-
-    $api.project.info({
-        id: self.projectid
-    }, function(data) {
-        self.project = data.result;
-        $state.$current.parent.data.title = '物业财务 - ' + data.result.title;
-    });
-
-    $api.business.accountbalance({
-        project: self.projectid
-    }, function(data) {
-        self.accountbalance = data.result || {};
-        self.accountbalance.total = Math.round((self.accountbalance.cash + self.accountbalance.frozen) * 100) / 100;
-        self.accountbalance.cash = Math.round(self.accountbalance.cash * 100) / 100;
-        self.accountbalance.frozen = Math.round(self.accountbalance.frozen * 100) / 100;
-        self.accountbalance.earning = Math.round(self.accountbalance.earning * 100) / 100;
-        self.accountbalance.withdraw = Math.round(self.accountbalance.withdraw * 100) / 100;
-    });
-
-    $api.channelaccount.info({
-        project: self.projectid,
-        all: true,
-        flow: 'EXPENSE',
-        status: 'SUCCESS'
-    }, function(data) {
-        self.cardData = data.result || [];
-    });
 
     self.inject = function() {
         if (self.amount) {
@@ -76,7 +48,7 @@ angular.module('app').controller('Property.withdraw', ["$api", "$filter", "$time
                             card: self.cardSelected,
                             amount: self.amount,
                             fee: self.fee,
-                            project: self.projectid
+                            project: EMAPP.Project.selected._id
                         }
                     }
                 },
@@ -89,11 +61,7 @@ angular.module('app').controller('Property.withdraw', ["$api", "$filter", "$time
                 }, function(res) {
                     if (res.code == 0) {
                         swal("成功", "已提交成功", "success");
-                        $state.go('admin.property.withdraw', {
-                            projectid: self.projectid
-                        }, {
-                            reload: true
-                        });
+                        loadData();
                     } else {
                         swal("错误", res.message, "error");
                     }
@@ -102,5 +70,31 @@ angular.module('app').controller('Property.withdraw', ["$api", "$filter", "$time
 
         });
     };
+
+    $scope.$watch('Project.selected', loadData);
+
+    function loadData() {
+
+        $api.business.accountbalance({
+            project: EMAPP.Project.selected._id
+        }, function(data) {
+            self.accountbalance = data.result || {};
+            self.accountbalance.total = Math.round((self.accountbalance.cash + self.accountbalance.frozen) * 100) / 100;
+            self.accountbalance.cash = Math.round(self.accountbalance.cash * 100) / 100;
+            self.accountbalance.frozen = Math.round(self.accountbalance.frozen * 100) / 100;
+            self.accountbalance.earning = Math.round(self.accountbalance.earning * 100) / 100;
+            self.accountbalance.withdraw = Math.round(self.accountbalance.withdraw * 100) / 100;
+        });
+
+        $api.channelaccount.info({
+            project: EMAPP.Project.selected._id,
+            all: true,
+            flow: 'EXPENSE',
+            status: 'SUCCESS'
+        }, function(data) {
+            self.cardData = data.result || [];
+        });
+
+    }
 
 }]);

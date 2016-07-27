@@ -4,7 +4,6 @@ angular.module('app').controller('Property.statement', ["$scope", "$api", "$stat
         KEY_PAGESIZE = EMAPP.Account._id + '_property_statement_pagesize';
 
     self.tab = $stateParams.tab || 'daily';
-    self.projectid = $stateParams.projectid;
     self.format = self.tab === 'daily' ? 'YYYY-MM' : 'YYYY';
     self.viewDate = moment().format(self.format);
 
@@ -16,7 +15,7 @@ angular.module('app').controller('Property.statement', ["$scope", "$api", "$stat
     $scope.$watch(function() {
         return self.paging.index;
     }, function() {
-        self.list();
+        self.listData && self.list();
     });
     $scope.$watch(function() {
         return self.paging.size;
@@ -25,12 +24,9 @@ angular.module('app').controller('Property.statement', ["$scope", "$api", "$stat
         self.listData && self.list();
     });
 
-    //设置面包屑
-    $api.project.info({
-        id: self.projectid
-    }, function(data) {
-        self.projectname = data.result.title;
-        $state.$current.parent.data.title = '物业财务 - ' + data.result.title;
+    $scope.$watch('Project.selected', function(item) {
+        self.projectid = item._id;
+        self.list();
     });
 
     //分页设置

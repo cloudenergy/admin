@@ -26,11 +26,9 @@ angular.module('app').controller('Finance.record.out.detail', ["$filter", "$api"
     self.sash = 0;
     self.pwd = '';
 
-    self.projectid && $api.project.info({
-        id: self.projectid
-    }, function(data) {
-        $state.$current.parent.data.title = data.result.title;
-    });
+    if (self.projectid) {
+        $state.$current.parent.data.title = EMAPP.Project[self.projectid].title;
+    }
 
     self.getDetail = function() {
         self.orderno && $api.withdraw.details({

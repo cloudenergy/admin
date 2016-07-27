@@ -15,8 +15,8 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }]
     }).state('login', {
         url: '/admin/login',
-        templateUrl: 'templates/login.html?rev=2480a6b353',
-        controller: 'session',
+        templateUrl: 'templates/login.html?rev=0f3c3941f7',
+        controller: 'login',
         controllerAs: 'self',
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
@@ -28,11 +28,16 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                 }, {
                     serie: true,
                     files: [
+                        'https://static.cloudenergy.me/libs/moment-2.14.1/min/moment.min.js',
+                        'https://static.cloudenergy.me/libs/moment-2.14.1/locale/zh-cn.js'
+                    ]
+                }, {
+                    files: [
                         'https://static.cloudenergy.me/libs/angular-md5-0.1.10/angular-md5.min.js',
                         'https://static.cloudenergy.me/libs/sweetalert-1.1.3/dist/sweetalert.min.js',
                         'app/services/user.min.js?rev=70c6db7442',
                         'app/services/ui.min.js?rev=177c56b661',
-                        'app/controllers/session.min.js?rev=28a3d11f28'
+                        'app/controllers/login.min.js?rev=20443151e0'
                     ]
                 }]);
             }]
@@ -70,7 +75,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }]
     }).state('admin', {
         abstract: true,
-        templateUrl: 'templates/common/layout.html?rev=e9bcb94c91',
+        templateUrl: 'templates/common/layout.html?rev=a5dd9e7ec5',
         url: '/admin',
         controller: 'admin',
         controllerAs: 'self',
@@ -102,7 +107,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                         'app/services/api.min.js?rev=0abc6298e1',
                         'app/services/authentication.min.js?rev=0f36778387',
                         'app/services/account.min.js?rev=41e7b7bd99',
-                        'app/controllers/admin.min.js?rev=805eb0236f'
+                        'app/controllers/admin.min.js?rev=ff1c7be2db'
                     ]
                 }]);
             }]
@@ -111,6 +116,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         url: '/dashboard',
         templateUrl: 'templates/dash.html?rev=05cc799ea4',
         data: {
+            noproject: true,
             title: '技术支持: 0571-85374789'
         }
     }).state('admin.character', {
@@ -991,6 +997,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         url: '/index',
         templateUrl: 'templates/admin/finance/index.html?rev=1770a47dfb',
         data: {
+            noproject: true,
             title: '平台财务'
         },
         controller: 'Finance',
@@ -1010,6 +1017,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         url: '/in',
         templateUrl: 'templates/admin/finance/record-in.html?rev=aa9ff2b37a',
         data: {
+            noproject: true,
             title: '收入'
         },
         controller: 'Finance.record.in',
@@ -1017,13 +1025,14 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/finance/record-in.min.js?rev=34035d5f21'
+                    'app/controllers/admin/finance/record-in.min.js?rev=99edd846f4'
                 ]);
             }]
         }
     }).state('admin.finance.record.in.project', {
         url: '/:projectid',
         data: {
+            noproject: true,
             title: '项目'
         },
         views: {
@@ -1037,6 +1046,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         url: '/out',
         templateUrl: 'templates/admin/finance/record-out.html?rev=f77db4e53c',
         data: {
+            noproject: true,
             title: '支出'
         },
         controller: 'Finance.record.out',
@@ -1044,13 +1054,14 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/finance/record-out.min.js?rev=5dc4b5fa92'
+                    'app/controllers/admin/finance/record-out.min.js?rev=ca41d7ac49'
                 ]);
             }]
         }
     }).state('admin.finance.record.out.project', {
         url: '/:projectid',
         data: {
+            noproject: true,
             title: '项目'
         },
         views: {
@@ -1063,6 +1074,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
     }).state('admin.finance.record.out.project.detail', {
         url: '/:orderno',
         data: {
+            noproject: true,
             title: '申请信息'
         },
         views: {
@@ -1075,7 +1087,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/finance/record-detail.min.js?rev=cdade4567d'
+                    'app/controllers/admin/finance/record-detail.min.js?rev=bfc84e6e46'
                 ]);
             }]
         }
@@ -1083,6 +1095,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         url: '/card',
         templateUrl: 'templates/admin/finance/card.html?rev=2b2d672cc4',
         data: {
+            noproject: true,
             title: '银行卡管理'
         },
         controller: 'Finance.card',
@@ -1097,6 +1110,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
     }).state('admin.finance.card.detail', {
         url: '/:id',
         data: {
+            noproject: true,
             title: '申请详情'
         },
         views: {
@@ -1117,6 +1131,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         url: '/project',
         templateUrl: 'templates/admin/finance/project/list.html?rev=a3474e12f2',
         data: {
+            noproject: true,
             title: '项目列表'
         },
         controller: 'Finance.project.list',
@@ -1131,6 +1146,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
     }).state('admin.finance.project.info', {
         url: '/:projectid',
         data: {
+            noproject: true,
             title: '项目首页'
         },
         views: {
@@ -1144,13 +1160,14 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
                     'app/directives/distpicker.min.js?rev=47a8e0bc0d',
-                    'app/controllers/admin/finance/project/index.min.js?rev=5d48668150'
+                    'app/controllers/admin/finance/project/index.min.js?rev=f426d23b21'
                 ]);
             }]
         }
     }).state('admin.finance.project.info.record', {
         url: '/record/:tab',
         data: {
+            noproject: true,
             title: '收支明细'
         },
         views: {
@@ -1163,13 +1180,14 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/finance/project/record.min.js?rev=f52fca6dac'
+                    'app/controllers/admin/finance/project/record.min.js?rev=3969d0c9e9'
                 ]);
             }]
         }
     }).state('admin.finance.project.info.withdraw', {
         url: '/withdraw',
         data: {
+            noproject: true,
             title: '转账'
         },
         views: {
@@ -1182,7 +1200,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/finance/project/withdraw.min.js?rev=7b01748977'
+                    'app/controllers/admin/finance/project/withdraw.min.js?rev=ad4351448c'
                 ]);
             }]
         }
@@ -1213,8 +1231,8 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             }]
         }
     }).state('admin.property.index', {
-        url: '/:projectid',
-        templateUrl: 'templates/admin/property/index.html?rev=4e00fd9cdb',
+        url: '/index',
+        templateUrl: 'templates/admin/property/index.html?rev=9a0378e5e1',
         data: {
             title: '物业财务'
         },
@@ -1224,13 +1242,13 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
                     'app/directives/distpicker.min.js?rev=47a8e0bc0d',
-                    'app/controllers/admin/property/index.min.js?rev=44a0fa449d'
+                    'app/controllers/admin/property/index.min.js?rev=34025ffe9e'
                 ]);
             }]
         }
     }).state('admin.property.withdraw', {
-        url: '/withdraw/:projectid',
-        templateUrl: 'templates/admin/property/withdraw.html?rev=8802b5ab93',
+        url: '/withdraw',
+        templateUrl: 'templates/admin/property/withdraw.html?rev=b047d33fb9',
         data: {
             title: '申请提现'
         },
@@ -1239,12 +1257,12 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/property/withdraw.min.js?rev=e26582e10f'
+                    'app/controllers/admin/property/withdraw.min.js?rev=611d45d0f9'
                 ]);
             }]
         }
     }).state('admin.property.record', {
-        url: '/record/:tab/:projectid/:category',
+        url: '/record/:tab/:category',
         templateUrl: 'templates/admin/property/record.html?rev=5127dfd3a3',
         data: {
             title: '收支明细'
@@ -1254,13 +1272,13 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/property/record.min.js?rev=967ba1b9bb'
+                    'app/controllers/admin/property/record.min.js?rev=61bd18a805'
                 ]);
             }]
         }
     }).state('admin.property.statement', {
-        url: '/statement/:tab/:projectid',
-        templateUrl: 'templates/admin/property/statement.html?rev=46b410b8b7',
+        url: '/statement/:tab',
+        templateUrl: 'templates/admin/property/statement.html?rev=23aa150c42',
         data: {
             title: '对账单'
         },
@@ -1269,13 +1287,13 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/property/statement.min.js?rev=fd5ced5899'
+                    'app/controllers/admin/property/statement.min.js?rev=0f77150ccb'
                 ]);
             }]
         }
     }).state('admin.property.consume', {
-        url: '/consume/:projectid',
-        templateUrl: 'templates/admin/property/consume.html?rev=753a1aa599',
+        url: '/consume',
+        templateUrl: 'templates/admin/property/consume.html?rev=bd41100825',
         data: {
             title: '消耗明细'
         },
@@ -1284,7 +1302,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/property/consume.min.js?rev=191e892810'
+                    'app/controllers/admin/property/consume.min.js?rev=f5c77552d6'
                 ]);
             }]
         }

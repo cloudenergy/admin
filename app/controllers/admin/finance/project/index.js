@@ -75,17 +75,11 @@ angular.module('app').controller('Finance.project.index', ["$api", "$filter", "$
         })
     };
 
-    $api.project.info({
-        id: self.projectid
-    }, function(data) {
+    self.project = EMAPP.Project[self.projectid];
 
-        self.project = data.result || {};
+    $state.$current.data.title = self.project.title;
 
-        $state.$current.data.title = self.project.title;
-
-        self.getCardList();
-
-    });
+    self.getCardList();
 
     $api.business.accountbalance({
         project: self.projectid

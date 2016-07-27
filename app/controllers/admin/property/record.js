@@ -20,7 +20,7 @@ angular.module('app').controller('Property.record', ["$scope", "$timeout", "$api
     $scope.$watch(function() {
         return self.paging.index;
     }, function() {
-        self.list();
+        self.listData && self.list();
     });
     $scope.$watch(function() {
         return self.paging.size;
@@ -29,8 +29,11 @@ angular.module('app').controller('Property.record', ["$scope", "$timeout", "$api
         self.listData && self.list();
     });
 
+    $scope.$watch('Project.selected', function() {
+        self.list();
+    });
+
     self.tab = $stateParams.tab || 'all';
-    self.projectid = $stateParams.projectid;
 
     self.startDate = moment().format('YYYY-MM-01');
     self.endDate = moment().format('YYYY-MM-DD');
@@ -130,14 +133,6 @@ angular.module('app').controller('Property.record', ["$scope", "$timeout", "$api
     }, self.category);
     self.category.selected = $stateParams.category || undefined;
 
-    //设置面包屑
-    $api.project.info({
-        id: self.projectid
-    }, function(data) {
-        self.projectname = data.result.title;
-        $state.$current.parent.data.title = '物业财务 - ' + data.result.title;
-    });
-
     //分页设置
     self.paging = {
         index: 1,
@@ -208,7 +203,7 @@ angular.module('app').controller('Property.record', ["$scope", "$timeout", "$api
 
     function GetOptions() {
         return {
-            project: self.projectid || undefined,
+            project: EMAPP.Project.selected._id,
             key: self.searchText || undefined, //项目名或账户名
             from: self.startDate.replace(/\-/g, ''), //查询起始'YYYYMMDD'
             to: self.endDate.replace(/\-/g, ''), //查询截止'YYYYMMDD'
