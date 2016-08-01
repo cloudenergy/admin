@@ -23,44 +23,15 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
         }
     };
 
-    var KEY_SEARCH = EMAPP.Account._id + '_sensor_index_search',
-        KEY_PROJECT = EMAPP.Account._id + '_sensor_index_projectid';
+    var KEY_SEARCH = EMAPP.Account._id + '_sensor_index_search';
 
     Auth.Check($scope.operateStatus, function() {
-
-        // 获取上次的页面
-        $scope.currentPage = UI.GetPageIndex();
-
-        $api.project.info(function(data) {
-            data.selected = localStorage.getItem(KEY_PROJECT);
-            $scope.projects = angular.isArray(data.result) ? data.result : data.result && [data.result] || [];
-            $scope.projects.select = function() {
-                if ($scope.projects.selected) {
-                    localStorage.setItem(KEY_PROJECT, $scope.projects.selected);
-                    $scope.customer = $scope.customer ? {
-                        enable: $scope.customer.enable
-                    } : {
-                        enable: true
-                    };
-                    $scope.buildings = [];
-                    $scope.DeviceTypes = [];
-                    $q.all([GetCustomer(), GetBuilding(), GetDeviceTypes()]).then($scope.OnSearch);
-                }
-            };
-            angular.forEach($scope.projects, function(item) {
-                if (item._id === data.selected) {
-                    $scope.projects.selected = item._id;
-                }
-            });
-            $scope.projects.selected = $scope.projects.selected || ($scope.projects[0] || {})._id;
-            $scope.projects.select();
-        });
 
         //社会属性
         function GetCustomer() {
             //查询社会属性
-            return $scope.projects.selected && $api.customer.info({
-                project: $scope.projects.selected,
+            return $api.customer.info({
+                project: $scope.Project.selected._id,
                 onlynode: 1
             }, function(data) {
                 $scope.customer = {
@@ -111,8 +82,8 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
 
         //建筑属性
         function GetBuilding() {
-            return $scope.projects.selected && $api.building.info({
-                project: $scope.projects.selected
+            return $api.building.info({
+                project: $scope.Project.selected._id
             }, function(data) {
 
                 var cacheKey = 'sensor.building',
@@ -144,8 +115,8 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
 
         //设备接口
         function GetDeviceTypes() {
-            return $scope.projects.selected && $api.device.type({
-                project: $scope.projects.selected
+            return $api.device.type({
+                project: $scope.Project.selected._id
             }, function(data) {
 
                 $scope.DeviceTypes = [{
@@ -174,7 +145,7 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
             $api.business.monitor({
                 devicetype: $scope.DeviceTypes.selected || undefined,
                 building: !$scope.customer.enable && $scope.buildings.selected || undefined,
-                project: $scope.projects.selected,
+                project: $scope.Project.selected._id,
                 key: UI.GetPageItem(KEY_SEARCH) || undefined,
                 // groupby: 'SENSOR',
                 mode: 'SENSOR',
@@ -183,7 +154,7 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
                 pageindex: $scope.currentPage,
                 pagesize: 15
             }, function(data) {
-                data = data.result[$scope.projects.selected];
+                data = data.result[$scope.Project.selected._id];
                 angular.forEach(data.detail, function(item) {
                     this.push(item)
                 }, $scope.viewOfSensor = []);
@@ -192,6 +163,19 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
             });
         }
 
+        // 获取上次的页面
+        $scope.currentPage = UI.GetPageIndex();
+
+        $scope.$watch('Project.selected', function() {
+            $scope.customer = angular.isDefined($scope.customer) ? {
+                enable: $scope.customer.enable
+            } : {
+                enable: true
+            };
+            $scope.buildings = [];
+            $scope.DeviceTypes = [];
+            $q.all([GetCustomer(), GetBuilding(), GetDeviceTypes()]).then($scope.OnSearch);
+        });
         $scope.$watch('currentPage', function(currentPage) {
             if (currentPage == undefined) {
                 $scope.currentPage = UI.GetPageIndex();
@@ -214,7 +198,7 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
                 id: channel.id,
                 mask: !channel.mask
             }, function(result) {
-                if (result.err) {} else {
+                if (!result.err) {
                     channel.mask = !channel.mask;
                 }
             });
@@ -270,7 +254,7 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
             }
 
             $api.sensorchannel.syncdata({
-                project: $scope.projects.selected
+                project: $scope.Project.selected._id
             }, function(result) {
                 if (result.err) {
                     console.error(result);
@@ -309,7 +293,7 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
                         }
                     },
                     ProjectID: function() {
-                        return $scope.projects.selected
+                        return $scope.Project.selected._id
                     }
                 }
             });
@@ -354,7 +338,7 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
                 }],
                 resolve: {
                     project: function() {
-                        return $scope.projects.selected
+                        return $scope.Project.selected._id
                     },
                     building: function() {
                         return $scope.buildings.selected

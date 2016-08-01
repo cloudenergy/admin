@@ -1,4 +1,4 @@
-angular.module('app').controller('eventcategoryIndex', ["$rootScope", "$scope", "Eventcategory", "API", "Auth", "UI", "$q", "Project", function($rootScope, $scope, Eventcategory, API, Auth, UI, $q, Project) {
+angular.module('app').controller('eventcategoryIndex', ["$rootScope", "$scope", "Eventcategory", "API", "Auth", "UI", function($rootScope, $scope, Eventcategory, API, Auth, UI) {
 
     $scope.gateways = {
         SMS: '短信通知',
@@ -14,13 +14,12 @@ angular.module('app').controller('eventcategoryIndex', ["$rootScope", "$scope", 
     $scope.updateGateway = function(event, gateway, elm) {
         var index = event.enablegateway.indexOf(gateway);
         elm.target.checked && index == -1 ? event.enablegateway.push(gateway) : event.enablegateway.splice(index, 1);
-        var data = {
+        // 更新事件
+        API.Query(Eventcategory.update, {
             templateid: event.id,
             gateway: event.enablegateway,
-            project: $scope.projects.selected._id
-        };
-        // 更新事件
-        API.Query(Eventcategory.update, data, function(res) {});
+            project: $scope.Project.selected._id
+        }, function(res) {});
     };
 
     $scope.operateStatus = {
@@ -42,14 +41,7 @@ angular.module('app').controller('eventcategoryIndex', ["$rootScope", "$scope", 
 
     Auth.Check($scope.operateStatus, function() {
 
-        API.Query(Project.info, function(res) {
-            if (!res.err) {
-                $scope.projects = angular.isArray(res.result) ? res.result : [res.result];
-                $scope.projects.selected = $scope.projects.length ? $scope.projects[0] : null;
-            }
-        });
-
-        $scope.$watch('projects.selected', function(n) {
+        $scope.$watch('Project.selected', function(n) {
             if (n) {
                 API.Query(Eventcategory.info, {
                     project: n._id

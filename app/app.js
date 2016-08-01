@@ -2,7 +2,7 @@ window.EMAPP = angular.module('app', [
     'ngCookies',
     'ngResource',
     'ngSanitize',
-    'ui.bootstrap',
+    'ngMd5',
     'ui.router',
     'ui.utils',
     'oc.lazyLoad',

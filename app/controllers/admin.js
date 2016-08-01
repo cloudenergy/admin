@@ -160,9 +160,11 @@ angular.module('app').controller('admin', ["$scope", "$rootScope", "$cookies", "
 
         }).$promise,
         $api.project.info(function(data) {
-            EMAPP.Project = angular.isArray(data.result) ? data.result : [data.result];
+            EMAPP.Project = angular.isArray(data.result) ? data.result : data.result && [data.result] || [];
         }).$promise
     ])).then(function() {
+
+        if (!EMAPP.Project.length) return;
 
         var KEY_PROJECT = EMAPP.Account._id + '_root_project_selected',
             selected = $localStorage[KEY_PROJECT];
