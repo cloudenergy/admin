@@ -16,7 +16,6 @@ angular.module('app').controller('admin', ["$scope", "$rootScope", "$cookies", "
             energy: 'fire',
             sensor: 'dashboard',
             collector: 'tasks',
-            appidsecret: 'eye',
             finance: 'dollar',
             property: 'dollar'
         },
@@ -30,9 +29,6 @@ angular.module('app').controller('admin', ["$scope", "$rootScope", "$cookies", "
         }, {
             title: '项目管理',
             state: 'admin.project.info'
-        }, {
-            title: 'APPID.SECRET',
-            state: 'admin.appidsecret.info'
         }, {
             title: '账户管理',
             state: 'admin.account.info'
@@ -113,6 +109,10 @@ angular.module('app').controller('admin', ["$scope", "$rootScope", "$cookies", "
 
     $scope.$watch('self.app.layout', function() {
         $localStorage.layout = self.app.layout;
+    });
+
+    $scope.$watch('$state.current.name', function(name) {
+        $state.current.prefix = /^(\w+\.\w+)?/.exec(name)[0] || '';
     });
 
     $scope.$on('$includeContentRequested', function(event, src) {

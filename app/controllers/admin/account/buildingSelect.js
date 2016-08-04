@@ -1,7 +1,7 @@
 /**
  * Created by Joey on 14-6-27.
  */
-angular.module('app').controller('BuildingSelect', ["$scope", "$modalInstance", "API", "Building", "ProjectID", "BuildingIDs", function($scope, $modalInstance, API, Building, ProjectID, BuildingIDs) {
+angular.module('app').controller('BuildingSelect', ["$scope", "$uibModalInstance", "API", "Building", "ProjectID", "BuildingIDs", function($scope, $uibModalInstance, API, Building, ProjectID, BuildingIDs) {
     var Buildings;
 
     $scope.Ok = function() {
@@ -20,13 +20,13 @@ angular.module('app').controller('BuildingSelect', ["$scope", "$modalInstance", 
                 }
             });
         }
-        $modalInstance.close({
+        $uibModalInstance.close({
             select: SelectBuildings,
             unselect: UnSelectBuildings
         });
     };
     $scope.Cancel = function() {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
     };
 
     $scope.SwitchBuilding = function(e, building) {

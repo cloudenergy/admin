@@ -1,6 +1,5 @@
-angular.module('app').controller('EnergyIndex', ["$scope", "$q", "$uibModal", "Energy", "API", "Auth", "Project", "UI", "Energycategory", "base64", "Sensor", function($scope, $q, $uibModal, Energy, API, Auth, Project, UI, Energycategory, base64, Sensor) {
+angular.module('app').controller('EnergyIndex', ["$scope", "$q", "$uibModal", "API", "Auth", "Project", "UI", "$api", "base64", "Sensor", "Energy", function($scope, $q, $uibModal, API, Auth, Project, UI, $api, base64, Sensor, Energy) {
 
-    var DefalutProjectStoreKey = 'energy.project';
     var removeEnergycategory = {};
     var updateEnergycategory = {};
 
@@ -54,12 +53,10 @@ angular.module('app').controller('EnergyIndex', ["$scope", "$q", "$uibModal", "E
                 energy = tmpEnergy;
             }
 
-            var projectEnergy = {
+            API.Query(Energy.update, {
                 energy: energy,
-                _id: $scope.projects.selected
-            };
-
-            API.Query(Energy.update, projectEnergy, function(result) {
+                _id: $scope.Project.selected._id
+            }, function(result) {
 
                 if (result.err) {
                     responseError(err);
@@ -80,7 +77,7 @@ angular.module('app').controller('EnergyIndex', ["$scope", "$q", "$uibModal", "E
                     };
                     API.Query(Sensor.update, updateSensor, function(result) {
 
-                    })
+                    });
                 });
 
                 //update Energycategory
@@ -88,7 +85,7 @@ angular.module('app').controller('EnergyIndex', ["$scope", "$q", "$uibModal", "E
                     var queryObj = {
                         energy: API.RootEnergycategory(k),
                         energyPath: k,
-                        project: $scope.projects.selected
+                        project: $scope.Project.selected._id
                     };
                     var updateObj = {
                         'set': {
@@ -102,10 +99,11 @@ angular.module('app').controller('EnergyIndex', ["$scope", "$q", "$uibModal", "E
                         queryoperate: updateObj
                     }, function(result) {});
                 });
-                GetEnergy($scope.projects.selected);
+                GetEnergy();
 
                 UI.AlertSuccess('保存成功');
             });
+
         };
 
         function InitialEnergyForPage(parent, energy, level) {
@@ -130,82 +128,59 @@ angular.module('app').controller('EnergyIndex', ["$scope", "$q", "$uibModal", "E
                 energyArray.push(v);
             });
             energyArray.sort(function(a, b) {
-                return a.title > b.title ? 1 : -1
+                return a.title > b.title ? 1 : -1;
             });
             return energyArray;
         }
 
-        function GetEnergy(projectID) {
+        function GetEnergy() {
+
             removeEnergycategory = {};
             updateEnergycategory = {};
-            $scope.projects.selected = projectID;
-            API.Query(Energy.info, {
-                project: projectID
-            }, function(data) {
-                if (data.err) {} else {
 
-                    var energy = data.result.energy;
-                    if (!energy) {
-                        energy = {};
-                    }
-
-                    _.each($scope.energycategory, function(ec) {
-                        if (!energy[ec._id]) {
-                            energy[ec._id] = {
+            $q.all([
+                $api.energy.info({
+                    project: $scope.Project.selected._id
+                }, function(data) {
+                    $scope.energyData = angular.isObject(data.result) && data.result.energy;
+                }, responseError).$promise,
+                $api.energycategory.info(function(data) {
+                    $scope.energycategory = data.result;
+                }).$promise
+            ]).then(function() {
+                if (angular.isObject($scope.energyData)) {
+                    angular.forEach($scope.energycategory, function(ec) {
+                        if (!$scope.energyData[ec._id]) {
+                            $scope.energyData[ec._id] = {
                                 id: ec._id,
                                 childrens: [],
                                 ischild: false
                             };
                         }
-                        var obj = energy[ec._id];
+                        var obj = $scope.energyData[ec._id];
                         obj.unit = ec.unit;
                         obj.standcol = ec.standcol;
                         obj.title = ec.title;
                     });
-                    $scope.energycategory.sort(function(a, b) {
-                        return a.title > b.title ? 1 : -1
-                    });
 
-                    var viewOfEnergy = InitialEnergyForPage(null, energy, 1);
+                    if ($scope.energycategory) {
+                        $scope.energycategory.sort(function(a, b) {
+                            return a.title > b.title ? 1 : -1;
+                        });
+                    }
+
                     $scope.viewOfEnergy = [{
-                        nodes: viewOfEnergy,
+                        nodes: InitialEnergyForPage(null, $scope.energyData, 1),
                         title: '能耗分类',
                         level: 0
                     }];
                 }
-            }, responseError)
+            });
+
         }
 
-        $q.all([
-            API.QueryPromise(Project.info, {}).$promise,
-            API.QueryPromise(Energycategory.info, {}).$promise
-        ]).then(function(result) {
-            if (result[0].err || result[1].err) {
-                //
-            } else {
-                $scope.projects = angular.isArray(result[0].result) ? result[0].result : [result[0].result];
-                var defaultProject = UI.GetPageItem(DefalutProjectStoreKey);
-                if (defaultProject) {
-                    defaultProject = _.find($scope.projects, function(project) {
-                        return project._id == defaultProject;
-                    });
-                    $scope.projects.selected = defaultProject._id;
-                } else {
-                    if ($scope.projects.length > 0) {
-                        $scope.projects.selected = $scope.projects[0]._id;
-                    }
-                }
-                $scope.energycategory = result[1].result;
-            }
-        });
-
         //选择项目后联动查询能耗类型
-        $scope.$watch('projects.selected', function(projectID) {
-            if (projectID) {
-                UI.PutPageItem(DefalutProjectStoreKey, projectID);
-                GetEnergy(projectID);
-            }
-        });
+        $scope.$watch('Project.selected', GetEnergy);
 
         //如果函数名为remove|removeNode会被覆盖
         $scope.deleteNode = function(scope, node) {
@@ -318,7 +293,7 @@ angular.module('app').controller('EnergyIndex', ["$scope", "$q", "$uibModal", "E
                 size: 'lg',
                 resolve: {
                     ProjectID: function() {
-                        return $scope.projects.selected
+                        return $scope.Project.selected._id;
                     },
                     EnergycategoryID: function() {
                         return node.id;
@@ -334,7 +309,7 @@ angular.module('app').controller('EnergyIndex', ["$scope", "$q", "$uibModal", "E
         };
 
         function responseError(result) {
-            UI.AlertError(result.data.message)
+            UI.AlertError(result.data.message);
         }
 
     });

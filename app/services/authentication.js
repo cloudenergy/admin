@@ -28,11 +28,11 @@ angular.module('app').factory('Auth', ["$location", "$cookies", "$q", "$api", "A
                     u: user
                 }, function() {
                     item.isEnable = true;
-                }).$promise)
+                }).$promise);
             });
 
             return $q.all(promiseList).then(success || angular.noop, error || angular.noop);
 
         }
-    }
+    };
 }]);

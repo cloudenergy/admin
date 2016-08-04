@@ -1,7 +1,7 @@
 /**
  * Created by Joey on 14-6-27.
  */
-angular.module('app').controller('EnergySelect', ["$scope", "$modalInstance", "ServiceEnergycategories", "Config", function($scope, $modalInstance, ServiceEnergycategories, Config) {
+angular.module('app').controller('EnergySelect', ["$scope", "$uibModalInstance", "ServiceEnergycategories", function($scope, $uibModalInstance, ServiceEnergycategories) {
     $scope.ServiceEnergycategories = ServiceEnergycategories;
     $scope.Ok = function() {
         var SelectedEnergycategories = [];
@@ -10,10 +10,10 @@ angular.module('app').controller('EnergySelect', ["$scope", "$modalInstance", "S
                 SelectedEnergycategories.push(sec._id);
             }
         });
-        $modalInstance.close(SelectedEnergycategories);
+        $uibModalInstance.close(SelectedEnergycategories);
     };
     $scope.Cancel = function() {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
     };
 
     $scope.SwitchServiceEnergycategories = function(e, sec) {

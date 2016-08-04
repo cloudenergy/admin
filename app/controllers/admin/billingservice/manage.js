@@ -1,4 +1,4 @@
-angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParams", "$q", "$modal", "$cookies", "$location", "Account", "md5", "API", "Auth", "UI", "BillingService", "Energycategory", "Config", function($scope, $stateParams, $q, $modal, $cookies, $location, Account, md5, API, Auth, UI, BillingService, Energycategory, Config) {
+angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParams", "$q", "$uibModal", "$state", "API", "Auth", "UI", "BillingService", "Energycategory", function($scope, $stateParams, $q, $uibModal, $state, API, Auth, UI, BillingService, Energycategory) {
     Auth.Check(function() {
 
         $scope.askingRemoveID = undefined;
@@ -29,71 +29,11 @@ angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParam
         }, {
             index: 7,
             title: '日'
-        }, ];
+        }];
         $scope.hours = [];
         for (var i = 0; i <= 24; i++) {
             $scope.hours.push(i);
         }
-        //Manage List Structure
-        /*
-        {
-            energycategories:{
-                'COOLING':{
-                    _id: xxxx,
-                    title: xxx
-                }...
-            },
-            //rules is in order
-            rules:[
-                {
-                    applyto: ['COOLING', 'ELECTRIC'],
-                    rule: {
-                        day:['0501','100[1-5]'],
-                        week:[1,2,3],
-                        timequantumprice:[],    \
-                                                  One of it
-                        fixprice: 100           /
-                    }
-                }...
-            ]
-        }
-        * */
-        //    $scope.Rules = [
-        //        {
-        //            id: '1',
-        //            applyto: ['ELECTRIC'],
-        //            rule: {
-        //                day:['0501','1001','1002','1003','1004','1005','1006','0901'],
-        //                week:[1,2,0,4,0,0,0],
-        //                timequantumprice:[5,5,5,5,5,5,5,5,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9]
-        //            },
-        //            SelectMonth: 1,
-        //            SelectDay: 1,
-        //            HourFrom: 0,
-        //            HourTo: 23,
-        //            price: 0,
-        //            billingtype:{
-        //                timequantum: true
-        //            }
-        //        }
-        //        ,{
-        //            id: '2',
-        //            applyto: ['COLDWATER'],
-        //            rule: {
-        //                day:[],
-        //                week:[0,0,0,4,5,6,0],
-        //                fixprice:3
-        //            },
-        //            SelectMonth: 1,
-        //            SelectDay: 1,
-        //            HourFrom: 0,
-        //            HourTo: 23,
-        //            price: 0,
-        //            billingtype: {
-        //                fixprice: true
-        //            }
-        //        }
-        //    ];
 
         function CreateLadderPrice(from, to, price) {
             return {
@@ -132,7 +72,7 @@ angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParam
                     //init
                     BuildService(rule);
                 });
-                console.log($scope.billingService);
+
                 if ($scope.billingService.rules) {
                     $scope.MaxLevel = $scope.billingService.rules.length - 1;
                 } else {
@@ -210,7 +150,7 @@ angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParam
                     };
                     text += RuleToText(rule);
                 });
-                console.log(text);
+
             }
         );
 
@@ -292,7 +232,6 @@ angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParam
                 });
             }
 
-            console.log('Build Service: ', service);
         }
         $scope.SaveStrategy = function() {
             //
@@ -323,18 +262,16 @@ angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParam
                 }
                 param.rules.push(saveObj);
             });
-            console.log(param);
-            API.Query(BillingService.update, param, function(result) {
-                console.log(result);
-                $location.path('/admin/billingservice/info');
 
+            API.Query(BillingService.update, param, function(result) {
+                $state.go('admin.billingservice.info');
                 UI.AlertSuccess('保存成功');
             }, function(result) {
                 UI.AlertError(result.data.message);
             });
         };
         $scope.AddSubStrategy = function() {
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 templateUrl: 'energySelect.html',
                 controller: 'EnergySelect',
                 size: 'md',

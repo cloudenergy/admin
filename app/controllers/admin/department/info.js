@@ -16,7 +16,6 @@ angular.module('app').controller('departmentInfo', ["$scope", "$timeout", "$uibM
     }, function() {
 
         var KEY_PageSize = EMAPP.Account._id + '.department.info.pagesize',
-            KEY_Project = EMAPP.Account._id + '.department.info.project',
             KEY_Status = EMAPP.Account._id + '.department.info.status';
 
         $scope.statusenum = [{
@@ -30,8 +29,6 @@ angular.module('app').controller('departmentInfo', ["$scope", "$timeout", "$uibM
             title: '欠费'
         }];
         $scope.statusenum.selected = parseInt(localStorage.getItem(KEY_Status) || $scope.statusenum[0].id);
-
-        $scope.ChargeRedirect = encodeURIComponent('/admin/department/info');
 
         //分页设置
         $scope.paging = {
@@ -70,7 +67,7 @@ angular.module('app').controller('departmentInfo', ["$scope", "$timeout", "$uibM
                 $scope.listData.loading = true;
             }
             $api.department.info({
-                project: $scope.projects.selected,
+                project: $scope.Project.selected._id,
                 keyreg: $scope.departmentKey,
                 amount: $scope.filterAmount ? parseFloat($scope.filterAmount) : undefined,
                 arrear: {
@@ -111,27 +108,11 @@ angular.module('app').controller('departmentInfo', ["$scope", "$timeout", "$uibM
                 $scope.listData.total = (data.paging || {}).count || 0;
 
             });
-        }
+        };
 
-        $api.project.info(function(data) {
-            data.result = angular.isArray(data.result) && data.result || [data.result];
-            if (data.result.length) {
-                data.__selected = localStorage.getItem(KEY_Project);
-                angular.forEach($scope.projects = data.result, function(project) {
-                    if (project._id === data.__selected) {
-                        $scope.projects.selected = project._id;
-                    }
-                });
-                $scope.projects.selected = $scope.projects.selected || $scope.projects[0]._id;
-            }
-        });
-
-        $scope.$watch('projects.selected', function(val) {
-            if (val) {
-                localStorage.setItem(KEY_Project, val);
-                $scope.paging.index = 1;
-                $scope.GetDepartment();
-            }
+        $scope.$watch('Project.selected', function() {
+            $scope.paging.index = 1;
+            $scope.GetDepartment();
         });
 
         $scope.$watch('statusenum.selected', function(val) {
@@ -155,7 +136,7 @@ angular.module('app').controller('departmentInfo', ["$scope", "$timeout", "$uibM
             }, function(result) {
                 $scope.GetDepartment();
             }, function(result) {
-                UI.AlertError(' ', result.data.message)
+                UI.AlertError(' ', result.data.message);
             });
         };
 
@@ -214,7 +195,7 @@ angular.module('app').controller('departmentInfo', ["$scope", "$timeout", "$uibM
                 }],
                 resolve: {
                     ProjectID: function() {
-                        return $scope.projects.selected;
+                        return $scope.Project.selected._id;
                     }
                 }
             }).result.then($scope.GetDepartment);
@@ -248,7 +229,7 @@ angular.module('app').controller('departmentInfo', ["$scope", "$timeout", "$uibM
                 }],
                 resolve: {
                     ProjectID: function() {
-                        return $scope.projects.selected;
+                        return $scope.Project.selected._id;
                     }
                 }
             }).result.then($scope.GetDepartment);
@@ -257,7 +238,7 @@ angular.module('app').controller('departmentInfo', ["$scope", "$timeout", "$uibM
         //导出报警信息
         $scope.OnExportAlertInfo = function() {
             // var obj = {
-            //     project: $scope.projects.selected,
+            //     project: $scope.Project.selected._id,
             //     account: $scope.departmentKey,
             //     filteramount: $scope.filterAmount
             // };

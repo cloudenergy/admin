@@ -1,31 +1,22 @@
-angular.module('app').controller('Buildingcreate', ["$scope", "$location", "$stateParams", "Building", "Auth", "API", "Project", "UI", function($scope, $location, $stateParams, Building, Auth, API, Project, UI) {
+angular.module('app').controller('Buildingcreate', ["$scope", "$state", "Building", "Auth", "API", "UI", function($scope, $state, Building, Auth, API, UI) {
     Auth.Check(function() {
 
+        $scope.building = {
+            project: $scope.Project.selected._id
+        };
+
         $scope.submit = function(e) {
-            $scope.building.project = $scope.projects.selected._id;
             API.Query(Building.add, $scope.building, function(result) {
                 if (result.code) {
                     UI.AlertError(result.message);
                 } else {
-                    $location.path('/admin/building/info');
+                    $state.go('admin.building.info');
                     UI.AlertSuccess('保存成功');
                 }
             }, function(result) {
                 UI.AlertError(result.data.message);
             });
         };
-
-        API.Query(Project.info, function(result) {
-            if (result.err) {
-                //
-            } else {
-                $scope.projects = angular.isArray(result.result) ? result.result : [result.result];
-                $scope.building = $scope.building || {};
-                $scope.projects.selected = _.find($scope.projects, function(project) {
-                    return project._id == $stateParams.project;
-                });
-            }
-        });
 
         $scope.avgConsumptionChange = function() {
             $scope.building.totalConsumption = $scope.building.acreage * $scope.building.avgConsumption;

@@ -1,9 +1,6 @@
-angular.module('app').controller('accountamount', ["$scope", "$stateParams", "Account", "API", "Auth", "UI", "BillingAccount", "Log", "Payment", "channels", function($scope, $stateParams, Account, API, Auth, UI, BillingAccount, Log, Payment, channels) {
-
-    $scope.channels = channels.result;
+angular.module('app').controller('accountamount', ["$scope", "$stateParams", "$api", "Account", "API", "Auth", "UI", "BillingAccount", "Log", "Payment", function($scope, $stateParams, $api, Account, API, Auth, UI, BillingAccount, Log, Payment) {
 
     $scope.AccountID = $stateParams.account;
-    $scope.Redirect = decodeURIComponent($stateParams.redirect || '/admin/account/info');
 
     Auth.Check(function() {
         function LoadBillingAccount() {
@@ -39,8 +36,15 @@ angular.module('app').controller('accountamount', ["$scope", "$stateParams", "Ac
             });
         }
 
-        LoadBillingAccount();
-        LoadChargeLog();
+        $api.payment.channelinfo({
+            type: 'manual',
+            project: $scope.Project.selected._id,
+            flow: 'EARNING'
+        }, function(data) {
+            $scope.channels = data.result;
+            LoadBillingAccount();
+            LoadChargeLog();
+        });
 
         //Charge
         $scope.OnCharge = function() {
@@ -58,9 +62,9 @@ angular.module('app').controller('accountamount', ["$scope", "$stateParams", "Ac
                 channel: 'Manual',
                 amount: parseFloat($scope.cash),
                 channelaccountid: $scope.channels.selected,
-                project: $stateParams.project,
+                project: $scope.Project.selected._id,
                 subject: '商户项目充值',
-                body: '充值项目: ' + $stateParams.project,
+                body: '充值项目: ' + $scope.Project.selected.title,
                 metadata: {
                     operator: EMAPP.Account._id
                 }
@@ -94,7 +98,7 @@ angular.module('app').controller('accountamount', ["$scope", "$stateParams", "Ac
                 } else {
                     LoadBillingAccount();
                     LoadChargeLog();
-                };
+                }
             });
         };
 

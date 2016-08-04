@@ -1,7 +1,6 @@
-angular.module('app').controller('SensorEdit', ["$scope", "$stateParams", "$location", "Sensor", "Collector", "Energy", "Customer", "Building", "API", "Auth", "UI", function($scope, $stateParams, $location, Sensor, Collector, Energy, Customer, Building, API, Auth, UI) {
+angular.module('app').controller('SensorEdit', ["$scope", "$stateParams", "$state", "Sensor", "Collector", "Energy", "Customer", "Building", "API", "Auth", "UI", function($scope, $stateParams, $state, Sensor, Collector, Energy, Customer, Building, API, Auth, UI) {
     Auth.Check(function() {
 
-        var page = $stateParams.page;
         var selectEnergycategory;
 
         $scope.submit = function(e) {
@@ -28,17 +27,7 @@ angular.module('app').controller('SensorEdit', ["$scope", "$stateParams", "$loca
                 console.log(sensor);
                 API.Query(Sensor.update, sensor, function(result) {
                     if (result.err) {} else {
-                        if (page) {
-                            //
-                            $location.path('/admin/sensor/info').search({
-                                'page': page,
-                                'building': buildingID
-                            });
-                        } else {
-                            $location.path('/admin/sensor/info').search({
-                                'building': buildingID
-                            });
-                        }
+                        $state.go('admin.sensor.info');
                     }
                 })
             };

@@ -1,7 +1,7 @@
 /**
  * Created by Joey on 14-6-27.
  */
-angular.module('app').controller('SensorSync', ["$scope", "$modalInstance", "API", "Sensor", "SensorIns", function($scope, $modalInstance, API, Sensor, SensorIns) {
+angular.module('app').controller('SensorSync', ["$scope", "$uibModalInstance", "API", "Sensor", "SensorIns", function($scope, $uibModalInstance, API, Sensor, SensorIns) {
     $scope.sensorTitle = SensorIns.title;
     if (SensorIns.channel) {
         $scope.sensorTitle += "-" + SensorIns.channel;
@@ -13,7 +13,7 @@ angular.module('app').controller('SensorSync', ["$scope", "$modalInstance", "API
     $scope.sensorLastTotal = SensorIns.lasttotal;
 
     $scope.Cancel = function() {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
     };
 
     $scope.SwitchSensor = function(e, sensor) {

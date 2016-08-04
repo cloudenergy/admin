@@ -1,4 +1,4 @@
-angular.module('app').controller('eventcategoryAdd', ["$rootScope", "$scope", "$location", "Eventcategory", "Auth", "API", "UI", function($rootScope, $scope, $location, Eventcategory, Auth, API, UI) {
+angular.module('app').controller('eventcategoryAdd', ["$rootScope", "$scope", "$state", "Eventcategory", "Auth", "API", "UI", function($rootScope, $scope, $state, Eventcategory, Auth, API, UI) {
     Auth.Check(function() {
 
         $scope.submit = function(e) {
@@ -16,12 +16,12 @@ angular.module('app').controller('eventcategoryAdd', ["$rootScope", "$scope", "$
                             if (result.code) {
                                 UI.AlertError(result.message);
                             } else {
-                                $location.path('/admin/eventcategory/info')
+                                $state.go('admin.eventcategory.info');
                             }
                         });
                     }
                 }
             });
-        }
+        };
     });
 }]);

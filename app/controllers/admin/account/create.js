@@ -1,4 +1,4 @@
-angular.module('app').controller('accountCreate', ["$scope", "$q", "$location", "$cookies", "BillingAccount", "Account", "md5", "API", "Auth", "UI", "Character", function($scope, $q, $location, $cookies, BillingAccount, Account, md5, API, Auth, UI, Character) {
+angular.module('app').controller('accountCreate', ["$scope", "$q", "$state", "$cookies", "BillingAccount", "Account", "md5", "API", "Auth", "UI", "Character", function($scope, $q, $state, $cookies, BillingAccount, Account, md5, API, Auth, UI, Character) {
 
     Auth.Check(function() {
 
@@ -45,7 +45,7 @@ angular.module('app').controller('accountCreate', ["$scope", "$q", "$location", 
                             UI.AlertError('账户创建错误: ' + result.message);
                         } else {
                             UI.AlertSuccess('创建账户成功');
-                            $location.path('/admin/account/info');
+                            $state.go('admin.account.info');
                         }
                     });
                 }

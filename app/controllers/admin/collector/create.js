@@ -1,37 +1,23 @@
-angular.module('app').controller('CollectorCreate', ["$scope", "$location", "Collector", "Project", "API", "Auth", "$stateParams", "UI", function($scope, $location, Collector, Project, API, Auth, $stateParams, UI) {
+angular.module('app').controller('CollectorCreate', ["$scope", "$state", "Collector", "API", "Auth", "UI", function($scope, $state, Collector, API, Auth, UI) {
     Auth.Check(function() {
 
-        $scope.submit = function() {
-            var collector = angular.copy($scope.collector)
-            collector.project = collector.project._id;
+        $scope.collector = {
+            project: $scope.Project.selected._id
+        };
 
-            API.Query(Collector.add, collector, function(result) {
+        $scope.submit = function() {
+            API.Query(Collector.add, $scope.collector, function(result) {
                 if (result.code) {
-                    //
                     UI.AlertWarning(result.message);
                 } else {
-                    $location.path('/admin/collector/info')
+                    $state.go('admin.collector.info');
                 }
-            }, responseError)
-        }
+            }, function(result) {
+                UI.AlertError(result.data.message);
+            });
+        };
 
-        var projectID = $stateParams.project;
         $scope.isEdit = false;
-        API.Query(Project.info, function(result) {
-            if (result.err) {
-                //
-            } else {
-                $scope.projects = angular.isArray(result.result) ? result.result : [result.result];
-                $scope.collector = $scope.collector || {};
-                $scope.collector.project = _.find($scope.projects, function(project) {
-                    return project._id == $stateParams.project;
-                });
-            }
-        })
 
-
-        function responseError(result) {
-            UI.AlertError(result.data.message)
-        }
     });
 }]);

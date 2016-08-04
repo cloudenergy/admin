@@ -1,7 +1,7 @@
 /**
  * Created by Joey on 14-6-27.
  */
-angular.module('app').controller('SensorSelect', ["$scope", "$rootScope", "$modalInstance", "API", "Sensor", "ProjectID", "Config", "EnergycategoryID", function($scope, $rootScope, $modalInstance, API, Sensor, ProjectID, Config, EnergycategoryID) {
+angular.module('app').controller('SensorSelect', ["$scope", "$rootScope", "$uibModalInstance", "API", "Sensor", "ProjectID", "Config", "EnergycategoryID", function($scope, $rootScope, $uibModalInstance, API, Sensor, ProjectID, Config, EnergycategoryID) {
     var Sensors;
     $scope.currentPage = 1;
 
@@ -40,7 +40,7 @@ angular.module('app').controller('SensorSelect', ["$scope", "$rootScope", "$moda
                 console.log('Add: ', sensorUpdateObj);
                 API.Query(Sensor.update, sensorUpdateObj, function(result) {
                     if (result.err) {} else {
-                        $modalInstance.close({});
+                        $uibModalInstance.close({});
                     }
                 });
             } else {
@@ -52,17 +52,17 @@ angular.module('app').controller('SensorSelect', ["$scope", "$rootScope", "$moda
                 console.log('Clear: ', sensorUpdateObj);
                 API.Query(Sensor.update, sensorUpdateObj, function(result) {
                     if (result.err) {} else {
-                        $modalInstance.close({});
+                        $uibModalInstance.close({});
                     }
                 });
             }
         });
         if (isUnmodified) {
-            $modalInstance.close({});
+            $uibModalInstance.close({});
         }
     };
     $scope.Cancel = function() {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
     };
 
     $scope.SwitchSensor = function(e, sensor) {

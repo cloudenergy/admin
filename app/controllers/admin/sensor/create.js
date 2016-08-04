@@ -1,4 +1,4 @@
-angular.module('app').controller('SensorCreate', ["$scope", "$location", "Sensor", "Collector", "Energy", "Customer", "Building", "API", "Auth", "UI", "$stateParams", function($scope, $location, Sensor, Collector, Energy, Customer, Building, API, Auth, UI, $stateParams) {
+angular.module('app').controller('SensorCreate', ["$scope", "$state", "Sensor", "Collector", "Energy", "Customer", "Building", "API", "Auth", "UI", "$stateParams", function($scope, $state, Sensor, Collector, Energy, Customer, Building, API, Auth, UI, $stateParams) {
     Auth.Check(function() {
 
         $scope.sensor = {
@@ -7,7 +7,7 @@ angular.module('app').controller('SensorCreate', ["$scope", "$location", "Sensor
         };
 
         $scope.buildingID = $stateParams.building;
-        var page = $stateParams.page;
+
         var selectEnergycategory;
 
         $scope.submit = function(e) {
@@ -61,10 +61,7 @@ angular.module('app').controller('SensorCreate', ["$scope", "$location", "Sensor
                         if (result.code) {
                             UI.AlertError(result.message);
                         } else {
-                            $location.path('/admin/sensor/info').search({
-                                'page': page,
-                                'building': $scope.buildingID
-                            });
+                            $state.go('admin.sensor.info');
                         }
                     }, responseError)
                 }

@@ -1,4 +1,4 @@
-angular.module('app').controller('accountEdit', ["$scope", "$stateParams", "$q", "$location", "Account", "md5", "API", "Auth", "UI", "Character", "Config", function($scope, $stateParams, $q, $location, Account, md5, API, Auth, UI, Character, Config) {
+angular.module('app').controller('accountEdit', ["$scope", "$stateParams", "$q", "$state", "Account", "md5", "API", "Auth", "UI", "Character", "Config", function($scope, $stateParams, $q, $state, Account, md5, API, Auth, UI, Character, Config) {
 
     Auth.Check(function() {
 
@@ -35,12 +35,12 @@ angular.module('app').controller('accountEdit', ["$scope", "$stateParams", "$q",
 
             API.Query(Account.update, updateObj, function(result) {
                 UI.AlertSuccess('账户更新成功');
-                $location.path('/admin/account/info')
+                $state.go('admin.account.info');
             }, function(result) {
                 if (result.code) {
                     UI.AlertError(result.message);
                 }
-            })
+            });
         };
 
         $q.all([
@@ -82,7 +82,7 @@ angular.module('app').controller('accountEdit', ["$scope", "$stateParams", "$q",
             });
 
         function responseError(result) {
-            UI.AlertError(result.message)
+            UI.AlertError(result.message);
         }
     });
 }]);

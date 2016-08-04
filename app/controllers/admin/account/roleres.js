@@ -1,4 +1,4 @@
-angular.module('app').controller('accountroleres', ["$scope", "$stateParams", "$q", "$modal", "$cookies", "$location", "Account", "API", "Auth", "UI", "Project", "Building", function($scope, $stateParams, $q, $modal, $cookies, $location, Account, API, Auth, UI, Project, Building) {
+angular.module('app').controller('accountroleres', ["$scope", "$stateParams", "$q", "$uibModal", "$cookies", "$state", "Account", "API", "Auth", function($scope, $stateParams, $q, $uibModal, $cookies, $state, Account, API, Auth) {
 
     var originProject;
     Auth.Check(function() {
@@ -11,7 +11,8 @@ angular.module('app').controller('accountroleres', ["$scope", "$stateParams", "$
             $q.all([
                 API.QueryPromise(Account.info, {
                     id: adminUser
-                }).$promise, API.QueryPromise(Account.info, {
+                }).$promise,
+                API.QueryPromise(Account.info, {
                     id: editUser
                 }).$promise
             ]).then(
@@ -37,36 +38,21 @@ angular.module('app').controller('accountroleres', ["$scope", "$stateParams", "$
                         originProject = $scope.editUser.resource.project || [];
 
                         //如果admin的权限是*，则需要查询所有的项目
-                        API.Query(Project.info, function(result) {
-                            if (result.err) {} else {
-                                var projects = angular.isArray(result.result) ? result.result : [result.result];
-                                $scope.roleResOfProject = [];
-                                var enumFromIDToDetail = function(projectIDs, projectDetail) {
-                                    //
-                                    var result = [];
-                                    _.each(projectIDs, function(projectid) {
-                                        var detailP = _.find(projectDetail, function(p) {
-                                            return p._id == projectid;
-                                        });
-                                        if (detailP) {
-                                            result.push(detailP);
-                                        }
-                                    });
-                                    return result;
-                                };
+                        $scope.roleResOfProject = $scope.Project;
 
-                                //被编辑者拥有的项目列表
-                                if ($scope.editUser.resource && $scope.editUser.resource.project) {
-                                    //
-                                    $scope.viewOfEditUserProject = enumFromIDToDetail(
-                                        $scope.editUser.resource.project,
-                                        projects
-                                    );
+                        //被编辑者拥有的项目列表
+                        if ($scope.editUser.resource && $scope.editUser.resource.project) {
+                            $scope.viewOfEditUserProject = [];
+                            _.each($scope.editUser.resource.project, function(projectid) {
+                                var detailP = _.find($scope.Project, function(p) {
+                                    return p._id == projectid;
+                                });
+                                if (detailP) {
+                                    $scope.viewOfEditUserProject.push(detailP);
                                 }
+                            });
+                        }
 
-                                $scope.roleResOfProject = projects;
-                            }
-                        });
                     }
                 });
         }
@@ -102,13 +88,13 @@ angular.module('app').controller('accountroleres', ["$scope", "$stateParams", "$
             console.log(obj);
             API.Query(Account.update, obj, function(result) {
                 if (result.err) {} else {
-                    $location.path('/admin/account/info');
+                    $state.go('admin.account.info');
                 }
             });
         };
         //添加项目
         $scope.AddProject = function() {
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 templateUrl: 'projectSelect.html',
                 controller: 'ProjectSelect',
                 size: 'md',
@@ -148,7 +134,7 @@ angular.module('app').controller('accountroleres', ["$scope", "$stateParams", "$
         $scope.AddBuildings = function(e, projectID) {
             e.preventDefault();
 
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 templateUrl: 'buildingSelect.html',
                 controller: 'BuildingSelect',
                 size: 'md',
@@ -187,7 +173,7 @@ angular.module('app').controller('accountroleres', ["$scope", "$stateParams", "$
         $scope.AddSensors = function(e, projectID) {
             e.preventDefault();
 
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 templateUrl: 'sensorSelect.html',
                 controller: 'SensorSelect',
                 size: 'lg',

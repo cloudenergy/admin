@@ -2,11 +2,11 @@ window.EMAPP = angular.module('app', [
     'ngCookies',
     'ngResource',
     'ngSanitize',
+    'ngStorage',
     'ngMd5',
     'ui.router',
     'ui.utils',
-    'oc.lazyLoad',
-    'ngStorage'
+    'oc.lazyLoad'
 ]).constant('Config', {
     pageSize: 20,
     popPageSize: 8,

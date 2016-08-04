@@ -1,12 +1,12 @@
-angular.module('app').controller('eventcategoryUpdate', ["$rootScope", "$scope", "$stateParams", "$location", "Eventcategory", "Auth", "API", "UI", function($rootScope, $scope, $stateParams, $location, Eventcategory, Auth, API, UI) {
+angular.module('app').controller('eventcategoryUpdate', ["$rootScope", "$scope", "$stateParams", "$state", "Eventcategory", "Auth", "API", "UI", function($rootScope, $scope, $stateParams, $state, Eventcategory, Auth, API, UI) {
     Auth.Check(function() {
 
         $scope.submit = function(e) {
             API.Query(Eventcategory.update, $scope.eventcategory, function(result) {
-                $location.path('/admin/eventcategory/info')
+                $state.go('admin.eventcategory.info');
             }, function(result) {
-                UI.AlertError(result.data.message)
-            })
+                UI.AlertError(result.data.message);
+            });
         };
 
         API.Query(Eventcategory.info, {
@@ -20,7 +20,7 @@ angular.module('app').controller('eventcategoryUpdate', ["$rootScope", "$scope",
         }, responseError);
 
         function responseError(result) {
-            UI.AlertError(result.data.message)
+            UI.AlertError(result.data.message);
         }
     });
 }]);

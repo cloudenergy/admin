@@ -1,4 +1,4 @@
-angular.module('app').controller('BuildingInfo', ["$scope", "Building", "API", "Auth", "Project", "UI", function($scope, Building, API, Auth, Project, UI) {
+angular.module('app').controller('BuildingInfo', ["$scope", "Building", "API", "Auth", "UI", function($scope, Building, API, Auth, UI) {
     $scope.operateStatus = {
         create: {
             isEnable: false,
@@ -15,7 +15,6 @@ angular.module('app').controller('BuildingInfo', ["$scope", "Building", "API", "
     };
 
     $scope.askingRemoveID = undefined;
-    var DefalutProjectStoreKey = 'building.project';
 
     Auth.Check($scope.operateStatus, function() {
 
@@ -39,9 +38,9 @@ angular.module('app').controller('BuildingInfo', ["$scope", "Building", "API", "
             $scope.askingRemoveID = undefined;
         };
 
-        function GetBuilding(projectID) {
+        function GetBuilding() {
             API.Query(Building.info, {
-                project: projectID
+                project: $scope.Project.selected._id
             }, function(result) {
                 if (result.err) {
                     //error
@@ -51,37 +50,8 @@ angular.module('app').controller('BuildingInfo', ["$scope", "Building", "API", "
             });
         }
 
-        API.Query(Project.info, function(result) {
-            if (result.err) {
-                //error
-            } else {
-                $scope.projects = angular.isArray(result.result) ? result.result : [result.result];
-                if ($scope.projects.length > 0) {
-                    $scope.projects.selected = $scope.projects[0]._id;
-                }
-
-                //Set Default Building
-                var defaultProject = UI.GetPageItem(DefalutProjectStoreKey);
-                if (defaultProject) {
-                    defaultProject = _.find($scope.projects, function(project) {
-                        return project._id == defaultProject;
-                    });
-                    $scope.projects.selected = defaultProject._id;
-                } else {
-                    if ($scope.projects.length > 0) {
-                        $scope.projects.selected = $scope.projects[0]._id;
-                    }
-                }
-            }
-        });
-
         //选择项目后联动查询建筑
-        $scope.$watch('projects.selected', function(projectID) {
-            if (projectID) {
-                UI.PutPageItem(DefalutProjectStoreKey, projectID);
-                GetBuilding(projectID);
-            }
-        });
+        $scope.$watch('Project.selected', GetBuilding);
 
         function responseError(result) {
             UI.AlertError(result.data.message);

@@ -106,6 +106,12 @@ angular.module('app').config(["$provide", function($provide) {
             projectmonthlyreceipt: {},
             // 消耗明细
             consumptiondetail: {}
+        }],
+        energy: ['energy', , {
+            info: {}
+        }],
+        energycategory: ['energycategory', , {
+            info: {}
         }]
     };
 

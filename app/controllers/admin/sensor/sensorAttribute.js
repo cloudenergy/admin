@@ -1,7 +1,7 @@
 /**
  * Created by Joey on 14-6-27.
  */
-angular.module('app').controller('sensorAttribute', ["$scope", "$modalInstance", "$q", "SensorSUID", "ProjectID", "Driver", "API", "Control", "SensorAttrib", function($scope, $modalInstance, $q, SensorSUID, ProjectID, Driver, API, Control, SensorAttrib) {
+angular.module('app').controller('sensorAttribute', ["$scope", "$uibModalInstance", "$q", "SensorSUID", "ProjectID", "Driver", "API", "Control", "SensorAttrib", function($scope, $uibModalInstance, $q, SensorSUID, ProjectID, Driver, API, Control, SensorAttrib) {
     function FullDriverPath() {
         if (!$scope.drivercompanySelected || !$scope.driverNameSelected || !$scope.driverVersionSelected) {
             return "";
@@ -12,7 +12,7 @@ angular.module('app').controller('sensorAttribute', ["$scope", "$modalInstance",
     $scope.Ok = function() {
         var driver = FullDriverPath();
         if (!driver.length) {
-            $modalInstance.close();
+            $uibModalInstance.close();
             return;
         }
 
@@ -28,11 +28,11 @@ angular.module('app').controller('sensorAttribute', ["$scope", "$modalInstance",
         reqData.ext['adaptdevice'] = $scope.adaptDeviceSelected || '';
         API.Query(SensorAttrib.update, reqData, function(result) {
             if (result.err) {} else {}
-            $modalInstance.close();
+            $uibModalInstance.close();
         });
     };
     $scope.Cancel = function() {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
     };
 
     function GetAdaptDevice(driverPath, defaultAdaptDevice) {

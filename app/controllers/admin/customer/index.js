@@ -1,7 +1,4 @@
 angular.module('app').controller('CustomerIndex', ["$scope", "$q", "$api", "$uibModal", "Auth", "UI", function($scope, $q, $api, $uibModal, Auth, UI) {
-
-    var KEY_PROJECT = EMAPP.Account._id + '_customer_index_projectid';
-
     Auth.Check(function() {
 
         function InitialCustomerForPage(parent, customer, level) {
@@ -27,7 +24,7 @@ angular.module('app').controller('CustomerIndex', ["$scope", "$q", "$api", "$uib
 
         function GetCustomer() {
             $api.customer.info({
-                project: $scope.projects.selected
+                project: $scope.Project.selected._id
             }, function(data) {
                 if (data.result) {
                     $scope.viewOfCustomer = [{
@@ -49,23 +46,7 @@ angular.module('app').controller('CustomerIndex', ["$scope", "$q", "$api", "$uib
             });
         }
 
-        $api.project.info(function(data) {
-            data.selected = localStorage.getItem(KEY_PROJECT);
-            $scope.projects = angular.isArray(data.result) ? data.result : data.result && [data.result] || [];
-            $scope.projects.select = function() {
-                if ($scope.projects.selected) {
-                    localStorage.setItem(KEY_PROJECT, $scope.projects.selected);
-                    GetCustomer();
-                }
-            };
-            angular.forEach($scope.projects, function(item) {
-                if (item._id === data.selected) {
-                    $scope.projects.selected = item._id;
-                }
-            });
-            $scope.projects.selected = $scope.projects.selected || ($scope.projects[0] || {})._id;
-            $scope.projects.select();
-        });
+        $scope.$watch('Project.selected', GetCustomer);
 
         $scope.newNode = function(node) {
             node.nodes.push({
@@ -100,7 +81,7 @@ angular.module('app').controller('CustomerIndex', ["$scope", "$q", "$api", "$uib
                     parent: node.parent.id
                 },
                 method: node.id ? 'UPDATE' : 'ADD',
-                project: $scope.projects.selected
+                project: $scope.Project.selected._id
             }, function(data) {
                 UI.AlertSuccess(node.id ? '更新成功' : '添加成功');
                 if (!node.id) {
@@ -135,7 +116,7 @@ angular.module('app').controller('CustomerIndex', ["$scope", "$q", "$api", "$uib
                     id: node.id
                 },
                 method: 'REMOVE',
-                project: $scope.projects.selected
+                project: $scope.Project.selected._id
             }, function(data) {
                 UI.AlertSuccess('删除成功');
                 target.remove();
@@ -149,7 +130,7 @@ angular.module('app').controller('CustomerIndex', ["$scope", "$q", "$api", "$uib
                 controller: 'SensorSelect',
                 resolve: {
                     ProjectID: function() {
-                        return $scope.projects.selected;
+                        return $scope.Project.selected._id;
                     },
                     SelectKEY: function() {
                         return (function each(nodes, selected) {
@@ -177,7 +158,7 @@ angular.module('app').controller('CustomerIndex', ["$scope", "$q", "$api", "$uib
                                     id: item.id
                                 },
                                 method: 'REMOVE',
-                                project: $scope.projects.selected
+                                project: $scope.Project.selected._id
                             }, function() {
                                 removeNode[item.id] = true;
                             }).$promise);
@@ -196,7 +177,7 @@ angular.module('app').controller('CustomerIndex', ["$scope", "$q", "$api", "$uib
                             parent: node.id
                         },
                         method: 'ADD',
-                        project: $scope.projects.selected
+                        project: $scope.Project.selected._id
                     }, function(data) {
                         node.nodes.push({
                             originid: data.result.id,

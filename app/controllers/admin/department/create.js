@@ -1,20 +1,19 @@
-angular.module('app').controller('departmentcreate', ["$scope", "$state", "$stateParams", "$uibModal", "Department", "Auth", "API", "Project", "UI", "Sensor", "md5", function($scope, $state, $stateParams, $uibModal, Department, Auth, API, Project, UI, Sensor, md5) {
+angular.module('app').controller('departmentcreate', ["$scope", "$state", "$uibModal", "Department", "Auth", "API", "Project", "UI", "Sensor", "md5", function($scope, $state, $uibModal, Department, Auth, API, Project, UI, Sensor, md5) {
     $scope.ondutyHour = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
     $scope.ondutyMinute = ['00', '10', '20', '30', '40', '50'];
     $scope.offdutyHour = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
     $scope.offdutyMinute = ['00', '10', '20', '30', '40', '50'];
-
     Auth.Check(function() {
         $scope.department = {
             character: 'NONE'
         };
-        var projectID = $stateParams.project;
+        var projectID = $scope.Project.selected._id;
 
         $scope.warning = {};
         $scope.submit = function(e) {
             if ($scope.department.account < 10) {
                 UI.AlertWarning('用户名不能低于10位');
-                return
+                return;
             }
 
             if ($scope.department.password != $scope.repassword) {
@@ -189,6 +188,6 @@ angular.module('app').controller('departmentcreate', ["$scope", "$state", "$stat
                     $scope.offdutyMinute.selected = offDuty.format('mm');
                 }
             }
-        })
+        });
     });
 }]);

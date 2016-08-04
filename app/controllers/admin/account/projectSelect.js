@@ -1,7 +1,7 @@
 /**
  * Created by Joey on 14-6-27.
  */
-angular.module('app').controller('ProjectSelect', ["$scope", "$modalInstance", "Projects", "ProjectIDs", "Config", function($scope, $modalInstance, Projects, ProjectIDs, Config) {
+angular.module('app').controller('ProjectSelect', ["$scope", "$uibModalInstance", "Projects", "ProjectIDs", "Config", function($scope, $uibModalInstance, Projects, ProjectIDs, Config) {
     $scope.Ok = function() {
         var SelectProjects;
         if ($scope.viewOfProjects[0].isEnable) {
@@ -15,10 +15,10 @@ angular.module('app').controller('ProjectSelect', ["$scope", "$modalInstance", "
                 }
             });
         }
-        $modalInstance.close(SelectProjects);
+        $uibModalInstance.close(SelectProjects);
     };
     $scope.Cancel = function() {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
     };
 
     $scope.SwitchProject = function(e, project) {

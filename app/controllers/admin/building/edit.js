@@ -1,13 +1,12 @@
-angular.module('app').controller('Buildingedit', ["$scope", "$stateParams", "$location", "Building", "Auth", "API", "Project", "UI", function($scope, $stateParams, $location, Building, Auth, API, Project, UI) {
+angular.module('app').controller('Buildingedit', ["$scope", "$state", "$stateParams", "Building", "Auth", "API", "UI", function($scope, $state, $stateParams, Building, Auth, API, UI) {
     Auth.Check(function() {
 
-        $scope.submit = function(e) {
-            $scope.building.project = $scope.building.project._id;
-            API.Query(Building.update, $scope.building, function(result) {
+        $scope.submit = function() {
+            $scope.building && API.Query(Building.update, $scope.building, function(result) {
                 if (result.code) {
                     UI.AlertError(result.message);
                 } else {
-                    $location.path('/admin/building/info');
+                    $state.go('admin.building.info');
                     UI.AlertSuccess('保存成功');
                 }
             }, function(result) {
@@ -18,27 +17,14 @@ angular.module('app').controller('Buildingedit', ["$scope", "$stateParams", "$lo
         API.Query(Building.info, {
             id: $stateParams.id
         }, function(result) {
-            if (result.err) {
-                //
-            } else {
-                $scope.building = result.result;
-
-                API.Query(Project.info, function(result) {
-                    if (result.err) {
-                        //
-                    } else {
-                        $scope.projects = angular.isArray(result.result) ? result.result : [result.result];
-                        $scope.building.project = _.find($scope.projects, function(project) {
-                            return project._id == $scope.building.project._id;
-                        });
-                    }
+            if (!result.err) {
+                angular.extend($scope.building = result.result, {
+                    project: $scope.Project.selected._id
                 });
             }
-        }, responseError);
-
-        function responseError(result) {
+        }, function(result) {
             UI.AlertError(result.data.message);
-        }
+        });
 
         $scope.avgConsumptionChange = function() {
             $scope.building.totalConsumption = $scope.building.acreage * $scope.building.avgConsumption;

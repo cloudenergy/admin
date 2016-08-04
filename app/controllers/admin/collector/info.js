@@ -1,4 +1,4 @@
-angular.module('app').controller('CollectorIndex', ["$scope", "$rootScope", "Collector", "API", "Auth", "Project", "UI", function($scope, $rootScope, Collector, API, Auth, Project, UI) {
+angular.module('app').controller('CollectorIndex', ["$scope", "Collector", "API", "Auth", "UI", function($scope, Collector, API, Auth, UI) {
     $scope.operateStatus = {
         create: {
             isEnable: false,
@@ -39,9 +39,9 @@ angular.module('app').controller('CollectorIndex', ["$scope", "$rootScope", "Col
             $scope.askingRemoveID = undefined;
         };
 
-        function GetCollector(projectID) {
+        function GetCollector() {
             API.Query(Collector.info, {
-                project: projectID
+                project: $scope.Project.selected._id
             }, (function(result) {
                 if (!result.err) {
                     $scope.items = result.result;
@@ -49,32 +49,9 @@ angular.module('app').controller('CollectorIndex', ["$scope", "$rootScope", "Col
             }));
         }
 
-        API.Query(Project.info, function(result) {
-            if (result.err) {
-                //error
-            } else {
-                $scope.projects = angular.isArray(result.result) ? result.result : [result.result];
-                var defaultProject = UI.GetPageItem('collector');
-                if (defaultProject) {
-                    defaultProject = _.find($scope.projects, function(project) {
-                        return project._id == defaultProject;
-                    });
-                    $scope.projects.selected = defaultProject._id;
-                } else {
-                    if ($scope.projects.length > 0) {
-                        $scope.projects.selected = $scope.projects[0]._id;
-                    }
-                }
-            }
-        })
-
         //选择项目后联动查询建筑
-        $scope.$watch('projects.selected', function(projectID) {
-            if (projectID) {
-                UI.PutPageItem('collector', projectID);
-                GetCollector(projectID);
-            }
-        });
+        $scope.$watch('Project.selected', GetCollector);
+
         $scope.$watch('currentPage', function(currentPage) {
             if (!currentPage) {
                 $scope.currentPage = UI.GetPageIndex();

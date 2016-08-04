@@ -1,4 +1,4 @@
-angular.module('app').controller('characterManage', ["$scope", "$stateParams", "$location", "UrlPath", "$cookies", "Account", "$q", "Project", "Building", "Customer", "Collector", "Sensor", "Auth", "API", "UI", "Character", function($scope, $stateParams, $location, UrlPath, $cookies, Account, $q, Project, Building, Customer, Collector, Sensor, Auth, API, UI, Character) {
+angular.module('app').controller('characterManage', ["$scope", "$stateParams", "$state", "UrlPath", "$cookies", "Account", "$q", "Project", "Building", "Customer", "Collector", "Sensor", "Auth", "API", "UI", "Character", function($scope, $stateParams, $state, UrlPath, $cookies, Account, $q, Project, Building, Customer, Collector, Sensor, Auth, API, UI, Character) {
 
     var characterAuthTree = {};
 
@@ -54,7 +54,7 @@ angular.module('app').controller('characterManage', ["$scope", "$stateParams", "
             $scope.character.rule = rule;
 
             var returnBack = function() {
-                $location.path('/admin/character/info')
+                $state.go('admin.character.info');
             };
 
             if (characterID) {
@@ -157,12 +157,12 @@ angular.module('app').controller('characterManage', ["$scope", "$stateParams", "
                                         desc: url.desc || '',
                                         select: false,
                                         nodes: new Array()
-                                    }
+                                    };
                                 }
                                 traverseNode.nodes.push(existsNode);
                             }
                             traverseNode = existsNode;
-                        })
+                        });
                     });
                     console.log(urlPath);
                     $scope.urlpath = [urlPath];

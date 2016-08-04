@@ -1,7 +1,7 @@
 /**
  * Created by Joey on 14-6-27.
  */
-angular.module('app').controller('SensorSelect', ["$scope", "$modalInstance", "API", "Sensor", "ProjectID", "SensorIDs", "Config", function($scope, $modalInstance, API, Sensor, ProjectID, SensorIDs, Config) {
+angular.module('app').controller('SensorSelect', ["$scope", "$uibModalInstance", "API", "Sensor", "ProjectID", "SensorIDs", "Config", function($scope, $uibModalInstance, API, Sensor, ProjectID, SensorIDs, Config) {
     var Sensors;
 
     $scope.Ok = function() {
@@ -29,13 +29,13 @@ angular.module('app').controller('SensorSelect', ["$scope", "$modalInstance", "A
                 }
             });
         }
-        $modalInstance.close({
+        $uibModalInstance.close({
             select: SelectSensors,
             unselect: UnSelectSensors
         });
     };
     $scope.Cancel = function() {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
     };
 
     $scope.SwitchSensor = function(e, sensor) {

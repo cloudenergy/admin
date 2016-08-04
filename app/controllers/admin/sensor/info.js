@@ -311,13 +311,13 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
             modalInstance = $uibModal.open({
                 templateUrl: 'importSensor.html',
                 size: 'md',
-                controller: ["$scope", "$timeout", "$modalInstance", "project", "building", "customer", function($scope, $timeout, $modalInstance, project, building, customer) {
+                controller: ["$scope", "$timeout", "$uibModalInstance", "project", "building", "customer", function($scope, $timeout, $uibModalInstance, project, building, customer) {
                     $scope.actionURL = '/api/import/importsensorchannel';
                     $scope.project = project;
                     $scope.building = building;
                     $scope.customer = customer;
                     $scope.ok = function() {
-                        $modalInstance.close();
+                        $uibModalInstance.close();
                         if (uploadCompleted) {
                             // $parentScope.currentPage += 1;
                             $parentScope.OnSearch();
@@ -334,7 +334,7 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
                         return false;
                     };
 
-                    $scope.cancel = $modalInstance.dismiss;
+                    $scope.cancel = $uibModalInstance.dismiss;
                 }],
                 resolve: {
                     project: function() {
