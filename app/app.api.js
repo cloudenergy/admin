@@ -50,7 +50,10 @@ angular.module('app').config(["$provide", function($provide) {
         }],
         //项目列表
         project: ['project', , {
-            info: {}
+            info: {},
+            add: {},
+            update: {},
+            delete: {}
         }],
         //提现
         withdraw: ['withdraw', , {
@@ -178,8 +181,11 @@ angular.module('app').config(["$provide", function($provide) {
                         }, action.params)
                     });
                 });
-                angular.forEach(this[name] = $resource.apply($resource, config), function(fn, action, request) {
+                angular.forEach(this[name] = $resource.apply($resource, config), function(fn, action, request, cancellable) {
                     this[action] = function() {
+                        if (cancellable = angular.isObject(arguments[0]) && arguments[0].cancellable) {
+                            delete arguments[0].cancellable;
+                        }
                         request = fn.apply(this, arguments);
                         // 若改请求已设置取消请求的参数，则将该请求缓存到变量中，
                         // 便于下一次路由触发后取消该次未完成的API请求
@@ -188,10 +194,10 @@ angular.module('app').config(["$provide", function($provide) {
                             $rootScope._api_request[$state.current._URL] = $rootScope._api_request[$state.current._URL] || {};
                             (function(origin, current) {
                                 if (origin) {
-                                    if (angular.equals(current, requestData.call({}, origin))) {
+                                    if (cancellable || angular.equals(current, requestData.call({}, origin))) {
                                         if (!origin.request.$resolved) {
                                             origin.request.$cancelRequest();
-                                            console.warn('duplicate request:', localStorage.testapi && 'testapi' || 'api', '/', name, '/', action);
+                                            !cancellable && console.warn('duplicate request:', localStorage.testapi && 'testapi' || 'api', '/', name, '/', action);
                                         }
                                     } else {
                                         $rootScope._api_request[$state.current._URL][name + '_' + action + '_' + Date.now()] = origin;

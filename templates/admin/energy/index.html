@@ -32,19 +32,19 @@
                 <input type="text" class="form-control" id="input-customer-freq" placeholder="输入传感器ID或名称进行查询" ng-model="sensorSearchKey">
             </div>
             <div class="col-lg-4">
-                <a class="btn btn-info" href="#" ng-click="onSearchSensor($event)">
+                <a class="btn btn-info" href="javascript:void(0)" ng-click="onSearchSensor($event)">
                     <span class="glyphicon glyphicon-search"></span> 查询
                 </a>
             </div>
             <div class="col-lg-2 text-right">
-                <a class="btn btn-success" href="#" ng-click="OnSelectAll($event)">
+                <a class="btn btn-success" href="javascript:void(0)" ng-click="OnSelectAll($event)">
                     <span class="glyphicon glyphicon-asterisk"></span>全选
                 </a>
             </div>
         </div>
         <div align="center" class="" style="position: relative; padding: 15px 30px 0px 30px;">
             <div class="row-fluid list-group">
-                <a href="#" class="list-group-item" ng-class="sensor.isEnable ? 'active':''" ng-click="SwitchSensor($event, sensor)" ng-repeat="sensor in viewOfSensors | startFrom: (currentPage-1) * popPageSize | limitTo: popPageSize">
+                <a href="javascript:void(0)" class="list-group-item" ng-class="sensor.isEnable ? 'active':''" ng-click="SwitchSensor($event, sensor)" ng-repeat="sensor in viewOfSensors | startFrom: (currentPage-1) * popPageSize | limitTo: popPageSize">
                     {{sensor.title}}&nbsp;{{sensor.channel}}
                 </a>
             </div>

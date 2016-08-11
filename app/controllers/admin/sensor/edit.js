@@ -4,7 +4,7 @@ angular.module('app').controller('SensorEdit', ["$scope", "$stateParams", "$stat
         var selectEnergycategory;
 
         $scope.submit = function(e) {
-            var sensor = angular.copy($scope.sensor)
+            var sensor = angular.copy($scope.sensor);
 
             //if(!selectEnergycategory){
             //    alert('请选择传感器能耗类型');
@@ -23,41 +23,19 @@ angular.module('app').controller('SensorEdit', ["$scope", "$stateParams", "$stat
             var buildingID = sensor.building;
 
             var UpdateSensor = function() {
-                //
-                console.log(sensor);
                 API.Query(Sensor.update, sensor, function(result) {
-                    if (result.err) {} else {
+                    if (!result.err) {
                         $state.go('admin.sensor.info');
                     }
-                })
+                });
             };
-
-            {
-                var selectArray = [];
-                var recursionSelect = function(node) {
-                    if (!node || !node.nodes) {
-                        return;
-                    }
-                    _.each(node.nodes, function(n) {
-                        if (n.isSelect) {
-                            selectArray.push(n.id);
-                        }
-                        recursionSelect(n);
-                    });
-                };
-
-                // recursionSelect($scope.viewOfCustomer && $scope.viewOfCustomer[0] || null);
-                // sensor.socity = selectArray;
-            }
 
             if ($scope.sid != sensor.sid) {
                 //check if sid is exists
                 API.Query(Sensor.info, {
                     sids: [sensor.sid]
                 }, function(result) {
-                    console.log(result);
                     if (result.result && result.result.length > 0) {
-                        //
                         alert('传感器标识已经存在');
                         return;
                     } else {
@@ -77,7 +55,6 @@ angular.module('app').controller('SensorEdit', ["$scope", "$stateParams", "$stat
         }, function(res) {
             if (res.err) {} else {
                 $scope.sensor = res.result[0];
-                console.log($scope.sensor);
                 $scope.sid = $scope.sensor.sid;
                 $scope.building = $scope.sensor.building;
 
@@ -90,7 +67,6 @@ angular.module('app').controller('SensorEdit', ["$scope", "$stateParams", "$stat
                         API.Query(Energy.info, {
                             project: $scope.building.project
                         }, function(result) {
-                            //                console.log(result);
                             if (result.err) {} else {
                                 var energy = result.result;
                                 if ($scope.sensor.energyPath) {
@@ -135,60 +111,8 @@ angular.module('app').controller('SensorEdit', ["$scope", "$stateParams", "$stat
                                 }
                             }
                         });
-                        //显示社会属性
-                        /*
-                        API.Query(Customer.info, {
-                            project: $scope.building.project
-                        }, function(result) {
-                            //                console.log(result);
-                            if (result.err) {} else {
-                                if (!result || !result.result) {
-                                    return;
-                                }
-                                var socities = result.result;
-                                if (socities.socities) {
-                                    //
-                                    _.each($scope.sensor.socity, function(socity) {
-                                        var path = socity.split('|') || [socity];
-                                        var nodePath;
-                                        var node = socities.socities;
-                                        _.each(path, function(subPath) {
-                                            if (!node) {
-                                                return;
-                                            }
-                                            if (nodePath) {
-                                                nodePath += '|' + subPath;
-                                            } else {
-                                                nodePath = subPath;
-                                            }
-                                            node = node[nodePath];
-                                            if (node) {
-                                                node.isSelect = true;
-                                                node = node.childrens;
-                                            }
-                                        });
-                                    });
-
-                                    var viewOfCustomer = BuildSocitiesTree(null, socities.socities, 1);
-                                    $scope.viewOfCustomer = [{
-                                        nodes: viewOfCustomer,
-                                        title: '社会属性',
-                                        level: 0
-                                    }];
-                                    console.log($scope.viewOfCustomer);
-                                } else {
-                                    $scope.viewOfCustomer = [{
-                                        nodes: [],
-                                        title: '社会属性',
-                                        level: 0
-                                    }];
-                                }
-
-                            }
-                        });
-                        */
                     }
-                })
+                });
             }
         });
 
@@ -212,7 +136,7 @@ angular.module('app').controller('SensorEdit', ["$scope", "$stateParams", "$stat
                 socitiesArray.push(v);
             });
             socitiesArray.sort(function(a, b) {
-                return a.title > b.title ? 1 : -1
+                return a.title > b.title ? 1 : -1;
             });
             return socitiesArray;
         }
@@ -237,13 +161,13 @@ angular.module('app').controller('SensorEdit', ["$scope", "$stateParams", "$stat
                 energyArray.push(v);
             });
             energyArray.sort(function(a, b) {
-                return a.title > b.title ? 1 : -1
+                return a.title > b.title ? 1 : -1;
             });
             return energyArray;
         }
 
         function responseError(result) {
-            UI.AlertError(result.data.message)
+            UI.AlertError(result.data.message);
         }
 
         $scope.onChoice = function(node) {
@@ -257,7 +181,7 @@ angular.module('app').controller('SensorEdit', ["$scope", "$stateParams", "$stat
                     groupSelect(n, isSelect);
                     n.isSelect = isSelect;
                 });
-                node.isSelect = isSelect
+                node.isSelect = isSelect;
             };
 
             groupSelect(node, node.isSelect);
@@ -267,7 +191,6 @@ angular.module('app').controller('SensorEdit', ["$scope", "$stateParams", "$stat
             if (node.nodes) {
                 return;
             }
-            console.log(node);
             if (selectEnergycategory) {
                 selectEnergycategory.isSelect = false;
             }
@@ -284,6 +207,6 @@ angular.module('app').controller('SensorEdit', ["$scope", "$stateParams", "$stat
         $scope.OnSelectPayMode = function(e, mode) {
             e.preventDefault();
             $scope.sensor.paystatus = mode;
-        }
+        };
     });
 }]);

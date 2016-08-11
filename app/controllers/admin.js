@@ -71,12 +71,12 @@ angular.module('app').controller('admin', ["$scope", "$rootScope", "$cookies", "
         }],
         promiseList = [];
 
-    self.layoutLoaded = {};
+    $rootScope.layoutLoaded = {};
 
-    self.app = {
+    $rootScope.app = {
         name: document.title,
         year: (new Date()).getFullYear(),
-        layout: {
+        layout: angular.extend({
             isSmallSidebar: false,
             isChatOpen: false,
             isFixedHeader: true,
@@ -89,7 +89,7 @@ angular.module('app').controller('admin', ["$scope", "$rootScope", "$cookies", "
             isQuickLaunch: false,
             sidebarTheme: '',
             headerTheme: ''
-        },
+        }, $localStorage.layout || {}),
         isMessageOpen: false,
         isConfigOpen: false
     };
@@ -101,14 +101,8 @@ angular.module('app').controller('admin', ["$scope", "$rootScope", "$cookies", "
 
     $scope.wwwLink = location.origin.replace('preadmin.', 'pre.').replace('admin.', 'www.');
 
-    if ($localStorage.layout) {
-        self.app.layout = $localStorage.layout;
-    } else {
-        $localStorage.layout = self.app.layout;
-    }
-
-    $scope.$watch('self.app.layout', function() {
-        $localStorage.layout = self.app.layout;
+    $scope.$watchCollection('app.layout', function(layout) {
+        $localStorage.layout = layout;
     });
 
     $scope.$watch('$state.current.name', function(name) {
@@ -117,13 +111,13 @@ angular.module('app').controller('admin', ["$scope", "$rootScope", "$cookies", "
 
     $scope.$on('$includeContentRequested', function(event, src) {
         if (/^templates\/common/.test(src)) {
-            self.layoutLoaded[src] = $q.defer();
-            promiseList.push(self.layoutLoaded[src].promise);
+            $rootScope.layoutLoaded[src] = $q.defer();
+            promiseList.push($rootScope.layoutLoaded[src].promise);
         }
     });
 
     $scope.$on('$includeContentLoaded', function(event, src) {
-        /^templates\/common/.test(src) && self.layoutLoaded[src] && self.layoutLoaded[src].resolve();
+        /^templates\/common/.test(src) && $rootScope.layoutLoaded[src] && $rootScope.layoutLoaded[src].resolve();
     });
 
     $q.all(promiseList.concat([
@@ -160,30 +154,25 @@ angular.module('app').controller('admin', ["$scope", "$rootScope", "$cookies", "
 
         }).$promise,
         $api.project.info(function(data) {
-            EMAPP.Project = angular.isArray(data.result) ? data.result : data.result && [data.result] || [];
+            angular.forEach(EMAPP.Project = angular.isArray(data.result) ? data.result : data.result && [data.result] || [], function(item) {
+                EMAPP.Project[item._id] = item;
+            });
         }).$promise
     ])).then(function() {
 
         if (!EMAPP.Project.length) return;
 
-        var KEY_PROJECT = EMAPP.Account._id + '_root_project_selected',
-            selected = $localStorage[KEY_PROJECT];
+        var KEY_PROJECT = EMAPP.Account._id + '_root_project_selected';
 
-        angular.forEach(EMAPP.Project, function(item) {
-            EMAPP.Project[item._id] = item;
-            if (selected === item._id) {
-                EMAPP.Project.selected = item;
-            }
-        });
+        EMAPP.Project.selected = EMAPP.Project[$localStorage[KEY_PROJECT]] || EMAPP.Project[0];
 
-        EMAPP.Project.selected = EMAPP.Project.selected || EMAPP.Project[0] || {};
         $rootScope.Project = EMAPP.Project;
 
         $rootScope.$watch('Project.selected', function(item) {
             $localStorage[KEY_PROJECT] = item._id;
         });
 
-        self.layoutLoaded = true;
+        $rootScope.layoutLoaded = true;
 
     });
 

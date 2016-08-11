@@ -61,7 +61,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }]
     }).state('admin', {
         abstract: true,
-        templateUrl: 'templates/common/layout.html?rev=7ebc72f81b',
+        templateUrl: 'templates/common/layout.html?rev=730882f633',
         url: '/admin',
         controller: 'admin',
         controllerAs: 'self',
@@ -86,7 +86,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                         'app/services/api.min.js?rev=0abc6298e1',
                         'app/services/authentication.min.js?rev=0f36778387',
                         'app/services/account.min.js?rev=41e7b7bd99',
-                        'app/controllers/admin.min.js?rev=841cc8f64b'
+                        'app/controllers/admin.min.js?rev=fb56c306c3'
                     ]
                 }]);
             }]
@@ -113,22 +113,24 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
     }).state('admin.character.info', {
         url: '/info',
         data: {
+            projectHide: true,
             title: '角色管理'
         },
         controller: 'characterInfo',
-        templateUrl: 'templates/admin/character/info.html?rev=2e1d5618ab',
+        templateUrl: 'templates/admin/character/info.html?rev=2b07cb85bc',
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
-                return $ocLazyLoad.load('app/controllers/admin/character/info.min.js?rev=9c58c5d47e');
+                return $ocLazyLoad.load('app/controllers/admin/character/info.min.js?rev=fcc92037fe');
             }]
         }
     }).state('admin.character.manage', {
         url: '/manage/:id',
         data: {
+            projectHide: true,
             title: '角色编辑'
         },
         controller: 'characterManage',
-        templateUrl: 'templates/admin/character/manage.html?rev=25b024ffba',
+        templateUrl: 'templates/admin/character/manage.html?rev=e2c7235375',
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([{
@@ -139,7 +141,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                 }, {
                     files: [
                         static + 'libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js',
-                        'app/controllers/admin/character/manage.min.js?rev=548d9d2392',
+                        'app/controllers/admin/character/manage.min.js?rev=3d5c1e198e',
                         'app/services/urlpath.min.js?rev=2dd7ea139b',
                         'app/services/project.min.js?rev=0a6c0a1013',
                         'app/services/building.min.js?rev=591e1b39a8',
@@ -164,21 +166,22 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.project.info', {
         url: '/info',
-        // controller : 'projectInfo',
         data: {
+            projectHide: true,
             title: '项目管理'
         },
         controller: 'projectInfo', // This view will use AppCtrl loaded below in the resolve
-        templateUrl: 'templates/admin/project/info.html?rev=3f3358742d',
+        templateUrl: 'templates/admin/project/info.html?rev=cf0afcd3ec',
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
-                return $ocLazyLoad.load('app/controllers/admin/project/info.min.js?rev=2e35b5c694');
+                return $ocLazyLoad.load('app/controllers/admin/project/info.min.js?rev=ec287f91fa');
             }]
         }
     }).state('admin.project.create', {
         url: '/create',
         templateUrl: 'templates/admin/project/create.html?rev=81556b33f7',
         data: {
+            projectHide: true,
             title: '创建项目'
         },
         controller: 'projectCreate',
@@ -194,6 +197,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         url: '/edit/:id',
         templateUrl: 'templates/admin/project/edit.html?rev=514876ae16',
         data: {
+            projectHide: true,
             title: '编辑项目'
         },
         controller: 'projectEdit',
@@ -223,8 +227,9 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
     }).state('admin.account.info', {
         url: '/info',
         controller: 'accountInfo',
-        templateUrl: 'templates/admin/account/info.html?rev=a8e54e4e5a',
+        templateUrl: 'templates/admin/account/info.html?rev=89538ef664',
         data: {
+            projectHide: true,
             title: '账户管理'
         },
         resolve: {
@@ -237,6 +242,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         controller: 'accountCreate',
         templateUrl: 'templates/admin/account/create.html?rev=2f0926a077',
         data: {
+            projectHide: true,
             title: '新建账户'
         },
         resolve: {
@@ -251,6 +257,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         controller: 'accountEdit',
         templateUrl: 'templates/admin/account/edit.html?rev=ab058fc974',
         data: {
+            projectHide: true,
             title: '编辑账户'
         },
         resolve: {
@@ -263,8 +270,9 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
     }).state('admin.account.roleres', {
         url: '/roleres/:id',
         controller: 'accountroleres',
-        templateUrl: 'templates/admin/account/roleres.html?rev=455ae63d45',
+        templateUrl: 'templates/admin/account/roleres.html?rev=5025cfdad7',
         data: {
+            projectHide: true,
             title: '账户权限'
         },
         resolve: {
@@ -301,7 +309,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.billingservice.info', {
         url: '/info',
-        templateUrl: 'templates/admin/billingservice/info.html?rev=f36e327c01',
+        templateUrl: 'templates/admin/billingservice/info.html?rev=548b00ee79',
         data: {
             title: '计费策略'
         },
@@ -313,7 +321,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.billingservice.manage', {
         url: '/manage/:id',
-        templateUrl: 'templates/admin/billingservice/manage.html?rev=6b7138eb20',
+        templateUrl: 'templates/admin/billingservice/manage.html?rev=9ce291753b',
         data: {
             projectDisabled: true,
             title: '编辑策略'
@@ -329,7 +337,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.billingservice.add', {
         url: '/add',
-        templateUrl: 'templates/admin/billingservice/add.html?rev=17ba9af4dc',
+        templateUrl: 'templates/admin/billingservice/add.html?rev=f6c58c61dc',
         data: {
             projectDisabled: true,
             title: '添加策略'
@@ -361,8 +369,9 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
     }).state('admin.urlpath.info', {
         url: '/info',
         controller: 'urlpathInfo',
-        templateUrl: 'templates/admin/urlpath/index.html?rev=531adafb03',
+        templateUrl: 'templates/admin/urlpath/index.html?rev=9b5dee6afa',
         data: {
+            projectHide: true,
             title: '地址管理'
         },
         resolve: {
@@ -434,7 +443,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             }]
         }
     }).state('admin.department', {
-        templateUrl: 'templates/admin/department/base.html?rev=b72ea2a3b5',
+        templateUrl: 'templates/admin/department/base.html?rev=35daa3fa2d',
         abstract: true,
         url: '/department',
         data: {
@@ -451,7 +460,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.department.info', {
         url: '/info',
-        templateUrl: 'templates/admin/department/info.html?rev=eac23d24dc',
+        templateUrl: 'templates/admin/department/info.html?rev=8ca2806ad7',
         data: {
             title: '户管理'
         },
@@ -643,7 +652,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.energy.index', {
         url: '/index',
-        templateUrl: 'templates/admin/energy/index.html?rev=86acc26699',
+        templateUrl: 'templates/admin/energy/index.html?rev=21ef96c8a2',
         data: {
             title: '能耗分类'
         },
@@ -684,8 +693,9 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.energycategory.info', {
         url: '/info',
-        templateUrl: 'templates/admin/energycategory/info.html?rev=52476c5059',
+        templateUrl: 'templates/admin/energycategory/info.html?rev=717bcc2be9',
         data: {
+            projectHide: true,
             title: '能耗配置'
         },
         controller: 'energycategoryinfo',
@@ -701,6 +711,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         url: '/add',
         templateUrl: 'templates/admin/energycategory/add.html?rev=7a3d3438ff',
         data: {
+            projectHide: true,
             title: '添加配置'
         },
         controller: 'energycategoryadd',
@@ -716,6 +727,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         url: '/update/:id',
         templateUrl: 'templates/admin/energycategory/update.html?rev=4347c5d585',
         data: {
+            projectHide: true,
             title: '编辑配置'
         },
         controller: 'energycategoryupdate',
@@ -736,50 +748,48 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         },
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
-                return $ocLazyLoad.load([
-                    'app/services/building.min.js?rev=591e1b39a8',
-                    'app/services/sensor.min.js?rev=8d65776b26'
-                ]);
+                return $ocLazyLoad.load([{
+                    insertBefore: '#load_styles_before',
+                    files: [
+                        static + 'libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.css',
+                        static + 'libs/angular-xeditable-0.2.0/dist/css/xeditable.min.css'
+                    ]
+                }, {
+                    files: [
+                        static + 'libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js',
+                        static + 'libs/angular-xeditable-0.2.0/dist/js/xeditable.min.js',
+                        static + 'libs/ngUpload-0.5.18/ng-upload.min.js',
+                        'app/services/building.min.js?rev=591e1b39a8',
+                        'app/services/sensor.min.js?rev=8d65776b26'
+                    ]
+                }]);
             }]
         }
     }).state('admin.sensor.info', {
         url: '/info',
-        templateUrl: 'templates/admin/sensor/info.html?rev=f035b19809',
+        templateUrl: 'templates/admin/sensor/info.html?rev=bc72f55ece',
         data: {
             title: '传感器管理'
         },
         controller: 'SensorIndex',
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
-                return $ocLazyLoad.load([{
-                    insertBefore: '#load_styles_before',
-                    files: [
-                        static + 'libs/angular-xeditable-0.2.0/dist/css/xeditable.min.css'
-                    ]
-                }, {
-                    name: 'ngUpload',
-                    files: [
-                        static + 'libs/ngUpload-0.5.18/ng-upload.min.js'
-                    ]
-                }, {
-                    name: 'xeditable',
-                    files: [
-                        static + 'libs/angular-xeditable-0.2.0/dist/js/xeditable.min.js',
-                        'app/services/driver.min.js?rev=10fba7c5a6',
-                        'app/services/control.min.js?rev=9fbeff12b2',
-                        'app/services/sensorAttrib.min.js?rev=fff9d59294',
-                        'app/controllers/admin/sensor/sensorSync.min.js?rev=84b05a344b',
-                        'app/controllers/admin/sensor/sensorAttribute.min.js?rev=a19a27efc4',
-                        'app/controllers/admin/sensor/info.min.js?rev=4212a17e5d',
-                        'app/directives/jstree.min.js?rev=2a332f4b56'
-                    ]
-                }]);
+                return $ocLazyLoad.load([
+                    'app/services/driver.min.js?rev=10fba7c5a6',
+                    'app/services/control.min.js?rev=9fbeff12b2',
+                    'app/services/sensorAttrib.min.js?rev=fff9d59294',
+                    'app/controllers/admin/sensor/sensorSync.min.js?rev=84b05a344b',
+                    'app/controllers/admin/sensor/sensorAttribute.min.js?rev=a19a27efc4',
+                    'app/controllers/admin/sensor/info.min.js?rev=4212a17e5d',
+                    'app/directives/jstree.min.js?rev=2a332f4b56'
+                ]);
             }]
         }
     }).state('admin.sensor.create', {
         url: '/create/:building',
-        templateUrl: 'templates/admin/sensor/create.html?rev=b817ee32e9',
+        templateUrl: 'templates/admin/sensor/create.html?rev=1d1fa86cef',
         data: {
+            projectDisabled: true,
             title: '添加传感器'
         },
         controller: 'SensorCreate',
@@ -789,14 +799,15 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                     'app/services/collector.min.js?rev=946b23467a',
                     'app/services/energy.min.js?rev=ef3fe92cff',
                     'app/services/customer.min.js?rev=aad33b141e',
-                    'app/controllers/admin/sensor/create.min.js?rev=51c15cd35f'
+                    'app/controllers/admin/sensor/create.min.js?rev=faf2dde51c'
                 ]);
             }]
         }
     }).state('admin.sensor.edit', {
         url: '/edit/:id',
-        templateUrl: 'templates/admin/sensor/edit.html?rev=07863d3abf',
+        templateUrl: 'templates/admin/sensor/edit.html?rev=d176d08040',
         data: {
+            projectDisabled: true,
             title: '编辑传感器'
         },
         controller: 'SensorEdit',
@@ -806,7 +817,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                     'app/services/collector.min.js?rev=946b23467a',
                     'app/services/energy.min.js?rev=ef3fe92cff',
                     'app/services/customer.min.js?rev=aad33b141e',
-                    'app/controllers/admin/sensor/edit.min.js?rev=d1219304d9'
+                    'app/controllers/admin/sensor/edit.min.js?rev=38ed4bd438'
                 ]);
             }]
         }
@@ -827,7 +838,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.eventcategory.info', {
         url: '/info',
-        templateUrl: 'templates/admin/eventcategory/info.html?rev=bad54e7653',
+        templateUrl: 'templates/admin/eventcategory/info.html?rev=d2155b6165',
         data: {
             title: '事件配置'
         },
@@ -841,8 +852,9 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.eventcategory.add', {
         url: '/add',
-        templateUrl: 'templates/admin/eventcategory/add.html?rev=76a7a8f5e0',
+        templateUrl: 'templates/admin/eventcategory/add.html?rev=2519e20be6',
         data: {
+            projectDisabled: true,
             title: '事件添加'
         },
         controller: 'eventcategoryAdd',
@@ -857,6 +869,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         url: '/update/:id',
         templateUrl: 'templates/admin/eventcategory/update.html?rev=74495db792',
         data: {
+            projectDisabled: true,
             title: '事件编辑'
         },
         controller: 'eventcategoryUpdate',
@@ -1129,7 +1142,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.property.index', {
         url: '/index',
-        templateUrl: 'templates/admin/property/index.html?rev=9a0378e5e1',
+        templateUrl: 'templates/admin/property/index.html?rev=448d45b291',
         data: {
             title: '物业财务'
         },
@@ -1139,7 +1152,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
                     'app/directives/distpicker.min.js?rev=47a8e0bc0d',
-                    'app/controllers/admin/property/index.min.js?rev=34025ffe9e'
+                    'app/controllers/admin/property/index.min.js?rev=1ae7f11b09'
                 ]);
             }]
         }
@@ -1160,7 +1173,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.property.record', {
         url: '/record/:tab/:category',
-        templateUrl: 'templates/admin/property/record.html?rev=5127dfd3a3',
+        templateUrl: 'templates/admin/property/record.html?rev=fcc9d0802f',
         data: {
             title: '收支明细'
         },
@@ -1169,7 +1182,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/property/record.min.js?rev=61bd18a805'
+                    'app/controllers/admin/property/record.min.js?rev=54b0857fc3'
                 ]);
             }]
         }

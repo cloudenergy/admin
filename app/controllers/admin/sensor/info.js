@@ -69,15 +69,15 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
                         //     };
                         // }
                         if (Object.keys(item.child).length) {
-                            item.icon = 'glyphicon glyphicon-th-list'
+                            item.icon = 'glyphicon glyphicon-th-list';
                         } else {
-                            item.icon = 'glyphicon glyphicon-file'
+                            item.icon = 'glyphicon glyphicon-file';
                         }
                         forEach(item.child, item.id);
                         $scope.customer.core.data.push(item);
                     });
                 }(data.result, 'ROOT'));
-            }).$promise
+            }).$promise;
         }
 
         //建筑属性
@@ -95,7 +95,7 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
                 // }];
                 $scope.buildings = [];
                 angular.forEach(data.result, function(item) {
-                    this.push(item)
+                    this.push(item);
                 }, $scope.buildings);
 
                 $scope.buildings.select = function() {
@@ -105,12 +105,12 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
 
                 angular.forEach($scope.buildings, function(item) {
                     if (item._id === cacheId) {
-                        $scope.buildings.selected = item._id
+                        $scope.buildings.selected = item._id;
                     }
                 });
-                $scope.buildings.selected = $scope.buildings.selected || ($scope.buildings[0] || {})._id
+                $scope.buildings.selected = $scope.buildings.selected || ($scope.buildings[0] || {})._id;
 
-            }).$promise
+            }).$promise;
         }
 
         //设备接口
@@ -128,16 +128,16 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
                     this.push({
                         id: item.id,
                         title: item.name
-                    })
+                    });
                 }, $scope.DeviceTypes);
 
-                $scope.DeviceTypes.selected = $scope.DeviceTypes.selected || ($scope.DeviceTypes[0] || {}).id
+                $scope.DeviceTypes.selected = $scope.DeviceTypes.selected || ($scope.DeviceTypes[0] || {}).id;
 
                 $scope.DeviceTypes.select = function() {
                     $scope.OnSearch();
                 };
 
-            }).$promise
+            }).$promise;
         }
 
         //获取传感器
@@ -156,7 +156,7 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
             }, function(data) {
                 data = data.result[$scope.Project.selected._id];
                 angular.forEach(data.detail, function(item) {
-                    this.push(item)
+                    this.push(item);
                 }, $scope.viewOfSensor = []);
                 $scope.pageSize = data.paging.pagesize;
                 $scope.itemsTotal = data.paging.count;
@@ -205,7 +205,7 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
         };
 
         $scope.OnMaskAll = function(reverse) {
-            if (!confirm("是否确定" + (reverse ? '屏蔽' : '启用') + "所有通道？")) {
+            if (!confirm('是否确定' + (reverse ? '屏蔽' : '启用') + '所有通道？')) {
                 return;
             }
 
@@ -216,8 +216,8 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
                         mask: reverse
                     }, function() {
                         channel.mask = reverse;
-                    })
-                })
+                    });
+                });
             });
         };
 
@@ -249,7 +249,7 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
 
         $scope.OnSyncAll = function() {
 
-            if (!confirm("是否确定同步所有数据异常的传感器？")) {
+            if (!confirm('是否确定同步所有数据异常的传感器？')) {
                 return;
             }
 
@@ -259,7 +259,7 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
                 if (result.err) {
                     console.error(result);
                 } else {
-                    alert("同步完成");
+                    alert('同步完成');
                     $scope.OnSearch();
                 }
             });
@@ -271,10 +271,10 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
                 id: channel.id
             }, function(result) {
                 // $scope.items.splice(removeIndex, 1);
-                delete sensor.channels[channel.funcid]
+                delete sensor.channels[channel.funcid];
             }, function(result) {
-                UI.AlertError(result.data.message)
-            })
+                UI.AlertError(result.data.message);
+            });
         };
 
         //传感器属性
@@ -287,13 +287,13 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
                     SensorSUID: function() {
                         var sensorGUID = API.ParseSensorID(sensor.id);
                         if (sensorGUID) {
-                            return sensorGUID.buildingID + sensorGUID.gatewayID + sensorGUID.addrID + sensorGUID.meterID
+                            return sensorGUID.buildingID + sensorGUID.gatewayID + sensorGUID.addrID + sensorGUID.meterID;
                         } else {
-                            return null
+                            return null;
                         }
                     },
                     ProjectID: function() {
-                        return $scope.Project.selected._id
+                        return $scope.Project.selected._id;
                     }
                 }
             });
@@ -307,47 +307,47 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
 
     $scope.importSensor = function() {
         var $parentScope = $scope,
-            uploadCompleted = false,
-            modalInstance = $uibModal.open({
-                templateUrl: 'importSensor.html',
-                size: 'md',
-                controller: ["$scope", "$timeout", "$uibModalInstance", "project", "building", "customer", function($scope, $timeout, $uibModalInstance, project, building, customer) {
-                    $scope.actionURL = '/api/import/importsensorchannel';
-                    $scope.project = project;
-                    $scope.building = building;
-                    $scope.customer = customer;
-                    $scope.ok = function() {
-                        $uibModalInstance.close();
-                        if (uploadCompleted) {
-                            // $parentScope.currentPage += 1;
-                            $parentScope.OnSearch();
-                        }
-                    };
-
-                    $scope.OnUploadComplete = function(res) {
-                        if (res.code) {
-                            UI.AlertError(res.result, res.message);
-                        } else {
-                            uploadCompleted = true;
-                            UI.AlertSuccess('导入成功');
-                        }
-                        return false;
-                    };
-
-                    $scope.cancel = $uibModalInstance.dismiss;
-                }],
-                resolve: {
-                    project: function() {
-                        return $scope.Project.selected._id
-                    },
-                    building: function() {
-                        return $scope.buildings.selected
-                    },
-                    customer: function() {
-                        return $scope.customer.selected
+            uploadCompleted = false;
+        $uibModal.open({
+            templateUrl: 'importSensor.html',
+            size: 'md',
+            controller: ["$scope", "$timeout", "$uibModalInstance", "project", "building", "customer", function($scope, $timeout, $uibModalInstance, project, building, customer) {
+                $scope.actionURL = '/api/import/importsensorchannel';
+                $scope.project = project;
+                $scope.building = building;
+                $scope.customer = customer;
+                $scope.ok = function() {
+                    $uibModalInstance.close();
+                    if (uploadCompleted) {
+                        // $parentScope.currentPage += 1;
+                        $parentScope.OnSearch();
                     }
+                };
+
+                $scope.OnUploadComplete = function(res) {
+                    if (res.code) {
+                        UI.AlertError(res.result, res.message);
+                    } else {
+                        uploadCompleted = true;
+                        UI.AlertSuccess('导入成功');
+                    }
+                    return false;
+                };
+
+                $scope.cancel = $uibModalInstance.dismiss;
+            }],
+            resolve: {
+                project: function() {
+                    return $scope.Project.selected._id;
+                },
+                building: function() {
+                    return $scope.buildings.selected;
+                },
+                customer: function() {
+                    return $scope.customer.selected;
                 }
-            });
+            }
+        });
     };
 
 }]);

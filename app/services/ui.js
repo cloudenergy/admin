@@ -3,13 +3,13 @@ angular.module('app').factory('UI', ["$rootScope", function($rootScope) {
     $rootScope.pageItemCache = {};
     return {
         AlertSuccess: function(message, title) {
-            swal(title || "成功", message || '操作成功', "success");
+            swal(title || '成功', message || '操作成功', 'success');
         },
         AlertError: function(message, title) {
-            swal(title || "失败", message || '操作失败', "error");
+            swal(title || '失败', message || '操作失败', 'error');
         },
         AlertWarning: function(message, title) {
-            swal(title || "警告", message || '操作异常', "warning");
+            swal(title || '警告', message || '操作异常', 'warning');
         },
         //分页索引缓存
         PutPageIndex: function(key, index) {
@@ -33,5 +33,5 @@ angular.module('app').factory('UI', ["$rootScope", function($rootScope) {
             key = key || '.common';
             return $rootScope.pageItemCache[key] || null;
         }
-    }
+    };
 }]);

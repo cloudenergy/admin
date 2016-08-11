@@ -25,29 +25,9 @@ angular.module('app').controller('SensorCreate', ["$scope", "$state", "Sensor", 
                 sensor.energyPath = selectEnergycategory.id;
             }
 
-            {
-                var selectArray = [];
-                var recursionSelect = function(node) {
-                    if (!node || !node.nodes) {
-                        return;
-                    }
-                    _.each(node.nodes, function(n) {
-                        if (n.isSelect) {
-                            selectArray.push(n.id);
-                        }
-                        recursionSelect(n);
-                    });
-                };
-
-                // recursionSelect($scope.viewOfCustomer[0]);
-                // sensor.socity = selectArray;
-            }
-
-            // console.log(sensor);
             API.Query(Sensor.info, {
                 sids: [sensor.sid]
             }, function(result) {
-                console.log(result);
                 if (result.result && result.result.length > 0) {
                     //
                     $scope.alert = {
@@ -63,46 +43,46 @@ angular.module('app').controller('SensorCreate', ["$scope", "$state", "Sensor", 
                         } else {
                             $state.go('admin.sensor.info');
                         }
-                    }, responseError)
+                    }, responseError);
                 }
             }, function(err) {
                 console.log(err);
             });
 
             function pickEnergyPath(trees) {
-                var i, l, input, tree, subtree,
-                    path = []
+                var input, tree, subtree,
+                    path = [];
 
                 for (var i = 0, l = trees.length; i < l; i++) {
-                    tree = trees.eq(i)
-                    input = tree.find('input').eq(0)
-                    subtree = tree.children('tree').children().children()
+                    tree = trees.eq(i);
+                    input = tree.find('input').eq(0);
+                    subtree = tree.children('tree').children().children();
 
                     if (input[0].checked) {
-                        path.push(i)
-                        path.push(input.val())
-                        break
+                        path.push(i);
+                        path.push(input.val());
+                        break;
                     }
 
                     if (subtree) {
-                        var subpath = pickEnergyPath(subtree)
+                        var subpath = pickEnergyPath(subtree);
 
                         if (subpath.length) {
-                            path.push(i)
-                            path = path.concat(subpath)
-                            break
+                            path.push(i);
+                            path = path.concat(subpath);
+                            break;
                         }
                     }
                 }
 
-                return path
+                return path;
             }
         };
 
         API.Query(Building.info, {
             id: $scope.buildingID
         }, function(result) {
-            if (result.err) {} else {
+            if (!result.err) {
                 $scope.building = result.result;
                 if ($scope.building) {
                     $scope.sensor.building = $scope.building;
@@ -115,8 +95,7 @@ angular.module('app').controller('SensorCreate', ["$scope", "$state", "Sensor", 
                 API.Query(Energy.info, {
                     project: $scope.building.project._id
                 }, function(result) {
-                    console.log(result);
-                    if (result.err) {} else {
+                    if (!result.err) {
                         var energy = result.result;
                         if (energy) {
                             var viewOfEnergy = BuildEnergyTree(null, energy.energy, 1);
@@ -134,33 +113,6 @@ angular.module('app').controller('SensorCreate', ["$scope", "$state", "Sensor", 
                         }
                     }
                 });
-                //显示社会属性
-                /*
-                API.Query(Customer.info, {
-                    project: $scope.building.project._id
-                }, function(result) {
-                    //                console.log(result);
-                    if (result.err) {} else {
-                        var socities = result.result;
-
-                        if (socities) {
-                            var viewOfCustomer = BuildSocitiesTree(null, socities.socities, 1);
-                            $scope.viewOfCustomer = [{
-                                nodes: viewOfCustomer,
-                                title: '社会属性',
-                                level: 0
-                            }];
-                            //                        console.log($scope.viewOfCustomer);
-                        } else {
-                            $scope.viewOfCustomer = [{
-                                nodes: [],
-                                title: '社会属性',
-                                level: 0
-                            }];
-                        }
-                    }
-                });
-                */
             }
         }, responseError);
 
@@ -184,7 +136,7 @@ angular.module('app').controller('SensorCreate', ["$scope", "$state", "Sensor", 
                 socitiesArray.push(v);
             });
             socitiesArray.sort(function(a, b) {
-                return a.title > b.title ? 1 : -1
+                return a.title > b.title ? 1 : -1;
             });
             return socitiesArray;
         }
@@ -209,7 +161,7 @@ angular.module('app').controller('SensorCreate', ["$scope", "$state", "Sensor", 
                 energyArray.push(v);
             });
             energyArray.sort(function(a, b) {
-                return a.title > b.title ? 1 : -1
+                return a.title > b.title ? 1 : -1;
             });
             return energyArray;
         }
@@ -240,7 +192,7 @@ angular.module('app').controller('SensorCreate', ["$scope", "$state", "Sensor", 
         $scope.sensorsocities = [];
 
         function responseError(result) {
-            $scope.alertError(result.data.message)
+            $scope.alertError(result.data.message);
         }
 
         $scope.onChoice = function(node) {
@@ -254,7 +206,7 @@ angular.module('app').controller('SensorCreate', ["$scope", "$state", "Sensor", 
                     groupSelect(n, isSelect);
                     n.isSelect = isSelect;
                 });
-                node.isSelect = isSelect
+                node.isSelect = isSelect;
             };
 
             groupSelect(node, node.isSelect);
@@ -264,7 +216,6 @@ angular.module('app').controller('SensorCreate', ["$scope", "$state", "Sensor", 
             if (node.nodes) {
                 return;
             }
-            console.log(node);
             if (selectEnergycategory) {
                 selectEnergycategory.isSelect = false;
             }

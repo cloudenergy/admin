@@ -20,7 +20,6 @@ angular.module('app').controller('characterInfo', ["$rootScope", "$scope", "API"
                 //error
             } else {
                 $scope.characters = result.result;
-                console.log($scope.characters);
                 $scope.MaxLevel = $scope.characters.length - 1;
             }
         });

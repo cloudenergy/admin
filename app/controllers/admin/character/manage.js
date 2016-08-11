@@ -7,12 +7,11 @@ angular.module('app').controller('characterManage', ["$scope", "$stateParams", "
     Auth.Check(function() {
 
         //保存权限
-        $scope.OnSave = function(e) {
-            e.preventDefault();
+        $scope.OnSave = function() {
 
             var nodes = new Array();
 
-            function TraverseNode(node, path) {
+            (function TraverseNode(node, path) {
                 //
                 if (node._id != '/') {
                     path += node._id;
@@ -26,10 +25,7 @@ angular.module('app').controller('characterManage', ["$scope", "$stateParams", "
                         TraverseNode(subNode, path + '/');
                     });
                 }
-            }
-
-            TraverseNode($scope.urlpath[0], '');
-            console.log(nodes);
+            }($scope.urlpath[0], ''));
 
             var rule = {};
             _.each(nodes, function(node) {
@@ -50,31 +46,25 @@ angular.module('app').controller('characterManage', ["$scope", "$stateParams", "
                     ruleNode = ruleNode[slot];
                 });
             });
-            console.log(rule);
+
             $scope.character.rule = rule;
 
-            var returnBack = function() {
-                $state.go('admin.character.info');
-            };
-
             if (characterID) {
-                //
                 API.Query(Character.update, $scope.character, function(result) {
                     if (result.code) {
                         UI.AlertError(result.message);
                         return;
                     } else {
-                        returnBack();
+                        $state.go('admin.character.info');
                     }
                 });
             } else {
                 API.Query(Character.add, $scope.character, function(result) {
-                    console.log(result);
                     if (result.code) {
                         UI.AlertError(result.message);
                         return;
                     } else {
-                        returnBack();
+                        $state.go('admin.character.info');
                     }
                 });
             }
@@ -164,9 +154,8 @@ angular.module('app').controller('characterManage', ["$scope", "$stateParams", "
                             traverseNode = existsNode;
                         });
                     });
-                    console.log(urlPath);
-                    $scope.urlpath = [urlPath];
 
+                    $scope.urlpath = [urlPath];
 
                 }
             });
@@ -177,12 +166,9 @@ angular.module('app').controller('characterManage', ["$scope", "$stateParams", "
             node.select = !node.select;
         };
         $scope.toggle = function(scope) {
-            console.log(scope);
             scope.toggle();
         };
         $scope.EnableSubNode = function(node, isEnable) {
-            //
-            console.log(node);
             var IterationNodes = function(node) {
                 if (!node) {
                     return;

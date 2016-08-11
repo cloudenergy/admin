@@ -156,10 +156,10 @@ angular.module('app').controller('Property.record', ["$scope", "$timeout", "$api
     };
 
     self.list = function() {
-        $api.$request && $api.$request.$cancelRequest();
-        $api.$request = $api.business.fundflow(angular.extend(GetOptions(), {
+        $api.business.fundflow(angular.extend(GetOptions(), {
             pageindex: self.paging.index,
-            pagesize: self.paging.size
+            pagesize: self.paging.size,
+            cancellable: true
         }), function(data) {
 
             delete $api.$request;

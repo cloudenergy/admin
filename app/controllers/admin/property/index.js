@@ -1,4 +1,4 @@
-angular.module('app').controller('Property.index', ["$scope", "$api", "$uibModal", function($scope, $api, $uibModal) {
+angular.module('app').controller('Property.index', ["$scope", "$api", "$uibModal", "$timeout", function($scope, $api, $uibModal, $timeout) {
 
     var self = this;
 
@@ -77,10 +77,39 @@ angular.module('app').controller('Property.index', ["$scope", "$api", "$uibModal
         this[item.key] = item;
     }, self.category);
 
-    self.format = 'YYYY-MM';
-    self.viewDate = moment().format(self.format);
+    self.startDate = moment().format('YYYY-MM-01');
+    self.endDate = moment().format('YYYY-MM-DD');
 
-    $scope.$watch('self.viewDate', function(val) {
+    //日期范围
+    self.dateRange = ['今天', '昨天', '最近7天', '最近30天'];
+    self.dateRange.select = function(key) {
+        self.dateRange.temp = true;
+        switch (self.dateRange.selected = key) {
+            case 0:
+                self.startDate = self.endDate = moment().format('YYYY-MM-DD');
+                break;
+            case 1:
+                self.startDate = self.endDate = moment().subtract(1, 'days').format('YYYY-MM-DD');
+                break;
+            case 2:
+                self.startDate = moment().subtract(7, 'days').format('YYYY-MM-DD');
+                self.endDate = moment().format('YYYY-MM-DD');
+                break;
+            case 3:
+                self.startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
+                self.endDate = moment().format('YYYY-MM-DD');
+                break;
+        }
+    };
+
+    $scope.$watchGroup(['self.startDate', 'self.endDate'], function() {
+        if (self.dateRange.temp) {
+            $timeout(function() {
+                delete self.dateRange.temp;
+            }, 10);
+        } else {
+            delete self.dateRange.selected;
+        }
         if (self.fundflow) {
             GetFundflowStatistic();
             GetFundflow();
@@ -100,7 +129,7 @@ angular.module('app').controller('Property.index', ["$scope", "$api", "$uibModal
     });
 
     /* 获取编辑银行卡 */
-    self.getCard = function(item) {
+    self.getCard = function(cardInfo) {
         $api.bank.info(function(data) {
             $uibModal.open({
                 // size: size,
@@ -109,7 +138,7 @@ angular.module('app').controller('Property.index', ["$scope", "$api", "$uibModal
                 controller: ["$api", "$uibModalInstance", function($api, $uibModalInstance) {
 
                     this.bankData = data.result;
-                    this.card = item && angular.copy(item) || {};
+                    this.card = cardInfo && angular.copy(cardInfo) || {};
                     this.card.locate = angular.isString(this.card.locate) && JSON.parse(this.card.locate || null) || this.card.locate || {
                         province: '浙江省',
                         city: '杭州市',
@@ -166,7 +195,8 @@ angular.module('app').controller('Property.index', ["$scope", "$api", "$uibModal
     /* 获取账户金额 */
     function GetAccountbalance() {
         $api.business.accountbalance({
-            project: EMAPP.Project.selected._id
+            project: EMAPP.Project.selected._id,
+            cancellable: true
         }, function(data) {
             self.accountbalance = data.result || {};
             self.accountbalance.total = Math.round((self.accountbalance.cash + self.accountbalance.frozen) * 100) / 100;
@@ -182,7 +212,8 @@ angular.module('app').controller('Property.index', ["$scope", "$api", "$uibModal
         $api.channelaccount.info({
             project: EMAPP.Project.selected._id,
             all: true,
-            flow: 'EXPENSE'
+            flow: 'EXPENSE',
+            cancellable: true
         }, function(data) {
 
             self.cardInfo = data.result && data.result[0] || {};
@@ -199,8 +230,10 @@ angular.module('app').controller('Property.index', ["$scope", "$api", "$uibModal
     /* 获取项目资金流水统计 */
     function GetFundflowStatistic() {
         $api.business.projectfundflowstatistic({
-            time: self.viewDate.replace(/\-/g, ''),
-            project: EMAPP.Project.selected._id
+            from: self.startDate.replace(/\-/g, ''),
+            to: self.endDate.replace(/\-/g, ''),
+            project: EMAPP.Project.selected._id,
+            cancellable: true
         }, function(data) {
             data = data.result || {};
             // 收入
@@ -229,10 +262,11 @@ angular.module('app').controller('Property.index', ["$scope", "$api", "$uibModal
     function GetFundflow() {
         $api.business.fundflow({
             project: EMAPP.Project.selected._id,
-            from: self.viewDate.replace(/\-/g, '') + '01',
-            to: moment(self.viewDate.replace(/\-/g, '') + '01', 'YYYYMMDD').add(1, 'month').subtract(1, 'day').format('YYYYMMDD'),
+            from: self.startDate.replace(/\-/g, ''),
+            to: self.endDate.replace(/\-/g, ''),
             pageindex: 1,
-            pagesize: 6
+            pagesize: 11,
+            cancellable: true
         }, function(res) {
             self.fundflow = res.result.detail;
             angular.forEach(self.fundflow, function(item) {
