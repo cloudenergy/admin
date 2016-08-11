@@ -1142,7 +1142,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.property.index', {
         url: '/index',
-        templateUrl: 'templates/admin/property/index.html?rev=448d45b291',
+        templateUrl: 'templates/admin/property/index.html?rev=b601a78761',
         data: {
             title: '物业财务'
         },
@@ -1167,7 +1167,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/property/withdraw.min.js?rev=611d45d0f9'
+                    'app/controllers/admin/property/withdraw.min.js?rev=cc19e3bc73'
                 ]);
             }]
         }
