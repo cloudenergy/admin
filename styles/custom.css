@@ -1,5 +1,5 @@
 .center-wrapper.login {
-  background: url(../images/login-bg.jpg?rev=4cfcb0b938);
+  background: url(../images/login-bg.jpg?rev=cf754aef2a);
   background-size: cover;
 }
 .login img.users-logo {
@@ -53,9 +53,8 @@ footer.content-footer nav ul li a {
   display: flex;
   display: -webkit-flex;
   /* Safari */
-  -webkit-flex-wrap: wrap;
-      -ms-flex-wrap: wrap;
-          flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
   text-align: center;
 }
 @media (max-width: 768px) {

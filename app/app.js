@@ -8,7 +8,7 @@ window.EMAPP = angular.module('app', [
     'ui.utils',
     'oc.lazyLoad'
 ]).constant('Config', {
-    pageSize: 20,
+    pageSize: 15,
     popPageSize: 8,
     API: localStorage.testapi ? '/testapi' : '/api'
 }).run(["$rootScope", "$cookies", "$state", "$stateParams", "Config", function($rootScope, $cookies, $state, $stateParams, Config) {

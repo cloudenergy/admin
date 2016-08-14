@@ -80,13 +80,13 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                         static + 'libs/angular-ui-select-0.18.0/dist/select.min.js',
                         static + 'libs/underscore-1.8.3/underscore-min.js',
                         'app/directives/perfect-scrollbar.min.js?rev=d1e4bdddc5',
-                        'app/filters/filters.min.js?rev=269f8d3097',
+                        'app/filters/filters.min.js?rev=52bac5287e',
                         'app/services/ui.min.js?rev=177c56b661',
                         'app/services/user.min.js?rev=70c6db7442',
-                        'app/services/api.min.js?rev=0abc6298e1',
+                        'app/services/api.min.js?rev=5da589a419',
                         'app/services/authentication.min.js?rev=0f36778387',
-                        'app/services/account.min.js?rev=41e7b7bd99',
-                        'app/controllers/admin.min.js?rev=fb56c306c3'
+                        'app/services/account.min.js?rev=0a9c0f02bd',
+                        'app/controllers/admin.min.js?rev=9ece3493be'
                     ]
                 }]);
             }]
@@ -107,7 +107,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         },
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
-                return $ocLazyLoad.load('app/services/character.min.js?rev=903e2446e0');
+                return $ocLazyLoad.load('app/services/character.min.js?rev=c077c2e7a0');
             }]
         }
     }).state('admin.character.info', {
@@ -120,7 +120,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         templateUrl: 'templates/admin/character/info.html?rev=2b07cb85bc',
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
-                return $ocLazyLoad.load('app/controllers/admin/character/info.min.js?rev=fcc92037fe');
+                return $ocLazyLoad.load('app/controllers/admin/character/info.min.js?rev=9dc314cd5e');
             }]
         }
     }).state('admin.character.manage', {
@@ -141,13 +141,13 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                 }, {
                     files: [
                         static + 'libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js',
-                        'app/controllers/admin/character/manage.min.js?rev=3d5c1e198e',
-                        'app/services/urlpath.min.js?rev=2dd7ea139b',
-                        'app/services/project.min.js?rev=0a6c0a1013',
-                        'app/services/building.min.js?rev=591e1b39a8',
-                        'app/services/customer.min.js?rev=aad33b141e',
-                        'app/services/collector.min.js?rev=946b23467a',
-                        'app/services/sensor.min.js?rev=8d65776b26'
+                        'app/controllers/admin/character/manage.min.js?rev=b94eed79a2',
+                        'app/services/urlpath.min.js?rev=a173d68137',
+                        'app/services/project.min.js?rev=253595453a',
+                        'app/services/building.min.js?rev=ee8f76352d',
+                        'app/services/customer.min.js?rev=2feac33e8f',
+                        'app/services/collector.min.js?rev=3f98049549',
+                        'app/services/sensor.min.js?rev=7102ffba10'
                     ]
                 }]);
             }]
@@ -161,7 +161,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         },
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
-                return $ocLazyLoad.load('app/services/project.min.js?rev=0a6c0a1013');
+                return $ocLazyLoad.load('app/services/project.min.js?rev=253595453a');
             }]
         }
     }).state('admin.project.info', {
@@ -174,7 +174,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         templateUrl: 'templates/admin/project/info.html?rev=cf0afcd3ec',
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
-                return $ocLazyLoad.load('app/controllers/admin/project/info.min.js?rev=ec287f91fa');
+                return $ocLazyLoad.load('app/controllers/admin/project/info.min.js?rev=df4b003896');
             }]
         }
     }).state('admin.project.create', {
@@ -188,7 +188,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/services/energycategory.min.js?rev=6508426e02',
+                    'app/services/energycategory.min.js?rev=0c6109038d',
                     'app/controllers/admin/project/create.min.js?rev=c2356af47c'
                 ]);
             }]
@@ -218,9 +218,9 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/services/account.min.js?rev=41e7b7bd99',
-                    'app/services/billingaccount.min.js?rev=acccca264b',
-                    'app/services/character.min.js?rev=903e2446e0'
+                    'app/services/account.min.js?rev=0a9c0f02bd',
+                    'app/services/billingaccount.min.js?rev=fc550857eb',
+                    'app/services/character.min.js?rev=c077c2e7a0'
                 ]);
             }]
         }
@@ -234,7 +234,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         },
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
-                return $ocLazyLoad.load('app/controllers/admin/account/info.min.js?rev=62e53f9570');
+                return $ocLazyLoad.load('app/controllers/admin/account/info.min.js?rev=c09eccc737');
             }]
         }
     }).state('admin.account.create', {
@@ -278,15 +278,15 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/services/billingservice.min.js?rev=966c517551',
-                    'app/services/energycategory.min.js?rev=6508426e02',
-                    'app/services/project.min.js?rev=0a6c0a1013',
-                    'app/services/building.min.js?rev=591e1b39a8',
-                    'app/services/sensor.min.js?rev=8d65776b26',
+                    'app/services/billingservice.min.js?rev=ae6baae3b2',
+                    'app/services/energycategory.min.js?rev=0c6109038d',
+                    'app/services/project.min.js?rev=253595453a',
+                    'app/services/building.min.js?rev=ee8f76352d',
+                    'app/services/sensor.min.js?rev=7102ffba10',
                     'app/controllers/admin/account/buildingSelect.min.js?rev=e934c39445',
                     'app/controllers/admin/account/projectSelect.min.js?rev=d24e4207ed',
                     'app/controllers/admin/account/sensorSelect.min.js?rev=4214a41180',
-                    'app/controllers/admin/account/roleres.min.js?rev=598cafd517'
+                    'app/controllers/admin/account/roleres.min.js?rev=9a3d7ab0b6'
                 ]);
             }]
         }
@@ -300,10 +300,10 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/services/project.min.js?rev=0a6c0a1013',
-                    'app/services/pab.min.js?rev=bb51301194',
-                    'app/services/billingservice.min.js?rev=966c517551',
-                    'app/services/energycategory.min.js?rev=6508426e02'
+                    'app/services/project.min.js?rev=253595453a',
+                    'app/services/pab.min.js?rev=6b516ff5ef',
+                    'app/services/billingservice.min.js?rev=ae6baae3b2',
+                    'app/services/energycategory.min.js?rev=0c6109038d'
                 ]);
             }]
         }
@@ -316,7 +316,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         controller: 'BillingServiceInfo',
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
-                return $ocLazyLoad.load('app/controllers/admin/billingservice/info.min.js?rev=7bac10af61');
+                return $ocLazyLoad.load('app/controllers/admin/billingservice/info.min.js?rev=aa1f8ab077');
             }]
         }
     }).state('admin.billingservice.manage', {
@@ -331,7 +331,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
                     'app/controllers/admin/billingservice/energySelect.min.js?rev=1941552c26',
-                    'app/controllers/admin/billingservice/manage.min.js?rev=a35fcbf5e1'
+                    'app/controllers/admin/billingservice/manage.min.js?rev=482be85bf2'
                 ]);
             }]
         }
@@ -346,7 +346,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/services/billingaccount.min.js?rev=acccca264b',
+                    'app/services/billingaccount.min.js?rev=fc550857eb',
                     'app/controllers/admin/billingservice/energySelect.min.js?rev=1941552c26',
                     'app/controllers/admin/billingservice/add.min.js?rev=6dcb4ee9b0'
                 ]);
@@ -362,7 +362,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/services/urlpath.min.js?rev=2dd7ea139b'
+                    'app/services/urlpath.min.js?rev=a173d68137'
                 ]);
             }]
         }
@@ -384,7 +384,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                 }, {
                     files: [
                         static + 'libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js',
-                        'app/controllers/admin/urlpath/index.min.js?rev=952955d871'
+                        'app/controllers/admin/urlpath/index.min.js?rev=36751153a6'
                     ]
                 }]);
             }]
@@ -399,8 +399,8 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/services/project.min.js?rev=0a6c0a1013',
-                    'app/services/building.min.js?rev=591e1b39a8'
+                    'app/services/project.min.js?rev=253595453a',
+                    'app/services/building.min.js?rev=ee8f76352d'
                 ]);
             }]
         }
@@ -413,7 +413,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         controller: 'BuildingInfo',
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
-                return $ocLazyLoad.load('app/controllers/admin/building/info.min.js?rev=c887a6b500');
+                return $ocLazyLoad.load('app/controllers/admin/building/info.min.js?rev=c16426e660');
             }]
         }
     }).state('admin.building.edit', {
@@ -452,9 +452,9 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/services/project.min.js?rev=0a6c0a1013',
-                    'app/services/billingaccount.min.js?rev=acccca264b',
-                    'app/services/department.min.js?rev=9fc5f2812b'
+                    'app/services/project.min.js?rev=253595453a',
+                    'app/services/billingaccount.min.js?rev=fc550857eb',
+                    'app/services/department.min.js?rev=85b5a81356'
                 ]);
             }]
         }
@@ -474,8 +474,8 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                     ]
                 }]).then(function() {
                     return $ocLazyLoad.load([
-                        'app/services/sensor.min.js?rev=8d65776b26',
-                        'app/controllers/admin/department/info.min.js?rev=81050c0e2a'
+                        'app/services/sensor.min.js?rev=7102ffba10',
+                        'app/controllers/admin/department/info.min.js?rev=fa7df9a3bb'
                     ]);
                 });
             }]
@@ -491,9 +491,9 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/services/sensor.min.js?rev=8d65776b26',
-                    'app/controllers/admin/common/accountSelect.min.js?rev=f790145200',
-                    'app/controllers/admin/common/channelSelect.min.js?rev=b7ed65b0f2',
+                    'app/services/sensor.min.js?rev=7102ffba10',
+                    'app/controllers/admin/common/accountSelect.min.js?rev=50867bfdeb',
+                    'app/controllers/admin/common/channelSelect.min.js?rev=4eaca3e3e8',
                     'app/controllers/admin/department/create.min.js?rev=aad1d3cae1'
                 ]);
             }]
@@ -509,9 +509,9 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/services/sensor.min.js?rev=8d65776b26',
-                    'app/controllers/admin/common/accountSelect.min.js?rev=f790145200',
-                    'app/controllers/admin/common/channelSelect.min.js?rev=b7ed65b0f2',
+                    'app/services/sensor.min.js?rev=7102ffba10',
+                    'app/controllers/admin/common/accountSelect.min.js?rev=50867bfdeb',
+                    'app/controllers/admin/common/channelSelect.min.js?rev=4eaca3e3e8',
                     'app/controllers/admin/department/edit.min.js?rev=ec3c5ba1ad'
                 ]);
             }]
@@ -543,10 +543,10 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/services/project.min.js?rev=0a6c0a1013',
-                    'app/services/energy.min.js?rev=ef3fe92cff',
-                    'app/services/customer.min.js?rev=aad33b141e',
-                    'app/services/sensor.min.js?rev=8d65776b26'
+                    'app/services/project.min.js?rev=253595453a',
+                    'app/services/energy.min.js?rev=c613470cac',
+                    'app/services/customer.min.js?rev=2feac33e8f',
+                    'app/services/sensor.min.js?rev=7102ffba10'
                 ]);
             }]
         }
@@ -569,7 +569,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                         static + 'libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js',
                         // static+'libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js',
                         'app/controllers/admin/customer/sensorSelect.min.js?rev=f908df2a98',
-                        'app/controllers/admin/customer/index.min.js?rev=bb3532ff53'
+                        'app/controllers/admin/customer/index.min.js?rev=f2b2eaea1b'
                     ]
                 }]);
             }]
@@ -584,8 +584,8 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/services/project.min.js?rev=0a6c0a1013',
-                    'app/services/collector.min.js?rev=946b23467a'
+                    'app/services/project.min.js?rev=253595453a',
+                    'app/services/collector.min.js?rev=3f98049549'
                 ]);
             }]
         }
@@ -599,7 +599,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/collector/info.min.js?rev=716dc65d46'
+                    'app/controllers/admin/collector/info.min.js?rev=2348cfb6b3'
                 ]);
             }]
         }
@@ -643,10 +643,10 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/services/project.min.js?rev=0a6c0a1013',
-                    'app/services/energycategory.min.js?rev=6508426e02',
-                    'app/services/energy.min.js?rev=ef3fe92cff',
-                    'app/services/sensor.min.js?rev=8d65776b26'
+                    'app/services/project.min.js?rev=253595453a',
+                    'app/services/energycategory.min.js?rev=0c6109038d',
+                    'app/services/energy.min.js?rev=c613470cac',
+                    'app/services/sensor.min.js?rev=7102ffba10'
                 ]);
             }]
         }
@@ -668,8 +668,8 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                     files: [
                         static + 'libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js',
                         static + 'libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js',
-                        'app/controllers/admin/energy/sensorSelect.min.js?rev=4f43072523',
-                        'app/controllers/admin/energy/index.min.js?rev=15507a8d7d'
+                        'app/controllers/admin/energy/sensorSelect.min.js?rev=6d465f266c',
+                        'app/controllers/admin/energy/index.min.js?rev=4313f76e6d'
                     ]
                 }]);
             }]
@@ -684,10 +684,10 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/services/project.min.js?rev=0a6c0a1013',
-                    'app/services/energycategory.min.js?rev=6508426e02',
-                    'app/services/energycategory.min.js?rev=6508426e02',
-                    'app/services/sensor.min.js?rev=8d65776b26'
+                    'app/services/project.min.js?rev=253595453a',
+                    'app/services/energycategory.min.js?rev=0c6109038d',
+                    'app/services/energycategory.min.js?rev=0c6109038d',
+                    'app/services/sensor.min.js?rev=7102ffba10'
                 ]);
             }]
         }
@@ -703,7 +703,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
                     static + 'libs/angular-utf8-base64-0.0.5/angular-utf8-base64.min.js',
-                    'app/controllers/admin/energycategory/info.min.js?rev=0662f70d14'
+                    'app/controllers/admin/energycategory/info.min.js?rev=63682a71f7'
                 ]);
             }]
         }
@@ -759,8 +759,8 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                         static + 'libs/angular-ui-tree-2.17.0/dist/angular-ui-tree.min.js',
                         static + 'libs/angular-xeditable-0.2.0/dist/js/xeditable.min.js',
                         static + 'libs/ngUpload-0.5.18/ng-upload.min.js',
-                        'app/services/building.min.js?rev=591e1b39a8',
-                        'app/services/sensor.min.js?rev=8d65776b26'
+                        'app/services/building.min.js?rev=ee8f76352d',
+                        'app/services/sensor.min.js?rev=7102ffba10'
                     ]
                 }]);
             }]
@@ -775,12 +775,12 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/services/driver.min.js?rev=10fba7c5a6',
+                    'app/services/driver.min.js?rev=c8c64edb7b',
                     'app/services/control.min.js?rev=9fbeff12b2',
-                    'app/services/sensorAttrib.min.js?rev=fff9d59294',
+                    'app/services/sensorAttrib.min.js?rev=9586d9286d',
                     'app/controllers/admin/sensor/sensorSync.min.js?rev=84b05a344b',
-                    'app/controllers/admin/sensor/sensorAttribute.min.js?rev=a19a27efc4',
-                    'app/controllers/admin/sensor/info.min.js?rev=4212a17e5d',
+                    'app/controllers/admin/sensor/sensorAttribute.min.js?rev=c82cd0abe3',
+                    'app/controllers/admin/sensor/info.min.js?rev=1ef9d95299',
                     'app/directives/jstree.min.js?rev=2a332f4b56'
                 ]);
             }]
@@ -796,9 +796,9 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/services/collector.min.js?rev=946b23467a',
-                    'app/services/energy.min.js?rev=ef3fe92cff',
-                    'app/services/customer.min.js?rev=aad33b141e',
+                    'app/services/collector.min.js?rev=3f98049549',
+                    'app/services/energy.min.js?rev=c613470cac',
+                    'app/services/customer.min.js?rev=2feac33e8f',
                     'app/controllers/admin/sensor/create.min.js?rev=faf2dde51c'
                 ]);
             }]
@@ -814,9 +814,9 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/services/collector.min.js?rev=946b23467a',
-                    'app/services/energy.min.js?rev=ef3fe92cff',
-                    'app/services/customer.min.js?rev=aad33b141e',
+                    'app/services/collector.min.js?rev=3f98049549',
+                    'app/services/energy.min.js?rev=c613470cac',
+                    'app/services/customer.min.js?rev=2feac33e8f',
                     'app/controllers/admin/sensor/edit.min.js?rev=38ed4bd438'
                 ]);
             }]
@@ -831,8 +831,8 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/services/project.min.js?rev=0a6c0a1013',
-                    'app/services/eventcategory.min.js?rev=06fa8c256f'
+                    'app/services/project.min.js?rev=253595453a',
+                    'app/services/eventcategory.min.js?rev=421a0b5075'
                 ]);
             }]
         }
@@ -846,7 +846,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/eventcategory/info.min.js?rev=5dcdbfc355'
+                    'app/controllers/admin/eventcategory/info.min.js?rev=18a8661b65'
                 ]);
             }]
         }
@@ -935,7 +935,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/finance/record-in.min.js?rev=199c239bae'
+                    'app/controllers/admin/finance/record-in.min.js?rev=c600714327'
                 ]);
             }]
         }
@@ -964,7 +964,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/finance/record-out.min.js?rev=0b25ab0c52'
+                    'app/controllers/admin/finance/record-out.min.js?rev=0c3bd4d3e6'
                 ]);
             }]
         }
@@ -1013,7 +1013,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/finance/card.min.js?rev=e086c4842f'
+                    'app/controllers/admin/finance/card.min.js?rev=581b98ad88'
                 ]);
             }]
         }
@@ -1049,7 +1049,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/finance/project/list.min.js?rev=15f32688b9'
+                    'app/controllers/admin/finance/project/list.min.js?rev=956c697fde'
                 ]);
             }]
         }
@@ -1070,7 +1070,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
                     'app/directives/distpicker.min.js?rev=47a8e0bc0d',
-                    'app/controllers/admin/finance/project/index.min.js?rev=f426d23b21'
+                    'app/controllers/admin/finance/project/index.min.js?rev=3389b1b63d'
                 ]);
             }]
         }
@@ -1090,7 +1090,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/finance/project/record.min.js?rev=3969d0c9e9'
+                    'app/controllers/admin/finance/project/record.min.js?rev=c7177dca1b'
                 ]);
             }]
         }
@@ -1110,7 +1110,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/finance/project/withdraw.min.js?rev=ad4351448c'
+                    'app/controllers/admin/finance/project/withdraw.min.js?rev=2ddf0eef3b'
                 ]);
             }]
         }
@@ -1126,10 +1126,9 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                 return $ocLazyLoad.load([{
                     insertBefore: '#load_styles_before',
                     files: [
-                        '//at.alicdn.com/t/font_1465708483_208262.css'
+                        '//at.alicdn.com/t/font_1470990232_7195055.css'
                     ]
                 }, {
-                    // serie: true,
                     files: [
                         'app/directives/datetimepicker.min.js?rev=3c390403e5',
                         'app/directives/auto-height.min.js?rev=b13007069a',
@@ -1142,7 +1141,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.property.index', {
         url: '/index',
-        templateUrl: 'templates/admin/property/index.html?rev=b601a78761',
+        templateUrl: 'templates/admin/property/index.html?rev=a236b5a865',
         data: {
             title: '物业财务'
         },
@@ -1152,7 +1151,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
                     'app/directives/distpicker.min.js?rev=47a8e0bc0d',
-                    'app/controllers/admin/property/index.min.js?rev=1ae7f11b09'
+                    'app/controllers/admin/property/index.min.js?rev=1172739188'
                 ]);
             }]
         }
@@ -1167,13 +1166,13 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/property/withdraw.min.js?rev=cc19e3bc73'
+                    'app/controllers/admin/property/withdraw.min.js?rev=ad45147f47'
                 ]);
             }]
         }
     }).state('admin.property.record', {
         url: '/record/:tab/:category',
-        templateUrl: 'templates/admin/property/record.html?rev=fcc9d0802f',
+        templateUrl: 'templates/admin/property/record.html?rev=47e08d6788',
         data: {
             title: '收支明细'
         },
@@ -1182,7 +1181,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/property/record.min.js?rev=54b0857fc3'
+                    'app/controllers/admin/property/record.min.js?rev=01da583754'
                 ]);
             }]
         }
@@ -1197,13 +1196,13 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/property/statement.min.js?rev=0f77150ccb'
+                    'app/controllers/admin/property/statement.min.js?rev=f3cc4797c3'
                 ]);
             }]
         }
     }).state('admin.property.consume', {
         url: '/consume',
-        templateUrl: 'templates/admin/property/consume.html?rev=bd41100825',
+        templateUrl: 'templates/admin/property/consume.html?rev=36bbbc2ba7',
         data: {
             title: '消耗明细'
         },
@@ -1212,7 +1211,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/property/consume.min.js?rev=f5c77552d6'
+                    'app/controllers/admin/property/consume.min.js?rev=ce3b4471d0'
                 ]);
             }]
         }

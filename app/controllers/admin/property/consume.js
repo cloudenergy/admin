@@ -10,18 +10,12 @@ angular.module('app').controller('Property.consume', ["$scope", "$api", "$state"
     $scope.$watch(function() {
         return self.startDate;
     }, function() {
-        if (self.listData) {
-            GetStatistic();
-            self.list();
-        }
+        self.listData && self.list();
     });
     $scope.$watch(function() {
         return self.endDate;
     }, function() {
-        if (self.listData) {
-            GetStatistic();
-            self.list();
-        }
+        self.listData && self.list();
     });
     $scope.$watch(function() {
         return self.category.selected;
@@ -42,41 +36,8 @@ angular.module('app').controller('Property.consume', ["$scope", "$api", "$state"
 
     $scope.$watch('Project.selected', function(item) {
         self.projectid = item._id;
-        GetStatistic();
         self.list();
     });
-
-    // 电表:ELECTRICITYMETER
-    // 冷水表:COLDWATERMETER
-    // 热水表:HOTWATERMETER
-    // 能量表:ENERGYMETER
-    // 温控器:TEMPRATURECONTROL
-    // 物业费:emfinance finance-property text-success
-    // 租金:emfinance finance-rent text-success
-    self.deviceType = [{
-        key: 'ELECTRICITYMETER',
-        title: '电表',
-        icon: 'emfinance finance-electricity text-warning'
-    }, {
-        key: 'COLDWATERMETER',
-        title: '冷水表',
-        icon: 'emfinance finance-water text-info'
-    }, {
-        key: 'HOTWATERMETER',
-        title: '热水表',
-        icon: 'emfinance finance-water text-danger'
-    }, {
-        key: 'ENERGYMETER',
-        title: '能量表',
-        icon: 'emfinance finance-power text-danger'
-    }, {
-        key: 'TEMPRATURECONTROL',
-        title: '温控器',
-        icon: 'emfinance finance-temprature text-info'
-    }];
-    angular.forEach(self.deviceType, function(item) {
-        this[item.key] = item;
-    }, self.deviceType);
 
     self.category = [{
         title: '全部类型'
@@ -121,25 +82,6 @@ angular.module('app').controller('Property.consume', ["$scope", "$api", "$state"
             title: '每页100条'
         }]
     };
-
-    function GetStatistic() {
-        $api.business.departmentconsumptionstatistic({
-            project: self.projectid,
-            from: self.startDate.replace(/\-/g, ''),
-            to: self.endDate.replace(/\-/g, '')
-        }, function(data) {
-
-            self.statistic = data.result || {};
-
-            // 消耗
-            angular.forEach(self.statistic.consumption.category, function(item, key) {
-                this.push(angular.extend(item, {
-                    category: key
-                }));
-            }, self.statistic.consumption.category = []);
-
-        });
-    }
 
     self.list = function() {
         $api.business.departmentconsumptiondetail({
