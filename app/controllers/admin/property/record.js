@@ -1,7 +1,57 @@
 angular.module('app').controller('Property.record', ["$scope", "$timeout", "$api", "$state", "$stateParams", function($scope, $timeout, $api, $state, $stateParams) {
 
     var self = this,
-        KEY_PAGESIZE = EMAPP.Account._id + '_property_record_pagesize';
+        KEY_PAGESIZE = EMAPP.Account._id + '_property_record_pagesize',
+        Array_status = [{
+            key: 'CHECKING',
+            title: '等待审核',
+            class: 'primary'
+        }, {
+            key: 'CHECKFAILED',
+            title: '审核失败',
+            class: 'warning'
+        }, {
+            key: 'PROCESSING',
+            title: '正在处理',
+            class: 'info'
+        }, {
+            key: 'FAILED',
+            title: '处理失败',
+            class: 'danger'
+        }, {
+            key: 'SUCCESS',
+            title: '完成',
+            class: 'success'
+        }],
+        Array_category_in = [{
+            key: 'RECHARGING',
+            title: '充值'
+        }, {
+            key: 'alipay',
+            title: '支付宝手机支付'
+        }, {
+            key: 'wx',
+            title: '微信支付'
+        }, {
+            key: 'wx_pub',
+            title: '微信公众号支付'
+        }, {
+            key: 'bankcard',
+            title: '银行卡支付'
+        }, {
+            key: 'manual',
+            title: '人工充值'
+        }],
+        Array_category_out = [{
+            key: 'WITHDRAW',
+            title: '提现'
+        }, {
+            key: 'HANDLINGCHARGERCG',
+            title: '充值服务费'
+        }, {
+            key: 'HANDLINGCHARGEWTD',
+            title: '提现服务费'
+        }];
 
     $scope.$watchGroup([function() {
         return self.startDate;
@@ -66,27 +116,7 @@ angular.module('app').controller('Property.record', ["$scope", "$timeout", "$api
     //状态
     self.status = [{
         title: '全部状态'
-    }, {
-        key: 'CHECKING',
-        title: '等待审核',
-        class: 'primary'
-    }, {
-        key: 'CHECKFAILED',
-        title: '审核失败',
-        class: 'warning'
-    }, {
-        key: 'PROCESSING',
-        title: '正在处理',
-        class: 'info'
-    }, {
-        key: 'FAILED',
-        title: '处理失败',
-        class: 'danger'
-    }, {
-        key: 'SUCCESS',
-        title: '完成',
-        class: 'success'
-    }];
+    }].concat(Array_status);
     angular.forEach(self.status, function(item) {
         this[item.key] = {
             title: item.title,
@@ -97,37 +127,17 @@ angular.module('app').controller('Property.record', ["$scope", "$timeout", "$api
     //类型
     self.category = [{
         title: '全部类型'
-    }, {
-        key: 'RECHARGING',
-        title: '充值'
-    }, {
-        key: 'WITHDRAW',
-        title: '提现'
-    }, {
-        key: 'PAYFEES',
-        title: '缴费'
-    }, {
-        key: 'HANDLINGCHARGE',
-        title: '手续费'
-    }, {
-        key: 'HANDLINGCHARGERCG',
-        title: '充值服务费'
-    }, {
-        key: 'HANDLINGCHARGEWTD',
-        title: '提现服务费'
-    }, {
-        key: 'alipay',
-        title: '支付宝手机支付'
-    }, {
-        key: 'wx',
-        title: '微信支付'
-    }, {
-        key: 'wx_pub',
-        title: '微信公众号支付'
-    }, {
-        key: 'bankcard',
-        title: '银行卡支付'
     }];
+    if (self.tab === 'in') {
+        self.category = self.category.concat(Array_category_in);
+    }
+    if (self.tab === 'out') {
+        self.category = self.category.concat(Array_category_out);
+    }
+    if (self.tab === 'all') {
+        self.category = self.category.concat(Array_category_in);
+        self.category = self.category.concat(Array_category_out);
+    }
     angular.forEach(self.category, function(item) {
         this[item.key] = item;
     }, self.category);

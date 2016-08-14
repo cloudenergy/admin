@@ -80,7 +80,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                         static + 'libs/angular-ui-select-0.18.0/dist/select.min.js',
                         static + 'libs/underscore-1.8.3/underscore-min.js',
                         'app/directives/perfect-scrollbar.min.js?rev=d1e4bdddc5',
-                        'app/filters/filters.min.js?rev=52bac5287e',
+                        'app/filters/filters.min.js?rev=f56ec829fd',
                         'app/services/ui.min.js?rev=177c56b661',
                         'app/services/user.min.js?rev=70c6db7442',
                         'app/services/api.min.js?rev=5da589a419',
@@ -1181,7 +1181,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/property/record.min.js?rev=01da583754'
+                    'app/controllers/admin/property/record.min.js?rev=9e13757cc2'
                 ]);
             }]
         }

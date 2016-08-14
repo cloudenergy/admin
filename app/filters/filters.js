@@ -35,23 +35,12 @@ angular.module('app').filter('startFrom', function() {
         key: 'RECHARGING',
         title: '充值'
     }, {
-        key: 'PAYFEES',
-        title: '缴费'
-    }, {
         key: 'WITHDRAW',
         title: '提现',
         icon: 'emfinance finance-withdraw text-danger'
     }, {
-        key: 'HANDLINGCHARGE',
-        title: '手续费'
-    }, {
-        key: 'HANDLINGCHARGERCG',
-        title: '充值服务费',
-        icon: 'emfinance finance-serve text-warning'
-    }, {
-        key: 'HANDLINGCHARGEWTD',
-        title: '提现服务费',
-        icon: 'emfinance finance-serve text-warning'
+        key: 'PAYFEES',
+        title: '缴费'
     }, {
         key: 'PAYPROPERTY',
         title: '物业费',
@@ -60,6 +49,9 @@ angular.module('app').filter('startFrom', function() {
         key: 'PAYPARKING',
         title: '停车费',
         icon: 'emfinance finance-parking text-danger'
+    }, {
+        key: 'HANDLINGCHARGE',
+        title: '手续费'
     }, {
         key: 'PAYELECTRICITY',
         title: '电费',
@@ -80,6 +72,14 @@ angular.module('app').filter('startFrom', function() {
         key: 'PAYACPANEL',
         title: '空调费面板',
         icon: 'emfinance finance-temprature text-info'
+    }, {
+        key: 'HANDLINGCHARGERCG',
+        title: '充值服务费',
+        icon: 'emfinance finance-serve text-warning'
+    }, {
+        key: 'HANDLINGCHARGEWTD',
+        title: '提现服务费',
+        icon: 'emfinance finance-serve text-warning'
     }, {
         key: 'alipay',
         title: '支付宝手机支付',
