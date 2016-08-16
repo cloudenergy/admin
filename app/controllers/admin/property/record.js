@@ -53,11 +53,7 @@ angular.module('app').controller('Property.record', ["$scope", "$timeout", "$api
             title: '提现服务费'
         }];
 
-    $scope.$watchGroup([function() {
-        return self.startDate;
-    }, function() {
-        return self.endDate;
-    }], function() {
+    $scope.$watchGroup(['self.startDate', 'self.endDate'], function() {
         if (self.dateRange.temp) {
             $timeout(function() {
                 delete self.dateRange.temp;
@@ -67,14 +63,10 @@ angular.module('app').controller('Property.record', ["$scope", "$timeout", "$api
         }
         self.listData && self.list();
     });
-    $scope.$watch(function() {
-        return self.paging.index;
-    }, function() {
+    $scope.$watch('self.paging.index', function() {
         self.listData && self.list();
     });
-    $scope.$watch(function() {
-        return self.paging.size;
-    }, function(val) {
+    $scope.$watch('self.paging.size', function(val) {
         localStorage.setItem(KEY_PAGESIZE, val);
         self.listData && self.list();
     });

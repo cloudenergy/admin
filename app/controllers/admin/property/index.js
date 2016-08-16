@@ -156,26 +156,7 @@ angular.module('app').controller('Property.index', ["$scope", "$api", "$uibModal
             project: EMAPP.Project.selected._id,
             cancellable: true
         }, function(data) {
-            data = data.result || {};
-            // 收入
-            data.earning && angular.forEach(data.earning.category, function(item, key) {
-                this.push(angular.extend(item, {
-                    name: key
-                }));
-            }, data.earning.category = []);
-            // 支出
-            data.expenses && angular.forEach(data.expenses.category, function(item, key) {
-                this.push(angular.extend(item, {
-                    category: key
-                }));
-            }, data.expenses.category = []);
-            // 消耗
-            data.consumption && angular.forEach(data.consumption.category, function(item, key) {
-                this.push(angular.extend(item, {
-                    category: key
-                }));
-            }, data.consumption.category = []);
-            self.fundflowstatistic = data;
+            self.fundflowstatistic = data.result || {};
         });
     }
 

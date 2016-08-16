@@ -7,35 +7,30 @@ angular.module('app').controller('Property.consume', ["$scope", "$api", "$state"
     self.startDate = moment().format('YYYY-MM-01');
     self.endDate = moment().format('YYYY-MM-DD');
 
-    $scope.$watch(function() {
-        return self.startDate;
-    }, function() {
+
+    $scope.$watchGroup(['self.startDate', 'self.endDate'], function() {
+        if (self.listData) {
+            GetStatistic();
+            self.list();
+        }
+    });
+    $scope.$watch('self.category.selected', function() {
+        if (self.listData) {
+            GetStatistic();
+            self.list();
+        }
+    });
+    $scope.$watch('self.paging.index', function() {
         self.listData && self.list();
     });
-    $scope.$watch(function() {
-        return self.endDate;
-    }, function() {
-        self.listData && self.list();
-    });
-    $scope.$watch(function() {
-        return self.category.selected;
-    }, function() {
-        self.listData && self.list();
-    });
-    $scope.$watch(function() {
-        return self.paging.index;
-    }, function() {
-        self.listData && self.list();
-    });
-    $scope.$watch(function() {
-        return self.paging.size;
-    }, function(val) {
+    $scope.$watch('self.paging.size', function(val) {
         localStorage.setItem(KEY_PAGESIZE, val);
         self.listData && self.list();
     });
 
     $scope.$watch('Project.selected', function(item) {
         self.projectid = item._id;
+        GetStatistic();
         self.list();
     });
 
@@ -82,6 +77,25 @@ angular.module('app').controller('Property.consume', ["$scope", "$api", "$state"
             title: '每页100条'
         }]
     };
+
+    function GetStatistic() {
+        $api.business.departmentconsumptionstatistic({
+            project: self.projectid,
+            from: self.startDate.replace(/\-/g, ''),
+            to: self.endDate.replace(/\-/g, '')
+        }, function(data) {
+
+            self.statistic = data.result || {};
+
+            // 消耗
+            angular.forEach(self.statistic.consumption.category, function(item, key) {
+                this.push(angular.extend(item, {
+                    category: key
+                }));
+            }, self.statistic.consumption.category = []);
+
+        });
+    }
 
     self.list = function() {
         $api.business.departmentconsumptiondetail({

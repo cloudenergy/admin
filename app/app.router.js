@@ -1151,7 +1151,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
                     'app/directives/distpicker.min.js?rev=47a8e0bc0d',
-                    'app/controllers/admin/property/index.min.js?rev=1172739188'
+                    'app/controllers/admin/property/index.min.js?rev=b6d4684953'
                 ]);
             }]
         }
@@ -1172,7 +1172,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.property.record', {
         url: '/record/:tab/:category',
-        templateUrl: 'templates/admin/property/record.html?rev=47e08d6788',
+        templateUrl: 'templates/admin/property/record.html?rev=862e5cb600',
         data: {
             title: '收支明细'
         },
@@ -1181,7 +1181,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/property/record.min.js?rev=9e13757cc2'
+                    'app/controllers/admin/property/record.min.js?rev=f31d881a18'
                 ]);
             }]
         }
@@ -1202,7 +1202,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.property.consume', {
         url: '/consume',
-        templateUrl: 'templates/admin/property/consume.html?rev=36bbbc2ba7',
+        templateUrl: 'templates/admin/property/consume.html?rev=16a15b0e73',
         data: {
             title: '消耗明细'
         },
@@ -1211,7 +1211,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/property/consume.min.js?rev=ce3b4471d0'
+                    'app/controllers/admin/property/consume.min.js?rev=7b8a1fbd3c'
                 ]);
             }]
         }
