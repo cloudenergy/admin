@@ -1141,7 +1141,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.property.index', {
         url: '/index',
-        templateUrl: 'templates/admin/property/index.html?rev=a236b5a865',
+        templateUrl: 'templates/admin/property/index.html?rev=360a0bfa41',
         data: {
             title: '物业财务'
         },
