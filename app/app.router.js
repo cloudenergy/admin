@@ -1141,7 +1141,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.property.index', {
         url: '/index',
-        templateUrl: 'templates/admin/property/index.html?rev=360a0bfa41',
+        templateUrl: 'templates/admin/property/index.html?rev=495f2878b9',
         data: {
             title: '物业财务'
         },
@@ -1171,8 +1171,8 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             }]
         }
     }).state('admin.property.record', {
-        url: '/record/:tab/:category',
-        templateUrl: 'templates/admin/property/record.html?rev=862e5cb600',
+        url: '/record/:tab/{category}|{startDate}|{endDate}|{dateRange}',
+        templateUrl: 'templates/admin/property/record.html?rev=9e26318c0e',
         data: {
             title: '收支明细'
         },
@@ -1181,7 +1181,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/property/record.min.js?rev=f31d881a18'
+                    'app/controllers/admin/property/record.min.js?rev=78ec18a2ad'
                 ]);
             }]
         }

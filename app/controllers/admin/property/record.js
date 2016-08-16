@@ -77,14 +77,16 @@ angular.module('app').controller('Property.record', ["$scope", "$timeout", "$api
 
     self.tab = $stateParams.tab || 'all';
 
-    self.startDate = moment().format('YYYY-MM-01');
-    self.endDate = moment().format('YYYY-MM-DD');
+    self.startDate = $stateParams.startDate || moment().format('YYYY-MM-01');
+    self.endDate = $stateParams.endDate || moment().format('YYYY-MM-DD');
 
     //金额过滤
     self.amount = {};
 
     //日期范围
     self.dateRange = ['今天', '昨天', '最近7天', '最近30天'];
+    self.dateRange.selected = $stateParams.dateRange && parseInt($stateParams.dateRange) || undefined;
+    self.dateRange.temp = !!$stateParams.dateRange;
     self.dateRange.select = function(key) {
         self.dateRange.temp = true;
         switch (self.dateRange.selected = key) {
