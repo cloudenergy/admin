@@ -11,14 +11,16 @@ angular.module('app').directive('recordSuccess', ["$api", "$uibModal", function(
                         $uibModal.open({
                             size: 'lg',
                             windowClass: 'no-border',
-                            templateUrl: 'templates/admin/property/record-success.html?rev=5a823e9f1a',
+                            templateUrl: 'templates/admin/property/record-success.html?rev=a75ca0a7a7',
                             controllerAs: 'self',
-                            controller: ["$filter", "$uibModalInstance", function($filter, $uibModalInstance) {
+                            controller: ["$uibModalInstance", function($uibModalInstance) {
 
                                 var self = this;
 
                                 self.detail = data.result || {};
-                                self.detail.timepaid = self.detail.timepaid && $filter('date')(self.detail.timepaid * 1000, 'yyyy-M-dd H:mm:ss') || '';
+
+                                self.detail.timecreate = self.detail.timecreate && moment(self.detail.timecreate * 1000).format('YYYY-M-DD H:mm:ss') || '';
+                                self.detail.timepaid = self.detail.timepaid && moment(self.detail.timepaid * 1000).format('YYYY-M-DD H:mm:ss') || '';
 
                                 self.Cancel = $uibModalInstance.dismiss;
 

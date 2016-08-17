@@ -1133,8 +1133,8 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                         'app/directives/datetimepicker.min.js?rev=3c390403e5',
                         'app/directives/auto-height.min.js?rev=b13007069a',
                         'app/directives/modal-download.min.js?rev=c526f60567',
-                        'app/controllers/admin/property/withdraw-detail.min.js?rev=6010a29633',
-                        'app/controllers/admin/property/record-success.min.js?rev=9373f44877'
+                        'app/controllers/admin/property/withdraw-detail.min.js?rev=93c73b0683',
+                        'app/controllers/admin/property/record-success.min.js?rev=4cd9fac828'
                     ]
                 }]);
             }]
@@ -1172,7 +1172,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.property.record', {
         url: '/record/:tab/{category}|{startDate}|{endDate}|{dateRange}',
-        templateUrl: 'templates/admin/property/record.html?rev=9e26318c0e',
+        templateUrl: 'templates/admin/property/record.html?rev=29bc90d45b',
         data: {
             title: '收支明细'
         },

@@ -13,14 +13,16 @@ angular.module('app').directive('withdrawDetail', ["$api", "$uibModal", function
                             windowClass: 'no-border',
                             templateUrl: 'templates/admin/property/withdraw-detail.html?rev=aaedc20996',
                             controllerAs: 'self',
-                            controller: ["$filter", "$uibModalInstance", function($filter, $uibModalInstance) {
+                            controller: ["$uibModalInstance", function($uibModalInstance) {
 
                                 var self = this;
 
                                 self.detail = data.result || {};
-                                self.detail.timecreate = self.detail.timecreate && $filter('date')(self.detail.timecreate * 1000, 'yyyy-M-dd H:mm:ss') || '';
-                                self.detail.timecheck = self.detail.timecheck && $filter('date')(self.detail.timecheck * 1000, 'yyyy-M-dd H:mm:ss') || '';
-                                self.detail.timepaid = self.detail.timepaid && $filter('date')(self.detail.timepaid * 1000, 'yyyy-M-dd H:mm:ss') || '';
+
+                                self.detail.timecreate = self.detail.timecreate && moment(self.detail.timecreate * 1000).format('YYYY-M-DD H:mm:ss') || '';
+                                self.detail.timecheck = self.detail.timecheck && moment(self.detail.timecheck * 1000).format('YYYY-M-DD H:mm:ss') || '';
+                                self.detail.timepaid = self.detail.timepaid && moment(self.detail.timepaid * 1000).format('YYYY-M-DD H:mm:ss') || '';
+
                                 if (self.detail.channelaccount) {
                                     self.detail.channelaccount.tail_account = (self.detail.channelaccount.account || '').replace(/\d+(\d{4})$/, '$1');
                                 }
