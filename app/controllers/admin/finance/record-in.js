@@ -66,7 +66,8 @@ angular.module('app').controller('Finance.record.in', ["$scope", "$filter", "$te
             // category: 流水类型
             // status: 流水状态,
             pageindex: (loadMore && self.gridOptions.paging ? self.gridOptions.paging.pageindex : 0) + 1,
-            pagesize: 100
+            pagesize: 100,
+            cancellable: true
         }, function(data) {
             data = data.result || {};
             angular.forEach(data.detail, function(item) {

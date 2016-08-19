@@ -82,7 +82,8 @@ angular.module('app').controller('Finance.project.record', ["$scope", "$api", "$
             // category: 流水类型
             // status: 流水状态,
             pageindex: (loadMore && self.gridOptions.paging ? self.gridOptions.paging.pageindex : 0) + 1,
-            pagesize: 100
+            pagesize: 100,
+            cancellable: true
         };
 
         if (self.tab == 'in') {

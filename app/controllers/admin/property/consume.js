@@ -82,7 +82,8 @@ angular.module('app').controller('Property.consume', ["$scope", "$api", "$state"
         $api.business.departmentconsumptionstatistic({
             project: self.projectid,
             from: self.startDate.replace(/\-/g, ''),
-            to: self.endDate.replace(/\-/g, '')
+            to: self.endDate.replace(/\-/g, ''),
+            cancellable: true
         }, function(data) {
 
             self.statistic = data.result || {};
@@ -105,7 +106,8 @@ angular.module('app').controller('Property.consume', ["$scope", "$api", "$state"
             from: self.startDate.replace(/\-/g, ''),
             to: self.endDate.replace(/\-/g, ''),
             pageindex: self.paging.index,
-            pagesize: self.paging.size
+            pagesize: self.paging.size,
+            cancellable: true
         }, function(data) {
 
             data = data.result || {};
