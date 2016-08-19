@@ -897,7 +897,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                 }, {
                     files: [
                         static + 'libs/angular-ui-grid-3.2.1/ui-grid.min.js',
-                        'app/directives/datetimepicker.min.js?rev=3c390403e5',
+                        'app/directives/datetimepicker.min.js?rev=a59a9cf5c0',
                         'app/directives/auto-height.min.js?rev=b13007069a'
                     ]
                 }]);
@@ -925,7 +925,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         url: '/record'
     }).state('admin.finance.record.in', {
         url: '/in',
-        templateUrl: 'templates/admin/finance/record-in.html?rev=3bd7fa184c',
+        templateUrl: 'templates/admin/finance/record-in.html?rev=965bc37bf6',
         data: {
             projectHide: true,
             title: '收入'
@@ -947,14 +947,14 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         },
         views: {
             '@admin.finance.record': {
-                templateUrl: 'templates/admin/finance/record-in.html?rev=3bd7fa184c',
+                templateUrl: 'templates/admin/finance/record-in.html?rev=965bc37bf6',
                 controller: 'Finance.record.in',
                 controllerAs: 'self'
             }
         }
     }).state('admin.finance.record.out', {
         url: '/out',
-        templateUrl: 'templates/admin/finance/record-out.html?rev=e94d940be3',
+        templateUrl: 'templates/admin/finance/record-out.html?rev=2f4964d432',
         data: {
             projectHide: true,
             title: '支出'
@@ -976,7 +976,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         },
         views: {
             '@admin.finance.record': {
-                templateUrl: 'templates/admin/finance/record-out.html?rev=e94d940be3',
+                templateUrl: 'templates/admin/finance/record-out.html?rev=2f4964d432',
                 controller: 'Finance.record.out',
                 controllerAs: 'self'
             }
@@ -1082,7 +1082,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         },
         views: {
             '@admin.finance': {
-                templateUrl: 'templates/admin/finance/project/record.html?rev=0183ae1ae5',
+                templateUrl: 'templates/admin/finance/project/record.html?rev=1bf8f2bbab',
                 controller: 'Finance.project.record',
                 controllerAs: 'self'
             }
@@ -1130,7 +1130,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                     ]
                 }, {
                     files: [
-                        'app/directives/datetimepicker.min.js?rev=3c390403e5',
+                        'app/directives/datetimepicker.min.js?rev=a59a9cf5c0',
                         'app/directives/auto-height.min.js?rev=b13007069a',
                         'app/directives/modal-download.min.js?rev=c526f60567',
                         'app/controllers/admin/property/withdraw-detail.min.js?rev=93c73b0683',
@@ -1141,7 +1141,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.property.index', {
         url: '/index',
-        templateUrl: 'templates/admin/property/index.html?rev=495f2878b9',
+        templateUrl: 'templates/admin/property/index.html?rev=32be3506a9',
         data: {
             title: '物业财务'
         },
@@ -1172,7 +1172,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.property.record', {
         url: '/record/:tab/{category}|{startDate}|{endDate}|{dateRange}',
-        templateUrl: 'templates/admin/property/record.html?rev=29bc90d45b',
+        templateUrl: 'templates/admin/property/record.html?rev=b62a09beff',
         data: {
             title: '收支明细'
         },
@@ -1202,7 +1202,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.property.consume', {
         url: '/consume',
-        templateUrl: 'templates/admin/property/consume.html?rev=16a15b0e73',
+        templateUrl: 'templates/admin/property/consume.html?rev=d9bb364064',
         data: {
             title: '消耗明细'
         },

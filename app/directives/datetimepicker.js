@@ -13,8 +13,13 @@ angular.module('app').directive('datetimepicker', ["$timeout", "$ocLazyLoad", fu
         link: function(scope, element, attrs, ctrl) {
             pluginLoad.then(function() {
 
-                var linkLeft,
-                    linkRight,
+                var opt = {
+                        maxDateTo: undefined, //最大至
+                        minDateTo: undefined, //最小至
+                        maxRangeTo: undefined, //最大范围至
+                        minRangeTo: undefined, //最小范围至
+                        rangeDay: undefined //限制范围（天）
+                    },
                     options = {
                         locale: 'zh-CN',
                         format: 'YYYY-MM-DD',
@@ -40,38 +45,46 @@ angular.module('app').directive('datetimepicker', ["$timeout", "$ocLazyLoad", fu
 
                         angular.isObject(val) && angular.extend(options, val);
 
-                        linkLeft = options.linkLeft && $(options.linkLeft);
-                        linkRight = options.linkRight && $(options.linkRight);
-
-                        delete options.linkLeft;
-                        delete options.linkRight;
+                        angular.forEach(opt, function(val, key) {
+                            opt[key] = options[key];
+                            delete options[key];
+                        });
 
                         element.datetimepicker(options);
 
                         !options.inline && $timeout(function() {
 
-                            var linkLeftData = linkLeft && linkLeft.length && linkLeft.data('DateTimePicker'),
-                                linkRightData = linkRight && linkRight.length && linkRight.data('DateTimePicker'),
-                                elementData = element.data('DateTimePicker'),
-                                rangeDate = function(now, rangeDay) {
-                                    if (linkLeftData) {
-                                        linkLeftData.maxDate(now);
-                                        linkLeftData.date() && elementData.minDate(linkLeftData.date());
-                                        rangeDay && linkLeftData.date(moment(Math.max(moment(now).subtract(rangeDay, 'days'), linkLeftData.date())));
+                            var elementData = element.data('DateTimePicker'),
+                                linkage = function(nowDate) {
+                                    if (!opt.changed) {
+                                        opt.maxDateTo = opt.maxDateTo && $(opt.maxDateTo).data('DateTimePicker');
+                                        opt.minDateTo = opt.minDateTo && $(opt.minDateTo).data('DateTimePicker');
+                                        opt.maxRangeTo = opt.maxRangeTo && $(opt.maxRangeTo).data('DateTimePicker');
+                                        opt.minRangeTo = opt.minRangeTo && $(opt.minRangeTo).data('DateTimePicker');
+                                        opt.changed = true;
                                     }
-                                    if (linkRightData) {
-                                        linkRightData.minDate(now);
-                                        linkRightData.date() && elementData.maxDate(linkRightData.date());
-                                        rangeDay && linkRightData.date(moment(Math.min(moment(now).add(rangeDay, 'days'), linkRightData.date(), moment())));
+                                    if (opt.maxDateTo) {
+                                        opt.maxDateTo.minDate(nowDate);
+                                        opt.maxDateTo.date() && elementData.maxDate(opt.maxDateTo.date());
+                                    }
+                                    if (opt.minDateTo) {
+                                        opt.minDateTo.maxDate(nowDate);
+                                        opt.minDateTo.date() && elementData.minDate(opt.minDateTo.date());
+                                    }
+                                    if (opt.maxRangeTo && opt.rangeDay) {
+                                        opt.maxRangeTo.date(moment(Math.max(elementData.date(), Math.min(moment(nowDate).add(opt.rangeDay, 'days'), opt.maxRangeTo.date(), moment()))));
+                                    }
+                                    if (opt.minRangeTo && opt.rangeDay) {
+                                        opt.minRangeTo.date(moment(Math.min(elementData.date(), Math.max(moment(nowDate).subtract(opt.rangeDay, 'days'), opt.minRangeTo.date()))));
                                     }
                                 };
 
                             element.off('dp.change').on('dp.change', function(event) {
                                 ctrl && ctrl.$setViewValue(event.target.value);
-                                rangeDate(event.date, attrs.rangeDay && scope.$eval(attrs.rangeDay));
+                                linkage(event.date);
                             }).off('dp.show').on('dp.show', function(event) {
                                 (element.is('input') ? element.parent() : element).addClass('focus');
-                                rangeDate(elementData.date(), attrs.rangeDay && scope.$eval(attrs.rangeDay));
+                                linkage(elementData.date());
                             }).off('dp.hide').on('dp.hide', function() {
                                 (element.is('input') ? element.parent() : element).removeClass('focus');
                             });
