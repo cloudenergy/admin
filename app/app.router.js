@@ -552,7 +552,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.customer.index', {
         url: '/index',
-        templateUrl: 'templates/admin/customer/index.html?rev=bc24500d84',
+        templateUrl: 'templates/admin/customer/index.html?rev=4436eb9c49',
         data: {
             title: '社会属性'
         },

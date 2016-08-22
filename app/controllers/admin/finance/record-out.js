@@ -115,7 +115,7 @@ angular.module('app').controller('Finance.record.out', ["$scope", "$filter", "$t
         });
 
     }
-    self.placeholder = self.projectid && "商户名称" || "项目名称";
+    self.placeholder = self.projectid && '商户名称' || '项目名称';
     self.list = function(loadMore) {
         if (loadMore && self.gridOptions.paging && self.gridOptions.paging.count <= (self.gridOptions.paging.pageindex * self.gridOptions.paging.pagesize)) return;
         return $api.business.pltfundflow({

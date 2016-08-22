@@ -43,7 +43,7 @@
                     <i class="glyphicon glyphicon-record"></i>
                 </a>
                 <b ng-bind="node.title"></b>
-                <div class="pull-right" ng-show="node.id&&node.id!=='OTHER'" data-nodrag>
+                <div class="pull-right" ng-show="node.id!=='OTHER'" data-nodrag>
                     <a ng-show="node.level>0 && node.originid && node.type==='NODE'" class="btn btn-warning btn-xs mr5" ng-click="collapsed&&this.toggle();sensor(node)">
                         <i class="glyphicon glyphicon-th"></i>
                     </a>

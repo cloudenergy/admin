@@ -61,10 +61,10 @@ angular.module('app').controller('Property.withdraw', ["$scope", "$api", "$timeo
                 }, function() {
                     delete self.amount;
                     delete self.cardSelected;
-                    swal("成功", "已提交成功", "success");
+                    swal('成功', '已提交成功', 'success');
                     loadData();
                 }, function(data) {
-                    swal("错误", data.message, "error");
+                    swal('错误', data.message, 'error');
                 });
             });
 
