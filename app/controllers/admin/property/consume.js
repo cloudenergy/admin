@@ -136,7 +136,7 @@ angular.module('app').controller('Property.consume', ["$scope", "$api", "$state"
         }, function(data) {
             if (data.result.fn) {
                 self.downloadFile = data.result.fn;
-                self.downloadName = self.projectname + '_' + $state.$current.data.title + '_' + self.startDate.replace(/\-/g, '') + '_' + self.endDate.replace(/\-/g, '');
+                self.downloadName = EMAPP.Project.selected.title + '_' + $state.$current.data.title + '_' + self.startDate.replace(/\-/g, '') + '_' + self.endDate.replace(/\-/g, '');
             }
         });
     };

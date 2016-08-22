@@ -84,7 +84,7 @@ angular.module('app').controller('Property.statement', ["$scope", "$api", "$stat
             }, function(data) {
                 if (data.result.fn) {
                     item.downloadFileBill = data.result.fn;
-                    item.downloadNameBill = self.projectname + '_' + $state.$current.data.title + '_日账单_' + item.time;
+                    item.downloadNameBill = EMAPP.Project.selected.title + '_' + $state.$current.data.title + '_日账单_' + item.time;
                 }
             });
         } else {
@@ -94,7 +94,7 @@ angular.module('app').controller('Property.statement', ["$scope", "$api", "$stat
             }, function(data) {
                 if (data.result.fn) {
                     item.downloadFileBill = data.result.fn;
-                    item.downloadNameBill = self.projectname + '_' + $state.$current.data.title + '_月账单_' + item.time;
+                    item.downloadNameBill = EMAPP.Project.selected.title + '_' + $state.$current.data.title + '_月账单_' + item.time;
                 }
             });
         }
@@ -110,7 +110,7 @@ angular.module('app').controller('Property.statement', ["$scope", "$api", "$stat
             }, function(data) {
                 if (data.result.fn) {
                     item.downloadFileReceipt = data.result.fn;
-                    item.downloadNameReceipt = self.projectname + '_' + $state.$current.data.title + '_日回单_' + item.time;
+                    item.downloadNameReceipt = EMAPP.Project.selected.title + '_' + $state.$current.data.title + '_日回单_' + item.time;
                 }
             });
         } else {
@@ -120,7 +120,7 @@ angular.module('app').controller('Property.statement', ["$scope", "$api", "$stat
             }, function(data) {
                 if (data.result.fn) {
                     item.downloadFileReceipt = data.result.fn;
-                    item.downloadNameReceipt = self.projectname + '_' + $state.$current.data.title + '_月回单_' + item.time;
+                    item.downloadNameReceipt = EMAPP.Project.selected.title + '_' + $state.$current.data.title + '_月回单_' + item.time;
                 }
             });
         }

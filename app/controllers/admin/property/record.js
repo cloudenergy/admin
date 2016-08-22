@@ -200,7 +200,7 @@ angular.module('app').controller('Property.record', ["$scope", "$timeout", "$api
             if (data.result.fn) {
                 var options = GetOptions();
                 self.downloadFile = data.result.fn;
-                self.downloadName = self.projectname + '_' + $state.$current.data.title + '_' + options.from + '_' + options.to;
+                self.downloadName = EMAPP.Project.selected.title + '_' + $state.$current.data.title + '_' + options.from + '_' + options.to;
             }
         });
     };

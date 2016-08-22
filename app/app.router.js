@@ -997,7 +997,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/finance/record-detail.min.js?rev=bfc84e6e46'
+                    'app/controllers/admin/finance/record-detail.min.js?rev=e1c55b52f9'
                 ]);
             }]
         }
@@ -1172,7 +1172,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.property.record', {
         url: '/record/:tab/{category}|{startDate}|{endDate}|{dateRange}',
-        templateUrl: 'templates/admin/property/record.html?rev=b62a09beff',
+        templateUrl: 'templates/admin/property/record.html?rev=8c7eacb2e3',
         data: {
             title: '收支明细'
         },
@@ -1181,7 +1181,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/property/record.min.js?rev=78ec18a2ad'
+                    'app/controllers/admin/property/record.min.js?rev=fef1c26b83'
                 ]);
             }]
         }
@@ -1196,7 +1196,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/property/statement.min.js?rev=f3cc4797c3'
+                    'app/controllers/admin/property/statement.min.js?rev=2b7e16fe4d'
                 ]);
             }]
         }
@@ -1211,7 +1211,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/property/consume.min.js?rev=f2b36f5748'
+                    'app/controllers/admin/property/consume.min.js?rev=eae6938b8f'
                 ]);
             }]
         }

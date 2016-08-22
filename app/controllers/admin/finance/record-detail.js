@@ -18,7 +18,6 @@ angular.module('app').controller('Finance.record.out.detail', ["$filter", "$api"
         SUCCESS: 'text-success'
     };
 
-    self.projectname = '智慧云能源';
     self.projectid = $stateParams.projectid;
     self.orderno = $stateParams.orderno;
 
