@@ -218,6 +218,7 @@ angular.module('app').controller('Property.record', ["$scope", "$timeout", "$api
             }[self.tab], //流水方向(收入EARNING/支出EXPENSE)
             category: self.category.selected || undefined, //流水类型
             status: self.status.selected || undefined, //流水状态
+            groupby: self.tab === 'all' && 'order' || undefined,
             amount: [
                 self.amount.start === undefined ? null : parseFloat(self.amount.start),
                 self.amount.end === undefined ? null : parseFloat(self.amount.end)

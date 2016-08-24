@@ -897,7 +897,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                 }, {
                     files: [
                         static + 'libs/angular-ui-grid-3.2.1/ui-grid.min.js',
-                        'app/directives/datetimepicker.min.js?rev=ee0cff5bd2',
+                        'app/directives/datetimepicker.min.js?rev=553b90057b',
                         'app/directives/auto-height.min.js?rev=b13007069a'
                     ]
                 }]);
@@ -1130,7 +1130,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                     ]
                 }, {
                     files: [
-                        'app/directives/datetimepicker.min.js?rev=ee0cff5bd2',
+                        'app/directives/datetimepicker.min.js?rev=553b90057b',
                         'app/directives/auto-height.min.js?rev=b13007069a',
                         'app/directives/modal-download.min.js?rev=c526f60567',
                         'app/controllers/admin/property/withdraw-detail.min.js?rev=93c73b0683',
@@ -1172,7 +1172,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.property.record', {
         url: '/record/:tab/{category}|{startDate}|{endDate}|{dateRange}',
-        templateUrl: 'templates/admin/property/record.html?rev=8c7eacb2e3',
+        templateUrl: 'templates/admin/property/record.html?rev=109d57397c',
         data: {
             title: '收支明细'
         },
@@ -1181,7 +1181,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'app/controllers/admin/property/record.min.js?rev=fef1c26b83'
+                    'app/controllers/admin/property/record.min.js?rev=fb5135847b'
                 ]);
             }]
         }

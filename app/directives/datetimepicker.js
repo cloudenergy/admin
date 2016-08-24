@@ -8,7 +8,7 @@ angular.module('app').directive('datetimepicker', ["$ocLazyLoad", function($ocLa
     }]);
 
     return {
-        restrict: 'A',
+        restrict: 'EA',
         require: '?ngModel',
         link: function(scope, element, attrs, ctrl) {
             pluginLoad.then(function() {
