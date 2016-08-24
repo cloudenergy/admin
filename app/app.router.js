@@ -1202,7 +1202,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.property.consume', {
         url: '/consume',
-        templateUrl: 'templates/admin/property/consume.html?rev=c8606db635',
+        templateUrl: 'templates/admin/property/consume.html?rev=0e64a489e2',
         data: {
             title: '消耗明细'
         },
