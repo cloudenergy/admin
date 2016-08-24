@@ -1172,7 +1172,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.property.record', {
         url: '/record/:tab/{category}|{startDate}|{endDate}|{dateRange}',
-        templateUrl: 'templates/admin/property/record.html?rev=109d57397c',
+        templateUrl: 'templates/admin/property/record.html?rev=21ed7baed6',
         data: {
             title: '收支明细'
         },
