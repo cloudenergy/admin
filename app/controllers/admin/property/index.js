@@ -166,6 +166,7 @@ angular.module('app').controller('Property.index', ["$scope", "$api", "$uibModal
             project: EMAPP.Project.selected._id,
             from: self.startDate.replace(/\-/g, ''),
             to: self.endDate.replace(/\-/g, ''),
+            groupby: 'order',
             pageindex: 1,
             pagesize: 9,
             cancellable: true

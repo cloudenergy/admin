@@ -1151,7 +1151,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
                     'app/directives/distpicker.min.js?rev=47a8e0bc0d',
-                    'app/controllers/admin/property/index.min.js?rev=b6d4684953'
+                    'app/controllers/admin/property/index.min.js?rev=93b30aa616'
                 ]);
             }]
         }
