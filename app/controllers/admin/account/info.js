@@ -1,1 +1,89 @@
-angular.module("app").controller("accountInfo",["$scope","$location","SettingMenu","Account","API","Auth","$cookies","UI","Config",function(e,n,t,o,r,u,a,c,i){e.operateStatus={create:{isEnable:!1,url:"/create"},"delete":{isEnable:!1,url:"/delete"},edit:{isEnable:!1,url:"/edit"},roleres:{isEnable:!1,url:"/roleres"},amount:{isEnable:!1,url:"/amount"}},e.askingRemoveID=void 0,u.Check(e.operateStatus,function(){function n(e){c.AlertError(e.data.message)}t(function(n){e.menu=n}),e.currentPage=c.GetPageIndex(),e.getAccounts=function(){var t={pageindex:e.currentPage||1};e.searchKey&&e.searchKey.length&&(t.key=e.searchKey),r.Query(o.info,t,function(n){n.err||(e.accounts=n.result)},n)},e.DoRemove=function(t,u,a){t.preventDefault();var i=c.GetAbsoluteIndex(e.currentPage,a);r.Query(o["delete"],{id:u},function(n){e.accounts.splice(i,1)},n)},e.AskForRemove=function(n,t){n.preventDefault(),e.askingRemoveID=t},e.CancelRemove=function(n,t){n.preventDefault(),e.askingRemoveID=void 0},e.$watch("currentPage",function(n){return n?(e.getAccounts(),void c.PutPageIndex(void 0,e.currentPage)):(e.currentPage=c.GetPageIndex(),void e.getAccounts())}),e.onSearch=function(){e.getAccounts()},e.adminUser=a.user})}]);
+angular.module('app').controller('accountInfo', ["$scope", "$location", "Account", "API", "Auth", "$cookies", "UI", "Config", function($scope, $location, Account, API, Auth, $cookies, UI, Config) {
+
+    $scope.operateStatus = {
+        create: {
+            isEnable: false,
+            url: '/create'
+        },
+        delete: {
+            isEnable: false,
+            url: '/delete'
+        },
+        edit: {
+            isEnable: false,
+            url: '/edit'
+        },
+        roleres: {
+            isEnable: false,
+            url: '/roleres'
+        },
+        amount: {
+            isEnable: false,
+            url: '/amount'
+        }
+    };
+
+    $scope.askingRemoveID = undefined;
+
+    Auth.Check($scope.operateStatus, function() {
+
+        $scope.currentPage = UI.GetPageIndex();
+
+        $scope.getAccounts = function() {
+            var params = {
+                pageindex: $scope.currentPage || 1
+            }
+
+            if ($scope.searchKey && $scope.searchKey.length) {
+                params.key = $scope.searchKey;
+            }
+            API.Query(Account.info, params, function(result) {
+                if (result.err) {
+                    //error
+                } else {
+                    $scope.accounts = result.result;
+                }
+            }, responseError);
+        }
+
+        $scope.DoRemove = function(e, id, index) {
+            e.preventDefault();
+
+            var removeIndex = UI.GetAbsoluteIndex($scope.currentPage, index);
+            API.Query(Account.delete, {
+                id: id
+            }, function(result) {
+                $scope.accounts.splice(removeIndex, 1);
+                //            UI.AlertSuccess('删除成功')
+            }, responseError)
+        };
+        $scope.AskForRemove = function(e, id) {
+            e.preventDefault();
+            $scope.askingRemoveID = id;
+        };
+        $scope.CancelRemove = function(e, id) {
+            e.preventDefault();
+            $scope.askingRemoveID = undefined;
+        };
+        $scope.$watch('currentPage', function(currentPage) {
+            if (!currentPage) {
+                $scope.currentPage = UI.GetPageIndex();
+                $scope.getAccounts();
+                return;
+            }
+            $scope.getAccounts();
+            UI.PutPageIndex(undefined, $scope.currentPage);
+        });
+
+        $scope.onSearch = function() {
+            $scope.getAccounts();
+        };
+
+        function responseError(result) {
+            UI.AlertError(result.data.message)
+        }
+
+        $scope.adminUser = $cookies.user;
+
+    });
+}]);

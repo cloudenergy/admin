@@ -1,1 +1,454 @@
-EMAPP.register.controller("BillingServicemanage",["$scope","$stateParams","$q","$modal","$cookies","$location","SettingMenu","Account","md5","API","Auth","UI","BillingService","Energycategory","Config",function(e,r,i,t,n,o,l,u,a,c,d,m,v,f,p){d.Check(function(){function n(e,r,i){return{from:e,to:r,price:i}}function l(r){r.SelectMonth=1,r.SelectDay=1,r.HourFrom=0,r.HourTo=23,r.price=0,r.ladfrom=0,r.ladto=0,r.ladprice=0;var i="";if(_.each(r.applyto,function(r){var t=_.find(e.EnergyCategories,function(e){return e._id==r});i+=t.title+","}),i=i.substr(0,i.length-1),r.applytoStr=i,r.timequantumprice?r.billingtype={timequantum:!0}:r.billingtype={fixprice:!0},r.timequantumprice){r.timequantum=[];var t=0,n=r.timequantumprice[t];_.each(r.timequantumprice,function(e,i){if(n!=e){var o={hourFrom:t,hourTo:i,price:n};r.timequantum.push(o),t=i,n=e}});var o={hourFrom:t,hourTo:24,price:n};r.timequantum.push(o)}if(r.ladderprice){r.ladder=[];var l=0;_.map(r.ladderprice,function(e,i){var t={from:l,to:i,price:e};l=i,r.ladder.push(t)})}console.log("Build Service: ",r)}e.askingRemoveID=void 0,e.BillingServiceID=r.id,e.months=[1,2,3,4,5,6,7,8,9,10,11,12],e.days=[];for(var u=1;31>=u;u++)e.days.push(u);e.week=[{index:1,title:"一"},{index:2,title:"二"},{index:3,title:"三"},{index:4,title:"四"},{index:5,title:"五"},{index:6,title:"六"},{index:7,title:"日"}],e.hours=[];for(var u=0;24>=u;u++)e.hours.push(u);i.all([c.QueryPromise(f.info,{}).$promise,c.QueryPromise(v.info,{id:e.BillingServiceID}).$promise]).then(function(r){if(!r[1].err&&!r[0].err){e.EnergyCategories=r[0].result,e.ServiceEnergycategories=[],_.each(r[1].result.energycategory,function(r){var i=_.find(e.EnergyCategories,function(e){return e._id==r});e.ServiceEnergycategories.push(i)}),e.billingService=r[1].result,_.each(e.billingService.rules,function(e,r){l(e)}),console.log(e.billingService),e.billingService.rules?e.MaxLevel=e.billingService.rules.length-1:e.MaxLevel=0;var i="";_.each(e.billingService.rules,function(e,r){var t=function(e){var r="";if(e.week){var i="",t=["一","二","三","四","五","六","日"];_.each(e.week,function(e,r){e&&(i.length&&(i+=","),i+=t[r])}),i.length&&(r+="星期"+i)}if(e.timequantumprice){var n=[],o=0,l=e.timequantumprice[o];_.each(e.timequantumprice,function(e,r){if(l!=e){var i={hourFrom:o,hourTo:r,price:l};n.push(i),o=r,l=e}});var u={hourFrom:o,hourTo:24,price:l};n.push(u);var a="";_.each(n,function(e){a.length&&(a+="; "),a+=e.hourFrom+":00 ~ "+e.hourTo+":00 : ￥"+e.price}),a.length&&(r+=a)}else e.fixprice&&(r+="单价 ￥"+e.fixprice);return r};i+=t(e)}),console.log(i)}}),e.SaveStrategy=function(){var r={id:e.BillingServiceID,rules:[]};_.each(e.billingService.rules,function(e){var i={};i.week=e.week,i.day=e.day,i.applyto=e.applyto,e.timequantum&&e.timequantum.length?(i.timequantumprice=new Array(24),_.each(e.timequantum,function(e){for(var r=e.hourFrom;r<e.hourTo;r++)i.timequantumprice[r]=parseFloat(e.price)})):e.ladder&&!_.isEmpty(e.ladder)?(i.ladderprice={},_.each(e.ladder,function(e){i.ladderprice[e.to]=e.price})):i.fixprice=parseFloat(e.fixprice||0),r.rules.push(i)}),console.log(r),c.Query(v.update,r,function(e){console.log(e),o.path("/admin/billingservice/info"),m.AlertSuccess("保存成功")},function(e){m.AlertError(e.data.message)})},e.AddSubStrategy=function(){var r=t.open({templateUrl:"energySelect.html",controller:"EnergySelect",size:"md",resolve:{ServiceEnergycategories:function(){return e.ServiceEnergycategories}}});r.result.then(function(r){var i={applyto:r};l(i),e.billingService.rules||(e.billingService.rules=[]),e.billingService.rules.push(i)},function(){})},e.Day=new Date,e.dateOptions={formatYear:"yy",startingDay:1},e.SelectRule=void 0,e.disabled=function(e,r){return"year"===r},e.open=function(r,i){r.preventDefault(),r.stopPropagation(),e.SelectRule=i,i.opened=!0,_.each(e.Rules,function(e){e.id!=i.id&&(e.opened=!1)})},e.AddSelectDate=function(e,r){e.preventDefault();var i=r.SelectMonth;i=10>i?"0"+i.toString():i.toString();var t=r.SelectDay;t=10>t?"0"+t.toString():t.toString();var n=i+t;r.day||(r.day=[]),r.day=_.union(r.day,n)},e.RemoveSelectDate=function(e,r,i){e.preventDefault(),r.day=_.without(r.day,i)},e.SelectWeek=function(e,r,i){e.preventDefault(),i.week&&i.week.length||(i.week=[0,0,0,0,0,0,0]),i.week[r]?i.week[r]=0:i.week[r]=r+1},e.AddTimeQuantum=function(e,r){var i=_.range(r.HourFrom,r.HourTo,1);for(var t in r.timequantum){var n=r.timequantum[t],o=_.range(n.hourFrom,n.hourTo,1),l=_.intersection(i,o);if(l.length)return void alert("添加时间段和现有时间段重叠，请检查")}r.timequantum||(r.timequantum=new Array),r.timequantum.push({hourFrom:Number(r.HourFrom),hourTo:Number(r.HourTo),price:Number(r.price)})},e.RemoveTimeQuantum=function(e,r,i){e.preventDefault();var t=_.indexOf(r.timequantum,i);r.timequantum.splice(t,1)},e.AddLadder=function(e,r){if(!r.ladfrom&&!r.ladto)return void alert("请填写阶梯范围");if(r.ladfrom>=r.ladto)return void alert("填写的阶梯范围有误，请检查");if(r.ladder){var i=_.find(r.ladder,function(e){return r.ladfrom>e.from&&r.ladfrom<e.to||r.ladto>e.from&&r.ladto<e.to});if(i)return void alert("添加阶梯价格和现有时间段重叠，请检查")}else r.ladder=[];r.ladder.push(n(r.ladfrom,r.ladto,r.ladprice))},e.RemoveLadder=function(e,r,i){e.preventDefault();var t=_.indexOf(r.ladderprice,i);r.ladderprice.splice(t,1)},e.DoRemove=function(r,i){r.preventDefault(),e.billingService.rules.splice(i,1),e.askingRemoveID=null},e.AskForRemove=function(r,i){r.preventDefault(),e.askingRemoveID=i},e.CancelRemove=function(r,i){r.preventDefault(),e.askingRemoveID=void 0},e.onLevelUp=function(r,i){r.preventDefault();var t=e.billingService.rules[i-1];e.billingService.rules[i-1]=e.billingService.rules[i],e.billingService.rules[i]=t},e.onLevelDown=function(r,i){r.preventDefault();var t=e.billingService.rules[i+1];e.billingService.rules[i+1]=e.billingService.rules[i],e.billingService.rules[i]=t}})}]);
+angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParams", "$q", "$uibModal", "$state", "API", "Auth", "UI", "BillingService", "Energycategory", function($scope, $stateParams, $q, $uibModal, $state, API, Auth, UI, BillingService, Energycategory) {
+    Auth.Check(function() {
+
+        $scope.askingRemoveID = undefined;
+        $scope.BillingServiceID = $stateParams.id;
+        $scope.months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        $scope.days = [];
+        for (var i = 1; i <= 31; i++) {
+            $scope.days.push(i);
+        }
+        $scope.week = [{
+            index: 1,
+            title: '一'
+        }, {
+            index: 2,
+            title: '二'
+        }, {
+            index: 3,
+            title: '三'
+        }, {
+            index: 4,
+            title: '四'
+        }, {
+            index: 5,
+            title: '五'
+        }, {
+            index: 6,
+            title: '六'
+        }, {
+            index: 7,
+            title: '日'
+        }];
+        $scope.hours = [];
+        for (var i = 0; i <= 24; i++) {
+            $scope.hours.push(i);
+        }
+
+        function CreateLadderPrice(from, to, price) {
+            return {
+                from: from,
+                to: to,
+                price: price
+            };
+        }
+        //////////////////////////////////////////////////////////////////////////////////
+        //Main Function
+        //Get Current BillingService's EnergyCategory
+        $q.all([
+            API.QueryPromise(Energycategory.info, {}).$promise,
+            API.QueryPromise(BillingService.info, {
+                id: $scope.BillingServiceID
+            }).$promise
+        ]).then(
+            function(result) {
+                if (result[1].err || result[0].err) {
+                    return;
+                }
+
+                $scope.EnergyCategories = result[0].result;
+                $scope.ServiceEnergycategories = [];
+
+                _.each(result[1].result.energycategory, function(ecID) {
+                    var ecItem = _.find($scope.EnergyCategories, function(ec) {
+                        return ec._id == ecID;
+                    });
+                    $scope.ServiceEnergycategories.push(ecItem);
+                });
+                ///////////////////////////////////////////////
+                //
+                $scope.billingService = result[1].result;
+                _.each($scope.billingService.rules, function(rule, index) {
+                    //init
+                    BuildService(rule);
+                });
+
+                if ($scope.billingService.rules) {
+                    $scope.MaxLevel = $scope.billingService.rules.length - 1;
+                } else {
+                    $scope.MaxLevel = 0;
+                }
+
+                //BillingService To Text
+                var text = '';
+                _.each($scope.billingService.rules, function(rule, index) {
+                    var RuleToText = function(rule) {
+                        var text = '';
+                        if (rule.week) {
+                            var weekText = '';
+                            var weekTextIndex = ['一', '二', '三', '四', '五', '六', '日'];
+                            _.each(rule.week, function(date, index) {
+                                if (date) {
+                                    if (weekText.length) {
+                                        weekText += ',';
+                                    }
+                                    weekText += weekTextIndex[index];
+                                }
+                            });
+                            if (weekText.length) {
+                                text += '星期' + weekText;
+                            }
+                        }
+
+                        //分段计费文字化
+                        if (rule.timequantumprice) {
+                            //
+                            var timequantum = [];
+
+                            //
+                            {
+                                var hourIndex = 0;
+                                var priceIndex = rule.timequantumprice[hourIndex];
+                                _.each(rule.timequantumprice, function(price, hour) {
+                                    if (priceIndex != price) {
+                                        //
+                                        var obj = {
+                                            hourFrom: hourIndex,
+                                            hourTo: hour,
+                                            price: priceIndex
+                                        };
+                                        timequantum.push(obj);
+                                        hourIndex = hour;
+                                        priceIndex = price;
+                                    }
+                                });
+                                var obj = {
+                                    hourFrom: hourIndex,
+                                    hourTo: 24,
+                                    price: priceIndex
+                                };
+                                timequantum.push(obj);
+                            }
+
+                            var quantumpriceText = '';
+                            _.each(timequantum, function(segment) {
+                                if (quantumpriceText.length) {
+                                    quantumpriceText += '; ';
+                                }
+                                quantumpriceText += segment.hourFrom + ":00 ~ " + segment.hourTo + ':00 : ￥' + segment.price;
+                            });
+
+                            if (quantumpriceText.length) {
+                                text += quantumpriceText;
+                            }
+                        }
+                        //单价文字化
+                        else if (rule.fixprice) {
+                            text += '单价 ￥' + rule.fixprice;
+                        }
+                        return text;
+                    };
+                    text += RuleToText(rule);
+                });
+
+            }
+        );
+
+        //
+        function BuildService(service) {
+            service.SelectMonth = 1;
+            service.SelectDay = 1;
+            service.HourFrom = 0;
+            service.HourTo = 23;
+            service.price = 0;
+            service.ladfrom = 0;
+            service.ladto = 0;
+            service.ladprice = 0;
+
+
+            var applytoStr = '';
+            _.each(service.applyto, function(energycategoryID) {
+                var energycategory = _.find($scope.EnergyCategories, function(energycategory) {
+                    return energycategory._id == energycategoryID;
+                });
+                applytoStr += energycategory.title + ',';
+            });
+            applytoStr = applytoStr.substr(0, applytoStr.length - 1);
+            service.applytoStr = applytoStr;
+
+            //
+            //判断区间计费/统一计费
+            if (service.timequantumprice) {
+                service.billingtype = {
+                    timequantum: true
+                };
+            } else {
+                service.billingtype = {
+                    fixprice: true
+                };
+            }
+
+            //时间段映射成对象
+            if (service.timequantumprice) {
+                //parse timequantum
+                //            var tq = {};
+                service.timequantum = [];
+
+                var hourIndex = 0;
+                var priceIndex = service.timequantumprice[hourIndex];
+                _.each(service.timequantumprice, function(price, hour) {
+                    if (priceIndex != price) {
+                        //
+                        var obj = {
+                            hourFrom: hourIndex,
+                            hourTo: hour,
+                            price: priceIndex
+                        };
+                        service.timequantum.push(obj);
+                        hourIndex = hour;
+                        priceIndex = price;
+                    }
+                });
+                var obj = {
+                    hourFrom: hourIndex,
+                    hourTo: 24,
+                    price: priceIndex
+                };
+                service.timequantum.push(obj);
+            }
+
+            //阶梯计费
+            if (service.ladderprice) {
+                service.ladder = [];
+                var lowerbound = 0;
+                _.map(service.ladderprice, function(price, level) {
+                    var obj = {
+                        from: lowerbound,
+                        to: level,
+                        price: price
+                    };
+                    lowerbound = level;
+                    service.ladder.push(obj);
+                });
+            }
+
+        }
+        $scope.SaveStrategy = function() {
+            //
+            var param = {
+                id: $scope.BillingServiceID,
+                rules: []
+            };
+            _.each($scope.billingService.rules, function(rule) {
+                var saveObj = {};
+                saveObj.week = rule.week;
+                saveObj.day = rule.day;
+                saveObj.applyto = rule.applyto;
+                if (rule.timequantum && rule.timequantum.length) {
+                    saveObj.timequantumprice = new Array(24);
+                    _.each(rule.timequantum, function(tq) {
+                        for (var i = tq.hourFrom; i < tq.hourTo; i++) {
+                            saveObj.timequantumprice[i] = parseFloat(tq.price);
+                        }
+                    });
+                } else if (rule.ladder && !_.isEmpty(rule.ladder)) {
+                    //
+                    saveObj.ladderprice = {};
+                    _.each(rule.ladder, function(lad) {
+                        saveObj.ladderprice[lad.to] = lad.price;
+                    });
+                } else {
+                    saveObj.fixprice = parseFloat(rule.fixprice || 0);
+                }
+                param.rules.push(saveObj);
+            });
+
+            API.Query(BillingService.update, param, function(result) {
+                $state.go('admin.billingservice.info');
+                UI.AlertSuccess('保存成功');
+            }, function(result) {
+                UI.AlertError(result.data.message);
+            });
+        };
+        $scope.AddSubStrategy = function() {
+            var modalInstance = $uibModal.open({
+                templateUrl: 'energySelect.html',
+                controller: 'EnergySelect',
+                size: 'md',
+                resolve: {
+                    ServiceEnergycategories: function() {
+                        return $scope.ServiceEnergycategories;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function(result) {
+                //
+                var service = {
+                    applyto: result
+                };
+                BuildService(service);
+                if (!$scope.billingService.rules) {
+                    $scope.billingService.rules = [];
+                }
+                $scope.billingService.rules.push(service);
+            }, function() {});
+        };
+
+        $scope.Day = new Date();
+        $scope.dateOptions = {
+            formatYear: 'yy',
+            startingDay: 1
+        };
+        $scope.SelectRule = undefined;
+        $scope.disabled = function(date, mode) {
+            //        return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+            return mode === 'year';
+        };
+        $scope.open = function($event, selectRule) {
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            $scope.SelectRule = selectRule;
+            selectRule.opened = true;
+            _.each($scope.Rules, function(rule) {
+                if (rule.id != selectRule.id) {
+                    rule.opened = false;
+                }
+            });
+        };
+
+        //添加日期
+        $scope.AddSelectDate = function(e, rule) {
+            e.preventDefault();
+            var month = rule.SelectMonth;
+            month = month < 10 ? '0' + month.toString() : month.toString();
+            var day = rule.SelectDay;
+            day = day < 10 ? '0' + day.toString() : day.toString();
+
+            var dt = month + day;
+            if (!rule.day) {
+                rule.day = [];
+            }
+            rule.day = _.union(rule.day, dt);
+        };
+        //删除已经选择的日期
+        $scope.RemoveSelectDate = function(e, rule, day) {
+            e.preventDefault();
+            rule.day = _.without(rule.day, day);
+        };
+        //选择星期
+        $scope.SelectWeek = function(e, week, rule) {
+            e.preventDefault();
+
+            if (!rule.week || !rule.week.length) {
+                rule.week = [0, 0, 0, 0, 0, 0, 0];
+            }
+
+            if (rule.week[week]) {
+                rule.week[week] = 0;
+            } else {
+                rule.week[week] = week + 1;
+            }
+        };
+
+        //添加时间段/价格
+        $scope.AddTimeQuantum = function(e, rule) {
+            //先要判定新添加的时间段和已有的时候是否重叠
+            var newTimeQuentum = _.range(rule.HourFrom, rule.HourTo, 1);
+            for (var index in rule.timequantum) {
+                var tq = rule.timequantum[index];
+                var timeQuentum = _.range(tq.hourFrom, tq.hourTo, 1);
+                var intersectionSet = _.intersection(newTimeQuentum, timeQuentum);
+                if (intersectionSet.length) {
+                    //Area overlap
+                    alert('添加时间段和现有时间段重叠，请检查');
+                    return;
+                }
+            }
+            if (!rule.timequantum) {
+                rule.timequantum = new Array();
+            }
+            rule.timequantum.push({
+                hourFrom: Number(rule.HourFrom),
+                hourTo: Number(rule.HourTo),
+                price: Number(rule.price)
+            });
+        };
+        //删除时间段/价格
+        $scope.RemoveTimeQuantum = function(e, rule, timeQuantum) {
+            e.preventDefault();
+
+            var index = _.indexOf(rule.timequantum, timeQuantum);
+            rule.timequantum.splice(index, 1);
+        };
+
+        //添加阶梯价格
+        $scope.AddLadder = function(e, rule) {
+            if (!rule.ladfrom && !rule.ladto) {
+                alert('请填写阶梯范围');
+                return;
+            }
+            if (rule.ladfrom >= rule.ladto) {
+                alert('填写的阶梯范围有误，请检查');
+                return;
+            }
+
+            if (!rule.ladder) {
+                rule.ladder = [];
+            } else {
+                //先要判定新添加的阶梯价和已有的时候是否重叠
+                var isInArea = _.find(rule.ladder, function(lad) {
+                    if (rule.ladfrom > lad.from && rule.ladfrom < lad.to || rule.ladto > lad.from && rule.ladto < lad.to) {
+                        return true;
+                    }
+                    return false;
+                });
+                if (isInArea) {
+                    //
+                    alert('添加阶梯价格和现有时间段重叠，请检查');
+                    return;
+                }
+            }
+
+            rule.ladder.push(CreateLadderPrice(rule.ladfrom, rule.ladto, rule.ladprice));
+        };
+        //删除阶梯价格
+        $scope.RemoveLadder = function(e, rule, lad) {
+            e.preventDefault();
+
+            var index = _.indexOf(rule.ladderprice, lad);
+            rule.ladderprice.splice(index, 1);
+        };
+
+        $scope.DoRemove = function(e, index) {
+            e.preventDefault();
+
+            $scope.billingService.rules.splice(index, 1);
+            $scope.askingRemoveID = null;
+        };
+        $scope.AskForRemove = function(e, index) {
+            e.preventDefault();
+            $scope.askingRemoveID = index;
+        };
+        $scope.CancelRemove = function(e, index) {
+            e.preventDefault();
+            $scope.askingRemoveID = undefined;
+        };
+
+        $scope.onLevelUp = function(e, index) {
+            e.preventDefault();
+
+            var tmp = $scope.billingService.rules[index - 1];
+            $scope.billingService.rules[index - 1] = $scope.billingService.rules[index];
+            $scope.billingService.rules[index] = tmp;
+        };
+        $scope.onLevelDown = function(e, index) {
+            e.preventDefault();
+
+            var tmp = $scope.billingService.rules[index + 1];
+            $scope.billingService.rules[index + 1] = $scope.billingService.rules[index];
+            $scope.billingService.rules[index] = tmp;
+        };
+    });
+}]);

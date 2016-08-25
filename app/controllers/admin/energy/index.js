@@ -1,1 +1,316 @@
-EMAPP.register.controller("EnergyIndex",["$scope","SettingMenu","$q","$modal","Energy","API","Auth","Project","UI","Energycategory","base64","Sensor",function(e,n,t,i,r,o,l,c,u,d,a,g){var s="energy.project",f={},y={};l.Check(function(){function l(e){return a.encode(e)}function p(e,n){return e&&e.id&&e.id.length?e.id+"|"+l(n):l(n)}function h(e,n,t){if(n){var i=[];return _.each(n,function(n){n.childrens?n.ischild=!1:n.ischild=!0,n.originid=n.id,n.origintitle=n.title,n.parent=e,n.level=t,n.nodes=h(n,n.childrens,t+1),i.push(n)}),i.sort(function(e,n){return e.title>n.title?1:-1}),i}}function v(n){f={},y={},e.projectSelected=n,o.Query(r.info,{project:n},function(n){if(n.err);else{console.log(n.result);var t=n.result.energy;t||(t={}),_.each(e.energycategory,function(e){t[e._id]||(t[e._id]={id:e._id,childrens:[],ischild:!1});var n=t[e._id];n.unit=e.unit,n.standcol=e.standcol,n.title=e.title}),e.energycategory.sort(function(e,n){return e.title>n.title?1:-1});var i=h(null,t,1);e.viewOfEnergy=[{nodes:i,title:"能耗分类",level:0}]}},j)}function j(e){u.AlertError(e.data.message)}n(function(n){e.menu=n}),e.doSaveEnergy=function(n){n.preventDefault();var t=function(e,n){var i={};return _.each(n,function(e){var n={id:e.id,title:e.title};e.originid&&e.originid!=e.id&&(y[e.originid]=e.id);var r=t(n,e.nodes);_.isEmpty(r)||(n.childrens=r),i[n.id]=n}),i},i=t(null,e.viewOfEnergy[0].nodes),l={};_.each(i,function(e){e.childrens&&(l[e.id]=e)}),i=l,console.log(i);var c={energy:i,_id:e.projectSelected};o.Query(r.update,c,function(n){console.log(n),n.err&&j(err),_.each(f,function(e){var n={query:{energyPath:e.id},queryoperate:{set:{energy:"",energyPath:""}}};o.Query(g.update,n,function(e){e.err||console.log(e)})}),_.map(y,function(n,t){var i={energy:o.RootEnergycategory(t),energyPath:t,project:e.projectSelected},r={set:{energy:o.RootEnergycategory(n),energyPath:n}};console.log(i,r),o.Query(g.update,{query:i,queryoperate:r},function(e){})}),v(e.projectSelected),u.AlertSuccess("保存成功")})},t.all([o.QueryPromise(c.info,{}).$promise,o.QueryPromise(d.info,{}).$promise]).then(function(n){if(n[0].err||n[1].err);else{e.projects=angular.isArray(n[0].result)?n[0].result:[n[0].result];var t=u.GetPageItem(s);t?(t=_.find(e.projects,function(e){return e._id==t}),e.projectSelected=t._id):e.projects.length>0&&(e.projectSelected=e.projects[0]._id),e.energycategory=n[1].result}}),e.$watch("projectSelected",function(e){e&&(u.PutPageItem(s,e),v(e))}),e.deleteNode=function(e,n){var t=function(e){e&&(_.each(e.nodes,function(n){t(n),e.originid&&(f[n.originid]=n)}),e.originid&&(f[e.originid]=e))};t(n),console.log(f),e.remove()},e.enable=function(e){e.enable=!e.enable},e.toggle=function(e){e.toggle()},e.newSubItem=function(e,n){var t=e.node;t.nodes||(t.nodes=[]),t.nodes.push({id:"",enable:!0,editing:!0,title:"",origintitle:"",level:t.level+1,parent:n,nodes:[]})},e.edit=function(e){e.editing=!0},e.cancelEditing=function(n,t){t.title.length||t.origintitle.length?(t.editing=!1,t.title=t.origintitle):e.deleteNode(n,t)},e.save=function(e){if(!e.title.length)return alert("请输入分类名称"),!1;if(e.parent){var n=_.find(e.parent.nodes,function(n){return n.id&&n.id.length&&!n.editing?n.title==e.title?(alert("已有相同名称，请确认"),!0):!1:void 0});if(n)return!1}e.editing=!1,e.originid||(e.origintitle=e.title);var t=function(e){e.id=p(e.parent,e.title),f[e.id]&&(f[e.id]=null),_.each(e.nodes,function(e){t(e)})};t(e),console.log(e,f)},e.sensor=function(n,t){console.log(n,t);var r=i.open({templateUrl:"sensorSelect.html",controller:"SensorSelect",size:"lg",resolve:{ProjectID:function(){return e.projectSelected},EnergycategoryID:function(){return n.id}}});r.result.then(function(e){},function(){})},e.switchUnitPriceType=function(e){e.unitprice.isnormal=!e.unitprice.isnormal}})}]);
+angular.module('app').controller('EnergyIndex', ["$scope", "$q", "$uibModal", "API", "Auth", "Project", "UI", "$api", "base64", "Sensor", "Energy", function($scope, $q, $uibModal, API, Auth, Project, UI, $api, base64, Sensor, Energy) {
+
+    var removeEnergycategory = {};
+    var updateEnergycategory = {};
+
+    Auth.Check(function() {
+
+        function TitleToCode(title) {
+            return base64.encode(title);
+        }
+
+        function GenereateID(parent, title) {
+            if (parent && parent.id && parent.id.length) {
+                return parent.id + '|' + TitleToCode(title);
+            } else {
+                return TitleToCode(title);
+            }
+        }
+
+        $scope.doSaveEnergy = function(e) {
+            e.preventDefault();
+
+            var SerilizeToEnergy = function(parent, nodes) {
+                //
+                var energyNodes = {};
+                _.each(nodes, function(node) {
+                    //
+                    var energyNode = {
+                        id: node.id,
+                        title: node.title
+                    };
+                    if (node.originid && node.originid != node.id) {
+                        updateEnergycategory[node.originid] = node.id;
+                    }
+                    var childrens = SerilizeToEnergy(energyNode, node.nodes);
+                    if (!_.isEmpty(childrens)) {
+                        energyNode.childrens = childrens;
+                    }
+                    energyNodes[energyNode.id] = energyNode;
+                });
+                return energyNodes;
+            };
+
+            var energy = SerilizeToEnergy(null, $scope.viewOfEnergy[0].nodes);
+            //Filter energy which do not exists child energies
+            {
+                var tmpEnergy = {};
+                _.each(energy, function(e) {
+                    if (e.childrens) {
+                        tmpEnergy[e.id] = e;
+                    }
+                });
+                energy = tmpEnergy;
+            }
+
+            API.Query(Energy.update, {
+                energy: energy,
+                _id: $scope.Project.selected._id
+            }, function(result) {
+
+                if (result.err) {
+                    responseError(err);
+                }
+
+                //remove Energycategory
+                _.each(removeEnergycategory, function(energycategory) {
+                    var updateSensor = {
+                        query: {
+                            energyPath: energycategory.id
+                        },
+                        queryoperate: {
+                            'set': {
+                                energy: '',
+                                energyPath: ''
+                            }
+                        }
+                    };
+                    API.Query(Sensor.update, updateSensor, function(result) {
+
+                    });
+                });
+
+                //update Energycategory
+                _.map(updateEnergycategory, function(v, k) {
+                    var queryObj = {
+                        energy: API.RootEnergycategory(k),
+                        energyPath: k,
+                        project: $scope.Project.selected._id
+                    };
+                    var updateObj = {
+                        'set': {
+                            energy: API.RootEnergycategory(v),
+                            energyPath: v
+                        }
+                    };
+
+                    API.Query(Sensor.update, {
+                        query: queryObj,
+                        queryoperate: updateObj
+                    }, function(result) {});
+                });
+                GetEnergy();
+
+                UI.AlertSuccess('保存成功');
+            });
+
+        };
+
+        function InitialEnergyForPage(parent, energy, level) {
+            if (!energy) {
+                return undefined;
+            }
+
+            var energyArray = [];
+            _.each(energy, function(v) {
+
+                if (v.childrens) {
+                    v.ischild = false;
+                } else {
+                    v.ischild = true;
+                }
+
+                v.originid = v.id;
+                v.origintitle = v.title;
+                v.parent = parent;
+                v.level = level;
+                v.nodes = InitialEnergyForPage(v, v.childrens, level + 1);
+                energyArray.push(v);
+            });
+            energyArray.sort(function(a, b) {
+                return a.title > b.title ? 1 : -1;
+            });
+            return energyArray;
+        }
+
+        function GetEnergy() {
+
+            removeEnergycategory = {};
+            updateEnergycategory = {};
+
+            $q.all([
+                $api.energy.info({
+                    project: $scope.Project.selected._id
+                }, function(data) {
+                    $scope.energyData = angular.isObject(data.result) && data.result.energy;
+                }, responseError).$promise,
+                $api.energycategory.info(function(data) {
+                    $scope.energycategory = data.result;
+                }).$promise
+            ]).then(function() {
+                if (angular.isObject($scope.energyData)) {
+                    angular.forEach($scope.energycategory, function(ec) {
+                        if (!$scope.energyData[ec._id]) {
+                            $scope.energyData[ec._id] = {
+                                id: ec._id,
+                                childrens: [],
+                                ischild: false
+                            };
+                        }
+                        var obj = $scope.energyData[ec._id];
+                        obj.unit = ec.unit;
+                        obj.standcol = ec.standcol;
+                        obj.title = ec.title;
+                    });
+
+                    if ($scope.energycategory) {
+                        $scope.energycategory.sort(function(a, b) {
+                            return a.title > b.title ? 1 : -1;
+                        });
+                    }
+
+                    $scope.viewOfEnergy = [{
+                        nodes: InitialEnergyForPage(null, $scope.energyData, 1),
+                        title: '能耗分类',
+                        level: 0
+                    }];
+                }
+            });
+
+        }
+
+        //选择项目后联动查询能耗类型
+        $scope.$watch('Project.selected', GetEnergy);
+
+        //如果函数名为remove|removeNode会被覆盖
+        $scope.deleteNode = function(scope, node) {
+            var recursionDelete = function(node) {
+                if (!node) {
+                    return;
+                }
+                _.each(node.nodes, function(n) {
+                    recursionDelete(n);
+                    if (node.originid) {
+                        removeEnergycategory[n.originid] = n;
+                    }
+                });
+
+                if (node.originid) {
+                    removeEnergycategory[node.originid] = node;
+                }
+            };
+
+            recursionDelete(node);
+
+            scope.remove();
+        };
+
+        $scope.enable = function(node) {
+            node.enable = !node.enable;
+        };
+
+        $scope.toggle = function(scope) {
+            scope.toggle();
+        };
+
+        $scope.newSubItem = function(scope, node) {
+            var nodeData = scope.node;
+            if (!nodeData.nodes) {
+                nodeData.nodes = [];
+            }
+            nodeData.nodes.push({
+                id: '',
+                enable: true,
+                editing: true,
+                title: '',
+                origintitle: '',
+                level: nodeData.level + 1,
+                parent: node,
+                nodes: []
+            });
+        };
+
+        $scope.edit = function(node) {
+            node.editing = true;
+        };
+        $scope.cancelEditing = function(scope, node) {
+            if (!node.title.length && !node.origintitle.length) {
+                $scope.deleteNode(scope, node);
+            } else {
+                node.editing = false;
+                node.title = node.origintitle;
+            }
+
+        };
+
+        $scope.save = function(node) {
+            if (!node.title.length) {
+                alert('请输入分类名称');
+                return false;
+            }
+            //查找同层是否有相同名称
+            if (node.parent) {
+                var isFind = _.find(node.parent.nodes, function(n) {
+                    if (!n.id || !n.id.length || n.editing) {
+                        return;
+                    }
+                    if (n.title == node.title) {
+                        alert('已有相同名称，请确认');
+                        return true;
+                    }
+                    return false;
+                });
+                if (isFind) {
+                    return false;
+                }
+            }
+
+            node.editing = false;
+            if (!node.originid) {
+                node.origintitle = node.title;
+            }
+
+            var recursionUpdate = function(node) {
+                node.id = GenereateID(node.parent, node.title);
+                //find if node.is is exists in removeList(Just to prevent remove/add same node)
+                if (removeEnergycategory[node.id]) {
+                    removeEnergycategory[node.id] = null;
+                }
+                _.each(node.nodes, function(n) {
+                    recursionUpdate(n);
+                });
+            };
+            recursionUpdate(node);
+
+        };
+
+        $scope.sensor = function(node, index) {
+
+            //将当前属性添加到选中的传感器
+            var modalInstance = $uibModal.open({
+                templateUrl: 'sensorSelect.html',
+                controller: 'SensorSelect',
+                size: 'lg',
+                resolve: {
+                    ProjectID: function() {
+                        return $scope.Project.selected._id;
+                    },
+                    EnergycategoryID: function() {
+                        return node.id;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function(sensors) {}, function() {});
+        };
+
+        $scope.switchUnitPriceType = function(member) {
+            member.unitprice.isnormal = !member.unitprice.isnormal;
+        };
+
+        function responseError(result) {
+            UI.AlertError(result.data.message);
+        }
+
+    });
+}]);

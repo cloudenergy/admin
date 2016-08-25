@@ -1,1 +1,37 @@
-EMAPP.register.controller("projectCreate",["$rootScope","$scope","$location","SettingMenu","Project","Energycategory","Auth","API","UI",function(t,e,o,r,n,u,c,f,i){e.onDutyHour="8",e.onDutyMinute="00",e.offDutyHour="17",e.offDutyMinute="00",c.Check(function(){r(function(t){e.menu=t}),e.submit=function(t){var r=new Array;e.project.onduty=e.onDutyHour+":"+e.onDutyMinute,e.project.offduty=e.offDutyHour+":"+e.offDutyMinute,r.push(e.project),f.Query(n.add,r,function(t){t.code?i.AlertError(t.message):(i.AlertSuccess("新增成功"),o.path("/admin/project/info"))},function(t){i.AlertError(t.data.message)})},f.Query(u.info,function(t){t.err?i.AlertError(t.data.message):e.energycategory=t.result})})}]);
+angular.module('app').controller('projectCreate', ["$rootScope", "$scope", "$state", "Project", "Energycategory", "Auth", "API", "UI", function($rootScope, $scope, $state, Project, Energycategory, Auth, API, UI) {
+    $scope.ondutyHour = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
+    $scope.ondutyMinute = ['00', '10', '20', '30', '40', '50'];
+    $scope.offdutyHour = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
+    $scope.offdutyMinute = ['00', '10', '20', '30', '40', '50'];
+    $scope.ondutyHour.selected = '8';
+    $scope.ondutyMinute.selected = '00';
+    $scope.offdutyHour.selected = '17';
+    $scope.offdutyMinute.selected = '00';
+    Auth.Check(function() {
+
+        $scope.submit = function(e) {
+            var projectArray = new Array();
+            $scope.project.onduty = $scope.ondutyHour.selected + ':' + $scope.ondutyMinute.selected;
+            $scope.project.offduty = $scope.offdutyHour.selected + ':' + $scope.offdutyMinute.selected;
+            projectArray.push($scope.project);
+            API.Query(Project.add, projectArray, function(result) {
+                if (result.code) {
+                    UI.AlertError(result.message);
+                } else {
+                    UI.AlertSuccess('新增成功');
+                    $state.go('admin.project.info');
+                }
+            }, function(result) {
+                UI.AlertError(result.data.message);
+            });
+        };
+
+        API.Query(Energycategory.info, function(result) {
+            if (result.err) {
+                UI.AlertError(result.data.message);
+            } else {
+                $scope.energycategory = result.result;
+            }
+        });
+    });
+}]);

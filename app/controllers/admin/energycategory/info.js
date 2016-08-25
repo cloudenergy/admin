@@ -1,1 +1,56 @@
-EMAPP.register.controller("energycategoryinfo",["$rootScope","$scope","SettingMenu","Energycategory","API","Auth","UI",function(e,t,n,o,r,a,u){t.operateStatus={add:{isEnable:!1,url:"/add"},"delete":{isEnable:!1,url:"/delete"},update:{isEnable:!1,url:"/update"}},t.askingRemoveID=void 0,a.Check(t.operateStatus,function(){function e(e){u.AlertError(e.data.message)}n(function(e){t.menu=e}),r.Query(o.info,function(e){e.err||(t.Energycategory=e.result)}),t.DoRemove=function(n,a,u){n.preventDefault();var i=u;r.Query(o["delete"],{id:a},function(e){t.Energycategory.splice(i,1)},e)},t.AskForRemove=function(e,n){e.preventDefault(),t.askingRemoveID=n},t.CancelRemove=function(e,n){e.preventDefault(),t.askingRemoveID=void 0}})}]);
+angular.module('app').controller('energycategoryinfo', ["$rootScope", "$scope", "Energycategory", "API", "Auth", "UI", function($rootScope, $scope, Energycategory, API, Auth, UI) {
+
+    $scope.operateStatus = {
+        add: {
+            isEnable: false,
+            url: '/add'
+        },
+        delete: {
+            isEnable: false,
+            url: '/delete'
+        },
+        update: {
+            isEnable: false,
+            url: '/update'
+        }
+    };
+
+    $scope.askingRemoveID = undefined;
+
+    Auth.Check($scope.operateStatus, function() {
+
+        API.Query(Energycategory.info, function(result) {
+            if (result.err) {
+                //error
+            } else {
+                $scope.Energycategory = result.result;
+            }
+        });
+
+        $scope.DoRemove = function(e, id, index) {
+            e.preventDefault();
+
+            //        index = $rootScope.convertIndex(index);
+            var removeIndex = index;
+            API.Query(Energycategory.delete, {
+                id: id
+            }, function(result) {
+                $scope.Energycategory.splice(removeIndex, 1);
+                //            UI.AlertSuccess('删除成功')
+            }, responseError)
+        };
+        $scope.AskForRemove = function(e, id) {
+            e.preventDefault();
+            $scope.askingRemoveID = id;
+        };
+        $scope.CancelRemove = function(e, id) {
+            e.preventDefault();
+            $scope.askingRemoveID = undefined;
+        };
+
+
+        function responseError(result) {
+            UI.AlertError(result.data.message)
+        }
+    });
+}]);

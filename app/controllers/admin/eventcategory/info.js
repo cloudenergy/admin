@@ -1,1 +1,82 @@
-EMAPP.register.controller("eventcategoryIndex",["$rootScope","$scope","SettingMenu","Eventcategory","API","Auth","UI","$q","Project",function(e,t,a,n,r,o,c,u,l){t.gateways={SMS:"短信通知",APP:"Web，APP通知",EMAIL:"邮件通知",WECHAT:"微信通知"},t.isGatewayOn=function(e,t){return-1!=e.enablegateway.indexOf(t)},t.updateGateway=function(e,a,o){var c=e.enablegateway.indexOf(a);o.target.checked&&-1==c?e.enablegateway.push(a):e.enablegateway.splice(c,1);var u={templateid:e.id,gateway:e.enablegateway,project:t.projectSelected._id};r.Query(n.update,u,function(e){console.log("update: ",e)})},t.operateStatus={add:{isEnable:!1,url:"/add"},"delete":{isEnable:!1,url:"/delete"},update:{isEnable:!1,url:"/update"}},t.askingRemoveID=void 0,o.Check(t.operateStatus,function(){function e(e){c.AlertError(e.data.message)}r.Query(l.info,function(e){e.err||(t.projects=angular.isArray(e.result)?e.result:[e.result],t.projectSelected=t.projects.length?t.projects[0]:null)}),t.$watch("projectSelected",function(e){e&&r.Query(n.info,{project:e._id},function(e){e.err||(t.Eventcategory=e.result)})}),t.DoRemove=function(a,o,c){a.preventDefault();var u=c;r.Query(n["delete"],{id:o},function(e){t.Eventcategory.splice(u,1)},e)},t.AskForRemove=function(e,a){e.preventDefault(),t.askingRemoveID=a},t.CancelRemove=function(e,a){e.preventDefault(),t.askingRemoveID=void 0}})}]);
+angular.module('app').controller('eventcategoryIndex', ["$rootScope", "$scope", "Eventcategory", "API", "Auth", "UI", function($rootScope, $scope, Eventcategory, API, Auth, UI) {
+
+    $scope.gateways = {
+        SMS: '短信通知',
+        APP: 'Web，APP通知',
+        EMAIL: '邮件通知',
+        WECHAT: '微信通知'
+    };
+
+    $scope.isGatewayOn = function(event, gateway) {
+        return event.enablegateway.indexOf(gateway) != -1;
+    };
+
+    $scope.updateGateway = function(event, gateway, elm) {
+        var index = event.enablegateway.indexOf(gateway);
+        elm.target.checked && index == -1 ? event.enablegateway.push(gateway) : event.enablegateway.splice(index, 1);
+        // 更新事件
+        API.Query(Eventcategory.update, {
+            templateid: event.id,
+            gateway: event.enablegateway,
+            project: $scope.Project.selected._id
+        }, function(res) {});
+    };
+
+    $scope.operateStatus = {
+        add: {
+            isEnable: false,
+            url: '/add'
+        },
+        delete: {
+            isEnable: false,
+            url: '/delete'
+        },
+        update: {
+            isEnable: false,
+            url: '/update'
+        }
+    };
+
+    $scope.askingRemoveID = undefined;
+
+    Auth.Check($scope.operateStatus, function() {
+
+        $scope.$watch('Project.selected', function(n) {
+            if (n) {
+                API.Query(Eventcategory.info, {
+                    project: n._id
+                }, function(result) {
+                    if (result.err) {
+                        //error
+                    } else {
+                        $scope.Eventcategory = result.result;
+                    }
+                });
+            }
+        });
+
+        $scope.DoRemove = function(e, id, index) {
+            e.preventDefault();
+            var removeIndex = index;
+            API.Query(Eventcategory.delete, {
+                id: id
+            }, function(result) {
+                $scope.Eventcategory.splice(removeIndex, 1);
+                //            UI.AlertSuccess('删除成功')
+            }, responseError);
+        };
+        $scope.AskForRemove = function(e, id) {
+            e.preventDefault();
+            $scope.askingRemoveID = id;
+        };
+        $scope.CancelRemove = function(e, id) {
+            e.preventDefault();
+            $scope.askingRemoveID = undefined;
+        };
+
+
+        function responseError(result) {
+            UI.AlertError(result.data.message);
+        }
+    });
+}]);

@@ -1,1 +1,0 @@
-EMAPP.register.factory("Export",["$resource","Config",function(t,e){return t(e.apiBase+"export",{},{DepartmentStatistic:{method:"POST",url:e.API+"/export/departmentstatistic"}})}]);

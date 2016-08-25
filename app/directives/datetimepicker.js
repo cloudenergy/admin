@@ -1,1 +1,99 @@
-angular.module("app").directive("datetimepicker",["$q","$ocLazyLoad",function($q,$ocLazyLoad){var promiseList=[$ocLazyLoad.load([{serie:!0,files:["vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css?rev=4fe382c5a6","vendor/moment/min/moment.min.js?rev=2b7d0faf37","vendor/moment/locale/zh-cn.js","vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js?rev=6055168fe2"]}])];return{restrict:"EA",require:"?ngModel",link:function(scope,element,attrs,ctrl){var linkLeft,linkRight,options={locale:"zh-CN",format:"YYYY-MM-DD",maxDate:new Date,widgetPositioning:{horizontal:"right"}},promise=[];angular.forEach(element.data(),function(val,key){/^\$/.test(key)||(/^\{.*\}$/.test(val)||/^\[.*\]$/.test(val)?eval("this[key]="+val):this[key]=val)},options),attrs.datetimepicker&&function(e){e=$q.defer(),scope.$watch(attrs.datetimepicker,function(t){void 0!==t&&(angular.extend(options,t),e.resolve(options))}),promise.push(e.promise)}(),$q.all(promiseList.concat(promise)).then(function(){options.linkLeft&&(linkLeft=$(options.linkLeft),delete options.linkLeft),options.linkRight&&(linkRight=$(options.linkRight),delete options.linkRight),element.datetimepicker(options),!options.inline&&element.bind("dp.change",function(e){linkLeft&&linkLeft.length&&linkLeft.data("DateTimePicker")&&linkLeft.data("DateTimePicker").maxDate(e.date),linkRight&&linkRight.length&&linkRight.data("DateTimePicker")&&linkRight.data("DateTimePicker").minDate(e.date),ctrl&&ctrl.$setViewValue(e.target.value)}).bind("dp.show",function(){(element.is("input")?element.parent():element).addClass("focus"),linkLeft&&linkLeft.length&&linkLeft.data("DateTimePicker")&&(linkLeft.data("DateTimePicker").maxDate(element.data("DateTimePicker").date()),linkLeft.data("DateTimePicker").date()&&element.data("DateTimePicker").minDate(linkLeft.data("DateTimePicker").date())),linkRight&&linkRight.length&&linkRight.data("DateTimePicker")&&(linkRight.data("DateTimePicker").minDate(element.data("DateTimePicker").date()),linkRight.data("DateTimePicker").date()&&element.data("DateTimePicker").maxDate(linkRight.data("DateTimePicker").date()))}).bind("dp.hide",function(){(element.is("input")?element.parent():element).removeClass("focus")})})}}}]);
+angular.module('app').directive('datetimepicker', ["$ocLazyLoad", function($ocLazyLoad) {
+
+    var pluginLoad = $ocLazyLoad.load([{
+        insertBefore: '#load_styles_before',
+        files: ['https://static.cloudenergy.me/libs/eonasdan-bootstrap-datetimepicker-4.17.37/build/css/bootstrap-datetimepicker.min.css']
+    }, {
+        files: ['https://static.cloudenergy.me/libs/eonasdan-bootstrap-datetimepicker-4.17.37/build/js/bootstrap-datetimepicker.min.js']
+    }]);
+
+    return {
+        restrict: 'EA',
+        require: '?ngModel',
+        link: function(scope, element, attrs, ctrl) {
+            pluginLoad.then(function() {
+
+                var elmData,
+                    opt = {
+                        maxDateTo: undefined, //最大至
+                        minDateTo: undefined, //最小至
+                        maxRangeTo: undefined, //最大范围至
+                        minRangeTo: undefined, //最小范围至
+                        rangeDay: undefined //限制范围（天）
+                    },
+                    options = {
+                        locale: 'zh-CN',
+                        format: 'YYYY-MM-DD',
+                        maxDate: new Date(),
+                        widgetPositioning: {
+                            horizontal: 'right'
+                        }
+                    },
+                    linkage = function(nowDate) {
+                        if (!opt.completed) {
+                            elmData = element.data('DateTimePicker');
+                            opt.maxDateTo = opt.maxDateTo && $(opt.maxDateTo).data('DateTimePicker');
+                            opt.minDateTo = opt.minDateTo && $(opt.minDateTo).data('DateTimePicker');
+                            opt.maxRangeTo = opt.maxRangeTo && $(opt.maxRangeTo).data('DateTimePicker');
+                            opt.minRangeTo = opt.minRangeTo && $(opt.minRangeTo).data('DateTimePicker');
+                            opt.completed = true;
+                        }
+                        nowDate = nowDate || elmData.date();
+                        if (opt.maxDateTo) {
+                            opt.maxDateTo.minDate(nowDate);
+                            opt.maxDateTo.date() && elmData.maxDate(opt.maxDateTo.date());
+                        }
+                        if (opt.minDateTo) {
+                            opt.minDateTo.maxDate(nowDate);
+                            opt.minDateTo.date() && elmData.minDate(opt.minDateTo.date());
+                        }
+                        if (opt.maxRangeTo && opt.rangeDay) {
+                            opt.maxRangeTo.date(moment(Math.max(elmData.date(), Math.min(moment(nowDate).add(opt.rangeDay, 'days'), opt.maxRangeTo.date(), moment()))));
+                        }
+                        if (opt.minRangeTo && opt.rangeDay) {
+                            opt.minRangeTo.date(moment(Math.min(elmData.date(), Math.max(moment(nowDate).subtract(opt.rangeDay, 'days'), opt.minRangeTo.date()))));
+                        }
+                    };
+
+                angular.forEach(element.data(), function(val, key) {
+                    if (!/^\$/.test(key)) {
+                        if (/^\{.*\}$/.test(val) || /^\[.*\]$/.test(val)) {
+                            eval('this[key]=' + val);
+                        } else {
+                            this[key] = val;
+                        }
+                    }
+                }, options);
+
+                scope.$watch(attrs.datetimepicker, function(val) {
+
+                    if (!attrs.datetimepicker || angular.isDefined(val)) {
+
+                        angular.isObject(val) && angular.extend(options, val);
+
+                        angular.forEach(opt, function(val, key) {
+                            opt[key] = options[key];
+                            delete options[key];
+                        });
+
+                        element.datetimepicker(options);
+
+                        !options.inline && element.off('dp.change').on('dp.change', function(event) {
+                            linkage(event.date);
+                            ctrl && ctrl.$setViewValue(event.target.value);
+                        }).off('dp.show').on('dp.show', function() {
+                            linkage();
+                            (element.is('input') ? element.parent() : element).addClass('focus');
+                        }).off('dp.hide').on('dp.hide', function() {
+                            (element.is('input') ? element.parent() : element).removeClass('focus');
+                        });
+
+                    }
+
+                });
+
+            });
+        }
+    };
+
+}]);

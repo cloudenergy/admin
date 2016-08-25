@@ -1,1 +1,67 @@
-EMAPP.register.controller("CollectorIndex",["$scope","$rootScope","SettingMenu","Collector","API","Auth","Project","UI",function(e,t,r,n,o,c,u,i){e.operateStatus={create:{isEnable:!1,url:"/create"},"delete":{isEnable:!1,url:"/delete"},edit:{isEnable:!1,url:"/edit"}},e.currentPage=1,e.askingRemoveID=void 0,c.Check(e.operateStatus,function(){function t(t){o.Query(n.info,{project:t},function(t){t.err||(e.items=t.result)})}function c(e){i.AlertError(e.data.message)}r(function(t){e.menu=t}),e.DoRemove=function(t,r,u){t.preventDefault();var l=i.GetAbsoluteIndex(e.currentPage,u);o.Query(n["delete"],{id:r},function(t){e.items.splice(l,1)},c)},e.AskForRemove=function(t,r){t.preventDefault(),e.askingRemoveID=r},e.CancelRemove=function(t,r){t.preventDefault(),e.askingRemoveID=void 0},o.Query(u.info,function(t){if(t.err);else{e.projects=angular.isArray(t.result)?t.result:[t.result];var r=i.GetPageItem("collector");r?(r=_.find(e.projects,function(e){return e._id==r}),e.projectSelected=r._id):e.projects.length>0&&(e.projectSelected=e.projects[0]._id)}}),e.$watch("projectSelected",function(e){e&&(i.PutPageItem("collector",e),t(e))}),e.$watch("currentPage",function(t){return t?void i.PutPageIndex(void 0,e.currentPage):void(e.currentPage=i.GetPageIndex())})})}]);
+angular.module('app').controller('CollectorIndex', ["$scope", "Collector", "API", "Auth", "UI", function($scope, Collector, API, Auth, UI) {
+    $scope.operateStatus = {
+        create: {
+            isEnable: false,
+            url: '/create'
+        },
+        delete: {
+            isEnable: false,
+            url: '/delete'
+        },
+        edit: {
+            isEnable: false,
+            url: '/edit'
+        }
+    };
+
+    $scope.currentPage = 1;
+    $scope.askingRemoveID = undefined;
+
+    Auth.Check($scope.operateStatus, function() {
+
+        $scope.DoRemove = function(e, id, index) {
+            e.preventDefault();
+
+            var removeIndex = UI.GetAbsoluteIndex($scope.currentPage, index);
+            API.Query(Collector.delete, {
+                id: id
+            }, function(result) {
+                $scope.items.splice(removeIndex, 1);
+                //            UI.AlertSuccess('删除成功')
+            }, responseError)
+        };
+        $scope.AskForRemove = function(e, id) {
+            e.preventDefault();
+            $scope.askingRemoveID = id;
+        };
+        $scope.CancelRemove = function(e, id) {
+            e.preventDefault();
+            $scope.askingRemoveID = undefined;
+        };
+
+        function GetCollector() {
+            API.Query(Collector.info, {
+                project: $scope.Project.selected._id
+            }, (function(result) {
+                if (!result.err) {
+                    $scope.items = result.result;
+                }
+            }));
+        }
+
+        //选择项目后联动查询建筑
+        $scope.$watch('Project.selected', GetCollector);
+
+        $scope.$watch('currentPage', function(currentPage) {
+            if (!currentPage) {
+                $scope.currentPage = UI.GetPageIndex();
+                return;
+            }
+            UI.PutPageIndex(undefined, $scope.currentPage);
+        });
+
+        function responseError(result) {
+            UI.AlertError(result.data.message)
+        }
+    });
+}]);

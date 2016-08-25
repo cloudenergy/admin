@@ -1,1 +1,18 @@
-EMAPP.register.controller("energycategoryadd",["$rootScope","$scope","$location","SettingMenu","Energycategory","Auth","API","UI",function(e,r,n,t,o,c,a,u){c.Check(function(){t(function(e){r.menu=e}),r.submit=function(e){var t=new Array;t.push(r.energycategory),a.Query(o.add,t,function(e){e.err?u.AlertError(e.data.message):(u.AlertSuccess("保存成功"),n.path("/admin/energycategory/info"))})}})}]);
+angular.module('app').controller('energycategoryadd', ["$rootScope", "$scope", "$state", "Energycategory", "Auth", "API", "UI", function($rootScope, $scope, $state, Energycategory, Auth, API, UI) {
+    Auth.Check(function() {
+
+        $scope.submit = function(e) {
+            var energycategoryArray = new Array();
+            energycategoryArray.push($scope.energycategory);
+            API.Query(Energycategory.add, energycategoryArray, function(result) {
+                if (result.err) {
+                    UI.AlertError(result.data.message);
+                    //
+                } else {
+                    UI.AlertSuccess('保存成功');
+                    $state.go('admin.energycategory.info');
+                }
+            });
+        };
+    });
+}]);

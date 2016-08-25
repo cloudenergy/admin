@@ -1,1 +1,80 @@
-angular.module("app").directive("distpicker",["$q","$ocLazyLoad",function($q,$ocLazyLoad){var promiseList=[$ocLazyLoad.load([{serie:!0,files:["vendor/distpicker/dist/distpicker.data.min.js?rev=d285f64ecd","vendor/distpicker/dist/distpicker.min.js?rev=97d1264e0b"]}])];return{restrict:"A",link:function(scope,element,attrs,ctrl){var promise=[],options={};angular.forEach(element.data(),function(val,key){/^\$/.test(key)||(/^\{.*\}$/.test(val)||/^\[.*\]$/.test(val)?eval("this[key]="+val):this[key]=val)},options),attrs.distpicker&&function(e){e=$q.defer(),scope.$watch(attrs.distpicker,function(i){angular.extend(options,i),e.resolve(options)}),promise.push(e.promise)}(),element.bind("change.distpicker",function(){element.children("select").eq(0).trigger("change.distpicker.province"),element.children("select").eq(1).trigger("change.distpicker.city"),element.children("select").eq(2).trigger("change.distpicker.district")}),$q.all(promiseList.concat(promise)).then(function(){element.distpicker(options),element.children("select").eq(0).trigger("change.distpicker.province"),element.children("select").eq(1).trigger("change.distpicker.city"),element.children("select").eq(2).trigger("change.distpicker.district")})}}}]).directive("distpickerProvince",function(){return{restrict:"A",require:"^ngModel",link:function(e,i,t,r){i.bind("change.distpicker.province",function(){r.$setViewValue(this.value)})}}}).directive("distpickerCity",function(){return{restrict:"A",require:"^ngModel",link:function(e,i,t,r){i.bind("change.distpicker.city",function(){r.$setViewValue(this.value)})}}}).directive("distpickerDistrict",function(){return{restrict:"A",require:"^ngModel",link:function(e,i,t,r){i.bind("change.distpicker.district",function(){r.$setViewValue(this.value)})}}});
+angular.module('app').directive('distpicker', ["$ocLazyLoad", "$timeout", function($ocLazyLoad, $timeout) {
+
+    var pluginLoad = $ocLazyLoad.load([{
+        serie: true,
+        files: [
+            'https://static.cloudenergy.me/libs/distpicker-1.0.4/dist/distpicker.data.min.js',
+            'https://static.cloudenergy.me/libs/distpicker-1.0.4/dist/distpicker.min.js'
+        ]
+    }]);
+
+    return {
+        // priority: 10,
+        restrict: 'A',
+        link: function(scope, element, attrs, ctrl) {
+            pluginLoad.then(function() {
+
+                var options = {},
+                    trigger = function() {
+                        element.children('select').eq(0).trigger('change.distpicker.province');
+                        element.children('select').eq(1).trigger('change.distpicker.city');
+                        element.children('select').eq(2).trigger('change.distpicker.district');
+                    };
+
+                angular.forEach(element.data(), function(val, key) {
+                    if (!/^\$/.test(key)) {
+                        if (/^\{.*\}$/.test(val) || /^\[.*\]$/.test(val)) {
+                            eval('this[key]=' + val);
+                        } else {
+                            this[key] = val;
+                        }
+                    }
+                }, options);
+
+                scope.$watch(attrs.distpicker, function(val) {
+                    if (!attrs.distpicker || angular.isDefined(val)) {
+                        angular.isObject(val) && angular.extend(options, val);
+                        $timeout(function() {
+                            element.distpicker(options);
+                            trigger();
+                        });
+                    }
+                });
+
+                element.bind('change.distpicker', trigger);
+
+            });
+        }
+    };
+
+}]).directive('distpickerProvince', function() {
+    return {
+        restrict: 'A',
+        require: '^ngModel',
+        link: function(scope, element, attrs, ctrl) {
+            element.bind('change.distpicker.province', function() {
+                ctrl.$setViewValue(this.value);
+            });
+        }
+    };
+}).directive('distpickerCity', function() {
+    return {
+        restrict: 'A',
+        require: '^ngModel',
+        link: function(scope, element, attrs, ctrl) {
+            element.bind('change.distpicker.city', function() {
+                ctrl.$setViewValue(this.value);
+            });
+        }
+    };
+}).directive('distpickerDistrict', function() {
+    return {
+        restrict: 'A',
+        require: '^ngModel',
+        link: function(scope, element, attrs, ctrl) {
+            element.bind('change.distpicker.district', function() {
+                ctrl.$setViewValue(this.value);
+            });
+        }
+    };
+});

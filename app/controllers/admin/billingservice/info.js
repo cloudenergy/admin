@@ -1,1 +1,68 @@
-angular.module("app").controller("BillingServiceInfo",["$scope","$q","$stateParams","Energycategory","$location","SettingMenu","Project","Account","API","Auth","$cookies","UI","Pab","BillingService","Config",function(e,t,n,r,o,i,c,s,u,a,l,g,f,v,d){e.operateStatus={add:{isEnable:!1,url:"/add"},"delete":{isEnable:!1,url:"/delete"},update:{isEnable:!1,url:"/update"}},e.askingRemoveID=void 0,e.PadShow=[],e.settingUserInfo=void 0,e.askingRemoveID=void 0,a.Check(e.operateStatus,function(){function n(t){u.Query(v.info,{project:t},function(t){t.err||(e.billingservices=t.result,_.each(e.billingservices,function(t){t.ecstring="",_.each(t.energycategory,function(n){var r=_.find(e.energycategory,function(e){return e._id==n});r&&(t.ecstring+=r.title+"，")}),t.ecstring=t.ecstring.substr(0,t.ecstring.length-1)}),console.log(e.billingservices))})}function o(e){g.AlertError(e.data.message)}i(function(t){e.menu=t}),e.onSearchAccount=function(n){n.preventDefault(),console.log(e.accountKey),u.Query(s.info,{user:e.accountKey},function(n){if(!n.err){var r=n.result;e.settingUserInfo=r;var o=r.resource&&r.resource.project||[];t.all([u.QueryPromise(c.info,"*"==o?{}:{ids:o}).$promise,u.QueryPromise(f.info,{account:e.accountKey}).$promise]).then(function(t){var n={};_.each(angular.isArray(t[0].result)?t[0].result:[t[0].result],function(e){n[e._id]={project:e,status:"UNBIND"}}),_.each(t[1].result,function(e){var t=n[e.project];t&&(t.status=e.status)}),_.each(n,function(t){e.PadShow.push(t)})})}})},t.all([u.QueryPromise(r.info,{}).$promise,u.QueryPromise(c.info,{}).$promise]).then(function(t){e.energycategory=t[0].result,e.projects=angular.isArray(t[1].result)?t[1].result:[t[1].result];var n=g.GetPageItem("billingservice.projectid",n);n?e.projectSelected=n:e.projects.length>0&&(e.projectSelected=e.projects[0]._id)}),e.$watch("projectSelected",function(e){e&&(g.PutPageItem("billingservice.projectid",e),n(e))}),e.DoRemove=function(t,n,r){t.preventDefault();var i=g.GetAbsoluteIndex(e.currentPage,r);u.Query(v["delete"],{id:n},function(t){e.billingservices.splice(i,1)},o)},e.AskForRemove=function(t,n){t.preventDefault(),e.askingRemoveID=n},e.CancelRemove=function(t,n){t.preventDefault(),e.askingRemoveID=void 0}})}]);
+angular.module('app').controller('BillingServiceInfo', ["$scope", "$q", "$stateParams", "$api", "Project", "Account", "API", "Auth", "$cookies", "UI", "Pab", "BillingService", "Config", function($scope, $q, $stateParams, $api, Project, Account, API, Auth, $cookies, UI, Pab, BillingService, Config) {
+
+    $scope.operateStatus = {
+        add: {
+            isEnable: false,
+            url: '/add'
+        },
+        delete: {
+            isEnable: false,
+            url: '/delete'
+        },
+        update: {
+            isEnable: false,
+            url: '/update'
+        }
+    };
+
+    $scope.askingRemoveID = undefined;
+    $scope.PadShow = [];
+    $scope.settingUserInfo = undefined;
+    $scope.askingRemoveID = undefined;
+
+    Auth.Check($scope.operateStatus, function() {
+
+        $scope.$watch('Project.selected', function(selected) {
+            API.Query(BillingService.info, {
+                project: selected._id
+            }, function(result) {
+                if (!result.err) {
+                    $scope.billingservices = result.result;
+                    _.each($scope.billingservices, function(bs) {
+                        bs.ecstring = '';
+                        _.each(bs.energycategory, function(ecID) {
+                            var energycategory = _.find($scope.energycategory, function(ec) {
+                                return ec._id == ecID;
+                            });
+                            if (energycategory) {
+                                bs.ecstring += energycategory.title + '，';
+                            }
+                        });
+                        bs.ecstring = bs.ecstring.substr(0, bs.ecstring.length - 1);
+                    });
+                }
+            });
+        });
+
+        $scope.DoRemove = function(e, id, index) {
+            e.preventDefault();
+            var removeIndex = UI.GetAbsoluteIndex($scope.currentPage, index);
+            API.Query(BillingService.delete, {
+                id: id
+            }, function(result) {
+                $scope.billingservices.splice(removeIndex, 1);
+            }, function(result) {
+                UI.AlertError(result.data.message);
+            });
+        };
+        $scope.AskForRemove = function(e, id) {
+            e.preventDefault();
+            $scope.askingRemoveID = id;
+        };
+        $scope.CancelRemove = function(e, id) {
+            e.preventDefault();
+            $scope.askingRemoveID = undefined;
+        };
+
+    });
+}]);

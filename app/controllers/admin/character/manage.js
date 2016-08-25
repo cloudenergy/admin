@@ -1,1 +1,185 @@
-EMAPP.register.controller("characterManage",["$scope","$stateParams","$location","SettingMenu","UrlPath","$cookies","Account","$q","Project","Building","Customer","Collector","Sensor","Auth","API","UI","Character",function(e,n,r,o,t,c,a,i,l,u,s,d,f,h,v,g,p){var A={},y=n.id;h.Check(function(){function n(){var n=i.defer(),r=function(e){var n=function(e,r){_.map(e,function(e,o){e.leaf?A[r+"/"+o]=!0:n(e,"/"==o?"":r+"/"+o)})};n(e,"")};return y?v.Query(p.info,{id:y},function(o){o.err?n.reject(o.err):(e.character=o.result,r(o.result.rule),n.resolve())}):n.resolve(),n.promise}e.OnSave=function(n){function o(e,n){"/"!=e._id&&(n+=e._id),e.select&&t.push(n),void 0!=e.nodes&&e.nodes.length>0&&_.each(e.nodes,function(e){o(e,n+"/")})}n.preventDefault();var t=new Array;o(e.urlpath[0],""),console.log(t);var c={};_.each(t,function(e){var n=e.split("/"),r=c;_.each(n,function(e,o){""==e&&(e="/");var t=!1;o==n.length-1&&(t=!0),r[e]||(r[e]={}),r[e].leaf=t,r=r[e]})}),console.log(c),e.character.rule=c;var a=function(){r.path("/admin/character/info")};y?v.Query(p.update,e.character,function(e){return e.code?void g.AlertError(e.message):void a()}):v.Query(p.add,e.character,function(e){return console.log(e),e.code?void g.AlertError(e.message):void a()})},n().then(function(){v.Query(t.info,{},function(n){if(n.err);else{var r={_id:"/",nodes:new Array};_.each(n.result,function(e){var n=e._id.split("/"),o=r;_.each(n,function(r,t){if(""!=r){var c=n.length==t+1,a=_.find(o.nodes,function(e){return e._id==r});void 0==a&&(c?(a={_id:r,url:e,desc:e.desc||"",enable:e.enable,select:!1,nodes:new Array},a.select=!!A[e._id]):a={_id:r,desc:e.desc||"",select:!1,nodes:new Array},o.nodes.push(a)),o=a}})}),console.log(r),e.urlpath=[r]}})}),e.enable=function(e){e.select=!e.select},e.toggle=function(e){console.log(e),e.toggle()},e.EnableSubNode=function(e,n){console.log(e);var r=function(e){e&&_.each(e.nodes,function(e){return e.select=n,r(e)})};r(e)}})}]);
+angular.module('app').controller('characterManage', ["$scope", "$stateParams", "$state", "UrlPath", "$cookies", "Account", "$q", "Project", "Building", "Customer", "Collector", "Sensor", "Auth", "API", "UI", "Character", function($scope, $stateParams, $state, UrlPath, $cookies, Account, $q, Project, Building, Customer, Collector, Sensor, Auth, API, UI, Character) {
+
+    var characterAuthTree = {};
+
+    var characterID = $stateParams.id;
+
+    Auth.Check(function() {
+
+        //保存权限
+        $scope.OnSave = function() {
+
+            var nodes = new Array();
+
+            (function TraverseNode(node, path) {
+                //
+                if (node._id != '/') {
+                    path += node._id;
+                }
+                if (node.select) {
+                    nodes.push(path);
+                }
+                if (node.nodes != undefined && node.nodes.length > 0) {
+                    //path
+                    _.each(node.nodes, function(subNode) {
+                        TraverseNode(subNode, path + '/');
+                    });
+                }
+            }($scope.urlpath[0], ''));
+
+            var rule = {};
+            _.each(nodes, function(node) {
+                var nodeSplit = node.split('/');
+                var ruleNode = rule;
+                _.each(nodeSplit, function(slot, index) {
+                    if (slot == '') {
+                        slot = '/';
+                    }
+                    var isLeaf = false;
+                    if (index == nodeSplit.length - 1) {
+                        isLeaf = true;
+                    }
+                    if (!ruleNode[slot]) {
+                        ruleNode[slot] = {};
+                    }
+                    ruleNode[slot].leaf = isLeaf;
+                    ruleNode = ruleNode[slot];
+                });
+            });
+
+            $scope.character.rule = rule;
+
+            if (characterID) {
+                API.Query(Character.update, $scope.character, function(result) {
+                    if (result.code) {
+                        UI.AlertError(result.message);
+                        return;
+                    } else {
+                        $state.go('admin.character.info');
+                    }
+                });
+            } else {
+                API.Query(Character.add, $scope.character, function(result) {
+                    if (result.code) {
+                        UI.AlertError(result.message);
+                        return;
+                    } else {
+                        $state.go('admin.character.info');
+                    }
+                });
+            }
+        };
+
+        function findCharacter() {
+            //
+            var deferred = $q.defer();
+
+            var buildRuleTree = function(data) {
+                var RecursionRuleTree = function(node, path) {
+                    _.map(node, function(v, k) {
+                        if (v.leaf) {
+                            //is left node
+                            characterAuthTree[path + '/' + k] = true;
+                        } else {
+                            RecursionRuleTree(v, k == '/' ? '' : path + '/' + k);
+                        }
+                    });
+                };
+
+                RecursionRuleTree(data, '');
+            };
+
+            if (characterID) {
+                API.Query(Character.info, {
+                    id: characterID
+                }, function(character) {
+                    if (character.err) {
+                        deferred.reject(character.err);
+                    } else {
+                        $scope.character = character.result;
+                        buildRuleTree(character.result.rule);
+                        deferred.resolve();
+                    }
+                });
+            } else {
+                deferred.resolve();
+            }
+
+            return deferred.promise;
+        }
+
+        //找到角色权限树以后，标记对应的总权限树
+        findCharacter().then(function() {
+            API.Query(UrlPath.info, {}, function(data) {
+                if (data.err) {} else {
+                    var urlPath = {
+                        _id: '/',
+                        nodes: new Array()
+                    };
+                    _.each(data.result, function(url) {
+                        var pathNode = url._id.split('/');
+                        var traverseNode = urlPath;
+                        _.each(pathNode, function(node, index) {
+                            if (node == '') {
+                                return;
+                            }
+
+                            //是否最后一个节点
+                            var isFinalNode = (pathNode.length == index + 1);
+                            var existsNode = _.find(traverseNode.nodes, function(v) {
+                                return v._id == node;
+                            });
+                            if (existsNode == undefined) {
+                                if (isFinalNode) {
+                                    //
+                                    existsNode = {
+                                        _id: node,
+                                        url: url,
+                                        desc: url.desc || '',
+                                        enable: url.enable,
+                                        select: false,
+                                        nodes: new Array()
+                                    };
+                                    existsNode.select = characterAuthTree[url._id] ? true : false;
+                                } else {
+                                    existsNode = {
+                                        _id: node,
+                                        desc: url.desc || '',
+                                        select: false,
+                                        nodes: new Array()
+                                    };
+                                }
+                                traverseNode.nodes.push(existsNode);
+                            }
+                            traverseNode = existsNode;
+                        });
+                    });
+
+                    $scope.urlpath = [urlPath];
+
+                }
+            });
+        });
+
+        //Action
+        $scope.enable = function(node) {
+            node.select = !node.select;
+        };
+        $scope.toggle = function(scope) {
+            scope.toggle();
+        };
+        $scope.EnableSubNode = function(node, isEnable) {
+            var IterationNodes = function(node) {
+                if (!node) {
+                    return;
+                }
+                _.each(node.nodes, function(node) {
+                    node.select = isEnable;
+                    return IterationNodes(node);
+                });
+            };
+
+            IterationNodes(node);
+        };
+    });
+}]);

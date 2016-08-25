@@ -1,1 +1,0 @@
-EMAPP.register.factory("AppIDSecret",["$resource","Config",function(e,p){return e(p.API+"/appidsecret",{},{info:{method:"POST",url:p.API+"/appidsecret/info"},add:{method:"POST",url:p.API+"/appidsecret/add"},update:{method:"POST",url:p.API+"/appidsecret/update"},"delete":{method:"POST",url:p.API+"/appidsecret/delete"},apply:{method:"POST",url:p.API+"/appidsecret/apply"}})}]);

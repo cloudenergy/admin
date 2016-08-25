@@ -1,1 +1,28 @@
-EMAPP.register.controller("Buildingcreate",["$scope","$location","$stateParams","SettingMenu","Building","Auth","API","Project","UI",function(n,i,t,o,u,e,r,c,l){e.Check(function(){o(function(i){n.menu=i}),n.submit=function(t){n.building.project=n.building.project._id,r.Query(u.add,n.building,function(n){n.code?l.AlertError(n.message):(i.path("/admin/building/info"),l.AlertSuccess("保存成功"))},function(n){l.AlertError(n.data.message)})};t.project;r.Query(c.info,function(i){i.err||(n.projects=angular.isArray(i.result)?i.result:[i.result],n.building=n.building||{},n.building.project=_.find(n.projects,function(n){return n._id==t.project}))}),n.avgConsumptionChange=function(){n.building.totalConsumption=n.building.acreage*n.building.avgConsumption},n.totalConsumptionChange=function(){n.building.avgConsumption=n.building.totalConsumption/n.building.acreage}})}]);
+angular.module('app').controller('Buildingcreate', ["$scope", "$state", "Building", "Auth", "API", "UI", function($scope, $state, Building, Auth, API, UI) {
+    Auth.Check(function() {
+
+        $scope.building = {
+            project: $scope.Project.selected._id
+        };
+
+        $scope.submit = function(e) {
+            API.Query(Building.add, $scope.building, function(result) {
+                if (result.code) {
+                    UI.AlertError(result.message);
+                } else {
+                    $state.go('admin.building.info');
+                    UI.AlertSuccess('保存成功');
+                }
+            }, function(result) {
+                UI.AlertError(result.data.message);
+            });
+        };
+
+        $scope.avgConsumptionChange = function() {
+            $scope.building.totalConsumption = $scope.building.acreage * $scope.building.avgConsumption;
+        };
+        $scope.totalConsumptionChange = function() {
+            $scope.building.avgConsumption = $scope.building.totalConsumption / $scope.building.acreage;
+        };
+    });
+}]);

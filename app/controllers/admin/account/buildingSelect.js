@@ -1,1 +1,99 @@
-EMAPP.register.controller("BuildingSelect",["$scope","$modalInstance","API","Building","ProjectID","BuildingIDs",function(i,e,n,l,s,u){var t;if(i.Ok=function(){var n=[],l=[];i.viewOfBuildings[0].isEnable?n=i.viewOfBuildings[0]._id:_.each(i.viewOfBuildings,function(i){var e=i.project&&i.project._id+"."||"";i.isEnable?n.push(e+i._id):l.push(e+i._id)}),e.close({select:n,unselect:l})},i.Cancel=function(){e.dismiss("cancel")},i.SwitchBuilding=function(e,n){e.preventDefault(),"*"==n._id?(_.each(i.viewOfBuildings,function(i){i.isEnable=!1}),n.isEnable=!n.isEnable):(i.viewOfBuildings[0].isEnable=!1,n.isEnable=!n.isEnable)},i.onSearchProject=function(e){e.preventDefault(),i.UpdateViewOfBuildings(i.buildingSearchKey)},i.UpdateViewOfBuildings=function(e){i.viewOfBuildings=[{_id:"*",title:"所有建筑"}],e?_.each(t,function(n){n.title.match(e)&&i.viewOfBuildings.push(n)}):i.viewOfBuildings=_.union(i.viewOfBuildings,t);var n=!1;_.each(i.viewOfBuildings,function(i){_.contains(u,i._id)?(n=!0,i.isEnable=!0):i.isEnable=!1}),n||(i.viewOfBuildings[0].isEnable=!0)},u&&u.length){var c=[];_.each(u,function(i){c.push(i.replace(/.+\./g,""))}),u=c}n.Query(l.info,{project:s},function(e){e.err||(t=e.result,i.UpdateViewOfBuildings())})}]);
+/**
+ * Created by Joey on 14-6-27.
+ */
+angular.module('app').controller('BuildingSelect', ["$scope", "$uibModalInstance", "API", "Building", "ProjectID", "BuildingIDs", function($scope, $uibModalInstance, API, Building, ProjectID, BuildingIDs) {
+    var Buildings;
+
+    $scope.Ok = function() {
+        var SelectBuildings = [];
+        var UnSelectBuildings = [];
+        if ($scope.viewOfBuildings[0].isEnable) {
+            //
+            SelectBuildings = $scope.viewOfBuildings[0]._id;
+        } else {
+            _.each($scope.viewOfBuildings, function(building) {
+                var prefix = building.project && building.project._id + '.' || '';
+                if (building.isEnable) {
+                    SelectBuildings.push(prefix + building._id);
+                } else {
+                    UnSelectBuildings.push(prefix + building._id);
+                }
+            });
+        }
+        $uibModalInstance.close({
+            select: SelectBuildings,
+            unselect: UnSelectBuildings
+        });
+    };
+    $scope.Cancel = function() {
+        $uibModalInstance.dismiss('cancel');
+    };
+
+    $scope.SwitchBuilding = function(e, building) {
+        e.preventDefault();
+
+        if (building._id == '*') {
+            _.each($scope.viewOfBuildings, function(p) {
+                p.isEnable = false;
+            });
+            building.isEnable = !building.isEnable;
+        } else {
+            $scope.viewOfBuildings[0].isEnable = false;
+            building.isEnable = !building.isEnable;
+        }
+    };
+
+    $scope.onSearchProject = function(e) {
+        e.preventDefault();
+
+        $scope.UpdateViewOfBuildings($scope.buildingSearchKey);
+    };
+
+    $scope.UpdateViewOfBuildings = function(key) {
+        //
+        $scope.viewOfBuildings = [{
+            _id: '*',
+            title: '所有建筑'
+        }];
+        if (!key) {
+            $scope.viewOfBuildings = _.union($scope.viewOfBuildings, Buildings);
+        } else {
+            _.each(Buildings, function(building) {
+                if (building.title.match(key)) {
+                    $scope.viewOfBuildings.push(building);
+                }
+            });
+        }
+
+        //Set Select Building
+        var isSelectedOne = false;
+        _.each($scope.viewOfBuildings, function(building) {
+            if (_.contains(BuildingIDs, building._id)) {
+                isSelectedOne = true;
+                building.isEnable = true;
+            } else {
+                building.isEnable = false;
+            }
+        });
+        if (!isSelectedOne) {
+            $scope.viewOfBuildings[0].isEnable = true;
+        }
+    };
+
+    if (BuildingIDs && BuildingIDs.length) {
+        var newBuildingIDs = [];
+        _.each(BuildingIDs, function(build) {
+            newBuildingIDs.push(build.replace(/.+\./g, ''));
+        });
+        BuildingIDs = newBuildingIDs;
+    }
+
+    API.Query(Building.info, {
+        project: ProjectID
+    }, function(result) {
+        if (result.err) {} else {
+            Buildings = result.result;
+            $scope.UpdateViewOfBuildings();
+        }
+    });
+}]);

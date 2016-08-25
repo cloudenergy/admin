@@ -1,1 +1,38 @@
-angular.module("app").factory("Auth",["$location","$cookies","$q","$api","API",function(a,n,u,t,o){return{Check:function(){var r,c,e,h=[],p=n.get("user"),i=o.ParentLocation(a.path());return angular.isObject(arguments[0])?(r=arguments[0],c=arguments[1],e=arguments[2]):(r=[],c=arguments[0],e=arguments[1]),h.push(t.auth.check({path:a.$$path,u:p}).$promise),angular.forEach(r,function(a){a&&h.push(t.auth.check({path:i+a.url,u:p},function(){a.isEnable=!0}).$promise)}),u.all(h).then(c||angular.noop,e||angular.noop)}}}]);
+angular.module('app').factory('Auth', ["$location", "$cookies", "$q", "$api", "API", function($location, $cookies, $q, $api, API) {
+    return {
+        Check: function() {
+
+            var params, success, error,
+                promiseList = [],
+                user = EMAPP.Account._id,
+                path = API.ParentLocation($location.path());
+
+            if (angular.isObject(arguments[0])) {
+                params = arguments[0];
+                success = arguments[1];
+                error = arguments[2];
+            } else {
+                params = [];
+                success = arguments[0];
+                error = arguments[1];
+            }
+
+            promiseList.push($api.auth.check({
+                path: $location.$$path,
+                u: user
+            }).$promise);
+
+            angular.forEach(params, function(item) {
+                item && promiseList.push($api.auth.check({
+                    path: path + item.url,
+                    u: user
+                }, function() {
+                    item.isEnable = true;
+                }).$promise);
+            });
+
+            return $q.all(promiseList).then(success || angular.noop, error || angular.noop);
+
+        }
+    };
+}]);

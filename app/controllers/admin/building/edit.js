@@ -1,1 +1,36 @@
-EMAPP.register.controller("Buildingedit",["$scope","$stateParams","$location","SettingMenu","Building","Auth","API","Project","UI",function(n,i,t,u,e,o,r,l,a){o.Check(function(){function o(n){a.AlertError(n.data.message)}u(function(i){n.menu=i}),n.submit=function(i){n.building.project=n.building.project._id,r.Query(e.update,n.building,function(n){n.code?a.AlertError(n.message):(t.path("/admin/building/info"),a.AlertSuccess("保存成功"))},function(n){a.AlertError(n.data.message)})},r.Query(e.info,{id:i.id},function(i){i.err||(n.building=i.result,r.Query(l.info,function(i){i.err||(n.projects=angular.isArray(i.result)?i.result:[i.result],n.building.project=_.find(n.projects,function(i){return i._id==n.building.project._id}))}))},o),n.avgConsumptionChange=function(){n.building.totalConsumption=n.building.acreage*n.building.avgConsumption},n.totalConsumptionChange=function(){n.building.avgConsumption=n.building.totalConsumption/n.building.acreage}})}]);
+angular.module('app').controller('Buildingedit', ["$scope", "$state", "$stateParams", "Building", "Auth", "API", "UI", function($scope, $state, $stateParams, Building, Auth, API, UI) {
+    Auth.Check(function() {
+
+        $scope.submit = function() {
+            $scope.building && API.Query(Building.update, $scope.building, function(result) {
+                if (result.code) {
+                    UI.AlertError(result.message);
+                } else {
+                    $state.go('admin.building.info');
+                    UI.AlertSuccess('保存成功');
+                }
+            }, function(result) {
+                UI.AlertError(result.data.message);
+            });
+        };
+
+        API.Query(Building.info, {
+            id: $stateParams.id
+        }, function(result) {
+            if (!result.err) {
+                angular.extend($scope.building = result.result, {
+                    project: $scope.Project.selected._id
+                });
+            }
+        }, function(result) {
+            UI.AlertError(result.data.message);
+        });
+
+        $scope.avgConsumptionChange = function() {
+            $scope.building.totalConsumption = $scope.building.acreage * $scope.building.avgConsumption;
+        };
+        $scope.totalConsumptionChange = function() {
+            $scope.building.avgConsumption = $scope.building.totalConsumption / $scope.building.acreage;
+        };
+    });
+}]);

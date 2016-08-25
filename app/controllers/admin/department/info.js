@@ -1,1 +1,251 @@
-angular.module("app").controller("departmentInfo",["$scope","$timeout","$uibModal","$api","Auth","UI",function(t,e,n,a,o,r){o.Check(t.operateStatus={create:{isEnable:!1,url:"/create"},"delete":{isEnable:!1,url:"/delete"},edit:{isEnable:!1,url:"/update"}},function(){var o=EMAPP.Account._id+".department.info.pagesize",s=EMAPP.Account._id+".department.info.project",i=EMAPP.Account._id+".department.info.status";t.statusenum=[{id:0,title:"全部"},{id:1,title:"正常"},{id:2,title:"欠费"}],t.statusenum.selected=parseInt(localStorage.getItem(i)||t.statusenum[0].id),t.ChargeRedirect=encodeURIComponent("/admin/department/info"),t.paging={total:0,index:1,size:parseInt(localStorage.getItem(o)||10)},t.GetDepartment=function(){t.listData&&t.listData.loading||(t.listData&&(t.listData.loading=!0),a.department.info({project:t.projects.selected,keyreg:t.departmentKey,amount:t.filterAmount?parseFloat(t.filterAmount):void 0,arrear:{1:!1,2:!0}[t.statusenum.selected],pageindex:t.paging.index,pagesize:t.paging.size},function(e){e=e.result||{},e.detail=angular.isArray(e.detail)&&e.detail||e.detail&&[e.detail]||[],angular.forEach(e.detail,function(t){t.account&&t.account.billingAccount&&(t.account.billingAccount.cash<0?t.status="欠费":t.status="正常"),t.sensorAll=[],angular.forEach(t.sensors,function(e){t.sensorAll.push(e.title+"\n"),e.status["switch"]={EMC_ON:!0,EMC_OFF:!1}[e.status["switch"]]||!0}),t.sensorAll=t.sensorAll.join("")}),t.listData=e.detail,t.listData.index=(e.paging||{}).pageindex||1,t.listData.total=(e.paging||{}).count||0}))},a.project.info(function(e){e.result=angular.isArray(e.result)&&e.result||[e.result],e.result.length&&(e.__selected=localStorage.getItem(s),angular.forEach(t.projects=e.result,function(n){n._id===e.__selected&&(t.projects.selected=n._id)}),t.projects.selected=t.projects.selected||t.projects[0]._id)}),t.$watch("projects.selected",function(e){e&&(localStorage.setItem(s,e),t.paging.index=1,t.GetDepartment())}),t.$watch("statusenum.selected",function(e){localStorage.setItem(i,e),t.paging.index=1,t.listData&&t.GetDepartment()}),t.$watch("paging.index",function(e){t.listData&&t.GetDepartment()}),t.$watch("paging.size",function(n){localStorage.setItem(o,n),e(t.listData&&t.GetDepartment)}),t.DoRemove=function(e){a.department["delete"]({id:e},function(e){t.GetDepartment()},function(t){r.AlertError(" ",t.data.message)})},t.switchControl=function(t){n.open({size:"sm",templateUrl:"switch_control.html",controller:["$scope","$uibModalInstance","$api","md5",function(e,n,a,o){e.md5=o,e.OnSubmit=function(){a.control.send({id:t.sid,uid:EMAPP.Account._id,ctrlcode:o.createHash(e.password).toUpperCase(),command:"EMC_SWITCH",param:{mode:"EMC_OFF"}},function(t){t.code?r.AlertError(" ",t.message):n.close()})},e.OnCancel=n.dismiss}]}).result.then(function(){},function(){t.status["switch"]=!t.status["switch"]})},t.OnImportDepartment=function(){n.open({size:"sm",templateUrl:"import_department.html",controller:["$scope","$uibModalInstance","UI","ProjectID",function(t,e,n,a){t.actionURL="/api/import/importdepartment",t.Character="54d032dd877012ac6d37063f",t.ProjectID=a,t.OnCancel=e.dismiss,t.OnUploadComplete=function(t){t.code?n.AlertError(t.result||" ",t.message):(n.AlertSuccess("导入成功"),e.close())}}],resolve:{ProjectID:function(){return t.projects.selected}}}).result.then(t.GetDepartment)},t.OnBatchRecharge=function(){n.open({size:"sm",templateUrl:"batch_recharge.html",controller:["$scope","$uibModalInstance","UI","ProjectID",function(t,e,n,a){t.actionURL="/api/import/importbatchrecharge",t.ProjectID=a,t.OnCancel=e.dismiss,t.OnUploadComplete=function(a){a.code?n.AlertError(a.result||" ",a.message):(n.AlertSuccess("导入成功"),t.OnCancel=e.close,a.result.fn&&(t.downloadLink="/download/"+a.result.fn,window.open(t.downloadLink)))}}],resolve:{ProjectID:function(){return t.projects.selected}}}).result.then(t.GetDepartment)},t.OnExportAlertInfo=function(){}})}]);
+angular.module('app').controller('departmentInfo', ["$scope", "$timeout", "$uibModal", "$api", "Auth", "UI", function($scope, $timeout, $uibModal, $api, Auth, UI) {
+
+    Auth.Check($scope.operateStatus = {
+        create: {
+            isEnable: false,
+            url: '/create'
+        },
+        delete: {
+            isEnable: false,
+            url: '/delete'
+        },
+        edit: {
+            isEnable: false,
+            url: '/update'
+        }
+    }, function() {
+
+        var KEY_PageSize = EMAPP.Account._id + '.department.info.pagesize',
+            KEY_Status = EMAPP.Account._id + '.department.info.status';
+
+        $scope.statusenum = [{
+            id: 0,
+            title: '全部'
+        }, {
+            id: 1,
+            title: '正常'
+        }, {
+            id: 2,
+            title: '欠费'
+        }];
+        $scope.statusenum.selected = parseInt(localStorage.getItem(KEY_Status) || $scope.statusenum[0].id);
+
+        //分页设置
+        $scope.paging = {
+            total: 0,
+            index: 1,
+            size: parseInt(localStorage.getItem(KEY_PageSize) || 10),
+            items: [{
+                key: 10,
+                title: '每页10条'
+            }, {
+                key: 15,
+                title: '每页15条'
+            }, {
+                key: 30,
+                title: '每页30条'
+            }, {
+                key: 50,
+                title: '每页50条'
+            }, {
+                key: 100,
+                title: '每页100条'
+            }]
+        };
+
+        $scope.GetDepartment = function() {
+            /*
+            project         [array]      查询项目下所有户
+            keyreg          [regexp]     查询符合条件的户
+            amount          [number]     过滤账户余额小于指定金额
+            arrear          [bool]       过滤账户余额状态true 欠费/false 正常
+            */
+            if ($scope.listData && $scope.listData.loading) {
+                return;
+            }
+            if ($scope.listData) {
+                $scope.listData.loading = true;
+            }
+            $api.department.info({
+                project: $scope.Project.selected._id,
+                keyreg: $scope.departmentKey,
+                amount: $scope.filterAmount ? parseFloat($scope.filterAmount) : undefined,
+                arrear: {
+                    1: false,
+                    2: true
+                }[$scope.statusenum.selected],
+                pageindex: $scope.paging.index,
+                pagesize: $scope.paging.size
+            }, function(data) {
+
+                data = data.result || {};
+                data.detail = angular.isArray(data.detail) && data.detail || data.detail && [data.detail] || [];
+
+                angular.forEach(data.detail, function(item) {
+
+                    if (item.account && item.account.billingAccount) {
+                        if (item.account.billingAccount.cash < 0) {
+                            item.status = '欠费';
+                        } else {
+                            item.status = '正常';
+                        }
+                    }
+
+                    item.sensorAll = [];
+                    angular.forEach(item.sensors, function(sensor) {
+                        item.sensorAll.push(sensor.title + '\u000A');
+                        sensor.status.switch = {
+                            EMC_ON: true,
+                            EMC_OFF: false
+                        }[sensor.status.switch] || true;
+                    });
+                    item.sensorAll = item.sensorAll.join('');
+
+                });
+
+                $scope.listData = data.detail;
+                $scope.listData.index = (data.paging || {}).pageindex || 1;
+                $scope.listData.total = (data.paging || {}).count || 0;
+
+            });
+        };
+
+        $scope.$watch('Project.selected', function() {
+            $scope.paging.index = 1;
+            $scope.GetDepartment();
+        });
+
+        $scope.$watch('statusenum.selected', function(val) {
+            localStorage.setItem(KEY_Status, val);
+            $scope.paging.index = 1;
+            $scope.listData && $scope.GetDepartment();
+        });
+
+        $scope.$watch('paging.index', function(val) {
+            $scope.listData && $scope.GetDepartment();
+        });
+
+        $scope.$watch('paging.size', function(val) {
+            localStorage.setItem(KEY_PageSize, val);
+            $timeout($scope.listData && $scope.GetDepartment);
+        });
+
+        $scope.DoRemove = function(id) {
+            $api.department.delete({
+                id: id
+            }, function(result) {
+                $scope.GetDepartment();
+            }, function(result) {
+                UI.AlertError(' ', result.data.message);
+            });
+        };
+
+        $scope.switchControl = function(sensor) {
+            $uibModal.open({
+                size: 'sm',
+                templateUrl: 'switch_control.html',
+                controller: ["$scope", "$uibModalInstance", "$api", "md5", function($scope, $uibModalInstance, $api, md5) {
+                    $scope.md5 = md5;
+                    $scope.OnSubmit = function() {
+                        $api.control.send({
+                            id: sensor.sid,
+                            uid: EMAPP.Account._id,
+                            ctrlcode: md5.createHash($scope.password).toUpperCase(),
+                            command: 'EMC_SWITCH', //开关机控制控制命令
+                            param: {
+                                mode: 'EMC_OFF' || 'EMC_ON'
+                            }
+                        }, function(data) {
+                            if (data.code) {
+                                UI.AlertError(' ', data.message);
+                            } else {
+                                $uibModalInstance.close();
+                            }
+                        });
+                    };
+                    $scope.OnCancel = $uibModalInstance.dismiss;
+                }]
+            }).result.then(function() {}, function() {
+                sensor.status.switch = !sensor.status.switch;
+            });
+        };
+
+        //导入商户
+        $scope.OnImportDepartment = function() {
+            $uibModal.open({
+                size: 'sm',
+                templateUrl: 'import_department.html',
+                controller: ["$scope", "$uibModalInstance", "UI", "ProjectID", function($scope, $uibModalInstance, UI, ProjectID) {
+
+                    $scope.actionURL = '/api/import/importdepartment';
+                    $scope.Character = '54d032dd877012ac6d37063f';
+                    $scope.ProjectID = ProjectID;
+
+                    $scope.OnCancel = $uibModalInstance.dismiss;
+
+                    $scope.OnUploadComplete = function(data) {
+                        if (data.code) {
+                            UI.AlertError(data.result || ' ', data.message);
+                        } else {
+                            UI.AlertSuccess('导入成功');
+                            $uibModalInstance.close();
+                        }
+                    };
+
+                }],
+                resolve: {
+                    ProjectID: function() {
+                        return $scope.Project.selected._id;
+                    }
+                }
+            }).result.then($scope.GetDepartment);
+        };
+
+        //批量充值
+        $scope.OnBatchRecharge = function() {
+            $uibModal.open({
+                size: 'sm',
+                templateUrl: 'batch_recharge.html',
+                controller: ["$scope", "$uibModalInstance", "UI", "ProjectID", function($scope, $uibModalInstance, UI, ProjectID) {
+
+                    $scope.actionURL = '/api/import/importbatchrecharge';
+                    $scope.ProjectID = ProjectID;
+
+                    $scope.OnCancel = $uibModalInstance.dismiss;
+
+                    $scope.OnUploadComplete = function(data) {
+                        if (data.code) {
+                            UI.AlertError(data.result || ' ', data.message);
+                        } else {
+                            UI.AlertSuccess('导入成功');
+                            $scope.OnCancel = $uibModalInstance.close;
+                            if (data.result.fn) {
+                                $scope.downloadLink = '/download/' + data.result.fn;
+                                window.open($scope.downloadLink);
+                            }
+                        }
+                    };
+
+                }],
+                resolve: {
+                    ProjectID: function() {
+                        return $scope.Project.selected._id;
+                    }
+                }
+            }).result.then($scope.GetDepartment);
+        };
+
+        //导出报警信息
+        $scope.OnExportAlertInfo = function() {
+            // var obj = {
+            //     project: $scope.Project.selected._id,
+            //     account: $scope.departmentKey,
+            //     filteramount: $scope.filterAmount
+            // };
+
+            // $window.open(Config.downloadURL + 'test.txt');
+        };
+
+    });
+
+}]);

@@ -1,1 +1,353 @@
-EMAPP.register.controller("SensorIndex",["$scope","$rootScope","$q","$api","$uibModal","Building","API","Auth","UI",function(e,n,t,r,c,s,o,i,l){e.operateStatus={create:{isEnable:!1,url:"/create"},"delete":{isEnable:!1,url:"/delete"},edit:{isEnable:!1,url:"/edit"},sync:{isEnable:!0,url:"/syncdata"},mask:{isEnable:!1,url:"/mask"}};var u="sensor.searchKey";i.Check(e.operateStatus,function(){function n(){return e.projects.selected&&r.customer.info({project:e.projects.selected,onlynode:1},function(n){e.customer={enable:e.customer.enable,selected:"ROOT",core:{data:[{id:"ROOT",parent:"#",text:"全部社会属性",state:{selected:!0,opened:!0},icon:"glyphicon glyphicon-th-list"}]},conditionalselect:function(n,t){return e.customer.selected=n.id,e.OnSearch(),!0},plugins:["search","conditionalselect"]},function t(n,r){angular.forEach(n,function(n,c){n.parent=r,n.text=n.title,Object.keys(n.child).length?n.icon="glyphicon glyphicon-th-list":n.icon="glyphicon glyphicon-file",t(n.child,n.id),e.customer.core.data.push(n)})}(n.result,"ROOT")}).$promise}function s(){return e.projects.selected&&r.building.info({project:e.projects.selected},function(n){var t="sensor.building",r=l.GetPageItem(t);e.buildings=[],angular.forEach(n.result,function(e){this.push(e)},e.buildings),e.buildings.select=function(){l.PutPageItem(t,e.buildings.selected._id),e.OnSearch()},e.buildings.selected=e.buildings[0],angular.forEach(e.buildings,function(n){n._id===r&&(e.buildings.selected=n)})}).$promise}function i(){return e.projects.selected&&r.device.type({project:e.projects.selected},function(n){e.DeviceTypes=[{id:void 0,title:"全部设备"}],angular.forEach(n.result,function(e){this.push({id:e.id,title:e.name})},e.DeviceTypes),e.DeviceTypes.selected=e.DeviceTypes[0].id,e.DeviceTypes.select=function(){e.OnSearch()}}).$promise}function a(){r.business.monitor({devicetype:e.DeviceTypes.selected||void 0,building:!e.customer.enable&&e.buildings.selected._id||void 0,project:e.projects.selected,key:l.GetPageItem(u)||void 0,mode:"SENSOR",usesocity:e.customer.enable||void 0,socitynode:e.customer.enable&&e.customer.selected||void 0,pageindex:e.currentPage,pagesize:15},function(n){n=n.result[e.projects.selected],angular.forEach(n.detail,function(e){this.push(e)},e.viewOfSensor=[]),e.pageSize=n.paging.pagesize,e.itemsTotal=n.paging.count})}e.currentPage=l.GetPageIndex(),r.project.info(function(r){var c="sensor.project";e.projects=angular.isArray(r.result)?r.result:[r.result],e.projects.select=function(){l.PutPageItem(c,e.projects.selected),e.customer=e.customer?{enable:e.customer.enable}:{enable:!0},e.buildings=[],e.DeviceTypes=[],t.all([n(),s(),i()]).then(e.OnSearch)},e.projects.selected=l.GetPageItem(c)||(e.projects[0]||{})._id,e.projects.select()}),e.$watch("currentPage",function(n){return void 0==n?void(e.currentPage=l.GetPageIndex()):(l.PutPageIndex(void 0,e.currentPage),void(e.viewOfSensor&&e.OnSearch()))}),e.$watch("customer.enable",function(n){e.viewOfSensor&&e.OnSearch()}),e.OnSearch=function(){l.PutPageItem(u,e.searchKey),a()},e.OnMask=function(e){r.sensorchannel.update({id:e.id,mask:!e.mask},function(n){n.err||(e.mask=!e.mask)})},e.OnMaskAll=function(n){confirm("是否确定"+(n?"屏蔽":"启用")+"所有通道？")&&angular.forEach(e.viewOfSensor,function(e){angular.forEach(e.channels,function(e){r.sensorchannel.update({id:e.id,mask:n},function(){e.mask=n})})})},e.OnSync=function(n,t){n.title=t.title;var r=c.open({templateUrl:"sensorSync.html",controller:"SensorSync",size:"lg",resolve:{SensorIns:function(){return n}}});r.result.then(function(n){e.editUser.resource.sensor||(e.editUser.resource.sensor=[]),e.editUser.resource.sensor=_.difference(e.editUser.resource.sensor,n.unselect),e.editUser.resource.sensor=_.union(e.editUser.resource.sensor,n.select)},function(){})},e.OnSyncAll=function(){confirm("是否确定同步所有数据异常的传感器？")&&r.sensorchannel.syncdata({project:e.projects.selected},function(n){n.err?console.error(n):(alert("同步完成"),e.OnSearch())})},e.onRemove=function(e,n){r.sensorchannel["delete"]({id:e.id},function(t){delete n.channels[e.funcid]},function(e){l.AlertError(e.data.message)})},e.OnSensorAttribute=function(n){var t=c.open({templateUrl:"sensorAttribute.html",controller:"sensorAttribute",size:"lg",resolve:{SensorSUID:function(){var e=o.ParseSensorID(n.id);return e?e.buildingID+e.gatewayID+e.addrID+e.meterID:null},ProjectID:function(){return e.projects.selected}}});t.result.then(function(){},function(){})}}),e.importSensor=function(){var n=e,t=!1;c.open({templateUrl:"importSensor.html",size:"md",controller:["$scope","$timeout","$modalInstance","project","building","customer",function(e,r,c,s,o,i){e.actionURL="/api/import/importsensorchannel",e.project=s,e.building=o,e.customer=i,e.ok=function(){c.close(),t&&n.OnSearch()},e.OnUploadComplete=function(e){return e.code?l.AlertError(e.result,e.message):(t=!0,l.AlertSuccess("导入成功")),!1},e.cancel=c.dismiss}],resolve:{project:function(){return e.projects.selected},building:function(){return e.buildings.selected._id},customer:function(){return e.customer.selected}}})}}]);
+angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibModal", "Building", "API", "Auth", "UI", function($scope, $q, $api, $uibModal, Building, API, Auth, UI) {
+
+    $scope.operateStatus = {
+        create: {
+            isEnable: false,
+            url: '/create'
+        },
+        delete: {
+            isEnable: false,
+            url: '/delete'
+        },
+        edit: {
+            isEnable: false,
+            url: '/edit'
+        },
+        sync: {
+            isEnable: true,
+            url: '/syncdata'
+        },
+        mask: {
+            isEnable: false,
+            url: '/mask'
+        }
+    };
+
+    var KEY_SEARCH = EMAPP.Account._id + '_sensor_index_search';
+
+    Auth.Check($scope.operateStatus, function() {
+
+        //社会属性
+        function GetCustomer() {
+            //查询社会属性
+            return $api.customer.info({
+                project: $scope.Project.selected._id,
+                onlynode: 1
+            }, function(data) {
+                $scope.customer = {
+                    enable: $scope.customer.enable,
+                    selected: 'ROOT',
+                    core: {
+                        data: [{
+                            id: 'ROOT',
+                            parent: '#',
+                            text: '全部社会属性',
+                            state: {
+                                selected: true,
+                                opened: true
+                            },
+                            icon: 'glyphicon glyphicon-th-list'
+                        }]
+                    },
+                    conditionalselect: function(node, event) {
+                        $scope.customer.selected = node.id;
+                        $scope.OnSearch();
+                        return true;
+                    },
+                    plugins: [
+                        'search', 'conditionalselect'
+                    ]
+                };
+                (function forEach(list, parent) {
+                    angular.forEach(list, function(item, index) {
+                        item.parent = parent;
+                        item.text = item.title;
+                        // if (parent === 'ROOT' && index === 0) {
+                        //     item.state = {
+                        //         selected: true,
+                        //         opened: true
+                        //     };
+                        // }
+                        if (Object.keys(item.child).length) {
+                            item.icon = 'glyphicon glyphicon-th-list';
+                        } else {
+                            item.icon = 'glyphicon glyphicon-file';
+                        }
+                        forEach(item.child, item.id);
+                        $scope.customer.core.data.push(item);
+                    });
+                }(data.result, 'ROOT'));
+            }).$promise;
+        }
+
+        //建筑属性
+        function GetBuilding() {
+            return $api.building.info({
+                project: $scope.Project.selected._id
+            }, function(data) {
+
+                var cacheKey = 'sensor.building',
+                    cacheId = UI.GetPageItem(cacheKey);
+
+                // $scope.buildings = [{
+                //     _id: undefined,
+                //     title: '全部建筑'
+                // }];
+                $scope.buildings = [];
+                angular.forEach(data.result, function(item) {
+                    this.push(item);
+                }, $scope.buildings);
+
+                $scope.buildings.select = function() {
+                    UI.PutPageItem(cacheKey, $scope.buildings.selected);
+                    $scope.OnSearch();
+                };
+
+                angular.forEach($scope.buildings, function(item) {
+                    if (item._id === cacheId) {
+                        $scope.buildings.selected = item._id;
+                    }
+                });
+                $scope.buildings.selected = $scope.buildings.selected || ($scope.buildings[0] || {})._id;
+
+            }).$promise;
+        }
+
+        //设备接口
+        function GetDeviceTypes() {
+            return $api.device.type({
+                project: $scope.Project.selected._id
+            }, function(data) {
+
+                $scope.DeviceTypes = [{
+                    id: undefined,
+                    title: '全部设备'
+                }];
+
+                angular.forEach(data.result, function(item) {
+                    this.push({
+                        id: item.id,
+                        title: item.name
+                    });
+                }, $scope.DeviceTypes);
+
+                $scope.DeviceTypes.selected = $scope.DeviceTypes.selected || ($scope.DeviceTypes[0] || {}).id;
+
+                $scope.DeviceTypes.select = function() {
+                    $scope.OnSearch();
+                };
+
+            }).$promise;
+        }
+
+        //获取传感器
+        function GetSensor() {
+            $api.business.monitor({
+                devicetype: $scope.DeviceTypes.selected || undefined,
+                building: !$scope.customer.enable && $scope.buildings.selected || undefined,
+                project: $scope.Project.selected._id,
+                key: UI.GetPageItem(KEY_SEARCH) || undefined,
+                // groupby: 'SENSOR',
+                mode: 'SENSOR',
+                usesocity: $scope.customer.enable || undefined,
+                socitynode: $scope.customer.enable && $scope.customer.selected || undefined,
+                pageindex: $scope.currentPage,
+                pagesize: 15
+            }, function(data) {
+                data = data.result[$scope.Project.selected._id];
+                angular.forEach(data.detail, function(item) {
+                    this.push(item);
+                }, $scope.viewOfSensor = []);
+                $scope.pageSize = data.paging.pagesize;
+                $scope.itemsTotal = data.paging.count;
+            });
+        }
+
+        // 获取上次的页面
+        $scope.currentPage = UI.GetPageIndex();
+
+        $scope.$watch('Project.selected', function() {
+            $scope.customer = angular.isDefined($scope.customer) ? {
+                enable: $scope.customer.enable
+            } : {
+                enable: true
+            };
+            $scope.buildings = [];
+            $scope.DeviceTypes = [];
+            $q.all([GetCustomer(), GetBuilding(), GetDeviceTypes()]).then($scope.OnSearch);
+        });
+        $scope.$watch('currentPage', function(currentPage) {
+            if (currentPage == undefined) {
+                $scope.currentPage = UI.GetPageIndex();
+                return;
+            }
+            UI.PutPageIndex(undefined, $scope.currentPage);
+            $scope.viewOfSensor && $scope.OnSearch();
+        });
+        $scope.$watch('customer.enable', function(enable) {
+            $scope.viewOfSensor && $scope.OnSearch();
+        });
+
+        $scope.OnSearch = function() {
+            UI.PutPageItem(KEY_SEARCH, $scope.searchKey);
+            GetSensor();
+        };
+
+        $scope.OnMask = function(channel) {
+            $api.sensorchannel.update({
+                id: channel.id,
+                mask: !channel.mask
+            }, function(result) {
+                if (!result.err) {
+                    channel.mask = !channel.mask;
+                }
+            });
+        };
+
+        $scope.OnMaskAll = function(reverse) {
+            if (!confirm('是否确定' + (reverse ? '屏蔽' : '启用') + '所有通道？')) {
+                return;
+            }
+
+            angular.forEach($scope.viewOfSensor, function(sensor) {
+                angular.forEach(sensor.channels, function(channel) {
+                    $api.sensorchannel.update({
+                        id: channel.id,
+                        mask: reverse
+                    }, function() {
+                        channel.mask = reverse;
+                    });
+                });
+            });
+        };
+
+        $scope.OnSync = function(channel, sensor) {
+
+            channel.title = sensor.title;
+            var modalInstance = $uibModal.open({
+                templateUrl: 'sensorSync.html',
+                controller: 'SensorSync',
+                size: 'lg',
+                resolve: {
+                    SensorIns: function() {
+                        return channel;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function(sensors) {
+
+                if (!$scope.editUser.resource.sensor) {
+                    $scope.editUser.resource.sensor = [];
+                }
+
+                $scope.editUser.resource.sensor = _.difference($scope.editUser.resource.sensor, sensors.unselect);
+                $scope.editUser.resource.sensor = _.union($scope.editUser.resource.sensor, sensors.select);
+
+            }, function() {});
+        };
+
+        $scope.OnSyncAll = function() {
+
+            if (!confirm('是否确定同步所有数据异常的传感器？')) {
+                return;
+            }
+
+            $api.sensorchannel.syncdata({
+                project: $scope.Project.selected._id
+            }, function(result) {
+                if (result.err) {
+                    console.error(result);
+                } else {
+                    alert('同步完成');
+                    $scope.OnSearch();
+                }
+            });
+        };
+
+        $scope.onRemove = function(channel, sensor) {
+            // var removeIndex = UI.GetAbsoluteIndex($scope.currentPage, index);
+            $api.sensorchannel.delete({
+                id: channel.id
+            }, function(result) {
+                // $scope.items.splice(removeIndex, 1);
+                delete sensor.channels[channel.funcid];
+            }, function(result) {
+                UI.AlertError(result.data.message);
+            });
+        };
+
+        //传感器属性
+        $scope.OnSensorAttribute = function(sensor) {
+            var modalInstance = $uibModal.open({
+                templateUrl: 'sensorAttribute.html',
+                controller: 'sensorAttribute',
+                size: 'lg',
+                resolve: {
+                    SensorSUID: function() {
+                        var sensorGUID = API.ParseSensorID(sensor.id);
+                        if (sensorGUID) {
+                            return sensorGUID.buildingID + sensorGUID.gatewayID + sensorGUID.addrID + sensorGUID.meterID;
+                        } else {
+                            return null;
+                        }
+                    },
+                    ProjectID: function() {
+                        return $scope.Project.selected._id;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function() {
+                //
+            }, function() {});
+        };
+
+    });
+
+    $scope.importSensor = function() {
+        var $parentScope = $scope,
+            uploadCompleted = false;
+        $uibModal.open({
+            templateUrl: 'importSensor.html',
+            size: 'md',
+            controller: ["$scope", "$timeout", "$uibModalInstance", "project", "building", "customer", function($scope, $timeout, $uibModalInstance, project, building, customer) {
+                $scope.actionURL = '/api/import/importsensorchannel';
+                $scope.project = project;
+                $scope.building = building;
+                $scope.customer = customer;
+                $scope.ok = function() {
+                    $uibModalInstance.close();
+                    if (uploadCompleted) {
+                        // $parentScope.currentPage += 1;
+                        $parentScope.OnSearch();
+                    }
+                };
+
+                $scope.OnUploadComplete = function(res) {
+                    if (res.code) {
+                        UI.AlertError(res.result, res.message);
+                    } else {
+                        uploadCompleted = true;
+                        UI.AlertSuccess('导入成功');
+                    }
+                    return false;
+                };
+
+                $scope.cancel = $uibModalInstance.dismiss;
+            }],
+            resolve: {
+                project: function() {
+                    return $scope.Project.selected._id;
+                },
+                building: function() {
+                    return $scope.buildings.selected;
+                },
+                customer: function() {
+                    return $scope.customer.selected;
+                }
+            }
+        });
+    };
+
+}]);

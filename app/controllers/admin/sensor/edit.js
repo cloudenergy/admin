@@ -1,1 +1,212 @@
-EMAPP.register.controller("SensorEdit",["$scope","$stateParams","$location","SettingMenu","Sensor","Collector","Energy","Customer","Building","API","Auth","UI",function(e,n,i,s,o,t,r,l,c,u,a,d){a.Check(function(){function t(e,n,i){if(n){var s=[];return _.each(n,function(n){n.childrens?n.ischild=!1:n.ischild=!0,n.parent=e,n.level=i,n.nodes=t(n,n.childrens,i+1),s.push(n)}),s.sort(function(e,n){return e.title>n.title?1:-1}),s}}s(function(n){e.menu=n});var l,a=n.page;e.submit=function(n){var s=angular.copy(e.sensor);s.project=e.sensor.building.project._id,s.building=e.sensor.building._id,l?(s.energy=u.RootEnergycategory(l.id),s.energyPath=l.id):(s.energy="",s.energyPath="");var t=s.building,r=function(){console.log(s),u.Query(o.update,s,function(e){e.err||(a?i.path("/admin/sensor/info").search({page:a,building:t}):i.path("/admin/sensor/info").search({building:t}))})};e.sid!=s.sid?u.Query(o.info,{sids:[s.sid]},function(e){return console.log(e),e.result&&e.result.length>0?void alert("传感器标识已经存在"):void r()},function(e){console.log(e)}):r()},u.Query(o.channelinfo,{id:n.id},function(n){n.err||(e.sensor=n.result[0],console.log(e.sensor),e.sid=e.sensor.sid,e.building=e.sensor.building,u.Query(c.info,{id:e.sensor.building.id},function(n){n.err||u.Query(r.info,{project:e.building.project},function(n){if(n.err);else{var i=n.result;if(e.sensor.energyPath){var s,o=e.sensor.energyPath.split("|"),r=i.energy;_.each(o,function(e){r&&(s?s+="|"+e:s=e,r=r[s],r&&(r&&!r.childrens?(r.isSelect=!0,l=r):r=r.childrens))})}if(i){var c=t(null,i.energy,1);e.viewOfEnergy=[{nodes:c,title:"能耗分类",level:0}]}else e.viewOfEnergy=[{nodes:[],title:"能耗分类",level:0}]}})}))}),e.onChoice=function(e){e.isSelect=!e.isSelect;var n=function(e,i){e&&e.nodes&&e.nodes.length&&(_.each(e.nodes,function(e){n(e,i),e.isSelect=i}),e.isSelect=i)};n(e,e.isSelect)},e.onEnergyChoice=function(e){e.nodes||(console.log(e),l&&(l.isSelect=!1),l=e,l.isSelect=!0)},e.OnCollapsePayStatus=function(){e.sensor.paystatus&&"NONE"!=e.sensor.paystatus?e.sensor.paystatus="NONE":e.sensor.paystatus="BYSELF"},e.OnSelectPayMode=function(n,i){n.preventDefault(),e.sensor.paystatus=i}})}]);
+angular.module('app').controller('SensorEdit', ["$scope", "$stateParams", "$state", "Sensor", "Collector", "Energy", "Customer", "Building", "API", "Auth", "UI", function($scope, $stateParams, $state, Sensor, Collector, Energy, Customer, Building, API, Auth, UI) {
+    Auth.Check(function() {
+
+        var selectEnergycategory;
+
+        $scope.submit = function(e) {
+            var sensor = angular.copy($scope.sensor);
+
+            //if(!selectEnergycategory){
+            //    alert('请选择传感器能耗类型');
+            //    return;
+            //}
+
+            sensor.project = $scope.sensor.building.project._id;
+            sensor.building = $scope.sensor.building._id;
+            if (selectEnergycategory) {
+                sensor.energy = API.RootEnergycategory(selectEnergycategory.id);
+                sensor.energyPath = selectEnergycategory.id;
+            } else {
+                sensor.energy = '';
+                sensor.energyPath = '';
+            }
+            var buildingID = sensor.building;
+
+            var UpdateSensor = function() {
+                API.Query(Sensor.update, sensor, function(result) {
+                    if (!result.err) {
+                        $state.go('admin.sensor.info');
+                    }
+                });
+            };
+
+            if ($scope.sid != sensor.sid) {
+                //check if sid is exists
+                API.Query(Sensor.info, {
+                    sids: [sensor.sid]
+                }, function(result) {
+                    if (result.result && result.result.length > 0) {
+                        alert('传感器标识已经存在');
+                        return;
+                    } else {
+                        UpdateSensor();
+                    }
+                }, function(err) {
+                    console.log(err);
+                });
+            } else {
+                //
+                UpdateSensor();
+            }
+        };
+
+        API.Query(Sensor.channelinfo, {
+            id: $stateParams.id
+        }, function(res) {
+            if (res.err) {} else {
+                $scope.sensor = res.result[0];
+                $scope.sid = $scope.sensor.sid;
+                $scope.building = $scope.sensor.building;
+
+                API.Query(Building.info, {
+                    id: $scope.sensor.building.id
+                }, function(res) {
+                    if (res.err) {} else {
+
+                        //显示能耗类型
+                        API.Query(Energy.info, {
+                            project: $scope.building.project
+                        }, function(result) {
+                            if (result.err) {} else {
+                                var energy = result.result;
+                                if ($scope.sensor.energyPath) {
+                                    var paths = $scope.sensor.energyPath.split('|');
+                                    var node = energy.energy;
+                                    var nodePath;
+                                    _.each(paths, function(subPath) {
+                                        if (!node) {
+                                            return;
+                                        }
+                                        if (nodePath) {
+                                            nodePath += '|' + subPath;
+                                        } else {
+                                            nodePath = subPath;
+                                        }
+                                        node = node[nodePath];
+                                        if (!node) {
+                                            return;
+                                        }
+                                        if (node && !node.childrens) {
+                                            node.isSelect = true;
+                                            selectEnergycategory = node;
+                                        } else {
+                                            node = node.childrens;
+                                        }
+                                    });
+                                }
+
+                                if (energy) {
+                                    var viewOfEnergy = BuildEnergyTree(null, energy.energy, 1);
+                                    $scope.viewOfEnergy = [{
+                                        nodes: viewOfEnergy,
+                                        title: '能耗分类',
+                                        level: 0
+                                    }];
+                                } else {
+                                    $scope.viewOfEnergy = [{
+                                        nodes: [],
+                                        title: '能耗分类',
+                                        level: 0
+                                    }];
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+        function BuildSocitiesTree(parent, socities, level) {
+            if (!socities) {
+                return undefined;
+            }
+
+            var socitiesArray = [];
+            _.each(socities, function(v) {
+                v.originid = v.id;
+                v.origintitle = v.title;
+                v.id = v.id;
+                v.title = v.title;
+                v.acreage = v.acreage || 0;
+                v.level = level;
+                v.nodes = BuildSocitiesTree(v, v.childrens, level + 1);
+                v.childrens = null;
+                v.parent = parent;
+                v.isSelect = v.isSelect;
+                socitiesArray.push(v);
+            });
+            socitiesArray.sort(function(a, b) {
+                return a.title > b.title ? 1 : -1;
+            });
+            return socitiesArray;
+        }
+
+        function BuildEnergyTree(parent, energy, level) {
+            if (!energy) {
+                return undefined;
+            }
+
+            var energyArray = [];
+            _.each(energy, function(v) {
+
+                if (v.childrens) {
+                    v.ischild = false;
+                } else {
+                    v.ischild = true;
+                }
+
+                v.parent = parent;
+                v.level = level;
+                v.nodes = BuildEnergyTree(v, v.childrens, level + 1);
+                energyArray.push(v);
+            });
+            energyArray.sort(function(a, b) {
+                return a.title > b.title ? 1 : -1;
+            });
+            return energyArray;
+        }
+
+        function responseError(result) {
+            UI.AlertError(result.data.message);
+        }
+
+        $scope.onChoice = function(node) {
+            node.isSelect = !node.isSelect;
+
+            var groupSelect = function(node, isSelect) {
+                if (!node || !node.nodes || !node.nodes.length) {
+                    return;
+                }
+                _.each(node.nodes, function(n) {
+                    groupSelect(n, isSelect);
+                    n.isSelect = isSelect;
+                });
+                node.isSelect = isSelect;
+            };
+
+            groupSelect(node, node.isSelect);
+        };
+
+        $scope.onEnergyChoice = function(node) {
+            if (node.nodes) {
+                return;
+            }
+            if (selectEnergycategory) {
+                selectEnergycategory.isSelect = false;
+            }
+            selectEnergycategory = node;
+            selectEnergycategory.isSelect = true;
+        };
+        $scope.OnCollapsePayStatus = function() {
+            if (!$scope.sensor.paystatus || $scope.sensor.paystatus == 'NONE') {
+                $scope.sensor.paystatus = 'BYSELF';
+            } else {
+                $scope.sensor.paystatus = 'NONE';
+            }
+        };
+        $scope.OnSelectPayMode = function(e, mode) {
+            e.preventDefault();
+            $scope.sensor.paystatus = mode;
+        };
+    });
+}]);

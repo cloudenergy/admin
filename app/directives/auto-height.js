@@ -1,1 +1,20 @@
-angular.module("app").directive("autoHeight",[function(){return{restrict:"A",scope:{height:"=*autoHeight"},link:function(i,t,n,e){var o=function(){t.height($(window).innerHeight()-t.offset().top-(i.height?parseInt(i.height):15))};$(window).bind("resize",o),i.$watch(function(){return i.height},o),i.$on("$destroy",function(){$(window).unbind("resize",o)})}}}]);
+angular.module('app').directive('autoHeight', function() {
+    return {
+        restrict: 'A',
+        scope: {
+            height: '=*autoHeight'
+        },
+        link: function(scope, element, attrs, ctrl) {
+            function resize() {
+                element.height($(window).innerHeight() - element.offset().top - (scope.height ? parseInt(scope.height) : 15));
+            }
+            scope.$watch(function() {
+                return scope.height
+            }, resize);
+            $(window).bind('resize', resize);
+            scope.$on('$destroy', function() {
+                $(window).unbind('resize', resize);
+            });
+        }
+    }
+});

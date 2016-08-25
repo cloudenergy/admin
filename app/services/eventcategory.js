@@ -1,1 +1,20 @@
-EMAPP.register.factory("Eventcategory",["$resource","Config",function(e,t){return e(t.API+"/eventcategory",{},{info:{method:"POST",url:t.API+"/event/info"},add:{method:"POST",url:t.API+"/eventcategory/add"},update:{method:"POST",url:t.API+"/event/update"},"delete":{method:"POST",url:t.API+"/eventcategory/delete"}})}]);
+angular.module('app').factory('Eventcategory', ["$resource", "Config", function($resource, Config) {
+    return $resource(Config.API + '/eventcategory', {}, {
+        info: {
+            method: 'POST',
+            url: Config.API + '/event/info'
+        },
+        add: {
+            method: 'POST',
+            url: Config.API + '/eventcategory/add'
+        },
+        update: {
+            method: 'POST',
+            url: Config.API + '/event/update'
+        },
+        delete: {
+            method: 'POST',
+            url: Config.API + '/eventcategory/delete'
+        }
+    })
+}]);

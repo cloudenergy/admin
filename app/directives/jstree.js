@@ -1,1 +1,25 @@
-angular.module("app").directive("jstree",["$ocLazyLoad",function(e){var t=e.load([{serie:!0,files:["/vendor/jstree/dist/themes/default/style.min.css?rev=4559d12f6e","/vendor/jstree/dist/jstree.min.js?rev=5cca690e8a"]}]);return{restrict:"A",link:function(e,r,s,a){t.then(function(){e.$watch(s.jstree,function(t){r.data("jstree")&&r.data("jstree").destroy(),r.jstree(t||{}),s.jstreeSearch&&r.jstree(!0).search&&e.$watch(s.jstreeSearch,function(e){r.jstree(!0).search(e||"")})})})}}}]);
+angular.module('app').directive('jstree', ["$ocLazyLoad", function($ocLazyLoad) {
+
+    var jstreeLoad = $ocLazyLoad.load([{
+        insertBefore: '#load_styles_before',
+        files: ['https://static.cloudenergy.me/libs/jstree-3.3.1/dist/themes/default/style.min.css']
+    }, {
+        files: ['https://static.cloudenergy.me/libs/jstree-3.3.1/dist/jstree.min.js']
+    }]);
+
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs, ctrl) {
+            jstreeLoad.then(function() {
+                scope.$watch(attrs.jstree, function(options) {
+                    element.data('jstree') && element.data('jstree').destroy();
+                    element.jstree(options || {});
+                    attrs.jstreeSearch && element.jstree(true).search && scope.$watch(attrs.jstreeSearch, function(value) {
+                        element.jstree(true).search(value || '');
+                    });
+                });
+            });
+        }
+    };
+
+}]);

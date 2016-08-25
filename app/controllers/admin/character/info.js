@@ -1,1 +1,96 @@
-EMAPP.register.controller("characterInfo",["$rootScope","$scope","SettingMenu","API","Auth","$cookies","UI","Character","Config",function(e,r,a,t,c,n,l,o,u){r.operateStatus={manage:{isEnable:!1,url:"/manage"},"delete":{isEnable:!1,url:"/delete"}},r.askingRemoveID=void 0,r.MaxLevel=0,c.Check(r.operateStatus,function(){function e(e){l.AlertError(e.data.message)}a(function(e){r.menu=e}),t.Query(o.info,{},function(e){e.err||(r.characters=e.result,console.log(r.characters),r.MaxLevel=r.characters.length-1)}),r.DoRemove=function(a,c,n){a.preventDefault();var u=l.GetAbsoluteIndex(r.currentPage,n);t.Query(o["delete"],{id:c},function(e){r.characters.splice(u,1)},e)},r.AskForRemove=function(e,a){e.preventDefault(),r.askingRemoveID=a},r.CancelRemove=function(e,a){e.preventDefault(),r.askingRemoveID=void 0},r.$watch("currentPage",function(e){return e?void l.PutPageIndex(void 0,r.currentPage):void(r.currentPage=l.GetPageIndex())}),r.onLevelUp=function(e,a,c){e.preventDefault();var n=r.characters[c-1];r.characters[c-1].level++,r.characters[c].level--,r.characters[c-1]=r.characters[c],r.characters[c]=n,t.Query(o.update,{_id:r.characters[c]._id,level:r.characters[c].level},function(e){}),t.Query(o.update,{_id:r.characters[c-1]._id,level:r.characters[c-1].level},function(e){})},r.onLevelDown=function(e,a,c){e.preventDefault();var n=r.characters[c+1];r.characters[c+1].level--,r.characters[c].level++,r.characters[c+1]=r.characters[c],r.characters[c]=n,t.Query(o.update,{_id:r.characters[c]._id,level:r.characters[c].level},function(e){}),t.Query(o.update,{_id:r.characters[c+1]._id,level:r.characters[c+1].level},function(e){})},r.adminUser=n.user})}]);
+angular.module('app').controller('characterInfo', ["$rootScope", "$scope", "API", "Auth", "$cookies", "UI", "Character", "Config", function($rootScope, $scope, API, Auth, $cookies, UI, Character, Config) {
+
+    $scope.operateStatus = {
+        manage: {
+            isEnable: false,
+            url: '/manage'
+        },
+        delete: {
+            isEnable: false,
+            url: '/delete'
+        }
+    };
+
+    $scope.askingRemoveID = undefined;
+    $scope.MaxLevel = 0;
+    Auth.Check($scope.operateStatus, function() {
+
+        API.Query(Character.info, {}, function(result) {
+            if (result.err) {
+                //error
+            } else {
+                $scope.characters = result.result;
+                $scope.MaxLevel = $scope.characters.length - 1;
+            }
+        });
+
+        $scope.DoRemove = function(e, id, index) {
+            e.preventDefault();
+
+            var removeIndex = UI.GetAbsoluteIndex($scope.currentPage, index);
+            API.Query(Character.delete, {
+                id: id
+            }, function(result) {
+                $scope.characters.splice(removeIndex, 1);
+            }, responseError)
+        };
+        $scope.AskForRemove = function(e, id) {
+            e.preventDefault();
+            $scope.askingRemoveID = id;
+        };
+        $scope.CancelRemove = function(e, id) {
+            e.preventDefault();
+            $scope.askingRemoveID = undefined;
+        };
+        $scope.$watch('currentPage', function(currentPage) {
+            if (!currentPage) {
+                $scope.currentPage = UI.GetPageIndex();
+                return;
+            }
+            UI.PutPageIndex(undefined, $scope.currentPage);
+        });
+
+        function responseError(result) {
+            UI.AlertError(result.data.message)
+        }
+
+        $scope.onLevelUp = function(e, character, index) {
+            e.preventDefault();
+
+            var tmp = $scope.characters[index - 1];
+            $scope.characters[index - 1].level++;
+            $scope.characters[index].level--;
+            $scope.characters[index - 1] = $scope.characters[index];
+            $scope.characters[index] = tmp;
+
+            API.Query(Character.update, {
+                '_id': $scope.characters[index]._id,
+                level: $scope.characters[index].level
+            }, function(result) {});
+            API.Query(Character.update, {
+                '_id': $scope.characters[index - 1]._id,
+                level: $scope.characters[index - 1].level
+            }, function(result) {});
+        };
+        $scope.onLevelDown = function(e, character, index) {
+            e.preventDefault();
+
+            var tmp = $scope.characters[index + 1];
+            $scope.characters[index + 1].level--;
+            $scope.characters[index].level++;
+            $scope.characters[index + 1] = $scope.characters[index];
+            $scope.characters[index] = tmp;
+
+            API.Query(Character.update, {
+                '_id': $scope.characters[index]._id,
+                level: $scope.characters[index].level
+            }, function(result) {});
+            API.Query(Character.update, {
+                '_id': $scope.characters[index + 1]._id,
+                level: $scope.characters[index + 1].level
+            }, function(result) {});
+        };
+
+        $scope.adminUser = $cookies.user;
+    })
+}]);

@@ -1,1 +1,16 @@
-EMAPP.register.factory("Payment",["$resource","Config",function(e,r){return e(r.API+"/payment",{},{payment:{method:"POST",url:r.API+"/payment/payment"},charge:{method:"POST",url:r.API+"/payment/charge"},reversal:{method:"POST",url:r.API+"/payment/reversal"}})}]);
+angular.module('app').factory('Payment', ["$resource", "Config", function($resource, Config) {
+    return $resource(Config.API + '/payment', {}, {
+        payment: {
+            method: 'POST',
+            url: Config.API + '/payment/payment'
+        },
+        charge: {
+            method: 'POST',
+            url: Config.API + '/payment/charge'
+        },
+        reversal: {
+            method: 'POST',
+            url: Config.API + '/payment/reversal'
+        }
+    })
+}]);

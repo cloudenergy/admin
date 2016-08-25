@@ -1,1 +1,30 @@
-EMAPP.register.controller("CollectorEdit",["$scope","$location","$stateParams","SettingMenu","Collector","Project","API","Auth","UI",function(o,t,r,e,c,n,i,l,u){l.Check(function(){function l(o){u.AlertError(o.data.message)}e(function(t){o.menu=t}),o.submit=function(){var e=angular.copy(o.collector);e.project=e.project._id,e._id=r.id,console.log(e),i.Query(c.update,e,function(o){t.path("/admin/collector/info")},l)},o.isEdit=!0,i.Query(c.info,{id:r.id},function(t){t.err||(o.collector=t.result,i.Query(n.info,function(t){t.err||(o.projects=angular.isArray(t.result)?t.result:[t.result],o.collector.project=_.find(o.projects,function(t){return t._id==o.collector.project._id}))}))},l)})}]);
+/**
+ * todo: 更新地理位置有点问题？有时出不来地图，这个指令写的也有问题，
+ * 不能初始化一个默认点，选中一个点时还依赖上级 $scope
+ */
+angular.module('app').controller('CollectorEdit', ["$scope", "$state", "$stateParams", "Collector", "Project", "API", "Auth", "UI", function($scope, $state, $stateParams, Collector, Project, API, Auth, UI) {
+    Auth.Check(function() {
+
+        $scope.submit = function() {
+            $scope.collector && API.Query(Collector.update, $scope.collector, function(result) {
+                $state.go('admin.collector.info');
+            }, responseError);
+        };
+
+        $scope.isEdit = true;
+
+        API.Query(Collector.info, {
+            id: $stateParams.id
+        }, function(result) {
+            if (!result.err) {
+                $scope.collector = angular.extend(result.result, {
+                    project: $scope.Project.selected._id
+                });
+            }
+        }, responseError);
+
+        function responseError(result) {
+            UI.AlertError(result.data.message);
+        }
+    });
+}]);

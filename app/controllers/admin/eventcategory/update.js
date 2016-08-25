@@ -1,1 +1,26 @@
-EMAPP.register.controller("eventcategoryUpdate",["$rootScope","$scope","$stateParams","$location","SettingMenu","Eventcategory","Auth","API","UI",function(e,t,n,o,r,a,c,i,u){c.Check(function(){function e(e){u.AlertError(e.data.message)}t.submit=function(e){i.Query(a.update,t.eventcategory,function(e){o.path("/admin/eventcategory/info")},function(e){u.AlertError(e.data.message)})},i.Query(a.info,{id:n.id},function(e){e.code?u.AlertError(e.message):t.eventcategory=e.result},e)})}]);
+angular.module('app').controller('eventcategoryUpdate', ["$rootScope", "$scope", "$stateParams", "$state", "Eventcategory", "Auth", "API", "UI", function($rootScope, $scope, $stateParams, $state, Eventcategory, Auth, API, UI) {
+    Auth.Check(function() {
+
+        $scope.submit = function(e) {
+            API.Query(Eventcategory.update, $scope.eventcategory, function(result) {
+                $state.go('admin.eventcategory.info');
+            }, function(result) {
+                UI.AlertError(result.data.message);
+            });
+        };
+
+        API.Query(Eventcategory.info, {
+            id: $stateParams.id
+        }, function(result) {
+            if (result.code) {
+                UI.AlertError(result.message);
+            } else {
+                $scope.eventcategory = result.result;
+            }
+        }, responseError);
+
+        function responseError(result) {
+            UI.AlertError(result.data.message);
+        }
+    });
+}]);

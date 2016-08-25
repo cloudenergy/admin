@@ -1,1 +1,20 @@
-angular.module("app").factory("Account",["$resource","Config",function(o,t){return o(t.API+"/account",{},{info:{method:"POST",url:t.API+"/account/info"},add:{method:"POST",url:t.API+"/account/add"},update:{method:"POST",url:t.API+"/account/update"},"delete":{method:"POST",url:t.API+"/account/delete"}})}]);
+angular.module('app').factory('Account', ["$resource", "Config", function($resource, Config) {
+    return $resource(Config.API + '/account', {}, {
+        info: {
+            method: 'POST',
+            url: Config.API + '/account/info'
+        },
+        add: {
+            method: 'POST',
+            url: Config.API + '/account/add'
+        },
+        update: {
+            method: 'POST',
+            url: Config.API + '/account/update'
+        },
+        delete: {
+            method: 'POST',
+            url: Config.API + '/account/delete'
+        }
+    })
+}]);
