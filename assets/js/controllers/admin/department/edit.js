@@ -1,4 +1,4 @@
-angular.module('app').controller('departmentedit', ["$scope", "$state", "$stateParams", "$uibModal", "$api", "Department", "Auth", "API", "Sensor", "UI", "md5", function($scope, $state, $stateParams, $uibModal, $api, Department, Auth, API, Sensor, UI, md5) {
+angular.module('app').controller('departmentedit', ["$scope", "$state", "$stateParams", "$uibModal", "$api", "Department", "Auth", "API", "Sensor", "UI", function($scope, $state, $stateParams, $uibModal, $api, Department, Auth, API, Sensor, UI) {
     $scope.ondutyHour = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
     $scope.ondutyMinute = ['00', '10', '20', '30', '40', '50'];
     $scope.offdutyHour = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
@@ -29,9 +29,11 @@ angular.module('app').controller('departmentedit', ["$scope", "$state", "$stateP
 
             $scope.department.onduty = $scope.ondutyHour.selected + ':' + $scope.ondutyMinute.selected;
             $scope.department.offduty = $scope.offdutyHour.selected + ':' + $scope.offdutyMinute.selected;
-            if ($scope.department.password) {
-                $scope.department.password = md5.createHash($scope.department.password).toUpperCase();
-            }
+
+            // if ($scope.department.password) {
+            //     $scope.department.password = md5.createHash($scope.department.password).toUpperCase();
+            // }
+
             // $scope.department.account = $scope.departmentAccount;
 
             API.Query(Department.update, $scope.department, function(result) {
@@ -42,26 +44,6 @@ angular.module('app').controller('departmentedit', ["$scope", "$state", "$stateP
                     $state.go('admin.department.info');
                 }
             });
-        };
-
-        $scope.OnSelectAccount = function(e) {
-            e.preventDefault();
-
-            var modalInstance = $uibModal.open({
-                templateUrl: 'accountSelect.html',
-                controller: 'AccountSelect',
-                size: 'lg',
-                resolve: {
-                    SelectedAccounts: function() {
-                        return $scope.SelectAccounts || $scope.department.account;
-                    }
-                }
-            });
-
-            modalInstance.result.then(function(selectAccounts) {
-                $scope.SelectAccounts = selectAccounts;
-                $scope.departmentAccount = selectAccounts._id;
-            }, function() {});
         };
 
         $scope.OnSelectSensor = function(e) {

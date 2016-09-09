@@ -348,7 +348,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                 return $ocLazyLoad.load([
                     'assets/js/services/billingaccount.min.js?rev=fc550857eb',
                     'assets/js/controllers/admin/billingservice/energySelect.min.js?rev=1941552c26',
-                    'assets/js/controllers/admin/billingservice/add.min.js?rev=6dcb4ee9b0'
+                    'assets/js/controllers/admin/billingservice/add.min.js?rev=08a978686d'
                 ]);
             }]
         }
@@ -443,7 +443,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             }]
         }
     }).state('admin.department', {
-        templateUrl: 'assets/html/admin/department/base.html?rev=35daa3fa2d',
+        templateUrl: 'assets/html/admin/department/base.html?rev=b905c616d7',
         abstract: true,
         url: '/department',
         data: {
@@ -492,15 +492,14 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
                     'assets/js/services/sensor.min.js?rev=7102ffba10',
-                    'assets/js/controllers/admin/common/accountSelect.min.js?rev=50867bfdeb',
-                    'assets/js/controllers/admin/common/channelSelect.min.js?rev=4eaca3e3e8',
-                    'assets/js/controllers/admin/department/create.min.js?rev=aad1d3cae1'
+                    'assets/js/controllers/common/channelSelect.min.js?rev=4eaca3e3e8',
+                    'assets/js/controllers/admin/department/create.min.js?rev=19e59e3be2'
                 ]);
             }]
         }
     }).state('admin.department.edit', {
         url: '/edit/:id',
-        templateUrl: 'assets/html/admin/department/edit.html?rev=c345122a21',
+        templateUrl: 'assets/html/admin/department/edit.html?rev=2870ce4b39',
         data: {
             projectDisabled: true,
             title: '编辑商户'
@@ -510,9 +509,8 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
                     'assets/js/services/sensor.min.js?rev=7102ffba10',
-                    'assets/js/controllers/admin/common/accountSelect.min.js?rev=50867bfdeb',
-                    'assets/js/controllers/admin/common/channelSelect.min.js?rev=4eaca3e3e8',
-                    'assets/js/controllers/admin/department/edit.min.js?rev=ec3c5ba1ad'
+                    'assets/js/controllers/common/channelSelect.min.js?rev=4eaca3e3e8',
+                    'assets/js/controllers/admin/department/edit.min.js?rev=c64a6dd6b7'
                 ]);
             }]
         }
@@ -1202,7 +1200,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.property.consume', {
         url: '/consume',
-        templateUrl: 'assets/html/admin/property/consume.html?rev=0e64a489e2',
+        templateUrl: 'assets/html/admin/property/consume.html?rev=d1e2bfd59d',
         data: {
             title: '消耗明细'
         },

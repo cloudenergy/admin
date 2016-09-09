@@ -1,4 +1,4 @@
-angular.module('app').controller('BillingServiceadd', ["Config", "$scope", "$api", "$cookies", "BillingService", "Energycategory", "$state", "BillingAccount", "Account", "md5", "API", "Auth", "UI", function(Config, $scope, $api, $cookies, BillingService, Energycategory, $state, BillingAccount, Account, md5, API, Auth, UI) {
+angular.module('app').controller('BillingServiceadd', ["Config", "$scope", "$api", "$cookies", "BillingService", "Energycategory", "$state", "BillingAccount", "Account", "API", "Auth", "UI", function(Config, $scope, $api, $cookies, BillingService, Energycategory, $state, BillingAccount, Account, API, Auth, UI) {
     Auth.Check(function() {
         $scope.submit = function(e) {
             var selectedEnergycategory = new Array();

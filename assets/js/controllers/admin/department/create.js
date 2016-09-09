@@ -1,4 +1,4 @@
-angular.module('app').controller('departmentcreate', ["$scope", "$state", "$uibModal", "Department", "Auth", "API", "Project", "UI", "Sensor", "md5", function($scope, $state, $uibModal, Department, Auth, API, Project, UI, Sensor, md5) {
+angular.module('app').controller('departmentcreate', ["$scope", "$state", "$uibModal", "Department", "Auth", "API", "Project", "UI", "Sensor", function($scope, $state, $uibModal, Department, Auth, API, Project, UI, Sensor) {
     $scope.ondutyHour = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
     $scope.ondutyMinute = ['00', '10', '20', '30', '40', '50'];
     $scope.offdutyHour = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
@@ -55,7 +55,7 @@ angular.module('app').controller('departmentcreate', ["$scope", "$state", "$uibM
 
             $scope.department.project = projectID;
 
-            $scope.department.password = md5.createHash($scope.department.password).toUpperCase();
+            // $scope.department.password = md5.createHash($scope.department.password).toUpperCase();
 
             API.Query(Department.add, $scope.department, function(result) {
                 if (result.code) {
@@ -66,78 +66,6 @@ angular.module('app').controller('departmentcreate', ["$scope", "$state", "$uibM
                 }
             });
 
-        };
-
-        $scope.OnSelectAccount = function(e) {
-            e.preventDefault();
-
-            var modalInstance = $uibModal.open({
-                templateUrl: 'accountSelect.html',
-                controller: 'AccountSelect',
-                size: 'lg',
-                resolve: {
-                    SelectedAccounts: function() {
-                        return $scope.SelectAccounts || null;
-                    }
-                }
-            });
-
-            modalInstance.result.then(function(selectAccounts) {
-                //
-                // console.log(selectAccounts);
-                $scope.SelectAccounts = selectAccounts;
-                $scope.department.account = selectAccounts._id;
-
-                //从选定的account中获取当前项目的传感器列表
-                if (!$scope.SelectAccounts.resource) {
-                    return;
-                }
-
-                //选择账户后，如果account.resource在该项目下有传感器权限，则会覆盖当前已选择的传感器
-                if ($scope.SelectAccounts.resource.sensor == '*') {
-                    //所有传感器的权限
-                    $scope.SelectSensors = [{
-                        _id: '*',
-                        title: '所有传感器'
-                    }];
-                } else {
-                    var regExpMatch = new RegExp(projectID + '.', 'g');
-                    var projectSensorAll = projectID + '.*';
-                    var sensorIDs = [];
-
-                    for (var i in $scope.SelectAccounts.resource.sensor) {
-                        var sensor = $scope.SelectAccounts.resource.sensor[i];
-                        if (sensor == projectSensorAll) {
-                            //
-                            $scope.SelectSensors = [{
-                                _id: '*',
-                                title: '所有传感器'
-                            }];
-                            sensorID = [];
-                            break;
-                        } else if (sensor.match(regExpMatch)) {
-                            var sensorid = sensor.replace(regExpMatch, '');
-                            sensorIDs.push(sensorid);
-                        }
-                    }
-
-                    if (sensorIDs.length) {
-                        API.Query(Sensor.info, {
-                            ids: sensorIDs
-                        }, function(result) {
-                            if (result.err) {
-                                //
-                            } else {
-                                $scope.SelectSensors = [];
-                                _.each(result.result, function(sensor) {
-                                    $scope.SelectSensors.push(sensor);
-                                });
-                            }
-                        });
-                    }
-                }
-
-            }, function() {});
         };
 
         $scope.OnSelectSensor = function(e) {
