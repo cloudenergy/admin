@@ -248,7 +248,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'assets/js/controllers/admin/account/create.min.js?rev=232ef37349'
+                    'assets/js/controllers/admin/account/create.min.js?rev=1e2d0e69d9'
                 ]);
             }]
         }
@@ -263,7 +263,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'assets/js/controllers/admin/account/edit.min.js?rev=175b69566f'
+                    'assets/js/controllers/admin/account/edit.min.js?rev=c484ed0170'
                 ]);
             }]
         }

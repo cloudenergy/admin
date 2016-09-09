@@ -1,4 +1,4 @@
-angular.module('app').controller('accountCreate', ["$scope", "$q", "$state", "$cookies", "BillingAccount", "Account", "md5", "API", "Auth", "UI", "Character", function($scope, $q, $state, $cookies, BillingAccount, Account, md5, API, Auth, UI, Character) {
+angular.module('app').controller('accountCreate', ["$scope", "$q", "$state", "$cookies", "BillingAccount", "Account", "API", "Auth", "UI", "Character", function($scope, $q, $state, $cookies, BillingAccount, Account, API, Auth, UI, Character) {
 
     Auth.Check(function() {
 
@@ -14,8 +14,8 @@ angular.module('app').controller('accountCreate', ["$scope", "$q", "$state", "$c
                 UI.AlertError('二次密码输入不一致，请重新输入');
                 return;
             } else if ($scope.newpasswd != undefined || $scope.newpasswd != null) {
-                var passwdMD5 = md5.createHash($scope.newpasswd).toUpperCase();
-                $scope.account.passwd = passwdMD5;
+                // var passwdMD5 = md5.createHash($scope.newpasswd).toUpperCase();
+                // $scope.account.passwd = passwdMD5;
             }
 
             if (!$scope.characters.selected) {
