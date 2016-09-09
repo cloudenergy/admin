@@ -12,6 +12,7 @@ angular.module('app').controller('accountEdit', ["$scope", "$stateParams", "$q",
             } else if ($scope.newpasswd && $scope.newpasswd.length) {
                 // var passwdMD5 = md5.createHash($scope.newpasswd).toUpperCase();
                 // updateObj.passwd = passwdMD5;
+                updateObj.passwd = $scope.newpasswd;
             }
 
             if (!$scope.characters.level) {
