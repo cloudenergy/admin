@@ -895,7 +895,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                 }, {
                     files: [
                         static + 'libs/angular-ui-grid-3.2.1/ui-grid.min.js',
-                        'assets/js/directives/datetimepicker.min.js?rev=553b90057b',
+                        'assets/js/directives/datetimepicker.min.js?rev=ab0351da14',
                         'assets/js/directives/auto-height.min.js?rev=b13007069a'
                     ]
                 }]);
@@ -1128,7 +1128,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                     ]
                 }, {
                     files: [
-                        'assets/js/directives/datetimepicker.min.js?rev=553b90057b',
+                        'assets/js/directives/datetimepicker.min.js?rev=ab0351da14',
                         'assets/js/directives/auto-height.min.js?rev=b13007069a',
                         'assets/js/directives/modal-download.min.js?rev=c526f60567',
                         'assets/js/controllers/admin/property/withdraw-detail.min.js?rev=bda250e173',

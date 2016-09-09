@@ -83,9 +83,6 @@ angular.module('app').directive('datetimepicker', ["$ocLazyLoad", function($ocLa
                             ctrl && ctrl.$setViewValue(event.target.value);
                         }).off('dp.show').on('dp.show', function() {
                             linkage();
-                            (element.is('input') ? element.parent() : element).addClass('focus');
-                        }).off('dp.hide').on('dp.hide', function() {
-                            (element.is('input') ? element.parent() : element).removeClass('focus');
                         });
 
                     }
