@@ -248,7 +248,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'assets/js/controllers/admin/account/create.min.js?rev=1e2d0e69d9'
+                    'assets/js/controllers/admin/account/create.min.js?rev=e36e1edc68'
                 ]);
             }]
         }
