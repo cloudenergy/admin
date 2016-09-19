@@ -248,7 +248,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'assets/js/controllers/admin/account/create.min.js?rev=e36e1edc68'
+                    'assets/js/controllers/admin/account/create.min.js?rev=1e2d0e69d9'
                 ]);
             }]
         }
@@ -452,6 +452,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function($ocLazyLoad) {
                 return $ocLazyLoad.load([
+                    'app/directives/datetimepicker.min.js',
                     'assets/js/services/project.min.js?rev=253595453a',
                     'assets/js/services/billingaccount.min.js?rev=fc550857eb',
                     'assets/js/services/department.min.js?rev=85b5a81356'
@@ -460,7 +461,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.department.info', {
         url: '/info',
-        templateUrl: 'assets/html/admin/department/info.html?rev=575ac0982d',
+        templateUrl: 'assets/html/admin/department/info.html?rev=41f19970dd',
         data: {
             title: '户管理'
         },
@@ -470,12 +471,14 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                 return $ocLazyLoad.load([{
                     name: 'ngUpload',
                     files: [
-                        static + 'libs/ngUpload-0.5.18/ng-upload.min.js'
+                        static + 'libs/ngUpload-0.5.18/ng-upload.min.js',
+                        static + 'libs/angular-ui-grid-3.2.1/ui-grid.min.css'
                     ]
                 }]).then(function() {
                     return $ocLazyLoad.load([
+                        static + 'libs/angular-ui-grid-3.2.1/ui-grid.min.js',
                         'assets/js/services/sensor.min.js?rev=7102ffba10',
-                        'assets/js/controllers/admin/department/info.min.js?rev=fa7df9a3bb'
+                        'assets/js/controllers/admin/department/info.min.js?rev=0fff9fc590'
                     ]);
                 });
             }]
@@ -895,7 +898,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                 }, {
                     files: [
                         static + 'libs/angular-ui-grid-3.2.1/ui-grid.min.js',
-                        'assets/js/directives/datetimepicker.min.js?rev=ab0351da14',
+                        'assets/js/directives/datetimepicker.min.js?rev=553b90057b',
                         'assets/js/directives/auto-height.min.js?rev=b13007069a'
                     ]
                 }]);
@@ -1128,7 +1131,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                     ]
                 }, {
                     files: [
-                        'assets/js/directives/datetimepicker.min.js?rev=ab0351da14',
+                        'assets/js/directives/datetimepicker.min.js?rev=553b90057b',
                         'assets/js/directives/auto-height.min.js?rev=b13007069a',
                         'assets/js/directives/modal-download.min.js?rev=c526f60567',
                         'assets/js/controllers/admin/property/withdraw-detail.min.js?rev=bda250e173',

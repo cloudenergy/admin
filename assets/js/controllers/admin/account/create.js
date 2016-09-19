@@ -16,7 +16,6 @@ angular.module('app').controller('accountCreate', ["$scope", "$q", "$state", "$c
             } else if ($scope.newpasswd != undefined || $scope.newpasswd != null) {
                 // var passwdMD5 = md5.createHash($scope.newpasswd).toUpperCase();
                 // $scope.account.passwd = passwdMD5;
-                $scope.account.passwd = $scope.newpasswd;
             }
 
             if (!$scope.characters.selected) {
