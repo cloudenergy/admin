@@ -461,7 +461,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.department.info', {
         url: '/info',
-        templateUrl: 'assets/html/admin/department/info.html?rev=eb79967a29',
+        templateUrl: 'assets/html/admin/department/info.html?rev=9bd54d556d',
         data: {
             title: '户管理'
         },
