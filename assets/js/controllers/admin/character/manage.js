@@ -1,13 +1,13 @@
-angular.module('app').controller('characterManage', ["$scope", "$stateParams", "$state", "UrlPath", "$cookies", "Account", "$q", "Project", "Building", "Customer", "Collector", "Sensor", "Auth", "API", "UI", "Character", function($scope, $stateParams, $state, UrlPath, $cookies, Account, $q, Project, Building, Customer, Collector, Sensor, Auth, API, UI, Character) {
+angular.module('app').controller('characterManage', ["$scope", "$stateParams", "$state", "UrlPath", "$cookies", "Account", "$q", "Project", "Building", "Customer", "Collector", "Sensor", "Auth", "API", "UI", "Character", function ($scope, $stateParams, $state, UrlPath, $cookies, Account, $q, Project, Building, Customer, Collector, Sensor, Auth, API, UI, Character) {
 
     var characterAuthTree = {};
 
     var characterID = $stateParams.id;
 
-    Auth.Check(function() {
+    Auth.Check(function () {
 
         //保存权限
-        $scope.OnSave = function() {
+        $scope.OnSave = function () {
 
             var nodes = new Array();
 
@@ -21,17 +21,17 @@ angular.module('app').controller('characterManage', ["$scope", "$stateParams", "
                 }
                 if (node.nodes != undefined && node.nodes.length > 0) {
                     //path
-                    _.each(node.nodes, function(subNode) {
+                    _.each(node.nodes, function (subNode) {
                         TraverseNode(subNode, path + '/');
                     });
                 }
             }($scope.urlpath[0], ''));
 
             var rule = {};
-            _.each(nodes, function(node) {
+            _.each(nodes, function (node) {
                 var nodeSplit = node.split('/');
                 var ruleNode = rule;
-                _.each(nodeSplit, function(slot, index) {
+                _.each(nodeSplit, function (slot, index) {
                     if (slot == '') {
                         slot = '/';
                     }
@@ -50,7 +50,7 @@ angular.module('app').controller('characterManage', ["$scope", "$stateParams", "
             $scope.character.rule = rule;
 
             if (characterID) {
-                API.Query(Character.update, $scope.character, function(result) {
+                API.Query(Character.update, $scope.character, function (result) {
                     if (result.code) {
                         UI.AlertError(result.message);
                         return;
@@ -59,7 +59,7 @@ angular.module('app').controller('characterManage', ["$scope", "$stateParams", "
                     }
                 });
             } else {
-                API.Query(Character.add, $scope.character, function(result) {
+                API.Query(Character.add, $scope.character, function (result) {
                     if (result.code) {
                         UI.AlertError(result.message);
                         return;
@@ -74,9 +74,9 @@ angular.module('app').controller('characterManage', ["$scope", "$stateParams", "
             //
             var deferred = $q.defer();
 
-            var buildRuleTree = function(data) {
-                var RecursionRuleTree = function(node, path) {
-                    _.map(node, function(v, k) {
+            var buildRuleTree = function (data) {
+                var RecursionRuleTree = function (node, path) {
+                    _.map(node, function (v, k) {
                         if (v.leaf) {
                             //is left node
                             characterAuthTree[path + '/' + k] = true;
@@ -92,7 +92,7 @@ angular.module('app').controller('characterManage', ["$scope", "$stateParams", "
             if (characterID) {
                 API.Query(Character.info, {
                     id: characterID
-                }, function(character) {
+                }, function (character) {
                     if (character.err) {
                         deferred.reject(character.err);
                     } else {
@@ -109,24 +109,24 @@ angular.module('app').controller('characterManage', ["$scope", "$stateParams", "
         }
 
         //找到角色权限树以后，标记对应的总权限树
-        findCharacter().then(function() {
-            API.Query(UrlPath.info, {}, function(data) {
+        findCharacter().then(function () {
+            API.Query(UrlPath.info, {}, function (data) {
                 if (data.err) {} else {
                     var urlPath = {
                         _id: '/',
                         nodes: new Array()
                     };
-                    _.each(data.result, function(url) {
+                    _.each(data.result, function (url) {
                         var pathNode = url._id.split('/');
                         var traverseNode = urlPath;
-                        _.each(pathNode, function(node, index) {
+                        _.each(pathNode, function (node, index) {
                             if (node == '') {
                                 return;
                             }
 
                             //是否最后一个节点
                             var isFinalNode = (pathNode.length == index + 1);
-                            var existsNode = _.find(traverseNode.nodes, function(v) {
+                            var existsNode = _.find(traverseNode.nodes, function (v) {
                                 return v._id == node;
                             });
                             if (existsNode == undefined) {
@@ -162,18 +162,18 @@ angular.module('app').controller('characterManage', ["$scope", "$stateParams", "
         });
 
         //Action
-        $scope.enable = function(node) {
+        $scope.enable = function (node) {
             node.select = !node.select;
         };
-        $scope.toggle = function(scope) {
+        $scope.toggle = function (scope) {
             scope.toggle();
         };
-        $scope.EnableSubNode = function(node, isEnable) {
-            var IterationNodes = function(node) {
+        $scope.EnableSubNode = function (node, isEnable) {
+            var IterationNodes = function (node) {
                 if (!node) {
                     return;
                 }
-                _.each(node.nodes, function(node) {
+                _.each(node.nodes, function (node) {
                     node.select = isEnable;
                     return IterationNodes(node);
                 });

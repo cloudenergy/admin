@@ -1,4 +1,4 @@
-angular.module('app').config(["$provide", function($provide) {
+angular.module('app').config(["$provide", function ($provide) {
 
     /**
      * 默认POST提交
@@ -125,7 +125,7 @@ angular.module('app').config(["$provide", function($provide) {
      *      $api.name1.action([parameters], [success], [error])
      *      $api.name2.action([parameters], postData, [success], [error])
      */
-    $provide.service('$api', ["$rootScope", "$resource", "$location", "$state", function($rootScope, $resource, $location, $state) {
+    $provide.service('$api', ["$rootScope", "$resource", "$location", "$state", function ($rootScope, $resource, $location, $state) {
 
         // 自动补全URL
         function fullUrl(url, bool) {
@@ -149,7 +149,7 @@ angular.module('app').config(["$provide", function($provide) {
         }
         // 取消请求
         function cancelRequest(key) {
-            angular.forEach($rootScope._api_request[key], function(item, key) {
+            angular.forEach($rootScope._api_request[key], function (item, key) {
                 item.request.$cancelRequest();
             });
             delete $rootScope._api_request[key];
@@ -159,21 +159,21 @@ angular.module('app').config(["$provide", function($provide) {
         $rootScope._api_request = {};
 
         // 监听路由变动，即时取消上一次路由中的API请求
-        $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+        $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
             toState.name !== fromState.name && cancelRequest(fromState._URL);
         });
-        $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+        $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
             $location.url() !== fromState._URL && cancelRequest(fromState._URL);
         });
 
-        angular.forEach(APICONFIG, function(config, name) {
+        angular.forEach(APICONFIG, function (config, name) {
             if (angular.isArray(config) && config[0]) {
                 config[0] = fullUrl(config[0], !!config[2]);
                 config[3] = angular.extend({}, {
                     // 默认可取消
                     cancellable: true
                 }, config[3]);
-                angular.forEach(config[2], function(action, name) {
+                angular.forEach(config[2], function (action, name) {
                     angular.extend(action, {
                         url: action.url && fullUrl(action.url) || undefined,
                         method: action.method || 'POST',
@@ -182,8 +182,8 @@ angular.module('app').config(["$provide", function($provide) {
                         }, action.params)
                     });
                 });
-                angular.forEach(this[name] = $resource.apply($resource, config), function(fn, action, request, cancellable) {
-                    this[action] = function() {
+                angular.forEach(this[name] = $resource.apply($resource, config), function (fn, action, request, cancellable) {
+                    this[action] = function () {
                         if (cancellable = angular.isObject(arguments[0]) && arguments[0].cancellable) {
                             delete arguments[0].cancellable;
                         }
@@ -193,7 +193,7 @@ angular.module('app').config(["$provide", function($provide) {
                         if (request.$cancelRequest) {
                             $state.current._URL = $location.url();
                             $rootScope._api_request[$state.current._URL] = $rootScope._api_request[$state.current._URL] || {};
-                            (function(origin, current) {
+                            (function (origin, current) {
                                 if (origin) {
                                     if (cancellable || angular.equals(current, requestData.call({}, origin))) {
                                         if (!origin.request.$resolved) {

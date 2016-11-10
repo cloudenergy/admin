@@ -1,4 +1,4 @@
-angular.module('app').controller('BillingServiceInfo', ["$scope", "$q", "$stateParams", "$api", "Project", "Account", "API", "Auth", "$cookies", "UI", "Pab", "BillingService", "Config", function($scope, $q, $stateParams, $api, Project, Account, API, Auth, $cookies, UI, Pab, BillingService, Config) {
+angular.module('app').controller('BillingServiceInfo', ["$scope", "$q", "$stateParams", "$api", "Project", "Account", "API", "Auth", "$cookies", "UI", "Pab", "BillingService", "Config", function ($scope, $q, $stateParams, $api, Project, Account, API, Auth, $cookies, UI, Pab, BillingService, Config) {
 
     $scope.operateStatus = {
         add: {
@@ -20,18 +20,18 @@ angular.module('app').controller('BillingServiceInfo', ["$scope", "$q", "$stateP
     $scope.settingUserInfo = undefined;
     $scope.askingRemoveID = undefined;
 
-    Auth.Check($scope.operateStatus, function() {
+    Auth.Check($scope.operateStatus, function () {
 
-        $scope.$watch('Project.selected', function(selected) {
+        $scope.$watch('Project.selected', function (selected) {
             API.Query(BillingService.info, {
                 project: selected._id
-            }, function(result) {
+            }, function (result) {
                 if (!result.err) {
                     $scope.billingservices = result.result;
-                    _.each($scope.billingservices, function(bs) {
+                    _.each($scope.billingservices, function (bs) {
                         bs.ecstring = '';
-                        _.each(bs.energycategory, function(ecID) {
-                            var energycategory = _.find($scope.energycategory, function(ec) {
+                        _.each(bs.energycategory, function (ecID) {
+                            var energycategory = _.find($scope.energycategory, function (ec) {
                                 return ec._id == ecID;
                             });
                             if (energycategory) {
@@ -44,22 +44,22 @@ angular.module('app').controller('BillingServiceInfo', ["$scope", "$q", "$stateP
             });
         });
 
-        $scope.DoRemove = function(e, id, index) {
+        $scope.DoRemove = function (e, id, index) {
             e.preventDefault();
             var removeIndex = UI.GetAbsoluteIndex($scope.currentPage, index);
             API.Query(BillingService.delete, {
                 id: id
-            }, function(result) {
+            }, function (result) {
                 $scope.billingservices.splice(removeIndex, 1);
-            }, function(result) {
+            }, function (result) {
                 UI.AlertError(result.data.message);
             });
         };
-        $scope.AskForRemove = function(e, id) {
+        $scope.AskForRemove = function (e, id) {
             e.preventDefault();
             $scope.askingRemoveID = id;
         };
-        $scope.CancelRemove = function(e, id) {
+        $scope.CancelRemove = function (e, id) {
             e.preventDefault();
             $scope.askingRemoveID = undefined;
         };

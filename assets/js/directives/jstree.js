@@ -1,4 +1,4 @@
-angular.module('app').directive('jstree', ["$ocLazyLoad", function($ocLazyLoad) {
+angular.module('app').directive('jstree', ["$ocLazyLoad", function ($ocLazyLoad) {
 
     var jstreeLoad = $ocLazyLoad.load([{
         insertBefore: '#load_styles_before',
@@ -9,12 +9,12 @@ angular.module('app').directive('jstree', ["$ocLazyLoad", function($ocLazyLoad) 
 
     return {
         restrict: 'A',
-        link: function(scope, element, attrs, ctrl) {
-            jstreeLoad.then(function() {
-                scope.$watch(attrs.jstree, function(options) {
+        link: function (scope, element, attrs, ctrl) {
+            jstreeLoad.then(function () {
+                scope.$watch(attrs.jstree, function (options) {
                     element.data('jstree') && element.data('jstree').destroy();
                     element.jstree(options || {});
-                    attrs.jstreeSearch && element.jstree(true).search && scope.$watch(attrs.jstreeSearch, function(value) {
+                    attrs.jstreeSearch && element.jstree(true).search && scope.$watch(attrs.jstreeSearch, function (value) {
                         element.jstree(true).search(value || '');
                     });
                 });

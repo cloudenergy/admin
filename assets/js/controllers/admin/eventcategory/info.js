@@ -1,4 +1,4 @@
-angular.module('app').controller('eventcategoryIndex', ["$rootScope", "$scope", "Eventcategory", "API", "Auth", "UI", function($rootScope, $scope, Eventcategory, API, Auth, UI) {
+angular.module('app').controller('eventcategoryIndex', ["$rootScope", "$scope", "Eventcategory", "API", "Auth", "UI", function ($rootScope, $scope, Eventcategory, API, Auth, UI) {
 
     $scope.gateways = {
         SMS: '短信通知',
@@ -7,11 +7,11 @@ angular.module('app').controller('eventcategoryIndex', ["$rootScope", "$scope", 
         WECHAT: '微信通知'
     };
 
-    $scope.isGatewayOn = function(event, gateway) {
+    $scope.isGatewayOn = function (event, gateway) {
         return event.enablegateway.indexOf(gateway) != -1;
     };
 
-    $scope.updateGateway = function(event, gateway, elm) {
+    $scope.updateGateway = function (event, gateway, elm) {
         var index = event.enablegateway.indexOf(gateway);
         elm.target.checked && index == -1 ? event.enablegateway.push(gateway) : event.enablegateway.splice(index, 1);
         // 更新事件
@@ -19,7 +19,7 @@ angular.module('app').controller('eventcategoryIndex', ["$rootScope", "$scope", 
             templateid: event.id,
             gateway: event.enablegateway,
             project: $scope.Project.selected._id
-        }, function(res) {});
+        }, function (res) {});
     };
 
     $scope.operateStatus = {
@@ -39,13 +39,13 @@ angular.module('app').controller('eventcategoryIndex', ["$rootScope", "$scope", 
 
     $scope.askingRemoveID = undefined;
 
-    Auth.Check($scope.operateStatus, function() {
+    Auth.Check($scope.operateStatus, function () {
 
-        $scope.$watch('Project.selected', function(n) {
+        $scope.$watch('Project.selected', function (n) {
             if (n) {
                 API.Query(Eventcategory.info, {
                     project: n._id
-                }, function(result) {
+                }, function (result) {
                     if (result.err) {
                         //error
                     } else {
@@ -55,21 +55,21 @@ angular.module('app').controller('eventcategoryIndex', ["$rootScope", "$scope", 
             }
         });
 
-        $scope.DoRemove = function(e, id, index) {
+        $scope.DoRemove = function (e, id, index) {
             e.preventDefault();
             var removeIndex = index;
             API.Query(Eventcategory.delete, {
                 id: id
-            }, function(result) {
+            }, function (result) {
                 $scope.Eventcategory.splice(removeIndex, 1);
                 //            UI.AlertSuccess('删除成功')
             }, responseError);
         };
-        $scope.AskForRemove = function(e, id) {
+        $scope.AskForRemove = function (e, id) {
             e.preventDefault();
             $scope.askingRemoveID = id;
         };
-        $scope.CancelRemove = function(e, id) {
+        $scope.CancelRemove = function (e, id) {
             e.preventDefault();
             $scope.askingRemoveID = undefined;
         };

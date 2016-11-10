@@ -1,4 +1,4 @@
-angular.module('app').controller('Finance.record.out.detail', ["$filter", "$api", "$state", "$stateParams", "$uibModal", function($filter, $api, $state, $stateParams, $uibModal) {
+angular.module('app').controller('Finance.record.out.detail', ["$filter", "$api", "$state", "$stateParams", "$uibModal", function ($filter, $api, $state, $stateParams, $uibModal) {
 
     var self = this;
 
@@ -29,17 +29,17 @@ angular.module('app').controller('Finance.record.out.detail', ["$filter", "$api"
         $state.$current.parent.data.title = EMAPP.Project[self.projectid].title;
     }
 
-    self.getDetail = function() {
+    self.getDetail = function () {
         self.orderno && $api.withdraw.details({
             id: self.orderno
-        }, function(data) {
+        }, function (data) {
             self.detail = data.result || {};
-        })
+        });
     };
 
     self.getDetail();
 
-    self.inject = function() {
+    self.inject = function () {
         swal({
             title: '确认通过此项提现申请吗？',
             type: 'warning',
@@ -47,34 +47,34 @@ angular.module('app').controller('Finance.record.out.detail', ["$filter", "$api"
             cancelButtonText: '取消',
             confirmButtonText: '确认',
             confirmButtonColor: '#ec6c62'
-        }, function() {
+        }, function () {
             $api.withdraw.checking({
                 id: self.orderno,
                 status: 'PASSED',
                 desc: '审核通过'
-            }, self.getDetail)
-        })
+            }, self.getDetail);
+        });
     };
 
-    self.reject = function(size) {
+    self.reject = function (size) {
         $uibModal.open({
             templateUrl: 'finance-record-detail-modal-reject.html',
             controllerAs: 'self',
-            controller: ["$uibModalInstance", "UI", function($uibModalInstance, UI) {
-                this.submit = function() {
-                    this.desc ? $uibModalInstance.close(this.desc) : UI.AlertWarning('描述内容不能为空', '请输入描述信息')
+            controller: ["$uibModalInstance", "UI", function ($uibModalInstance, UI) {
+                this.submit = function () {
+                    this.desc ? $uibModalInstance.close(this.desc) : UI.AlertWarning('描述内容不能为空', '请输入描述信息');
                 };
-                this.cancel = function() {
-                    $uibModalInstance.dismiss('cancel')
+                this.cancel = function () {
+                    $uibModalInstance.dismiss('cancel');
                 };
             }],
             size: size
-        }).result.then(function(desc) {
+        }).result.then(function (desc) {
             desc && $api.withdraw.checking({
                 id: self.orderno,
                 status: 'REJECT',
                 desc: desc
-            }, self.getDetail)
+            }, self.getDetail);
         });
     };
 

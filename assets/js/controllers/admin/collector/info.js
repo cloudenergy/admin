@@ -1,4 +1,4 @@
-angular.module('app').controller('CollectorIndex', ["$scope", "Collector", "API", "Auth", "UI", function($scope, Collector, API, Auth, UI) {
+angular.module('app').controller('CollectorIndex', ["$scope", "Collector", "API", "Auth", "UI", function ($scope, Collector, API, Auth, UI) {
     $scope.operateStatus = {
         create: {
             isEnable: false,
@@ -17,24 +17,24 @@ angular.module('app').controller('CollectorIndex', ["$scope", "Collector", "API"
     $scope.currentPage = 1;
     $scope.askingRemoveID = undefined;
 
-    Auth.Check($scope.operateStatus, function() {
+    Auth.Check($scope.operateStatus, function () {
 
-        $scope.DoRemove = function(e, id, index) {
+        $scope.DoRemove = function (e, id, index) {
             e.preventDefault();
 
             var removeIndex = UI.GetAbsoluteIndex($scope.currentPage, index);
             API.Query(Collector.delete, {
                 id: id
-            }, function(result) {
+            }, function (result) {
                 $scope.items.splice(removeIndex, 1);
                 //            UI.AlertSuccess('删除成功')
-            }, responseError)
+            }, responseError);
         };
-        $scope.AskForRemove = function(e, id) {
+        $scope.AskForRemove = function (e, id) {
             e.preventDefault();
             $scope.askingRemoveID = id;
         };
-        $scope.CancelRemove = function(e, id) {
+        $scope.CancelRemove = function (e, id) {
             e.preventDefault();
             $scope.askingRemoveID = undefined;
         };
@@ -42,7 +42,7 @@ angular.module('app').controller('CollectorIndex', ["$scope", "Collector", "API"
         function GetCollector() {
             API.Query(Collector.info, {
                 project: $scope.Project.selected._id
-            }, (function(result) {
+            }, (function (result) {
                 if (!result.err) {
                     $scope.items = result.result;
                 }
@@ -52,7 +52,7 @@ angular.module('app').controller('CollectorIndex', ["$scope", "Collector", "API"
         //选择项目后联动查询建筑
         $scope.$watch('Project.selected', GetCollector);
 
-        $scope.$watch('currentPage', function(currentPage) {
+        $scope.$watch('currentPage', function (currentPage) {
             if (!currentPage) {
                 $scope.currentPage = UI.GetPageIndex();
                 return;
@@ -61,7 +61,7 @@ angular.module('app').controller('CollectorIndex', ["$scope", "Collector", "API"
         });
 
         function responseError(result) {
-            UI.AlertError(result.data.message)
+            UI.AlertError(result.data.message);
         }
     });
 }]);

@@ -1,6 +1,6 @@
-angular.module('app').factory('Auth', ["$location", "$cookies", "$q", "$api", "API", function($location, $cookies, $q, $api, API) {
+angular.module('app').factory('Auth', ["$location", "$cookies", "$q", "$api", "API", function ($location, $cookies, $q, $api, API) {
     return {
-        Check: function() {
+        Check: function () {
 
             var params, success, error,
                 promiseList = [],
@@ -22,11 +22,11 @@ angular.module('app').factory('Auth', ["$location", "$cookies", "$q", "$api", "A
                 u: user
             }).$promise);
 
-            angular.forEach(params, function(item) {
+            angular.forEach(params, function (item) {
                 item && promiseList.push($api.auth.check({
                     path: path + item.url,
                     u: user
-                }, function() {
+                }, function () {
                     item.isEnable = true;
                 }).$promise);
             });

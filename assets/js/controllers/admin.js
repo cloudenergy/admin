@@ -1,4 +1,4 @@
-angular.module('app').controller('admin', ["$scope", "$rootScope", "$cookies", "$q", "$state", "$localStorage", "$api", function($scope, $rootScope, $cookies, $q, $state, $localStorage, $api) {
+angular.module('app').controller('admin', ["$scope", "$rootScope", "$cookies", "$q", "$state", "$localStorage", "$api", function ($scope, $rootScope, $cookies, $q, $state, $localStorage, $api) {
 
     var self = this,
         icons = {
@@ -101,35 +101,35 @@ angular.module('app').controller('admin', ["$scope", "$rootScope", "$cookies", "
 
     $scope.wwwLink = location.origin.replace('preadmin.', 'pre.').replace('admin.', 'www.');
 
-    $scope.$watchCollection('app.layout', function(layout) {
+    $scope.$watchCollection('app.layout', function (layout) {
         $localStorage.layout = layout;
     });
 
-    $scope.$watch('$state.current.name', function(name) {
+    $scope.$watch('$state.current.name', function (name) {
         $state.current.prefix = /^(\w+\.\w+)?/.exec(name)[0] || '';
     });
 
-    $scope.$on('$includeContentRequested', function(event, src) {
+    $scope.$on('$includeContentRequested', function (event, src) {
         if (/^assets\/html\/common/.test(src)) {
             $rootScope.layoutLoaded[src] = $q.defer();
             promiseList.push($rootScope.layoutLoaded[src].promise);
         }
     });
 
-    $scope.$on('$includeContentLoaded', function(event, src) {
+    $scope.$on('$includeContentLoaded', function (event, src) {
         /^assets\/html\/common/.test(src) && $rootScope.layoutLoaded[src] && $rootScope.layoutLoaded[src].resolve();
     });
 
     $q.all(promiseList.concat([
         $api.account.info({
             id: $cookies.get('user')
-        }, function(data) {
+        }, function (data) {
 
             EMAPP.Account = data.result || {};
             EMAPP.Rule = {};
 
             (function each(rule, level, keys) {
-                angular.forEach(rule, function(item, key) {
+                angular.forEach(rule, function (item, key) {
                     if (key !== 'leaf') {
                         if (level === 0) {
                             each(item, level + 1, [key]);
@@ -144,7 +144,7 @@ angular.module('app').controller('admin', ["$scope", "$rootScope", "$cookies", "
                 });
             }(EMAPP.Account.character.rule['/'], 0));
 
-            angular.forEach(menu, function(item) {
+            angular.forEach(menu, function (item) {
                 if (item.ignore || EMAPP.Rule[item.state]) {
                     item.prefix = /^(\w+\.\w+)?/.exec(item.state)[0] || '';
                     item.icon = icons[item.state.split('.')[1]] || 'circle';
@@ -153,14 +153,16 @@ angular.module('app').controller('admin', ["$scope", "$rootScope", "$cookies", "
             }, self.menu = []);
 
         }).$promise,
-        $api.project.info(function(data) {
-            angular.forEach(EMAPP.Project = angular.isArray(data.result) ? data.result : data.result && [data.result] || [], function(item) {
+        $api.project.info(function (data) {
+            angular.forEach(EMAPP.Project = angular.isArray(data.result) ? data.result : data.result && [data.result] || [], function (item) {
                 EMAPP.Project[item._id] = item;
             });
         }).$promise
-    ])).then(function() {
+    ])).then(function () {
 
-        if (!EMAPP.Project.length) return;
+        if (!EMAPP.Project.length) {
+            return;
+        }
 
         var KEY_PROJECT = EMAPP.Account._id + '_root_project_selected';
 
@@ -168,7 +170,7 @@ angular.module('app').controller('admin', ["$scope", "$rootScope", "$cookies", "
 
         $rootScope.Project = EMAPP.Project;
 
-        $rootScope.$watch('Project.selected', function(item) {
+        $rootScope.$watch('Project.selected', function (item) {
             $localStorage[KEY_PROJECT] = item._id;
         });
 

@@ -1,4 +1,4 @@
-angular.module('app').factory('Eventcategory', ["$resource", "Config", function($resource, Config) {
+angular.module('app').factory('Eventcategory', ["$resource", "Config", function ($resource, Config) {
     return $resource(Config.API + '/eventcategory', {}, {
         info: {
             method: 'POST',
@@ -16,5 +16,5 @@ angular.module('app').factory('Eventcategory', ["$resource", "Config", function(
             method: 'POST',
             url: Config.API + '/eventcategory/delete'
         }
-    })
+    });
 }]);

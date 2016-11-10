@@ -1,4 +1,4 @@
-angular.module('app').controller('Finance.project.record', ["$scope", "$api", "$filter", "$state", "$stateParams", "$timeout", "$q", "uiGridConstants", function($scope, $api, $filter, $state, $stateParams, $timeout, $q, uiGridConstants) {
+angular.module('app').controller('Finance.project.record', ["$scope", "$api", "$filter", "$state", "$stateParams", "$timeout", "$q", "uiGridConstants", function ($scope, $api, $filter, $state, $stateParams, $timeout, $q, uiGridConstants) {
 
     var self = this,
         nowDate = new Date();
@@ -10,13 +10,13 @@ angular.module('app').controller('Finance.project.record', ["$scope", "$api", "$
     self.startDate = $filter('date')(nowDate, 'yyyy-MM-01');
     self.endDate = $filter('date')(nowDate, 'yyyy-MM-dd');
 
-    $('#start_date').bind('dp.change', function(event) {
-        $timeout(function() {
+    $('#start_date').bind('dp.change', function (event) {
+        $timeout(function () {
             event.date && event.oldDate && self.list();
         });
     });
-    $('#end_date').bind('dp.change', function(event) {
-        $timeout(function() {
+    $('#end_date').bind('dp.change', function (event) {
+        $timeout(function () {
             event.date && event.oldDate && self.list();
         });
     });
@@ -44,7 +44,7 @@ angular.module('app').controller('Finance.project.record', ["$scope", "$api", "$
         class: 'success'
     }];
 
-    angular.forEach(self.status, function(item) {
+    angular.forEach(self.status, function (item) {
         this[item.key] = {
             title: item.title,
             class: item.class
@@ -54,13 +54,13 @@ angular.module('app').controller('Finance.project.record', ["$scope", "$api", "$
     self.projectname = $state.$current.parent.data.title = EMAPP.Project[self.projectid].title;
 
     //筛选
-    self.filter = function() {
+    self.filter = function () {
         self.gridOptions.enableFiltering = !self.gridOptions.enableFiltering;
         self.gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
     };
 
     //导出
-    self.export = function() {
+    self.export = function () {
         self.gridOptions.exporterCsvFilename = (self.projectname ? self.projectname + '_' : '') + {
             all: '收支明细',
             in: '收入',
@@ -69,8 +69,10 @@ angular.module('app').controller('Finance.project.record', ["$scope", "$api", "$
         self.gridApi.exporter.csvExport('visible', 'visible', angular.element(document.querySelectorAll('.subContent')));
     };
 
-    self.list = function(loadMore) {
-        if (loadMore && self.gridOptions.paging && self.gridOptions.paging.count <= (self.gridOptions.paging.pageindex * self.gridOptions.paging.pagesize)) return;
+    self.list = function (loadMore) {
+        if (loadMore && self.gridOptions.paging && self.gridOptions.paging.count <= (self.gridOptions.paging.pageindex * self.gridOptions.paging.pagesize)) {
+            return;
+        }
         var options = {
             // payer: 'PLT',
             // uid: EMAPP.Account._id,//用户ID
@@ -101,9 +103,9 @@ angular.module('app').controller('Finance.project.record', ["$scope", "$api", "$
             options.status = self.status.selected;
         }
 
-        return $api.business.fundflow(options, function(data) {
+        return $api.business.fundflow(options, function (data) {
             data = data.result || {};
-            angular.forEach(data.detail, function(item) {
+            angular.forEach(data.detail, function (item) {
                 item.timecreate = item.timecreate && $filter('date')(item.timecreate * 1000, 'yyyy-M-dd H:mm:ss') || '';
                 item.timepaid = item.timepaid && $filter('date')(item.timepaid * 1000, 'yyyy-M-dd H:mm:ss') || '';
             });
@@ -111,12 +113,12 @@ angular.module('app').controller('Finance.project.record', ["$scope", "$api", "$
                 self.gridOptions.data = self.gridOptions.data.concat(data.detail || []);
             } else {
                 self.gridOptions.data = data.detail || [];
-                self.gridOptions.data.length && $timeout(function() {
+                self.gridOptions.data.length && $timeout(function () {
                     self.gridApi.core.scrollTo(self.gridOptions.data[0], self.gridOptions.columnDefs[0]);
                 });
             }
             self.gridOptions.paging = data.paging;
-            $timeout(function() {
+            $timeout(function () {
                 self.paneHeight = 90;
             });
             self.gridApi.grid.element.height('auto');
@@ -133,15 +135,15 @@ angular.module('app').controller('Finance.project.record', ["$scope", "$api", "$
             enableColumnMenu: false,
             exporterSuppressExport: true,
             headerCellClass: 'text-center',
-            headerCellTemplate: '<div class="ui-grid-cell-contents">序号</div>',
+            headerCellTemplate: '<div  class="ui-grid-cell-contents">序号</div>',
             cellClass: 'text-center',
-            cellTemplate: '<div class="ui-grid-cell-contents" ng-bind="grid.renderContainers.body.visibleRowCache.indexOf(row)+1"></div>'
+            cellTemplate: '<div  class="ui-grid-cell-contents" ng-bind="grid.renderContainers.body.visibleRowCache.indexOf(row)+1"></div>'
         }, {
             displayName: '交易金额 ¥',
             name: 'amount',
             width: '*',
             minWidth: 120,
-            cellTemplate: '<div class="ui-grid-cell-contents" ng-class="{\'text-danger\': COL_FIELD>0, \'text-success\': COL_FIELD<0}" ng-if="COL_FIELD" ng-bind="COL_FIELD"></div>'
+            cellTemplate: '<div  class="ui-grid-cell-contents" ng-class="{\'text-danger\': COL_FIELD>0, \'text-success\': COL_FIELD<0}" ng-if="COL_FIELD" ng-bind="COL_FIELD"></div>'
         }, {
             displayName: '交易类型',
             name: 'category',
@@ -154,7 +156,7 @@ angular.module('app').controller('Finance.project.record', ["$scope", "$api", "$
             width: '*',
             minWidth: 100,
             enableColumnMenu: false,
-            cellTemplate: '<div class="ui-grid-cell-contents text-{{grid.appScope.self.status[COL_FIELD].class}}" ng-bind="grid.appScope.self.status[COL_FIELD].title"></div>'
+            cellTemplate: '<div  class="ui-grid-cell-contents text-{{grid.appScope.self.status[COL_FIELD].class}}" ng-bind="grid.appScope.self.status[COL_FIELD].title"></div>'
         }, {
             displayName: '到账时间',
             name: 'timepaid',
@@ -178,7 +180,7 @@ angular.module('app').controller('Finance.project.record', ["$scope", "$api", "$
             displayName: '跟踪',
             name: 'operation',
             minWidth: 80,
-            cellTemplate: '<div class="ui-grid-cell-contents text-primary"><a class="text-primary" href="javascript:void(0)">查看详情</a></div>'
+            cellTemplate: '<div  class="ui-grid-cell-contents text-primary"><a class="text-primary" href="javascript:void(0)">查看详情</a></div>'
         }],
         inColumn = [{
             displayName: '',
@@ -189,15 +191,15 @@ angular.module('app').controller('Finance.project.record', ["$scope", "$api", "$
             enableColumnMenu: false,
             exporterSuppressExport: true,
             headerCellClass: 'text-center',
-            headerCellTemplate: '<div class="ui-grid-cell-contents">序号</div>',
+            headerCellTemplate: '<div  class="ui-grid-cell-contents">序号</div>',
             cellClass: 'text-center',
-            cellTemplate: '<div class="ui-grid-cell-contents" ng-bind="grid.renderContainers.body.visibleRowCache.indexOf(row)+1"></div>'
+            cellTemplate: '<div  class="ui-grid-cell-contents" ng-bind="grid.renderContainers.body.visibleRowCache.indexOf(row)+1"></div>'
         }, {
             displayName: '交易金额 ¥',
             name: 'amount',
             width: '*',
             minWidth: 120,
-            cellTemplate: '<div class="ui-grid-cell-contents" ng-class="{\'text-danger\': COL_FIELD<0, \'text-success\': COL_FIELD>0}" ng-if="COL_FIELD" ng-bind="COL_FIELD"></div>'
+            cellTemplate: '<div  class="ui-grid-cell-contents" ng-class="{\'text-danger\': COL_FIELD<0, \'text-success\': COL_FIELD>0}" ng-if="COL_FIELD" ng-bind="COL_FIELD"></div>'
         }, {
             displayName: '交易类型',
             name: 'category',
@@ -210,7 +212,7 @@ angular.module('app').controller('Finance.project.record', ["$scope", "$api", "$
             width: '*',
             minWidth: 100,
             enableColumnMenu: false,
-            cellTemplate: '<div class="ui-grid-cell-contents text-{{grid.appScope.self.status[COL_FIELD].class}}" ng-bind="grid.appScope.self.status[COL_FIELD].title"></div>'
+            cellTemplate: '<div  class="ui-grid-cell-contents text-{{grid.appScope.self.status[COL_FIELD].class}}" ng-bind="grid.appScope.self.status[COL_FIELD].title"></div>'
         }, {
             displayName: '操作后余额',
             name: 'balance',
@@ -224,17 +226,17 @@ angular.module('app').controller('Finance.project.record', ["$scope", "$api", "$
         }];
 
     self.gridOptions = {
-        onRegisterApi: function(gridApi) {
-            gridApi.infiniteScroll.on.needLoadMoreData($scope, function() {
+        onRegisterApi: function (gridApi) {
+            gridApi.infiniteScroll.on.needLoadMoreData($scope, function () {
                 var defer = $q.defer(),
                     inject = defer.resolve,
-                    reject = function() {
+                    reject = function () {
                         gridApi.infiniteScroll.dataLoaded();
                         defer.reject();
                     };
-                (function(promise) {
+                (function (promise) {
                     if (promise) {
-                        promise.then(function() {
+                        promise.then(function () {
                             gridApi.infiniteScroll.saveScrollPercentage();
                             gridApi.infiniteScroll.dataLoaded(false, true).then(inject, reject);
                         }, reject);
@@ -249,7 +251,7 @@ angular.module('app').controller('Finance.project.record', ["$scope", "$api", "$
         infiniteScrollDown: true,
         enableColumnResizing: true,
         exporterOlderExcelCompatibility: true,
-        exporterFieldCallback: function(grid, row, col, value) {
+        exporterFieldCallback: function (grid, row, col, value) {
             if (/status/.test(col.field)) {
                 value = self.status[value] && self.status[value].title || '';
             }

@@ -1,4 +1,4 @@
-angular.module('app').factory('SensorAttrib', ["$resource", "Config", function($resource, Config) {
+angular.module('app').factory('SensorAttrib', ["$resource", "Config", function ($resource, Config) {
     return $resource(Config.apiBase + 'sensorattrib', {}, {
         info: {
             method: 'POST',
@@ -13,5 +13,5 @@ angular.module('app').factory('SensorAttrib', ["$resource", "Config", function($
             method: 'POST',
             url: Config.API + '/sensorattrib/delete'
         }
-    })
+    });
 }]);

@@ -1,8 +1,8 @@
-angular.module('app').filter('startFrom', function() {
-    return function(input, start) {
+angular.module('app').filter('startFrom', function () {
+    return function (input, start) {
         return angular.isArray(input) && input.slice(+start) || input && angular.isArray(input.detail) && input.detail.slice(+start) || [];
     };
-}).filter('tradeStatus', function() {
+}).filter('tradeStatus', function () {
     var status = [{
         key: 'CHECKING',
         title: '等待审核',
@@ -24,13 +24,13 @@ angular.module('app').filter('startFrom', function() {
         title: '完成',
         class: 'success'
     }];
-    angular.forEach(status, function(item) {
+    angular.forEach(status, function (item) {
         status[item.key] = item;
     });
-    return function(input, key) {
+    return function (input, key) {
         return status[input] && status[input][key] || status[input] || input;
     };
-}).filter('tradeCategory', function() {
+}).filter('tradeCategory', function () {
     var category = [{
         key: 'RECHARGING',
         title: '充值'
@@ -101,10 +101,10 @@ angular.module('app').filter('startFrom', function() {
         title: '人工充值',
         icon: 'emfinance finance-manual text-info'
     }];
-    angular.forEach(category, function(item) {
+    angular.forEach(category, function (item) {
         category[item.key] = item;
     });
-    return function(input, key) {
+    return function (input, key) {
         return category[input] && category[input][key] || category[input] || input;
     };
 });

@@ -1,10 +1,10 @@
-angular.module('app').controller('eventcategoryAdd', ["$rootScope", "$scope", "$state", "Eventcategory", "Auth", "API", "UI", function($rootScope, $scope, $state, Eventcategory, Auth, API, UI) {
-    Auth.Check(function() {
+angular.module('app').controller('eventcategoryAdd', ["$rootScope", "$scope", "$state", "Eventcategory", "Auth", "API", "UI", function ($rootScope, $scope, $state, Eventcategory, Auth, API, UI) {
+    Auth.Check(function () {
 
-        $scope.submit = function(e) {
+        $scope.submit = function (e) {
             API.Query(Eventcategory.info, {
                 id: $scope.eventcategory._id
-            }, function(result) {
+            }, function (result) {
                 if (result.err) {} else {
                     if (result.result) {
                         //exists
@@ -12,7 +12,7 @@ angular.module('app').controller('eventcategoryAdd', ["$rootScope", "$scope", "$
                         return;
                     } else {
                         //
-                        API.Query(Eventcategory.add, $scope.eventcategory, function(result) {
+                        API.Query(Eventcategory.add, $scope.eventcategory, function (result) {
                             if (result.code) {
                                 UI.AlertError(result.message);
                             } else {

@@ -1,4 +1,4 @@
-angular.module('app').factory('User', ["$resource", "Config", function($resource, Config) {
+angular.module('app').factory('User', ["$resource", "Config", function ($resource, Config) {
     return $resource(Config.apiBase + 'user', {}, {
         multi: {
             method: 'GET',
@@ -19,5 +19,5 @@ angular.module('app').factory('User', ["$resource", "Config", function($resource
             method: 'DELETE',
             url: Config.apiBase + 'user/:id'
         }
-    })
+    });
 }]);

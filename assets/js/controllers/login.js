@@ -1,13 +1,13 @@
-angular.module('app').controller('login', ["$api", "$cookies", "$state", "UI", "md5", function($api, $cookies, $state, UI, md5) {
+angular.module('app').controller('login', ["$api", "$cookies", "$state", "UI", "md5", function ($api, $cookies, $state, UI, md5) {
 
     var self = this,
         remember,
         domain = /cloudenergy\.me/.test(location.hostname) ? '.cloudenergy.me' : location.hostname,
-        validate = function(data) {
+        validate = function (data) {
 
             data = data && data.result || {};
 
-            angular.forEach(['token', 'user'], function(key) {
+            angular.forEach(['token', 'user'], function (key) {
                 data[key] && $cookies.put(key, data[key], {
                     path: '/',
                     domain: domain,
@@ -24,7 +24,7 @@ angular.module('app').controller('login', ["$api", "$cookies", "$state", "UI", "
 
         };
 
-    self.login = function() {
+    self.login = function () {
 
         var user = this && this.user,
             password = this && this.password,
@@ -41,7 +41,7 @@ angular.module('app').controller('login', ["$api", "$cookies", "$state", "UI", "
         !msg && $api.auth.login({
             user: user,
             passwd: md5.createHash(password).toUpperCase()
-        }, validate, function(result) {
+        }, validate, function (result) {
             UI.AlertError('服务器错误', '错误: ' + result.data.code);
         });
 

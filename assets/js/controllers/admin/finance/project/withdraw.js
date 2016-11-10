@@ -1,4 +1,4 @@
-angular.module('app').controller('Finance.project.withdraw', ["$scope", "$api", "$filter", "$state", "$stateParams", "$uibModal", function($scope, $api, $filter, $state, $stateParams, $uibModal) {
+angular.module('app').controller('Finance.project.withdraw', ["$scope", "$api", "$filter", "$state", "$stateParams", "$uibModal", function ($scope, $api, $filter, $state, $stateParams, $uibModal) {
 
     var self = this;
 
@@ -10,7 +10,7 @@ angular.module('app').controller('Finance.project.withdraw', ["$scope", "$api", 
 
     $api.business.accountbalance({
         project: self.projectid
-    }, function(data) {
+    }, function (data) {
         self.accountbalance = data.result || {};
         self.accountbalance.total = Math.round((self.accountbalance.cash + self.accountbalance.frozen) * 100) / 100;
         self.accountbalance.cash = Math.round(self.accountbalance.cash * 100) / 100;
@@ -19,7 +19,7 @@ angular.module('app').controller('Finance.project.withdraw', ["$scope", "$api", 
         self.accountbalance.withdraw = Math.round(self.accountbalance.withdraw * 100) / 100;
     });
 
-    self.queryFee = function() {
+    self.queryFee = function () {
         if (self.amount) {
             self.amount = Math.round(self.amount * 100) / 100;
         }
@@ -29,44 +29,44 @@ angular.module('app').controller('Finance.project.withdraw', ["$scope", "$api", 
         $api.payment.handlingcharge({
             channelaccount: self.cardSelected.id,
             amount: self.amount
-        }, function(res) {
+        }, function (res) {
             var f = res.result;
             self.fee = f.PRJ;
-        })
+        });
     };
 
-    $scope.$watch(function() {
-        return self.cardSelected
-    }, function(n) {
+    $scope.$watch(function () {
+        return self.cardSelected;
+    }, function (n) {
         if (n) {
             self.queryFee();
         }
     });
 
-    self.getCardList = function() {
+    self.getCardList = function () {
         $api.channelaccount.info({
             project: self.projectid,
             all: true,
             flow: 'EXPENSE',
             status: 'SUCCESS'
-        }, function(data) {
+        }, function (data) {
             self.cardData = data.result || [];
-        })
+        });
     };
 
     self.getCardList();
 
-    self.inject = function() {
+    self.inject = function () {
         // todo modal
         $uibModal.open({
             templateUrl: 'withdraw_request_confirmation.html',
             controllerAs: 'self',
-            controller: ["$uibModalInstance", "UI", "data", function($uibModalInstance, UI, data) {
-                this.submit = function() {
+            controller: ["$uibModalInstance", "UI", "data", function ($uibModalInstance, UI, data) {
+                this.submit = function () {
                     $uibModalInstance.close(this.detail);
                 };
-                this.cancel = function() {
-                    $uibModalInstance.dismiss('cancel')
+                this.cancel = function () {
+                    $uibModalInstance.dismiss('cancel');
                 };
 
                 this.detail = data;
@@ -74,34 +74,34 @@ angular.module('app').controller('Finance.project.withdraw', ["$scope", "$api", 
                 this.detail.applicant = EMAPP.Account._id;
             }],
             resolve: {
-                data: function() {
+                data: function () {
                     return {
                         card: self.cardSelected,
                         amount: self.amount,
                         fee: self.fee,
                         project: self.projectid
-                    }
+                    };
                 }
             },
             size: 'md'
-        }).result.then(function(detail) {
+        }).result.then(function (detail) {
             $api.withdraw.apply({
                 project: detail.project,
                 amount: detail.amount,
                 channelaccount: detail.card.id
-            }, function(res) {
+            }, function (res) {
                 if (res.code == 0) {
                     swal('成功', '已提交成功', 'success');
                     $state.go($state.current.name, {
                         projectid: self.projectid
                     }, {
                         reload: true
-                    })
+                    });
                 } else {
                     swal('错误', res.message, 'error');
                 }
             });
         });
-    }
+    };
 
 }]);

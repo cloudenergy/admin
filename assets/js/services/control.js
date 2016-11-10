@@ -1,4 +1,4 @@
-angular.module('app').factory('Control', ["$resource", "Config", function($resource, Config) {
+angular.module('app').factory('Control', ["$resource", "Config", function ($resource, Config) {
     return $resource(Config.apiBase + 'control', {}, {
         Send: {
             method: 'POST',
@@ -8,5 +8,5 @@ angular.module('app').factory('Control', ["$resource", "Config", function($resou
             method: 'POST',
             url: Config.API + '/control/sensorcommand'
         }
-    })
+    });
 }]);

@@ -1,12 +1,12 @@
-angular.module('app').controller('departmentedit', ["$scope", "$state", "$stateParams", "$uibModal", "$api", "Department", "Auth", "API", "Sensor", "UI", function($scope, $state, $stateParams, $uibModal, $api, Department, Auth, API, Sensor, UI) {
+angular.module('app').controller('departmentedit', ["$scope", "$state", "$stateParams", "$uibModal", "$api", "Department", "Auth", "API", "Sensor", "UI", function ($scope, $state, $stateParams, $uibModal, $api, Department, Auth, API, Sensor, UI) {
     $scope.ondutyHour = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
     $scope.ondutyMinute = ['00', '10', '20', '30', '40', '50'];
     $scope.offdutyHour = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
     $scope.offdutyMinute = ['00', '10', '20', '30', '40', '50'];
 
-    Auth.Check(function() {
+    Auth.Check(function () {
 
-        $scope.submit = function(e) {
+        $scope.submit = function (e) {
             if ($scope.department.password != $scope.repassword) {
                 swal('错误', '两次输入的密码不一致', 'warning');
                 return;
@@ -17,13 +17,13 @@ angular.module('app').controller('departmentedit', ["$scope", "$state", "$stateP
                 project: [projectID],
                 sensor: []
             };
-            _.each($scope.SelectSensors, function(sensor) {
+            _.each($scope.SelectSensors, function (sensor) {
                 $scope.department.resource.sensor.push(
                     projectID + '.' + sensor._id
                 );
             });
 
-            $scope.department.message = Object.keys($scope.warning).filter(function(item) {
+            $scope.department.message = Object.keys($scope.warning).filter(function (item) {
                 return $scope.warning[item] ? item : '';
             }).join(',');
 
@@ -36,7 +36,7 @@ angular.module('app').controller('departmentedit', ["$scope", "$state", "$stateP
 
             // $scope.department.account = $scope.departmentAccount;
 
-            API.Query(Department.update, $scope.department, function(result) {
+            API.Query(Department.update, $scope.department, function (result) {
                 if (result.code) {
                     UI.AlertError(result.message);
                 } else {
@@ -46,7 +46,7 @@ angular.module('app').controller('departmentedit', ["$scope", "$state", "$stateP
             });
         };
 
-        $scope.OnSelectSensor = function(e) {
+        $scope.OnSelectSensor = function (e) {
             e.preventDefault();
 
             var modalInstance = $uibModal.open({
@@ -54,23 +54,23 @@ angular.module('app').controller('departmentedit', ["$scope", "$state", "$stateP
                 controller: 'ChannelSelect',
                 size: 'lg',
                 resolve: {
-                    ProjectID: function() {
+                    ProjectID: function () {
                         return $scope.department.project;
                     },
-                    SelectedSensors: function() {
+                    SelectedSensors: function () {
                         return $scope.SelectSensors || [];
                     }
                 }
             });
 
-            modalInstance.result.then(function(selectSensors) {
+            modalInstance.result.then(function (selectSensors) {
                 $scope.SelectSensors = selectSensors;
-            }, function() {});
+            }, function () {});
         };
 
         $api.department.info({
             id: $stateParams.id
-        }, function(result) {
+        }, function (result) {
             $scope.department = result.result || {};
             $scope.departmentAccount = result.result.account._id || result.result.account;
             $scope.SelectSensors = $scope.department.resource && $scope.department.resource.sensor || [];
@@ -84,7 +84,7 @@ angular.module('app').controller('departmentedit', ["$scope", "$state", "$stateP
                 $scope.department.email = $scope.account.email;
 
                 var message = $scope.account.message ? String.prototype.split.call($scope.account.message || '', ',') : [];
-                angular.forEach(message, function(value, key) {
+                angular.forEach(message, function (value, key) {
                     $scope.warning[value] = true;
                 });
             }
@@ -100,12 +100,12 @@ angular.module('app').controller('departmentedit', ["$scope", "$state", "$stateP
             if ($scope.department.resource && $scope.department.resource.sensor) {
                 //
                 var sensorIDs = [];
-                _.each($scope.department.resource.sensor, function(sensor) {
+                _.each($scope.department.resource.sensor, function (sensor) {
                     sensorIDs.push(sensor.replace(/.+\./g, ''));
                 });
                 API.Query(Sensor.channelinfo, {
                     ids: sensorIDs
-                }, function(result) {
+                }, function (result) {
                     if (!result.err) {
                         $scope.SelectSensors = result.result;
                     }
@@ -113,7 +113,7 @@ angular.module('app').controller('departmentedit', ["$scope", "$state", "$stateP
             }
         });
 
-        $scope.OnSelectCharacter = function(e, character) {
+        $scope.OnSelectCharacter = function (e, character) {
             e.preventDefault();
             $scope.department.character = character;
         };

@@ -1,4 +1,4 @@
-angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibModal", "Building", "API", "Auth", "UI", function($scope, $q, $api, $uibModal, Building, API, Auth, UI) {
+angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibModal", "Building", "API", "Auth", "UI", function ($scope, $q, $api, $uibModal, Building, API, Auth, UI) {
 
     $scope.operateStatus = {
         create: {
@@ -25,7 +25,7 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
 
     var KEY_SEARCH = EMAPP.Account._id + '_sensor_index_search';
 
-    Auth.Check($scope.operateStatus, function() {
+    Auth.Check($scope.operateStatus, function () {
 
         //社会属性
         function GetCustomer() {
@@ -33,7 +33,7 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
             return $api.customer.info({
                 project: $scope.Project.selected._id,
                 onlynode: 1
-            }, function(data) {
+            }, function (data) {
                 $scope.customer = {
                     enable: $scope.customer.enable,
                     selected: 'ROOT',
@@ -49,7 +49,7 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
                             icon: 'glyphicon glyphicon-th-list'
                         }]
                     },
-                    conditionalselect: function(node, event) {
+                    conditionalselect: function (node, event) {
                         $scope.customer.selected = node.id;
                         $scope.OnSearch();
                         return true;
@@ -59,7 +59,7 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
                     ]
                 };
                 (function forEach(list, parent) {
-                    angular.forEach(list, function(item, index) {
+                    angular.forEach(list, function (item, index) {
                         item.parent = parent;
                         item.text = item.title;
                         // if (parent === 'ROOT' && index === 0) {
@@ -84,7 +84,7 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
         function GetBuilding() {
             return $api.building.info({
                 project: $scope.Project.selected._id
-            }, function(data) {
+            }, function (data) {
 
                 var cacheKey = 'sensor.building',
                     cacheId = UI.GetPageItem(cacheKey);
@@ -94,16 +94,16 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
                 //     title: '全部建筑'
                 // }];
                 $scope.buildings = [];
-                angular.forEach(data.result, function(item) {
+                angular.forEach(data.result, function (item) {
                     this.push(item);
                 }, $scope.buildings);
 
-                $scope.buildings.select = function() {
+                $scope.buildings.select = function () {
                     UI.PutPageItem(cacheKey, $scope.buildings.selected);
                     $scope.OnSearch();
                 };
 
-                angular.forEach($scope.buildings, function(item) {
+                angular.forEach($scope.buildings, function (item) {
                     if (item._id === cacheId) {
                         $scope.buildings.selected = item._id;
                     }
@@ -117,14 +117,14 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
         function GetDeviceTypes() {
             return $api.device.type({
                 project: $scope.Project.selected._id
-            }, function(data) {
+            }, function (data) {
 
                 $scope.DeviceTypes = [{
                     id: undefined,
                     title: '全部设备'
                 }];
 
-                angular.forEach(data.result, function(item) {
+                angular.forEach(data.result, function (item) {
                     this.push({
                         id: item.id,
                         title: item.name
@@ -133,7 +133,7 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
 
                 $scope.DeviceTypes.selected = $scope.DeviceTypes.selected || ($scope.DeviceTypes[0] || {}).id;
 
-                $scope.DeviceTypes.select = function() {
+                $scope.DeviceTypes.select = function () {
                     $scope.OnSearch();
                 };
 
@@ -153,9 +153,9 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
                 socitynode: $scope.customer.enable && $scope.customer.selected || undefined,
                 pageindex: $scope.currentPage,
                 pagesize: 15
-            }, function(data) {
+            }, function (data) {
                 data = data.result[$scope.Project.selected._id];
-                angular.forEach(data.detail, function(item) {
+                angular.forEach(data.detail, function (item) {
                     this.push(item);
                 }, $scope.viewOfSensor = []);
                 $scope.pageSize = data.paging.pagesize;
@@ -166,7 +166,7 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
         // 获取上次的页面
         $scope.currentPage = UI.GetPageIndex();
 
-        $scope.$watch('Project.selected', function() {
+        $scope.$watch('Project.selected', function () {
             $scope.customer = angular.isDefined($scope.customer) ? {
                 enable: $scope.customer.enable
             } : {
@@ -176,7 +176,7 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
             $scope.DeviceTypes = [];
             $q.all([GetCustomer(), GetBuilding(), GetDeviceTypes()]).then($scope.OnSearch);
         });
-        $scope.$watch('currentPage', function(currentPage) {
+        $scope.$watch('currentPage', function (currentPage) {
             if (currentPage == undefined) {
                 $scope.currentPage = UI.GetPageIndex();
                 return;
@@ -184,44 +184,44 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
             UI.PutPageIndex(undefined, $scope.currentPage);
             $scope.viewOfSensor && $scope.OnSearch();
         });
-        $scope.$watch('customer.enable', function(enable) {
+        $scope.$watch('customer.enable', function (enable) {
             $scope.viewOfSensor && $scope.OnSearch();
         });
 
-        $scope.OnSearch = function() {
+        $scope.OnSearch = function () {
             UI.PutPageItem(KEY_SEARCH, $scope.searchKey);
             GetSensor();
         };
 
-        $scope.OnMask = function(channel) {
+        $scope.OnMask = function (channel) {
             $api.sensorchannel.update({
                 id: channel.id,
                 mask: !channel.mask
-            }, function(result) {
+            }, function (result) {
                 if (!result.err) {
                     channel.mask = !channel.mask;
                 }
             });
         };
 
-        $scope.OnMaskAll = function(reverse) {
+        $scope.OnMaskAll = function (reverse) {
             if (!confirm('是否确定' + (reverse ? '屏蔽' : '启用') + '所有通道？')) {
                 return;
             }
 
-            angular.forEach($scope.viewOfSensor, function(sensor) {
-                angular.forEach(sensor.channels, function(channel) {
+            angular.forEach($scope.viewOfSensor, function (sensor) {
+                angular.forEach(sensor.channels, function (channel) {
                     $api.sensorchannel.update({
                         id: channel.id,
                         mask: reverse
-                    }, function() {
+                    }, function () {
                         channel.mask = reverse;
                     });
                 });
             });
         };
 
-        $scope.OnSync = function(channel, sensor) {
+        $scope.OnSync = function (channel, sensor) {
 
             channel.title = sensor.title;
             var modalInstance = $uibModal.open({
@@ -229,13 +229,13 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
                 controller: 'SensorSync',
                 size: 'lg',
                 resolve: {
-                    SensorIns: function() {
+                    SensorIns: function () {
                         return channel;
                     }
                 }
             });
 
-            modalInstance.result.then(function(sensors) {
+            modalInstance.result.then(function (sensors) {
 
                 if (!$scope.editUser.resource.sensor) {
                     $scope.editUser.resource.sensor = [];
@@ -244,10 +244,10 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
                 $scope.editUser.resource.sensor = _.difference($scope.editUser.resource.sensor, sensors.unselect);
                 $scope.editUser.resource.sensor = _.union($scope.editUser.resource.sensor, sensors.select);
 
-            }, function() {});
+            }, function () {});
         };
 
-        $scope.OnSyncAll = function() {
+        $scope.OnSyncAll = function () {
 
             if (!confirm('是否确定同步所有数据异常的传感器？')) {
                 return;
@@ -255,7 +255,7 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
 
             $api.sensorchannel.syncdata({
                 project: $scope.Project.selected._id
-            }, function(result) {
+            }, function (result) {
                 if (result.err) {
                     console.error(result);
                 } else {
@@ -265,26 +265,26 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
             });
         };
 
-        $scope.onRemove = function(channel, sensor) {
+        $scope.onRemove = function (channel, sensor) {
             // var removeIndex = UI.GetAbsoluteIndex($scope.currentPage, index);
             $api.sensorchannel.delete({
                 id: channel.id
-            }, function(result) {
+            }, function (result) {
                 // $scope.items.splice(removeIndex, 1);
                 delete sensor.channels[channel.funcid];
-            }, function(result) {
+            }, function (result) {
                 UI.AlertError(result.data.message);
             });
         };
 
         //传感器属性
-        $scope.OnSensorAttribute = function(sensor) {
+        $scope.OnSensorAttribute = function (sensor) {
             var modalInstance = $uibModal.open({
                 templateUrl: 'sensorAttribute.html',
                 controller: 'sensorAttribute',
                 size: 'lg',
                 resolve: {
-                    SensorSUID: function() {
+                    SensorSUID: function () {
                         var sensorGUID = API.ParseSensorID(sensor.id);
                         if (sensorGUID) {
                             return sensorGUID.buildingID + sensorGUID.gatewayID + sensorGUID.addrID + sensorGUID.meterID;
@@ -292,31 +292,31 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
                             return null;
                         }
                     },
-                    ProjectID: function() {
+                    ProjectID: function () {
                         return $scope.Project.selected._id;
                     }
                 }
             });
 
-            modalInstance.result.then(function() {
+            modalInstance.result.then(function () {
                 //
-            }, function() {});
+            }, function () {});
         };
 
     });
 
-    $scope.importSensor = function() {
+    $scope.importSensor = function () {
         var $parentScope = $scope,
             uploadCompleted = false;
         $uibModal.open({
             templateUrl: 'importSensor.html',
             size: 'md',
-            controller: ["$scope", "$timeout", "$uibModalInstance", "project", "building", "customer", function($scope, $timeout, $uibModalInstance, project, building, customer) {
+            controller: ["$scope", "$timeout", "$uibModalInstance", "project", "building", "customer", function ($scope, $timeout, $uibModalInstance, project, building, customer) {
                 $scope.actionURL = '/api/import/importsensorchannel';
                 $scope.project = project;
                 $scope.building = building;
                 $scope.customer = customer;
-                $scope.ok = function() {
+                $scope.ok = function () {
                     $uibModalInstance.close();
                     if (uploadCompleted) {
                         // $parentScope.currentPage += 1;
@@ -324,7 +324,7 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
                     }
                 };
 
-                $scope.OnUploadComplete = function(res) {
+                $scope.OnUploadComplete = function (res) {
                     if (res.code) {
                         UI.AlertError(res.result, res.message);
                     } else {
@@ -337,13 +337,13 @@ angular.module('app').controller('SensorIndex', ["$scope", "$q", "$api", "$uibMo
                 $scope.cancel = $uibModalInstance.dismiss;
             }],
             resolve: {
-                project: function() {
+                project: function () {
                     return $scope.Project.selected._id;
                 },
-                building: function() {
+                building: function () {
                     return $scope.buildings.selected;
                 },
-                customer: function() {
+                customer: function () {
                     return $scope.customer.selected;
                 }
             }

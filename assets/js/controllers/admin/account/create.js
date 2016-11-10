@@ -1,10 +1,10 @@
-angular.module('app').controller('accountCreate', ["$scope", "$q", "$state", "$cookies", "BillingAccount", "Account", "API", "Auth", "UI", "Character", function($scope, $q, $state, $cookies, BillingAccount, Account, API, Auth, UI, Character) {
+angular.module('app').controller('accountCreate', ["$scope", "$q", "$state", "$cookies", "BillingAccount", "Account", "API", "Auth", "UI", "Character", function ($scope, $q, $state, $cookies, BillingAccount, Account, API, Auth, UI, Character) {
 
-    Auth.Check(function() {
+    Auth.Check(function () {
 
         $scope.warning = {};
 
-        $scope.submit = function(e) {
+        $scope.submit = function (e) {
             if ($scope.account.user.length < 6) {
                 UI.AlertError('用户名不能低于6位');
                 return;
@@ -24,14 +24,14 @@ angular.module('app').controller('accountCreate', ["$scope", "$q", "$state", "$c
                 return;
             }
             $scope.account.character = $scope.characters.selected._id;
-            $scope.account.message = Object.keys($scope.warning).filter(function(item) {
+            $scope.account.message = Object.keys($scope.warning).filter(function (item) {
                 return $scope.warning[item] ? item : '';
             }).join(',');
 
             API.Query(BillingAccount.add, {
                 account: $scope.account.user,
                 title: $scope.account.user
-            }, function(result) {
+            }, function (result) {
                 if (result.code) {
                     UI.AlertError(result.message);
                     //error
@@ -39,7 +39,7 @@ angular.module('app').controller('accountCreate', ["$scope", "$q", "$state", "$c
                     //
                     $scope.account.billingAccount = result.result._id;
                     console.log($scope.account);
-                    API.Query(Account.add, $scope.account, function(result) {
+                    API.Query(Account.add, $scope.account, function (result) {
                         console.log(result);
                         if (result.code) {
                             //
@@ -55,7 +55,7 @@ angular.module('app').controller('accountCreate', ["$scope", "$q", "$state", "$c
 
         API.Query(Account.info, {
             'id': $cookies.user
-        }, function(data) {
+        }, function (data) {
             if (data.code) {
                 UI.AlertError(result.message);
             } else {
@@ -64,7 +64,7 @@ angular.module('app').controller('accountCreate', ["$scope", "$q", "$state", "$c
                 var power = $scope.adminUser.character && $scope.adminUser.character.level;
                 API.Query(Character.info, {
                     power: power
-                }, function(result) {
+                }, function (result) {
                     //                console.log(result);
                     if (result.code) {
                         UI.AlertError(result.message);

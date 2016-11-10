@@ -1,4 +1,4 @@
-angular.module('app').directive('distpicker', ["$ocLazyLoad", "$timeout", function($ocLazyLoad, $timeout) {
+angular.module('app').directive('distpicker', ["$ocLazyLoad", "$timeout", function ($ocLazyLoad, $timeout) {
 
     var pluginLoad = $ocLazyLoad.load([{
         serie: true,
@@ -11,17 +11,17 @@ angular.module('app').directive('distpicker', ["$ocLazyLoad", "$timeout", functi
     return {
         // priority: 10,
         restrict: 'A',
-        link: function(scope, element, attrs, ctrl) {
-            pluginLoad.then(function() {
+        link: function (scope, element, attrs, ctrl) {
+            pluginLoad.then(function () {
 
                 var options = {},
-                    trigger = function() {
+                    trigger = function () {
                         element.children('select').eq(0).trigger('change.distpicker.province');
                         element.children('select').eq(1).trigger('change.distpicker.city');
                         element.children('select').eq(2).trigger('change.distpicker.district');
                     };
 
-                angular.forEach(element.data(), function(val, key) {
+                angular.forEach(element.data(), function (val, key) {
                     if (!/^\$/.test(key)) {
                         if (/^\{.*\}$/.test(val) || /^\[.*\]$/.test(val)) {
                             eval('this[key]=' + val);
@@ -31,10 +31,10 @@ angular.module('app').directive('distpicker', ["$ocLazyLoad", "$timeout", functi
                     }
                 }, options);
 
-                scope.$watch(attrs.distpicker, function(val) {
+                scope.$watch(attrs.distpicker, function (val) {
                     if (!attrs.distpicker || angular.isDefined(val)) {
                         angular.isObject(val) && angular.extend(options, val);
-                        $timeout(function() {
+                        $timeout(function () {
                             element.distpicker(options);
                             trigger();
                         });
@@ -47,32 +47,32 @@ angular.module('app').directive('distpicker', ["$ocLazyLoad", "$timeout", functi
         }
     };
 
-}]).directive('distpickerProvince', function() {
+}]).directive('distpickerProvince', function () {
     return {
         restrict: 'A',
         require: '^ngModel',
-        link: function(scope, element, attrs, ctrl) {
-            element.bind('change.distpicker.province', function() {
+        link: function (scope, element, attrs, ctrl) {
+            element.bind('change.distpicker.province', function () {
                 ctrl.$setViewValue(this.value);
             });
         }
     };
-}).directive('distpickerCity', function() {
+}).directive('distpickerCity', function () {
     return {
         restrict: 'A',
         require: '^ngModel',
-        link: function(scope, element, attrs, ctrl) {
-            element.bind('change.distpicker.city', function() {
+        link: function (scope, element, attrs, ctrl) {
+            element.bind('change.distpicker.city', function () {
                 ctrl.$setViewValue(this.value);
             });
         }
     };
-}).directive('distpickerDistrict', function() {
+}).directive('distpickerDistrict', function () {
     return {
         restrict: 'A',
         require: '^ngModel',
-        link: function(scope, element, attrs, ctrl) {
-            element.bind('change.distpicker.district', function() {
+        link: function (scope, element, attrs, ctrl) {
+            element.bind('change.distpicker.district', function () {
                 ctrl.$setViewValue(this.value);
             });
         }

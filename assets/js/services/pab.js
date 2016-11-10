@@ -1,4 +1,4 @@
-EMAPP.factory('Pab', ["$resource", "Config", function($resource, Config) {
+EMAPP.factory('Pab', ["$resource", "Config", function ($resource, Config) {
     return $resource(Config.API + '/pab', {}, {
         info: {
             method: 'POST',
@@ -16,5 +16,5 @@ EMAPP.factory('Pab', ["$resource", "Config", function($resource, Config) {
             method: 'POST',
             url: Config.API + '/pab/delete'
         }
-    })
+    });
 }]);

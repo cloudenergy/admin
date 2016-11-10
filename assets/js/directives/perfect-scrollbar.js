@@ -1,4 +1,4 @@
-angular.module('app').directive('perfectScrollbar', ["$ocLazyLoad", "$timeout", function($ocLazyLoad, $timeout) {
+angular.module('app').directive('perfectScrollbar', ["$ocLazyLoad", "$timeout", function ($ocLazyLoad, $timeout) {
 
     var pluginLoad = $ocLazyLoad.load([{
         insertBefore: '#load_styles_before',
@@ -9,18 +9,18 @@ angular.module('app').directive('perfectScrollbar', ["$ocLazyLoad", "$timeout", 
 
     return {
         restrict: 'A',
-        link: function(scope, element, attrs, ctrl) {
-            pluginLoad.then(function() {
-                scope.$watch(attrs.perfectScrollbar, function(options) {
+        link: function (scope, element, attrs, ctrl) {
+            pluginLoad.then(function () {
+                scope.$watch(attrs.perfectScrollbar, function (options) {
                     options = angular.isObject(options) && angular.extend({}, options) || {};
-                    $timeout(function() {
+                    $timeout(function () {
                         element.perfectScrollbar(options);
                         element.data('perfectScrollbar') && element.perfectScrollbar('update');
                         element.data('perfectScrollbar', options);
                     });
                 });
-                scope.$watch(attrs.perfectScrollbarEvent, function(events) {
-                    angular.forEach(events, function(fn, key) {
+                scope.$watch(attrs.perfectScrollbarEvent, function (events) {
+                    angular.forEach(events, function (fn, key) {
                         element.off(key);
                         angular.isFunction(fn) && element.on(key, fn);
                     });

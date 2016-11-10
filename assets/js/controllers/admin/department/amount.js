@@ -1,12 +1,12 @@
-angular.module('app').controller('accountamount', ["$scope", "$stateParams", "$api", "Account", "API", "Auth", "UI", "BillingAccount", "Log", "Payment", function($scope, $stateParams, $api, Account, API, Auth, UI, BillingAccount, Log, Payment) {
+angular.module('app').controller('accountamount', ["$scope", "$stateParams", "$api", "Account", "API", "Auth", "UI", "BillingAccount", "Log", "Payment", function ($scope, $stateParams, $api, Account, API, Auth, UI, BillingAccount, Log, Payment) {
 
     $scope.AccountID = $stateParams.account;
 
-    Auth.Check(function() {
+    Auth.Check(function () {
         function LoadBillingAccount() {
             API.Query(Account.info, {
                 id: $scope.AccountID
-            }, function(result) {
+            }, function (result) {
                 if (result.err) {
                     //error
                 } else {
@@ -27,7 +27,7 @@ angular.module('app').controller('accountamount', ["$scope", "$stateParams", "$a
             API.Query(Log.charge, {
                 uid: $scope.AccountID,
                 channel: 'manual'
-            }, function(result) {
+            }, function (result) {
                 if (result.err) {
                     //
                 } else {
@@ -40,14 +40,14 @@ angular.module('app').controller('accountamount', ["$scope", "$stateParams", "$a
             type: 'manual',
             project: $scope.Project.selected._id,
             flow: 'EARNING'
-        }, function(data) {
+        }, function (data) {
             $scope.channels = data.result;
             LoadBillingAccount();
             LoadChargeLog();
         });
 
         //Charge
-        $scope.OnCharge = function() {
+        $scope.OnCharge = function () {
 
             if (!$scope.cash) {
                 return UI.AlertWarning(' ', '请输入充值金额');
@@ -69,7 +69,7 @@ angular.module('app').controller('accountamount', ["$scope", "$stateParams", "$a
                     operator: EMAPP.Account._id
                 }
             };
-            API.Query(Payment.charge, params, function(data) {
+            API.Query(Payment.charge, params, function (data) {
                 if (data.code) {
                     // swal('错误', '充值出错', 'error');
                     UI.AlertError(' ', '充值出错');
@@ -86,12 +86,12 @@ angular.module('app').controller('accountamount', ["$scope", "$stateParams", "$a
         };
 
         //Reverse
-        $scope.OnReverse = function(log) {
+        $scope.OnReverse = function (log) {
             API.Query(Payment.reversal, {
                 id: log._id,
                 time: moment(log.timecreate).unix(),
                 type: 'CHARGE'
-            }, function(res) {
+            }, function (res) {
                 if (res.err) {
                     // swal('错误', '冲正出错: ' + res.err.message, 'error');
                     UI.AlertError(' ', '冲正出错: ' + res.err.message);
@@ -103,12 +103,12 @@ angular.module('app').controller('accountamount', ["$scope", "$stateParams", "$a
         };
 
         //save alert threshold
-        $scope.OnSaveAlerthreshold = function() {
+        $scope.OnSaveAlerthreshold = function () {
             var update = {
                 account: $scope.account.billingAccount._id,
                 alerthreshold: $scope.account.billingAccount.alerthreshold
             };
-            API.Query(BillingAccount.update, update, function(result) {
+            API.Query(BillingAccount.update, update, function (result) {
                 // console.log(result);
             });
         };

@@ -1,4 +1,4 @@
-angular.module('app').factory('Log', ["$resource", "Config", function($resource, Config) {
+angular.module('app').factory('Log', ["$resource", "Config", function ($resource, Config) {
     return $resource(Config.API + '/log', {}, {
         charge: {
             method: 'POST',
@@ -8,5 +8,5 @@ angular.module('app').factory('Log', ["$resource", "Config", function($resource,
             method: 'POST',
             url: Config.API + '/log/account'
         }
-    })
+    });
 }]);

@@ -1,4 +1,4 @@
-angular.module('app').controller('BuildingInfo', ["$scope", "Building", "API", "Auth", "UI", function($scope, Building, API, Auth, UI) {
+angular.module('app').controller('BuildingInfo', ["$scope", "Building", "API", "Auth", "UI", function ($scope, Building, API, Auth, UI) {
     $scope.operateStatus = {
         create: {
             isEnable: false,
@@ -16,24 +16,24 @@ angular.module('app').controller('BuildingInfo', ["$scope", "Building", "API", "
 
     $scope.askingRemoveID = undefined;
 
-    Auth.Check($scope.operateStatus, function() {
+    Auth.Check($scope.operateStatus, function () {
 
-        $scope.DoRemove = function(e, id, index) {
+        $scope.DoRemove = function (e, id, index) {
             e.preventDefault();
 
             API.Query(Building.delete, {
                 id: id
-            }, function(result) {
+            }, function (result) {
                 if (!result.code) {
                     $scope.buildings.splice(index, 1);
                 }
             }, responseError);
         };
-        $scope.AskForRemove = function(e, id) {
+        $scope.AskForRemove = function (e, id) {
             e.preventDefault();
             $scope.askingRemoveID = id;
         };
-        $scope.CancelRemove = function(e, id) {
+        $scope.CancelRemove = function (e, id) {
             e.preventDefault();
             $scope.askingRemoveID = undefined;
         };
@@ -41,7 +41,7 @@ angular.module('app').controller('BuildingInfo', ["$scope", "Building", "API", "
         function GetBuilding() {
             API.Query(Building.info, {
                 project: $scope.Project.selected._id
-            }, function(result) {
+            }, function (result) {
                 if (result.err) {
                     //error
                 } else {

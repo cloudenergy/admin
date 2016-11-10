@@ -1,4 +1,4 @@
-angular.module('app').factory('Department', ["$resource", "Config", function($resource, Config) {
+angular.module('app').factory('Department', ["$resource", "Config", function ($resource, Config) {
     return $resource(Config.API + '/department', {}, {
         info: {
             method: 'POST',
@@ -16,5 +16,5 @@ angular.module('app').factory('Department', ["$resource", "Config", function($re
             method: 'POST',
             url: Config.API + '/department/delete'
         }
-    })
+    });
 }]);

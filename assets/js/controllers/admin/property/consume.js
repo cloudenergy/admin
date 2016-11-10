@@ -1,4 +1,4 @@
-angular.module('app').controller('Property.consume', ["$scope", "$api", "$state", function($scope, $api, $state) {
+angular.module('app').controller('Property.consume', ["$scope", "$api", "$state", function ($scope, $api, $state) {
 
     var self = this,
         KEY_PAGESIZE = EMAPP.Account._id + '_property_consume_pagesize';
@@ -8,27 +8,27 @@ angular.module('app').controller('Property.consume', ["$scope", "$api", "$state"
     self.endDate = moment().format('YYYY-MM-DD');
 
 
-    $scope.$watchGroup(['self.startDate', 'self.endDate'], function() {
+    $scope.$watchGroup(['self.startDate', 'self.endDate'], function () {
         if (self.listData) {
             GetStatistic();
             self.list();
         }
     });
-    $scope.$watch('self.category.selected', function() {
+    $scope.$watch('self.category.selected', function () {
         if (self.listData) {
             GetStatistic();
             self.list();
         }
     });
-    $scope.$watch('self.paging.index', function() {
+    $scope.$watch('self.paging.index', function () {
         self.listData && self.list();
     });
-    $scope.$watch('self.paging.size', function(val) {
+    $scope.$watch('self.paging.size', function (val) {
         localStorage.setItem(KEY_PAGESIZE, val);
         self.listData && self.list();
     });
 
-    $scope.$watch('Project.selected', function(item) {
+    $scope.$watch('Project.selected', function (item) {
         self.projectid = item._id;
         GetStatistic();
         self.list();
@@ -52,7 +52,7 @@ angular.module('app').controller('Property.consume', ["$scope", "$api", "$state"
         key: 'PAYPARKING',
         title: '停车费'
     }];
-    angular.forEach(self.category, function(item) {
+    angular.forEach(self.category, function (item) {
         this[item.key] = item;
     }, self.category);
 
@@ -84,12 +84,12 @@ angular.module('app').controller('Property.consume', ["$scope", "$api", "$state"
             from: self.startDate.replace(/\-/g, ''),
             to: self.endDate.replace(/\-/g, ''),
             cancellable: true
-        }, function(data) {
+        }, function (data) {
 
             self.statistic = data.result || {};
 
             // 消耗
-            angular.forEach(self.statistic.consumption.category, function(item, key) {
+            angular.forEach(self.statistic.consumption.category, function (item, key) {
                 this.push(angular.extend(item, {
                     category: key
                 }));
@@ -98,7 +98,7 @@ angular.module('app').controller('Property.consume', ["$scope", "$api", "$state"
         });
     }
 
-    self.list = function() {
+    self.list = function () {
         $api.business.departmentconsumptiondetail({
             project: self.projectid,
             key: self.searchText || undefined, //商户名称/账号关键字
@@ -108,11 +108,11 @@ angular.module('app').controller('Property.consume', ["$scope", "$api", "$state"
             pageindex: self.paging.index,
             pagesize: self.paging.size,
             cancellable: true
-        }, function(data) {
+        }, function (data) {
 
             data = data.result || {};
 
-            angular.forEach(data.detail, function(item, key) {
+            angular.forEach(data.detail, function (item, key) {
                 if (!Object.keys(item.earning && item.earning.category).length && !Object.keys(item.consumption && item.consumption.category).length) {
                     item.isnull = true;
                 }
@@ -127,13 +127,13 @@ angular.module('app').controller('Property.consume', ["$scope", "$api", "$state"
         });
     };
 
-    self.exportConsumptiondetail = function() {
+    self.exportConsumptiondetail = function () {
         delete self.downloadFile;
         $api.export.consumptiondetail({
             project: self.projectid,
             from: self.startDate.replace(/\-/g, ''),
             to: self.endDate.replace(/\-/g, '')
-        }, function(data) {
+        }, function (data) {
             if (data.result.fn) {
                 self.downloadFile = data.result.fn;
                 self.downloadName = EMAPP.Project.selected.title + '_' + $state.$current.data.title + '_' + self.startDate.replace(/\-/g, '') + '_' + self.endDate.replace(/\-/g, '');

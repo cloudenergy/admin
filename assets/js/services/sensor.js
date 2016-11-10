@@ -1,4 +1,4 @@
-angular.module('app').factory('Sensor', ["$resource", "Config", function($resource, Config) {
+angular.module('app').factory('Sensor', ["$resource", "Config", function ($resource, Config) {
     return $resource(Config.apiBase + 'sensor', {}, {
         //            multi: { method: 'GET', isArray: true },
         //            create: { method: 'POST' },
@@ -29,5 +29,5 @@ angular.module('app').factory('Sensor', ["$resource", "Config", function($resour
             method: 'POST',
             url: Config.API + '/sensorchannel/delete'
         }
-    })
+    });
 }]);

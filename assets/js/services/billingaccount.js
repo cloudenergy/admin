@@ -1,4 +1,4 @@
-angular.module('app').factory('BillingAccount', ["$resource", "Config", function($resource, Config) {
+angular.module('app').factory('BillingAccount', ["$resource", "Config", function ($resource, Config) {
     return $resource(Config.API + '/billingaccount', {}, {
         //            multi: { method: 'GET', isArray: true },
         //            create: { method: 'POST' },
@@ -21,5 +21,5 @@ angular.module('app').factory('BillingAccount', ["$resource", "Config", function
             method: 'POST',
             url: Config.API + '/billingaccount/delete'
         }
-    })
+    });
 }]);

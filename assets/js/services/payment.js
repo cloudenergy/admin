@@ -1,4 +1,4 @@
-angular.module('app').factory('Payment', ["$resource", "Config", function($resource, Config) {
+angular.module('app').factory('Payment', ["$resource", "Config", function ($resource, Config) {
     return $resource(Config.API + '/payment', {}, {
         payment: {
             method: 'POST',
@@ -12,5 +12,5 @@ angular.module('app').factory('Payment', ["$resource", "Config", function($resou
             method: 'POST',
             url: Config.API + '/payment/reversal'
         }
-    })
+    });
 }]);

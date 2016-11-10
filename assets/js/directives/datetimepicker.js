@@ -1,4 +1,4 @@
-angular.module('app').directive('datetimepicker', ["$ocLazyLoad", function($ocLazyLoad) {
+angular.module('app').directive('datetimepicker', ["$ocLazyLoad", function ($ocLazyLoad) {
 
     var pluginLoad = $ocLazyLoad.load([{
         insertBefore: '#load_styles_before',
@@ -10,8 +10,8 @@ angular.module('app').directive('datetimepicker', ["$ocLazyLoad", function($ocLa
     return {
         restrict: 'EA',
         require: '?ngModel',
-        link: function(scope, element, attrs, ctrl) {
-            pluginLoad.then(function() {
+        link: function (scope, element, attrs, ctrl) {
+            pluginLoad.then(function () {
 
                 var elmData,
                     opt = {
@@ -29,7 +29,7 @@ angular.module('app').directive('datetimepicker', ["$ocLazyLoad", function($ocLa
                             horizontal: 'right'
                         }
                     },
-                    linkage = function(nowDate) {
+                    linkage = function (nowDate) {
                         if (!opt.completed) {
                             elmData = element.data('DateTimePicker');
                             opt.maxDateTo = opt.maxDateTo && $(opt.maxDateTo).data('DateTimePicker');
@@ -55,7 +55,7 @@ angular.module('app').directive('datetimepicker', ["$ocLazyLoad", function($ocLa
                         }
                     };
 
-                angular.forEach(element.data(), function(val, key) {
+                angular.forEach(element.data(), function (val, key) {
                     if (!/^\$/.test(key)) {
                         if (/^\{.*\}$/.test(val) || /^\[.*\]$/.test(val)) {
                             eval('this[key]=' + val);
@@ -65,23 +65,23 @@ angular.module('app').directive('datetimepicker', ["$ocLazyLoad", function($ocLa
                     }
                 }, options);
 
-                scope.$watch(attrs.datetimepicker, function(val) {
+                scope.$watch(attrs.datetimepicker, function (val) {
 
                     if (!attrs.datetimepicker || angular.isDefined(val)) {
 
                         angular.isObject(val) && angular.extend(options, val);
 
-                        angular.forEach(opt, function(val, key) {
+                        angular.forEach(opt, function (val, key) {
                             opt[key] = options[key];
                             delete options[key];
                         });
 
                         element.datetimepicker(options);
 
-                        !options.inline && element.off('dp.change').on('dp.change', function(event) {
+                        !options.inline && element.off('dp.change').on('dp.change', function (event) {
                             linkage(event.date);
                             ctrl && ctrl.$setViewValue(event.target.value);
-                        }).off('dp.show').on('dp.show', function() {
+                        }).off('dp.show').on('dp.show', function () {
                             linkage();
                         });
 

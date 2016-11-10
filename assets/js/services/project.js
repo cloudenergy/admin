@@ -1,4 +1,4 @@
-angular.module('app').factory('Project', ["$resource", "Config", function($resource, Config) {
+angular.module('app').factory('Project', ["$resource", "Config", function ($resource, Config) {
     return $resource(Config.API + '/project', {}, {
         //            multi: { method: 'GET', isArray: true },
         //            create: { method: 'POST' },
@@ -21,5 +21,5 @@ angular.module('app').factory('Project', ["$resource", "Config", function($resou
             method: 'POST',
             url: Config.API + '/project/delete'
         }
-    })
+    });
 }]);

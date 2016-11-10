@@ -1,4 +1,4 @@
-angular.module('app').controller('Property.record', ["$scope", "$timeout", "$api", "$state", "$stateParams", function($scope, $timeout, $api, $state, $stateParams) {
+angular.module('app').controller('Property.record', ["$scope", "$timeout", "$api", "$state", "$stateParams", function ($scope, $timeout, $api, $state, $stateParams) {
 
     var self = this,
         KEY_PAGESIZE = EMAPP.Account._id + '_property_record_pagesize',
@@ -53,9 +53,9 @@ angular.module('app').controller('Property.record', ["$scope", "$timeout", "$api
             title: '提现服务费'
         }];
 
-    $scope.$watchGroup(['self.startDate', 'self.endDate'], function() {
+    $scope.$watchGroup(['self.startDate', 'self.endDate'], function () {
         if (self.dateRange.temp) {
-            $timeout(function() {
+            $timeout(function () {
                 delete self.dateRange.temp;
             }, 10);
         } else {
@@ -63,15 +63,15 @@ angular.module('app').controller('Property.record', ["$scope", "$timeout", "$api
         }
         self.listData && self.list();
     });
-    $scope.$watch('self.paging.index', function() {
+    $scope.$watch('self.paging.index', function () {
         self.listData && self.list();
     });
-    $scope.$watch('self.paging.size', function(val) {
+    $scope.$watch('self.paging.size', function (val) {
         localStorage.setItem(KEY_PAGESIZE, val);
         self.listData && self.list();
     });
 
-    $scope.$watch('Project.selected', function() {
+    $scope.$watch('Project.selected', function () {
         self.list();
     });
 
@@ -87,23 +87,23 @@ angular.module('app').controller('Property.record', ["$scope", "$timeout", "$api
     self.dateRange = ['今天', '昨天', '最近7天', '最近30天'];
     self.dateRange.selected = $stateParams.dateRange && parseInt($stateParams.dateRange) || undefined;
     self.dateRange.temp = !!$stateParams.dateRange;
-    self.dateRange.select = function(key) {
+    self.dateRange.select = function (key) {
         self.dateRange.temp = true;
         switch (self.dateRange.selected = key) {
-            case 0:
-                self.startDate = self.endDate = moment().format('YYYY-MM-DD');
-                break;
-            case 1:
-                self.startDate = self.endDate = moment().subtract(1, 'days').format('YYYY-MM-DD');
-                break;
-            case 2:
-                self.startDate = moment().subtract(7, 'days').format('YYYY-MM-DD');
-                self.endDate = moment().format('YYYY-MM-DD');
-                break;
-            case 3:
-                self.startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
-                self.endDate = moment().format('YYYY-MM-DD');
-                break;
+        case 0:
+            self.startDate = self.endDate = moment().format('YYYY-MM-DD');
+            break;
+        case 1:
+            self.startDate = self.endDate = moment().subtract(1, 'days').format('YYYY-MM-DD');
+            break;
+        case 2:
+            self.startDate = moment().subtract(7, 'days').format('YYYY-MM-DD');
+            self.endDate = moment().format('YYYY-MM-DD');
+            break;
+        case 3:
+            self.startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
+            self.endDate = moment().format('YYYY-MM-DD');
+            break;
         }
     };
 
@@ -111,7 +111,7 @@ angular.module('app').controller('Property.record', ["$scope", "$timeout", "$api
     self.status = [{
         title: '全部状态'
     }].concat(Array_status);
-    angular.forEach(self.status, function(item) {
+    angular.forEach(self.status, function (item) {
         this[item.key] = {
             title: item.title,
             class: item.class
@@ -132,7 +132,7 @@ angular.module('app').controller('Property.record', ["$scope", "$timeout", "$api
         self.category = self.category.concat(Array_category_in);
         self.category = self.category.concat(Array_category_out);
     }
-    angular.forEach(self.category, function(item) {
+    angular.forEach(self.category, function (item) {
         this[item.key] = item;
     }, self.category);
     self.category.selected = $stateParams.category || undefined;
@@ -159,18 +159,18 @@ angular.module('app').controller('Property.record', ["$scope", "$timeout", "$api
         }]
     };
 
-    self.list = function() {
+    self.list = function () {
         $api.business.fundflow(angular.extend(GetOptions(), {
             pageindex: self.paging.index,
             pagesize: self.paging.size,
             cancellable: true
-        }), function(data) {
+        }), function (data) {
 
             delete $api.$request;
 
             data = data.result || {};
 
-            angular.forEach(data.detail, function(item) {
+            angular.forEach(data.detail, function (item) {
                 if (item.channelaccount && item.channelaccount.account) {
                     item.channelaccount.tail = item.channelaccount.account.replace(/\d+(\d{4})$/, '$1');
                 }
@@ -188,7 +188,7 @@ angular.module('app').controller('Property.record', ["$scope", "$timeout", "$api
         });
     };
 
-    self.exportProjectflow = function() {
+    self.exportProjectflow = function () {
         delete self.downloadFile;
         $api.export.projectflow(angular.extend(GetOptions(), {
             type: {
@@ -196,7 +196,7 @@ angular.module('app').controller('Property.record', ["$scope", "$timeout", "$api
                 in: 'EARNING',
                 out: 'EXPENSES'
             }[self.tab]
-        }), function(data) {
+        }), function (data) {
             if (data.result.fn) {
                 var options = GetOptions();
                 self.downloadFile = data.result.fn;

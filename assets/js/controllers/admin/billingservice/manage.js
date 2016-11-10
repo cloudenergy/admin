@@ -1,5 +1,5 @@
-angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParams", "$q", "$uibModal", "$state", "API", "Auth", "UI", "BillingService", "Energycategory", function($scope, $stateParams, $q, $uibModal, $state, API, Auth, UI, BillingService, Energycategory) {
-    Auth.Check(function() {
+angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParams", "$q", "$uibModal", "$state", "API", "Auth", "UI", "BillingService", "Energycategory", function ($scope, $stateParams, $q, $uibModal, $state, API, Auth, UI, BillingService, Energycategory) {
+    Auth.Check(function () {
 
         $scope.askingRemoveID = undefined;
         $scope.BillingServiceID = $stateParams.id;
@@ -51,7 +51,7 @@ angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParam
                 id: $scope.BillingServiceID
             }).$promise
         ]).then(
-            function(result) {
+            function (result) {
                 if (result[1].err || result[0].err) {
                     return;
                 }
@@ -59,8 +59,8 @@ angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParam
                 $scope.EnergyCategories = result[0].result;
                 $scope.ServiceEnergycategories = [];
 
-                _.each(result[1].result.energycategory, function(ecID) {
-                    var ecItem = _.find($scope.EnergyCategories, function(ec) {
+                _.each(result[1].result.energycategory, function (ecID) {
+                    var ecItem = _.find($scope.EnergyCategories, function (ec) {
                         return ec._id == ecID;
                     });
                     $scope.ServiceEnergycategories.push(ecItem);
@@ -68,7 +68,7 @@ angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParam
                 ///////////////////////////////////////////////
                 //
                 $scope.billingService = result[1].result;
-                _.each($scope.billingService.rules, function(rule, index) {
+                _.each($scope.billingService.rules, function (rule, index) {
                     //init
                     BuildService(rule);
                 });
@@ -81,13 +81,13 @@ angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParam
 
                 //BillingService To Text
                 var text = '';
-                _.each($scope.billingService.rules, function(rule, index) {
-                    var RuleToText = function(rule) {
+                _.each($scope.billingService.rules, function (rule, index) {
+                    var RuleToText = function (rule) {
                         var text = '';
                         if (rule.week) {
                             var weekText = '';
                             var weekTextIndex = ['一', '二', '三', '四', '五', '六', '日'];
-                            _.each(rule.week, function(date, index) {
+                            _.each(rule.week, function (date, index) {
                                 if (date) {
                                     if (weekText.length) {
                                         weekText += ',';
@@ -109,7 +109,7 @@ angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParam
                             {
                                 var hourIndex = 0;
                                 var priceIndex = rule.timequantumprice[hourIndex];
-                                _.each(rule.timequantumprice, function(price, hour) {
+                                _.each(rule.timequantumprice, function (price, hour) {
                                     if (priceIndex != price) {
                                         //
                                         var obj = {
@@ -131,7 +131,7 @@ angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParam
                             }
 
                             var quantumpriceText = '';
-                            _.each(timequantum, function(segment) {
+                            _.each(timequantum, function (segment) {
                                 if (quantumpriceText.length) {
                                     quantumpriceText += '; ';
                                 }
@@ -167,8 +167,8 @@ angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParam
 
 
             var applytoStr = '';
-            _.each(service.applyto, function(energycategoryID) {
-                var energycategory = _.find($scope.EnergyCategories, function(energycategory) {
+            _.each(service.applyto, function (energycategoryID) {
+                var energycategory = _.find($scope.EnergyCategories, function (energycategory) {
                     return energycategory._id == energycategoryID;
                 });
                 applytoStr += energycategory.title + ',';
@@ -196,7 +196,7 @@ angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParam
 
                 var hourIndex = 0;
                 var priceIndex = service.timequantumprice[hourIndex];
-                _.each(service.timequantumprice, function(price, hour) {
+                _.each(service.timequantumprice, function (price, hour) {
                     if (priceIndex != price) {
                         //
                         var obj = {
@@ -221,7 +221,7 @@ angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParam
             if (service.ladderprice) {
                 service.ladder = [];
                 var lowerbound = 0;
-                _.map(service.ladderprice, function(price, level) {
+                _.map(service.ladderprice, function (price, level) {
                     var obj = {
                         from: lowerbound,
                         to: level,
@@ -233,20 +233,20 @@ angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParam
             }
 
         }
-        $scope.SaveStrategy = function() {
+        $scope.SaveStrategy = function () {
             //
             var param = {
                 id: $scope.BillingServiceID,
                 rules: []
             };
-            _.each($scope.billingService.rules, function(rule) {
+            _.each($scope.billingService.rules, function (rule) {
                 var saveObj = {};
                 saveObj.week = rule.week;
                 saveObj.day = rule.day;
                 saveObj.applyto = rule.applyto;
                 if (rule.timequantum && rule.timequantum.length) {
                     saveObj.timequantumprice = new Array(24);
-                    _.each(rule.timequantum, function(tq) {
+                    _.each(rule.timequantum, function (tq) {
                         for (var i = tq.hourFrom; i < tq.hourTo; i++) {
                             saveObj.timequantumprice[i] = parseFloat(tq.price);
                         }
@@ -254,7 +254,7 @@ angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParam
                 } else if (rule.ladder && !_.isEmpty(rule.ladder)) {
                     //
                     saveObj.ladderprice = {};
-                    _.each(rule.ladder, function(lad) {
+                    _.each(rule.ladder, function (lad) {
                         saveObj.ladderprice[lad.to] = lad.price;
                     });
                 } else {
@@ -263,26 +263,26 @@ angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParam
                 param.rules.push(saveObj);
             });
 
-            API.Query(BillingService.update, param, function(result) {
+            API.Query(BillingService.update, param, function (result) {
                 $state.go('admin.billingservice.info');
                 UI.AlertSuccess('保存成功');
-            }, function(result) {
+            }, function (result) {
                 UI.AlertError(result.data.message);
             });
         };
-        $scope.AddSubStrategy = function() {
+        $scope.AddSubStrategy = function () {
             var modalInstance = $uibModal.open({
                 templateUrl: 'energySelect.html',
                 controller: 'EnergySelect',
                 size: 'md',
                 resolve: {
-                    ServiceEnergycategories: function() {
+                    ServiceEnergycategories: function () {
                         return $scope.ServiceEnergycategories;
                     }
                 }
             });
 
-            modalInstance.result.then(function(result) {
+            modalInstance.result.then(function (result) {
                 //
                 var service = {
                     applyto: result
@@ -292,7 +292,7 @@ angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParam
                     $scope.billingService.rules = [];
                 }
                 $scope.billingService.rules.push(service);
-            }, function() {});
+            }, function () {});
         };
 
         $scope.Day = new Date();
@@ -301,17 +301,17 @@ angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParam
             startingDay: 1
         };
         $scope.SelectRule = undefined;
-        $scope.disabled = function(date, mode) {
+        $scope.disabled = function (date, mode) {
             //        return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
             return mode === 'year';
         };
-        $scope.open = function($event, selectRule) {
+        $scope.open = function ($event, selectRule) {
             $event.preventDefault();
             $event.stopPropagation();
 
             $scope.SelectRule = selectRule;
             selectRule.opened = true;
-            _.each($scope.Rules, function(rule) {
+            _.each($scope.Rules, function (rule) {
                 if (rule.id != selectRule.id) {
                     rule.opened = false;
                 }
@@ -319,7 +319,7 @@ angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParam
         };
 
         //添加日期
-        $scope.AddSelectDate = function(e, rule) {
+        $scope.AddSelectDate = function (e, rule) {
             e.preventDefault();
             var month = rule.SelectMonth;
             month = month < 10 ? '0' + month.toString() : month.toString();
@@ -333,12 +333,12 @@ angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParam
             rule.day = _.union(rule.day, dt);
         };
         //删除已经选择的日期
-        $scope.RemoveSelectDate = function(e, rule, day) {
+        $scope.RemoveSelectDate = function (e, rule, day) {
             e.preventDefault();
             rule.day = _.without(rule.day, day);
         };
         //选择星期
-        $scope.SelectWeek = function(e, week, rule) {
+        $scope.SelectWeek = function (e, week, rule) {
             e.preventDefault();
 
             if (!rule.week || !rule.week.length) {
@@ -353,7 +353,7 @@ angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParam
         };
 
         //添加时间段/价格
-        $scope.AddTimeQuantum = function(e, rule) {
+        $scope.AddTimeQuantum = function (e, rule) {
             //先要判定新添加的时间段和已有的时候是否重叠
             var newTimeQuentum = _.range(rule.HourFrom, rule.HourTo, 1);
             for (var index in rule.timequantum) {
@@ -376,7 +376,7 @@ angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParam
             });
         };
         //删除时间段/价格
-        $scope.RemoveTimeQuantum = function(e, rule, timeQuantum) {
+        $scope.RemoveTimeQuantum = function (e, rule, timeQuantum) {
             e.preventDefault();
 
             var index = _.indexOf(rule.timequantum, timeQuantum);
@@ -384,7 +384,7 @@ angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParam
         };
 
         //添加阶梯价格
-        $scope.AddLadder = function(e, rule) {
+        $scope.AddLadder = function (e, rule) {
             if (!rule.ladfrom && !rule.ladto) {
                 alert('请填写阶梯范围');
                 return;
@@ -398,7 +398,7 @@ angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParam
                 rule.ladder = [];
             } else {
                 //先要判定新添加的阶梯价和已有的时候是否重叠
-                var isInArea = _.find(rule.ladder, function(lad) {
+                var isInArea = _.find(rule.ladder, function (lad) {
                     if (rule.ladfrom > lad.from && rule.ladfrom < lad.to || rule.ladto > lad.from && rule.ladto < lad.to) {
                         return true;
                     }
@@ -414,36 +414,36 @@ angular.module('app').controller('BillingServicemanage', ["$scope", "$stateParam
             rule.ladder.push(CreateLadderPrice(rule.ladfrom, rule.ladto, rule.ladprice));
         };
         //删除阶梯价格
-        $scope.RemoveLadder = function(e, rule, lad) {
+        $scope.RemoveLadder = function (e, rule, lad) {
             e.preventDefault();
 
             var index = _.indexOf(rule.ladderprice, lad);
             rule.ladderprice.splice(index, 1);
         };
 
-        $scope.DoRemove = function(e, index) {
+        $scope.DoRemove = function (e, index) {
             e.preventDefault();
 
             $scope.billingService.rules.splice(index, 1);
             $scope.askingRemoveID = null;
         };
-        $scope.AskForRemove = function(e, index) {
+        $scope.AskForRemove = function (e, index) {
             e.preventDefault();
             $scope.askingRemoveID = index;
         };
-        $scope.CancelRemove = function(e, index) {
+        $scope.CancelRemove = function (e, index) {
             e.preventDefault();
             $scope.askingRemoveID = undefined;
         };
 
-        $scope.onLevelUp = function(e, index) {
+        $scope.onLevelUp = function (e, index) {
             e.preventDefault();
 
             var tmp = $scope.billingService.rules[index - 1];
             $scope.billingService.rules[index - 1] = $scope.billingService.rules[index];
             $scope.billingService.rules[index] = tmp;
         };
-        $scope.onLevelDown = function(e, index) {
+        $scope.onLevelDown = function (e, index) {
             e.preventDefault();
 
             var tmp = $scope.billingService.rules[index + 1];

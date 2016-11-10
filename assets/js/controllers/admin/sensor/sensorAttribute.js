@@ -1,7 +1,7 @@
 /**
  * Created by Joey on 14-6-27.
  */
-angular.module('app').controller('sensorAttribute', ["$scope", "$uibModalInstance", "$q", "SensorSUID", "ProjectID", "Driver", "API", "Control", "SensorAttrib", function($scope, $uibModalInstance, $q, SensorSUID, ProjectID, Driver, API, Control, SensorAttrib) {
+angular.module('app').controller('sensorAttribute', ["$scope", "$uibModalInstance", "$q", "SensorSUID", "ProjectID", "Driver", "API", "Control", "SensorAttrib", function ($scope, $uibModalInstance, $q, SensorSUID, ProjectID, Driver, API, Control, SensorAttrib) {
     function FullDriverPath() {
         if (!$scope.drivercompanySelected || !$scope.driverNameSelected || !$scope.driverVersionSelected) {
             return "";
@@ -9,7 +9,7 @@ angular.module('app').controller('sensorAttribute', ["$scope", "$uibModalInstanc
         return $scope.drivercompanySelected + '/' + $scope.driverNameSelected + '/' + $scope.driverVersionSelected;
     }
 
-    $scope.Ok = function() {
+    $scope.Ok = function () {
         var driver = FullDriverPath();
         if (!driver.length) {
             $uibModalInstance.close();
@@ -25,13 +25,13 @@ angular.module('app').controller('sensorAttribute', ["$scope", "$uibModalInstanc
             project: ProjectID,
             ext: $scope.SensorAttrib.ext || {}
         };
-        reqData.ext['adaptdevice'] = $scope.adaptDeviceSelected || '';
-        API.Query(SensorAttrib.update, reqData, function(result) {
+        reqData.ext.adaptdevice = $scope.adaptDeviceSelected || '';
+        API.Query(SensorAttrib.update, reqData, function (result) {
             if (result.err) {} else {}
             $uibModalInstance.close();
         });
     };
-    $scope.Cancel = function() {
+    $scope.Cancel = function () {
         $uibModalInstance.dismiss('cancel');
     };
 
@@ -41,11 +41,11 @@ angular.module('app').controller('sensorAttribute', ["$scope", "$uibModalInstanc
             "sid": SensorSUID,
             "driver": driverPath
         };
-        API.Query(Control.Send, obj, function(result) {
+        API.Query(Control.Send, obj, function (result) {
             console.log(result);
             if (result.err) {} else {
                 $scope.AdaptDevice = [];
-                _.each(result.result, function(v, k) {
+                _.each(result.result, function (v, k) {
                     var obj = v;
                     $scope.AdaptDevice.push(obj);
                 });
@@ -60,7 +60,7 @@ angular.module('app').controller('sensorAttribute', ["$scope", "$uibModalInstanc
     }
 
     //选择驱动厂商
-    $scope.$watch('drivercompanySelected', function(driverCompany) {
+    $scope.$watch('drivercompanySelected', function (driverCompany) {
         if (driverCompany) {
             //UI.PutPageItem('sensor.energytype', energyType);
             //
@@ -73,7 +73,7 @@ angular.module('app').controller('sensorAttribute', ["$scope", "$uibModalInstanc
             }
 
             $scope.DriverName = [];
-            _.map($scope.DriverNames, function(v, k) {
+            _.map($scope.DriverNames, function (v, k) {
                 $scope.DriverName.push({
                     id: k
                 });
@@ -81,7 +81,7 @@ angular.module('app').controller('sensorAttribute', ["$scope", "$uibModalInstanc
         }
     });
     //选择驱动名称
-    $scope.$watch('driverNameSelected', function(driverName) {
+    $scope.$watch('driverNameSelected', function (driverName) {
         if (driverName) {
             //UI.PutPageItem('sensor.energytype', energyType);
             //
@@ -93,7 +93,7 @@ angular.module('app').controller('sensorAttribute', ["$scope", "$uibModalInstanc
             }
 
             $scope.DriverVersion = [];
-            _.map($scope.DriverVersions, function(v, k) {
+            _.map($scope.DriverVersions, function (v, k) {
                 $scope.DriverVersion.push({
                     id: k
                 });
@@ -101,7 +101,7 @@ angular.module('app').controller('sensorAttribute', ["$scope", "$uibModalInstanc
         }
     });
     //选择版本后，获取传感器适配型号
-    $scope.$watch('driverVersionSelected', function(driverVersion) {
+    $scope.$watch('driverVersionSelected', function (driverVersion) {
         if (driverVersion) {
             //
             var driverPath = FullDriverPath();
@@ -119,11 +119,11 @@ angular.module('app').controller('sensorAttribute', ["$scope", "$uibModalInstanc
             sensor: SensorSUID
         }).$promise
     ]).then(
-        function(result) {
+        function (result) {
             //
             $scope.Drivers = result[0].result;
             $scope.DriverCompany = [];
-            _.map($scope.Drivers, function(v, k) {
+            _.map($scope.Drivers, function (v, k) {
                 $scope.DriverCompany.push({
                     id: k
                 });

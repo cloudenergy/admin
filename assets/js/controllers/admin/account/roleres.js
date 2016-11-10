@@ -1,7 +1,7 @@
-angular.module('app').controller('accountroleres', ["$scope", "$stateParams", "$q", "$uibModal", "$cookies", "$state", "Account", "API", "Auth", function($scope, $stateParams, $q, $uibModal, $cookies, $state, Account, API, Auth) {
+angular.module('app').controller('accountroleres', ["$scope", "$stateParams", "$q", "$uibModal", "$cookies", "$state", "Account", "API", "Auth", function ($scope, $stateParams, $q, $uibModal, $cookies, $state, Account, API, Auth) {
 
     var originProject;
-    Auth.Check(function() {
+    Auth.Check(function () {
 
         $scope.askingRemoveID = null;
         var adminUser = $cookies.user;
@@ -16,7 +16,7 @@ angular.module('app').controller('accountroleres', ["$scope", "$stateParams", "$
                     id: editUser
                 }).$promise
             ]).then(
-                function(result) {
+                function (result) {
                     //
                     if (result[0].err || result[1].err) {
                         //error
@@ -43,8 +43,8 @@ angular.module('app').controller('accountroleres', ["$scope", "$stateParams", "$
                         //被编辑者拥有的项目列表
                         if ($scope.editUser.resource && $scope.editUser.resource.project) {
                             $scope.viewOfEditUserProject = [];
-                            _.each($scope.editUser.resource.project, function(projectid) {
-                                var detailP = _.find($scope.Project, function(p) {
+                            _.each($scope.editUser.resource.project, function (projectid) {
+                                var detailP = _.find($scope.Project, function (p) {
                                     return p._id == projectid;
                                 });
                                 if (detailP) {
@@ -57,7 +57,7 @@ angular.module('app').controller('accountroleres', ["$scope", "$stateParams", "$
                 });
         }
 
-        $scope.SaveRoleRes = function() {
+        $scope.SaveRoleRes = function () {
             //计算pab需要增项/减项
             var addObject = _.difference(
                 $scope.editUser.resource.project,
@@ -73,12 +73,12 @@ angular.module('app').controller('accountroleres', ["$scope", "$stateParams", "$
                     empty: true
                 };
             } else {
-                _.map($scope.editUser.resource, function(v, k) {
+                _.map($scope.editUser.resource, function (v, k) {
                     if (_.isEmpty(v)) {
                         $scope.editUser.resource[k] = '*';
                     }
                 });
-                $scope.editUser.resource['empty'] = false;
+                $scope.editUser.resource.empty = false;
             }
 
             var obj = {
@@ -86,29 +86,29 @@ angular.module('app').controller('accountroleres', ["$scope", "$stateParams", "$
                 resource: $scope.editUser.resource
             };
             console.log(obj);
-            API.Query(Account.update, obj, function(result) {
+            API.Query(Account.update, obj, function (result) {
                 if (result.err) {} else {
                     $state.go('admin.account.info');
                 }
             });
         };
         //添加项目
-        $scope.AddProject = function() {
+        $scope.AddProject = function () {
             var modalInstance = $uibModal.open({
                 templateUrl: 'projectSelect.html',
                 controller: 'ProjectSelect',
                 size: 'md',
                 resolve: {
-                    Projects: function() {
+                    Projects: function () {
                         return $scope.roleResOfProject;
                     },
-                    ProjectIDs: function() {
+                    ProjectIDs: function () {
                         return $scope.editUser.resource && $scope.editUser.resource.project || [];
                     }
                 }
             });
 
-            modalInstance.result.then(function(result) {
+            modalInstance.result.then(function (result) {
                 //
                 if (_.isArray(result)) {
                     //
@@ -118,7 +118,7 @@ angular.module('app').controller('accountroleres', ["$scope", "$stateParams", "$
                         $scope.viewOfEditUserProject = result;
                     }
                     $scope.editUser.resource.project = [];
-                    _.each($scope.viewOfEditUserProject, function(project) {
+                    _.each($scope.viewOfEditUserProject, function (project) {
                         $scope.editUser.resource.project.push(project._id);
                     });
                 } else {
@@ -128,10 +128,10 @@ angular.module('app').controller('accountroleres', ["$scope", "$stateParams", "$
                     $scope.editUser.resource.project = $scope.adminUser.resource.project;
                     $scope.viewOfEditUserProject = $scope.roleResOfProject;
                 }
-            }, function() {});
+            }, function () {});
         };
         //添加建筑
-        $scope.AddBuildings = function(e, projectID) {
+        $scope.AddBuildings = function (e, projectID) {
             e.preventDefault();
 
             var modalInstance = $uibModal.open({
@@ -139,23 +139,23 @@ angular.module('app').controller('accountroleres', ["$scope", "$stateParams", "$
                 controller: 'BuildingSelect',
                 size: 'md',
                 resolve: {
-                    ProjectID: function() {
+                    ProjectID: function () {
                         return projectID;
                     },
-                    BuildingIDs: function() {
+                    BuildingIDs: function () {
                         return $scope.editUser.resource && $scope.editUser.resource.building || [];
                     }
                 }
             });
 
-            modalInstance.result.then(function(buildings) {
+            modalInstance.result.then(function (buildings) {
                 //
                 //            console.log(buildings.select, buildings.unselect);
 
                 if (buildings.select == '*') {
                     //if(!$scope.editUser.resource.building || $scope.editUser.resource.building == '*'){
                     var newBuildings = [];
-                    _.each($scope.editUser.resource.building, function(b) {
+                    _.each($scope.editUser.resource.building, function (b) {
                         if (b.indexOf(projectID) == -1) {
                             newBuildings.push(b);
                         }
@@ -167,10 +167,10 @@ angular.module('app').controller('accountroleres', ["$scope", "$stateParams", "$
                 }
 
                 console.log($scope.editUser.resource.building);
-            }, function() {});
+            }, function () {});
         };
         //添加传感器
-        $scope.AddSensors = function(e, projectID) {
+        $scope.AddSensors = function (e, projectID) {
             e.preventDefault();
 
             var modalInstance = $uibModal.open({
@@ -178,21 +178,21 @@ angular.module('app').controller('accountroleres', ["$scope", "$stateParams", "$
                 controller: 'SensorSelect',
                 size: 'lg',
                 resolve: {
-                    ProjectID: function() {
+                    ProjectID: function () {
                         return projectID;
                     },
-                    SensorIDs: function() {
+                    SensorIDs: function () {
                         return $scope.editUser.resource && $scope.editUser.resource.sensor || [];
                     }
                 }
             });
 
-            modalInstance.result.then(function(sensors) {
+            modalInstance.result.then(function (sensors) {
                 //
                 if (sensors.select == '*') {
                     //if(!$scope.editUser.resource.sensor || $scope.editUser.resource.sensor == '*'){
                     var newSensors = [];
-                    _.each($scope.editUser.resource.sensor, function(s) {
+                    _.each($scope.editUser.resource.sensor, function (s) {
                         if (s.indexOf(projectID) == -1) {
                             newSensors.push(s);
                         }
@@ -205,11 +205,11 @@ angular.module('app').controller('accountroleres', ["$scope", "$stateParams", "$
                 }
 
                 console.log($scope.editUser.resource.sensor);
-            }, function() {});
+            }, function () {});
         };
 
         //删除项目
-        $scope.DoRemove = function(e, id, index) {
+        $scope.DoRemove = function (e, id, index) {
             e.preventDefault();
 
             //        var removeIndex = UI.GetAbsoluteIndex($scope.currentPage, index);
@@ -218,11 +218,11 @@ angular.module('app').controller('accountroleres', ["$scope", "$stateParams", "$
             $scope.editUser.resource.project = _.without($scope.editUser.resource.project, id);
             $scope.askingRemoveID = null;
         };
-        $scope.AskForRemove = function(e, id) {
+        $scope.AskForRemove = function (e, id) {
             e.preventDefault();
             $scope.askingRemoveID = id;
         };
-        $scope.CancelRemove = function(e, id) {
+        $scope.CancelRemove = function (e, id) {
             e.preventDefault();
             $scope.askingRemoveID = undefined;
         };

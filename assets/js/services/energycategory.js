@@ -1,4 +1,4 @@
-angular.module('app').factory('Energycategory', ["$resource", "Config", function($resource, Config) {
+angular.module('app').factory('Energycategory', ["$resource", "Config", function ($resource, Config) {
     return $resource(Config.API + '/energycategory', {}, {
         info: {
             method: 'POST',
@@ -16,5 +16,5 @@ angular.module('app').factory('Energycategory', ["$resource", "Config", function
             method: 'POST',
             url: Config.API + '/energycategory/delete'
         }
-    })
+    });
 }]);

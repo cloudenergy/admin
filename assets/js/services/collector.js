@@ -1,4 +1,4 @@
-angular.module('app').factory('Collector', ["$resource", "Config", function($resource, Config) {
+angular.module('app').factory('Collector', ["$resource", "Config", function ($resource, Config) {
     return $resource(Config.apiBase + 'collector', {}, {
         info: {
             method: 'POST',
@@ -16,5 +16,5 @@ angular.module('app').factory('Collector', ["$resource", "Config", function($res
             method: 'POST',
             url: Config.API + '/collector/delete'
         }
-    })
+    });
 }]);

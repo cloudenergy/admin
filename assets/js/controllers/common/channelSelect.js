@@ -1,12 +1,12 @@
 /**
  * Created by Joey on 14-6-27.
  */
-angular.module('app').controller('ChannelSelect', ["$scope", "$rootScope", "$uibModalInstance", "API", "Sensor", "ProjectID", "SelectedSensors", function($scope, $rootScope, $uibModalInstance, API, Sensor, ProjectID, SelectedSensors) {
+angular.module('app').controller('ChannelSelect', ["$scope", "$rootScope", "$uibModalInstance", "API", "Sensor", "ProjectID", "SelectedSensors", function ($scope, $rootScope, $uibModalInstance, API, Sensor, ProjectID, SelectedSensors) {
     var Sensors;
     $scope.currentPage = 1;
     $scope.project = ProjectID;
 
-    $scope.Ok = function() {
+    $scope.Ok = function () {
 
         var selectSensors = [];
         var isUnmodified = true;
@@ -14,7 +14,7 @@ angular.module('app').controller('ChannelSelect', ["$scope", "$rootScope", "$uib
             //
             selectSensors = [$scope.viewOfSensors[0]];
         } else {
-            _.each($scope.viewOfSensors, function(sensor) {
+            _.each($scope.viewOfSensors, function (sensor) {
                 if (sensor.isEnable) {
                     isUnmodified = false;
                     selectSensors.push(sensor);
@@ -24,28 +24,28 @@ angular.module('app').controller('ChannelSelect', ["$scope", "$rootScope", "$uib
             //selectSensors = _.union(selectSensors, SelectedSensors);
 
             if (isUnmodified) {
-                $scope.Cancel()
+                $scope.Cancel();
             }
         }
 
         $uibModalInstance.close(selectSensors);
     };
-    $scope.Cancel = function() {
+    $scope.Cancel = function () {
         $uibModalInstance.dismiss('cancel');
     };
 
-    $scope.SwitchSensor = function(e, sensor) {
+    $scope.SwitchSensor = function (e, sensor) {
         e.preventDefault();
 
         if (sensor._id == '*') {
             sensor.isEnable = !sensor.isEnable;
-            _.each($scope.viewOfSensors, function(p) {
+            _.each($scope.viewOfSensors, function (p) {
                 p.isEnable = sensor.isEnable;
             });
             // sensor.isEnable = !sensor.isEnable;
             SelectedSensors = [];
         } else {
-            var findSensor = _.find(SelectedSensors, function(ss) {
+            var findSensor = _.find(SelectedSensors, function (ss) {
                 return ss._id == sensor._id;
             });
             if (!findSensor) {
@@ -58,12 +58,12 @@ angular.module('app').controller('ChannelSelect', ["$scope", "$rootScope", "$uib
         }
     };
 
-    $scope.onSearchSensor = function(e) {
+    $scope.onSearchSensor = function (e) {
         e.preventDefault();
         $scope.UpdateViewOfSensors($scope.sensorSearchKey);
     };
 
-    $scope.OnSelectAll = function(e) {
+    $scope.OnSelectAll = function (e) {
         e.preventDefault();
 
         // console.log($scope.currentPage, $rootScope.popPageSize);
@@ -74,7 +74,7 @@ angular.module('app').controller('ChannelSelect', ["$scope", "$rootScope", "$uib
         }
     };
 
-    $scope.UpdateViewOfSensors = function(key) {
+    $scope.UpdateViewOfSensors = function (key) {
         //
         $scope.viewOfSensors = [{
             _id: '*',
@@ -85,7 +85,7 @@ angular.module('app').controller('ChannelSelect', ["$scope", "$rootScope", "$uib
         if (!key) {
             $scope.viewOfSensors = _.union($scope.viewOfSensors, Sensors);
         } else {
-            _.each(Sensors, function(sensor) {
+            _.each(Sensors, function (sensor) {
                 if (sensor.title.match(key)) {
                     $scope.viewOfSensors.push(sensor);
                 } else if (sensor.channel && sensor.channel.match(key)) {
@@ -95,8 +95,8 @@ angular.module('app').controller('ChannelSelect', ["$scope", "$rootScope", "$uib
         }
 
         //Set Select Sensor
-        _.each($scope.viewOfSensors, function(sensor) {
-            sensor.isEnable = _.find(SelectedSensors, function(SelectSensor) {
+        _.each($scope.viewOfSensors, function (sensor) {
+            sensor.isEnable = _.find(SelectedSensors, function (SelectSensor) {
                 if (_.isObject(SelectSensor)) {
                     return SelectSensor._id == sensor._id;
                 } else {
@@ -108,7 +108,7 @@ angular.module('app').controller('ChannelSelect', ["$scope", "$rootScope", "$uib
     //
     API.Query(Sensor.channelinfo, {
         project: ProjectID
-    }, function(result) {
+    }, function (result) {
         // console.log(result);
         if (result.err) {
 

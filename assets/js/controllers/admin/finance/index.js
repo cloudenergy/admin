@@ -1,4 +1,4 @@
-angular.module('app').controller('Finance', ["$api", "$filter", function($api, $filter) {
+angular.module('app').controller('Finance', ["$api", "$filter", function ($api, $filter) {
 
     var self = this;
 
@@ -29,7 +29,7 @@ angular.module('app').controller('Finance', ["$api", "$filter", function($api, $
 
     $api.business.accountbalance({
         project: 'PLT'
-    }, function(data) {
+    }, function (data) {
         self.accountbalance = data.result || {};
         self.accountbalance.total = Math.round((self.accountbalance.cash + self.accountbalance.frozen) * 100) / 100;
         self.accountbalance.cash = Math.round(self.accountbalance.cash * 100) / 100;
@@ -45,12 +45,12 @@ angular.module('app').controller('Finance', ["$api", "$filter", function($api, $
         flow: 'EXPENSE',
         pageindex: 1,
         pagesize: 6
-    }, function(data) {
+    }, function (data) {
         self.card = data && data.result && data.result.detail || [];
-        angular.forEach(self.card, function(item) {
+        angular.forEach(self.card, function (item) {
             if (item.locate && angular.isString(item.locate)) {
-                angular.forEach(JSON.parse(item.locate), function(val, key) {
-                    this.push(val)
+                angular.forEach(JSON.parse(item.locate), function (val, key) {
+                    this.push(val);
                 }, item.locate = []);
                 item.locate = item.locate.join('-');
             }
@@ -66,9 +66,9 @@ angular.module('app').controller('Finance', ["$api", "$filter", function($api, $
         // status: 'CHECKING',
         pageindex: 1,
         pagesize: 6
-    }, function(data) {
+    }, function (data) {
         self.withdraw = data && data.result && data.result.detail || [];
-        angular.forEach(self.withdraw, function(item) {
+        angular.forEach(self.withdraw, function (item) {
             var ca = [];
             item.channelaccount.name && ca.push(item.channelaccount.name);
             item.channelaccount.origin && ca.push(item.channelaccount.origin);

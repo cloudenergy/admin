@@ -1,4 +1,4 @@
-angular.module('app').controller('accountInfo', ["$scope", "$location", "Account", "API", "Auth", "$cookies", "UI", "Config", function($scope, $location, Account, API, Auth, $cookies, UI, Config) {
+angular.module('app').controller('accountInfo', ["$scope", "$location", "Account", "API", "Auth", "$cookies", "UI", "Config", function ($scope, $location, Account, API, Auth, $cookies, UI, Config) {
 
     $scope.operateStatus = {
         create: {
@@ -25,47 +25,47 @@ angular.module('app').controller('accountInfo', ["$scope", "$location", "Account
 
     $scope.askingRemoveID = undefined;
 
-    Auth.Check($scope.operateStatus, function() {
+    Auth.Check($scope.operateStatus, function () {
 
         $scope.currentPage = UI.GetPageIndex();
 
-        $scope.getAccounts = function() {
+        $scope.getAccounts = function () {
             var params = {
                 pageindex: $scope.currentPage || 1
-            }
+            };
 
             if ($scope.searchKey && $scope.searchKey.length) {
                 params.key = $scope.searchKey;
             }
-            API.Query(Account.info, params, function(result) {
+            API.Query(Account.info, params, function (result) {
                 if (result.err) {
                     //error
                 } else {
                     $scope.accounts = result.result;
                 }
             }, responseError);
-        }
+        };
 
-        $scope.DoRemove = function(e, id, index) {
+        $scope.DoRemove = function (e, id, index) {
             e.preventDefault();
 
             var removeIndex = UI.GetAbsoluteIndex($scope.currentPage, index);
             API.Query(Account.delete, {
                 id: id
-            }, function(result) {
+            }, function (result) {
                 $scope.accounts.splice(removeIndex, 1);
                 //            UI.AlertSuccess('删除成功')
-            }, responseError)
+            }, responseError);
         };
-        $scope.AskForRemove = function(e, id) {
+        $scope.AskForRemove = function (e, id) {
             e.preventDefault();
             $scope.askingRemoveID = id;
         };
-        $scope.CancelRemove = function(e, id) {
+        $scope.CancelRemove = function (e, id) {
             e.preventDefault();
             $scope.askingRemoveID = undefined;
         };
-        $scope.$watch('currentPage', function(currentPage) {
+        $scope.$watch('currentPage', function (currentPage) {
             if (!currentPage) {
                 $scope.currentPage = UI.GetPageIndex();
                 $scope.getAccounts();
@@ -75,12 +75,12 @@ angular.module('app').controller('accountInfo', ["$scope", "$location", "Account
             UI.PutPageIndex(undefined, $scope.currentPage);
         });
 
-        $scope.onSearch = function() {
+        $scope.onSearch = function () {
             $scope.getAccounts();
         };
 
         function responseError(result) {
-            UI.AlertError(result.data.message)
+            UI.AlertError(result.data.message);
         }
 
         $scope.adminUser = $cookies.user;

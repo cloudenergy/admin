@@ -1,4 +1,4 @@
-angular.module('app').factory('Customer', ["$resource", "Config", function($resource, Config) {
+angular.module('app').factory('Customer', ["$resource", "Config", function ($resource, Config) {
     return $resource(Config.apiBase + 'customer', {}, {
         //            multi: { method: 'GET', isArray: true },
         //            create: { method: 'POST' },
@@ -21,5 +21,5 @@ angular.module('app').factory('Customer', ["$resource", "Config", function($reso
             method: 'POST',
             url: Config.API + '/customer/delete'
         }
-    })
+    });
 }]);

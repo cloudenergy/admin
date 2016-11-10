@@ -1,9 +1,9 @@
-angular.module('app').controller('SensorEdit', ["$scope", "$stateParams", "$state", "Sensor", "Collector", "Energy", "Customer", "Building", "API", "Auth", "UI", function($scope, $stateParams, $state, Sensor, Collector, Energy, Customer, Building, API, Auth, UI) {
-    Auth.Check(function() {
+angular.module('app').controller('SensorEdit', ["$scope", "$stateParams", "$state", "Sensor", "Collector", "Energy", "Customer", "Building", "API", "Auth", "UI", function ($scope, $stateParams, $state, Sensor, Collector, Energy, Customer, Building, API, Auth, UI) {
+    Auth.Check(function () {
 
         var selectEnergycategory;
 
-        $scope.submit = function(e) {
+        $scope.submit = function (e) {
             var sensor = angular.copy($scope.sensor);
 
             //if(!selectEnergycategory){
@@ -22,8 +22,8 @@ angular.module('app').controller('SensorEdit', ["$scope", "$stateParams", "$stat
             }
             var buildingID = sensor.building;
 
-            var UpdateSensor = function() {
-                API.Query(Sensor.update, sensor, function(result) {
+            var UpdateSensor = function () {
+                API.Query(Sensor.update, sensor, function (result) {
                     if (!result.err) {
                         $state.go('admin.sensor.info');
                     }
@@ -34,14 +34,14 @@ angular.module('app').controller('SensorEdit', ["$scope", "$stateParams", "$stat
                 //check if sid is exists
                 API.Query(Sensor.info, {
                     sids: [sensor.sid]
-                }, function(result) {
+                }, function (result) {
                     if (result.result && result.result.length > 0) {
                         alert('传感器标识已经存在');
                         return;
                     } else {
                         UpdateSensor();
                     }
-                }, function(err) {
+                }, function (err) {
                     console.log(err);
                 });
             } else {
@@ -52,7 +52,7 @@ angular.module('app').controller('SensorEdit', ["$scope", "$stateParams", "$stat
 
         API.Query(Sensor.channelinfo, {
             id: $stateParams.id
-        }, function(res) {
+        }, function (res) {
             if (res.err) {} else {
                 $scope.sensor = res.result[0];
                 $scope.sid = $scope.sensor.sid;
@@ -60,20 +60,20 @@ angular.module('app').controller('SensorEdit', ["$scope", "$stateParams", "$stat
 
                 API.Query(Building.info, {
                     id: $scope.sensor.building.id
-                }, function(res) {
+                }, function (res) {
                     if (res.err) {} else {
 
                         //显示能耗类型
                         API.Query(Energy.info, {
                             project: $scope.building.project
-                        }, function(result) {
+                        }, function (result) {
                             if (result.err) {} else {
                                 var energy = result.result;
                                 if ($scope.sensor.energyPath) {
                                     var paths = $scope.sensor.energyPath.split('|');
                                     var node = energy.energy;
                                     var nodePath;
-                                    _.each(paths, function(subPath) {
+                                    _.each(paths, function (subPath) {
                                         if (!node) {
                                             return;
                                         }
@@ -122,7 +122,7 @@ angular.module('app').controller('SensorEdit', ["$scope", "$stateParams", "$stat
             }
 
             var socitiesArray = [];
-            _.each(socities, function(v) {
+            _.each(socities, function (v) {
                 v.originid = v.id;
                 v.origintitle = v.title;
                 v.id = v.id;
@@ -135,7 +135,7 @@ angular.module('app').controller('SensorEdit', ["$scope", "$stateParams", "$stat
                 v.isSelect = v.isSelect;
                 socitiesArray.push(v);
             });
-            socitiesArray.sort(function(a, b) {
+            socitiesArray.sort(function (a, b) {
                 return a.title > b.title ? 1 : -1;
             });
             return socitiesArray;
@@ -147,7 +147,7 @@ angular.module('app').controller('SensorEdit', ["$scope", "$stateParams", "$stat
             }
 
             var energyArray = [];
-            _.each(energy, function(v) {
+            _.each(energy, function (v) {
 
                 if (v.childrens) {
                     v.ischild = false;
@@ -160,7 +160,7 @@ angular.module('app').controller('SensorEdit', ["$scope", "$stateParams", "$stat
                 v.nodes = BuildEnergyTree(v, v.childrens, level + 1);
                 energyArray.push(v);
             });
-            energyArray.sort(function(a, b) {
+            energyArray.sort(function (a, b) {
                 return a.title > b.title ? 1 : -1;
             });
             return energyArray;
@@ -170,14 +170,14 @@ angular.module('app').controller('SensorEdit', ["$scope", "$stateParams", "$stat
             UI.AlertError(result.data.message);
         }
 
-        $scope.onChoice = function(node) {
+        $scope.onChoice = function (node) {
             node.isSelect = !node.isSelect;
 
-            var groupSelect = function(node, isSelect) {
+            var groupSelect = function (node, isSelect) {
                 if (!node || !node.nodes || !node.nodes.length) {
                     return;
                 }
-                _.each(node.nodes, function(n) {
+                _.each(node.nodes, function (n) {
                     groupSelect(n, isSelect);
                     n.isSelect = isSelect;
                 });
@@ -187,7 +187,7 @@ angular.module('app').controller('SensorEdit', ["$scope", "$stateParams", "$stat
             groupSelect(node, node.isSelect);
         };
 
-        $scope.onEnergyChoice = function(node) {
+        $scope.onEnergyChoice = function (node) {
             if (node.nodes) {
                 return;
             }
@@ -197,14 +197,14 @@ angular.module('app').controller('SensorEdit', ["$scope", "$stateParams", "$stat
             selectEnergycategory = node;
             selectEnergycategory.isSelect = true;
         };
-        $scope.OnCollapsePayStatus = function() {
+        $scope.OnCollapsePayStatus = function () {
             if (!$scope.sensor.paystatus || $scope.sensor.paystatus == 'NONE') {
                 $scope.sensor.paystatus = 'BYSELF';
             } else {
                 $scope.sensor.paystatus = 'NONE';
             }
         };
-        $scope.OnSelectPayMode = function(e, mode) {
+        $scope.OnSelectPayMode = function (e, mode) {
             e.preventDefault();
             $scope.sensor.paystatus = mode;
         };

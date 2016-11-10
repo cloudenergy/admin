@@ -1,8 +1,8 @@
-angular.module('app').controller('accountEdit', ["$scope", "$stateParams", "$q", "$state", "Account", "API", "Auth", "UI", "Character", function($scope, $stateParams, $q, $state, Account, API, Auth, UI, Character) {
+angular.module('app').controller('accountEdit', ["$scope", "$stateParams", "$q", "$state", "Account", "API", "Auth", "UI", "Character", function ($scope, $stateParams, $q, $state, Account, API, Auth, UI, Character) {
 
-    Auth.Check(function() {
+    Auth.Check(function () {
 
-        $scope.submit = function(e) {
+        $scope.submit = function (e) {
             var updateObj = {
                 _id: $scope.account._id
             };
@@ -25,7 +25,7 @@ angular.module('app').controller('accountEdit', ["$scope", "$stateParams", "$q",
             updateObj.mobile = $scope.account.mobile;
             updateObj.email = $scope.account.email;
 
-            updateObj.message = Object.keys($scope.warning).filter(function(item) {
+            updateObj.message = Object.keys($scope.warning).filter(function (item) {
                 return $scope.warning[item] ? item : '';
             }).join(',');
 
@@ -33,10 +33,10 @@ angular.module('app').controller('accountEdit', ["$scope", "$stateParams", "$q",
                 updateObj.initpath = $scope.account.initpath;
             }
 
-            API.Query(Account.update, updateObj, function(result) {
+            API.Query(Account.update, updateObj, function (result) {
                 UI.AlertSuccess('账户更新成功');
                 $state.go('admin.account.info');
-            }, function(result) {
+            }, function (result) {
                 if (result.code) {
                     UI.AlertError(result.message);
                 }
@@ -44,26 +44,26 @@ angular.module('app').controller('accountEdit', ["$scope", "$stateParams", "$q",
         };
 
         $q.all([
-                API.QueryPromise(Account.info, {
+            API.QueryPromise(Account.info, {
                     id: EMAPP.Account._id
                 }).$promise, API.QueryPromise(Account.info, {
                     id: $stateParams.id
                 }).$promise
-            ])
-            .then(function(result) {
+        ])
+            .then(function (result) {
                 $scope.adminUser = result[0].result;
                 $scope.account = result[1].result;
 
                 var message = $scope.account.message ? $scope.account.message.split(',') : [];
                 $scope.warning = {};
-                angular.forEach(message, function(value, key) {
+                angular.forEach(message, function (value, key) {
                     $scope.warning[value] = true;
                 });
 
                 var power = $scope.adminUser.character && $scope.adminUser.character.level;
                 API.Query(Character.info, {
                     power: power
-                }, function(result) {
+                }, function (result) {
                     if (result.code) {
                         UI.AlertError(result.message);
                         //
@@ -73,7 +73,7 @@ angular.module('app').controller('accountEdit', ["$scope", "$stateParams", "$q",
                         if ($scope.characters.level == undefined) {
                             $scope.characters.level = $scope.characters[$scope.characters.length - 1];
                         } else {
-                            $scope.characters.level = _.find($scope.characters, function(character) {
+                            $scope.characters.level = _.find($scope.characters, function (character) {
                                 return character.level == $scope.characters.level;
                             });
                         }

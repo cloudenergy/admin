@@ -1,9 +1,9 @@
-angular.module('app').controller('EnergyIndex', ["$scope", "$q", "$uibModal", "API", "Auth", "Project", "UI", "$api", "base64", "Sensor", "Energy", function($scope, $q, $uibModal, API, Auth, Project, UI, $api, base64, Sensor, Energy) {
+angular.module('app').controller('EnergyIndex', ["$scope", "$q", "$uibModal", "API", "Auth", "Project", "UI", "$api", "base64", "Sensor", "Energy", function ($scope, $q, $uibModal, API, Auth, Project, UI, $api, base64, Sensor, Energy) {
 
     var removeEnergycategory = {};
     var updateEnergycategory = {};
 
-    Auth.Check(function() {
+    Auth.Check(function () {
 
         function TitleToCode(title) {
             return base64.encode(title);
@@ -17,13 +17,13 @@ angular.module('app').controller('EnergyIndex', ["$scope", "$q", "$uibModal", "A
             }
         }
 
-        $scope.doSaveEnergy = function(e) {
+        $scope.doSaveEnergy = function (e) {
             e.preventDefault();
 
-            var SerilizeToEnergy = function(parent, nodes) {
+            var SerilizeToEnergy = function (parent, nodes) {
                 //
                 var energyNodes = {};
-                _.each(nodes, function(node) {
+                _.each(nodes, function (node) {
                     //
                     var energyNode = {
                         id: node.id,
@@ -45,7 +45,7 @@ angular.module('app').controller('EnergyIndex', ["$scope", "$q", "$uibModal", "A
             //Filter energy which do not exists child energies
             {
                 var tmpEnergy = {};
-                _.each(energy, function(e) {
+                _.each(energy, function (e) {
                     if (e.childrens) {
                         tmpEnergy[e.id] = e;
                     }
@@ -56,14 +56,14 @@ angular.module('app').controller('EnergyIndex', ["$scope", "$q", "$uibModal", "A
             API.Query(Energy.update, {
                 energy: energy,
                 _id: $scope.Project.selected._id
-            }, function(result) {
+            }, function (result) {
 
                 if (result.err) {
                     responseError(err);
                 }
 
                 //remove Energycategory
-                _.each(removeEnergycategory, function(energycategory) {
+                _.each(removeEnergycategory, function (energycategory) {
                     var updateSensor = {
                         query: {
                             energyPath: energycategory.id
@@ -75,13 +75,13 @@ angular.module('app').controller('EnergyIndex', ["$scope", "$q", "$uibModal", "A
                             }
                         }
                     };
-                    API.Query(Sensor.update, updateSensor, function(result) {
+                    API.Query(Sensor.update, updateSensor, function (result) {
 
                     });
                 });
 
                 //update Energycategory
-                _.map(updateEnergycategory, function(v, k) {
+                _.map(updateEnergycategory, function (v, k) {
                     var queryObj = {
                         energy: API.RootEnergycategory(k),
                         energyPath: k,
@@ -97,7 +97,7 @@ angular.module('app').controller('EnergyIndex', ["$scope", "$q", "$uibModal", "A
                     API.Query(Sensor.update, {
                         query: queryObj,
                         queryoperate: updateObj
-                    }, function(result) {});
+                    }, function (result) {});
                 });
                 GetEnergy();
 
@@ -112,7 +112,7 @@ angular.module('app').controller('EnergyIndex', ["$scope", "$q", "$uibModal", "A
             }
 
             var energyArray = [];
-            _.each(energy, function(v) {
+            _.each(energy, function (v) {
 
                 if (v.childrens) {
                     v.ischild = false;
@@ -127,7 +127,7 @@ angular.module('app').controller('EnergyIndex', ["$scope", "$q", "$uibModal", "A
                 v.nodes = InitialEnergyForPage(v, v.childrens, level + 1);
                 energyArray.push(v);
             });
-            energyArray.sort(function(a, b) {
+            energyArray.sort(function (a, b) {
                 return a.title > b.title ? 1 : -1;
             });
             return energyArray;
@@ -141,15 +141,15 @@ angular.module('app').controller('EnergyIndex', ["$scope", "$q", "$uibModal", "A
             $q.all([
                 $api.energy.info({
                     project: $scope.Project.selected._id
-                }, function(data) {
+                }, function (data) {
                     $scope.energyData = angular.isObject(data.result) && data.result.energy;
                 }, responseError).$promise,
-                $api.energycategory.info(function(data) {
+                $api.energycategory.info(function (data) {
                     $scope.energycategory = data.result;
                 }).$promise
-            ]).then(function() {
+            ]).then(function () {
                 if (angular.isObject($scope.energyData)) {
-                    angular.forEach($scope.energycategory, function(ec) {
+                    angular.forEach($scope.energycategory, function (ec) {
                         if (!$scope.energyData[ec._id]) {
                             $scope.energyData[ec._id] = {
                                 id: ec._id,
@@ -164,7 +164,7 @@ angular.module('app').controller('EnergyIndex', ["$scope", "$q", "$uibModal", "A
                     });
 
                     if ($scope.energycategory) {
-                        $scope.energycategory.sort(function(a, b) {
+                        $scope.energycategory.sort(function (a, b) {
                             return a.title > b.title ? 1 : -1;
                         });
                     }
@@ -183,12 +183,12 @@ angular.module('app').controller('EnergyIndex', ["$scope", "$q", "$uibModal", "A
         $scope.$watch('Project.selected', GetEnergy);
 
         //如果函数名为remove|removeNode会被覆盖
-        $scope.deleteNode = function(scope, node) {
-            var recursionDelete = function(node) {
+        $scope.deleteNode = function (scope, node) {
+            var recursionDelete = function (node) {
                 if (!node) {
                     return;
                 }
-                _.each(node.nodes, function(n) {
+                _.each(node.nodes, function (n) {
                     recursionDelete(n);
                     if (node.originid) {
                         removeEnergycategory[n.originid] = n;
@@ -205,15 +205,15 @@ angular.module('app').controller('EnergyIndex', ["$scope", "$q", "$uibModal", "A
             scope.remove();
         };
 
-        $scope.enable = function(node) {
+        $scope.enable = function (node) {
             node.enable = !node.enable;
         };
 
-        $scope.toggle = function(scope) {
+        $scope.toggle = function (scope) {
             scope.toggle();
         };
 
-        $scope.newSubItem = function(scope, node) {
+        $scope.newSubItem = function (scope, node) {
             var nodeData = scope.node;
             if (!nodeData.nodes) {
                 nodeData.nodes = [];
@@ -230,10 +230,10 @@ angular.module('app').controller('EnergyIndex', ["$scope", "$q", "$uibModal", "A
             });
         };
 
-        $scope.edit = function(node) {
+        $scope.edit = function (node) {
             node.editing = true;
         };
-        $scope.cancelEditing = function(scope, node) {
+        $scope.cancelEditing = function (scope, node) {
             if (!node.title.length && !node.origintitle.length) {
                 $scope.deleteNode(scope, node);
             } else {
@@ -243,14 +243,14 @@ angular.module('app').controller('EnergyIndex', ["$scope", "$q", "$uibModal", "A
 
         };
 
-        $scope.save = function(node) {
+        $scope.save = function (node) {
             if (!node.title.length) {
                 alert('请输入分类名称');
                 return false;
             }
             //查找同层是否有相同名称
             if (node.parent) {
-                var isFind = _.find(node.parent.nodes, function(n) {
+                var isFind = _.find(node.parent.nodes, function (n) {
                     if (!n.id || !n.id.length || n.editing) {
                         return;
                     }
@@ -270,13 +270,13 @@ angular.module('app').controller('EnergyIndex', ["$scope", "$q", "$uibModal", "A
                 node.origintitle = node.title;
             }
 
-            var recursionUpdate = function(node) {
+            var recursionUpdate = function (node) {
                 node.id = GenereateID(node.parent, node.title);
                 //find if node.is is exists in removeList(Just to prevent remove/add same node)
                 if (removeEnergycategory[node.id]) {
                     removeEnergycategory[node.id] = null;
                 }
-                _.each(node.nodes, function(n) {
+                _.each(node.nodes, function (n) {
                     recursionUpdate(n);
                 });
             };
@@ -284,7 +284,7 @@ angular.module('app').controller('EnergyIndex', ["$scope", "$q", "$uibModal", "A
 
         };
 
-        $scope.sensor = function(node, index) {
+        $scope.sensor = function (node, index) {
 
             //将当前属性添加到选中的传感器
             var modalInstance = $uibModal.open({
@@ -292,19 +292,19 @@ angular.module('app').controller('EnergyIndex', ["$scope", "$q", "$uibModal", "A
                 controller: 'SensorSelect',
                 size: 'lg',
                 resolve: {
-                    ProjectID: function() {
+                    ProjectID: function () {
                         return $scope.Project.selected._id;
                     },
-                    EnergycategoryID: function() {
+                    EnergycategoryID: function () {
                         return node.id;
                     }
                 }
             });
 
-            modalInstance.result.then(function(sensors) {}, function() {});
+            modalInstance.result.then(function (sensors) {}, function () {});
         };
 
-        $scope.switchUnitPriceType = function(member) {
+        $scope.switchUnitPriceType = function (member) {
             member.unitprice.isnormal = !member.unitprice.isnormal;
         };
 

@@ -1,8 +1,8 @@
-angular.module('app').controller('BillingServiceadd', ["Config", "$scope", "$api", "$cookies", "BillingService", "Energycategory", "$state", "BillingAccount", "Account", "API", "Auth", "UI", function(Config, $scope, $api, $cookies, BillingService, Energycategory, $state, BillingAccount, Account, API, Auth, UI) {
-    Auth.Check(function() {
-        $scope.submit = function(e) {
+angular.module('app').controller('BillingServiceadd', ["Config", "$scope", "$api", "$cookies", "BillingService", "Energycategory", "$state", "BillingAccount", "Account", "API", "Auth", "UI", function (Config, $scope, $api, $cookies, BillingService, Energycategory, $state, BillingAccount, Account, API, Auth, UI) {
+    Auth.Check(function () {
+        $scope.submit = function (e) {
             var selectedEnergycategory = new Array();
-            _.each($scope.energycategory, function(v) {
+            _.each($scope.energycategory, function (v) {
                 if (v.isEnable) {
                     selectedEnergycategory.push(v._id);
                 }
@@ -12,7 +12,7 @@ angular.module('app').controller('BillingServiceadd', ["Config", "$scope", "$api
                 title: $scope.serviceTitle,
                 energycategory: selectedEnergycategory,
                 project: $scope.Project.selected._id
-            }, function(result) {
+            }, function (result) {
                 if (result.code) {
                     UI.AlertError(result.message);
                     //
@@ -25,11 +25,11 @@ angular.module('app').controller('BillingServiceadd', ["Config", "$scope", "$api
         };
 
         //Get All EnergyCategory
-        $api.energycategory.info(function(result) {
+        $api.energycategory.info(function (result) {
             $scope.energycategory = result.result || [];
         });
 
-        $scope.SwitchEnergycategory = function(e, ec) {
+        $scope.SwitchEnergycategory = function (e, ec) {
             e.preventDefault();
 
             if (ec.isEnable) {

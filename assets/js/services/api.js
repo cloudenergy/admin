@@ -1,4 +1,4 @@
-angular.module('app').factory('API', function() {
+angular.module('app').factory('API', function () {
     var lengthOfSensorID = {
         buildingID: 10,
         gatewayID: 2,
@@ -6,7 +6,7 @@ angular.module('app').factory('API', function() {
         meterID: 3,
         funcID: 2
     };
-    var RootEnergycategory = function(energycategoryID) {
+    var RootEnergycategory = function (energycategoryID) {
         var idArray = energycategoryID.split('|');
         if (_.isArray(idArray)) {
             return idArray[0] || energycategoryID;
@@ -14,7 +14,7 @@ angular.module('app').factory('API', function() {
             return energycategoryID;
         }
     };
-    var TailEnergycategory = function(energycategoryID) {
+    var TailEnergycategory = function (energycategoryID) {
         var idArray = energycategoryID.split('|');
         if (_.isArray(idArray)) {
             return idArray[idArray.length - 1] || energycategoryID;
@@ -24,7 +24,7 @@ angular.module('app').factory('API', function() {
     };
 
     return {
-        Query: function(api, parameter, callback) {
+        Query: function (api, parameter, callback) {
             if (api == undefined || api == null) {
                 return false;
             }
@@ -37,7 +37,7 @@ angular.module('app').factory('API', function() {
                 return api;
             }
         },
-        QueryPromise: function(api, parameter) {
+        QueryPromise: function (api, parameter) {
             if (api == undefined || api == null) {
                 return false;
             }
@@ -49,9 +49,9 @@ angular.module('app').factory('API', function() {
                 return api(parameter);
             }
         },
-        FindEnergyByPath: function(energy, id, path) {
+        FindEnergyByPath: function (energy, id, path) {
             //
-            var findEnergyByPath = function(node, pathStep, step) {
+            var findEnergyByPath = function (node, pathStep, step) {
                 if (pathStep.length <= step) {
                     return node;
                 }
@@ -60,10 +60,10 @@ angular.module('app').factory('API', function() {
                     return findEnergyByPath(node.childrens[index], pathStep, step + 1);
                 }
                 return undefined;
-            }
+            };
 
-            var node = undefined
-            _.each(energy, function(e) {
+            var node = undefined;
+            _.each(energy, function (e) {
                 if (e._id == id) {
                     //
                     node = findEnergyByPath(e, path.split(','), 1);
@@ -71,9 +71,9 @@ angular.module('app').factory('API', function() {
             });
             return node;
         },
-        FindEnergyByID: function(energy, id) {
+        FindEnergyByID: function (energy, id) {
             //
-            var findEnergyByID = function(node) {
+            var findEnergyByID = function (node) {
                 if (!node) {
                     return undefined;
                 }
@@ -94,10 +94,10 @@ angular.module('app').factory('API', function() {
 
             return findEnergyByID(energy);
         },
-        FindEnergyByTitle: function(energy, title) {
+        FindEnergyByTitle: function (energy, title) {
             //
             titleReg = new RegExp(title, 'ig');
-            var findEnergyByTitle = function(node) {
+            var findEnergyByTitle = function (node) {
                 if (!node) {
                     return undefined;
                 }
@@ -122,19 +122,19 @@ angular.module('app').factory('API', function() {
 
             return findEnergyByTitle(energy);
         },
-        ParentLocation: function(url) {
+        ParentLocation: function (url) {
             var index = url.lastIndexOf('/');
             return url.substr(0, index);
         },
-        RootEnergycategory: function(energycategoryID) {
+        RootEnergycategory: function (energycategoryID) {
             return RootEnergycategory(energycategoryID);
         },
-        TailEnergycategory: function(energycategoryID) {
+        TailEnergycategory: function (energycategoryID) {
             return TailEnergycategory(energycategoryID);
         },
-        FindSocity: function(socities, id) {
+        FindSocity: function (socities, id) {
             //
-            var findSocity = function(node) {
+            var findSocity = function (node) {
                 if (!node) {
                     return undefined;
                 }
@@ -155,22 +155,22 @@ angular.module('app').factory('API', function() {
 
             return findSocity(socities);
         },
-        SensorID: function(sid) {
+        SensorID: function (sid) {
             return sid.substr(0, sid.length - 2);
         },
-        ParseSensorID: function(id) {
+        ParseSensorID: function (id) {
             //
             if (!id || !id.length) {
                 return null;
             }
 
             var obj = {};
-            _.map(lengthOfSensorID, function(length, name) {
+            _.map(lengthOfSensorID, function (length, name) {
                 obj[name] = id.substr(0, length);
                 id = id.substr(length);
             });
 
             return obj;
         }
-    }
+    };
 });

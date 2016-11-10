@@ -11,19 +11,19 @@ window.EMAPP = angular.module('app', [
     pageSize: 15,
     popPageSize: 8,
     API: localStorage.testapi ? '/testapi' : '/api'
-}).run(["$rootScope", "$cookies", "$state", "$stateParams", "Config", function($rootScope, $cookies, $state, $stateParams, Config) {
+}).run(["$rootScope", "$cookies", "$state", "$stateParams", "Config", function ($rootScope, $cookies, $state, $stateParams, Config) {
     document.title = '智慧云能源管理平台';
     $rootScope.$cookies = $cookies;
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
     $rootScope.pageSize = Config.pageSize;
     $rootScope.popPageSize = Config.popPageSize;
-    angular.forEach(['user', 'token'], function(key) {
-        $cookies.__defineGetter__(key, function() {
+    angular.forEach(['user', 'token'], function (key) {
+        $cookies.__defineGetter__(key, function () {
             return this.get(key);
         });
     });
 }]);
-angular.element(document).ready(function() {
+angular.element(document).ready(function () {
     angular.bootstrap(document, ['app']);
 });

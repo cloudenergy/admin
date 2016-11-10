@@ -1,19 +1,19 @@
-angular.module('app').directive('withdrawDetail', ["$api", "$uibModal", function($api, $uibModal) {
+angular.module('app').directive('withdrawDetail', ["$api", "$uibModal", function ($api, $uibModal) {
     return {
         restrict: 'A',
-        link: function(scope, element, attrs, ctrl) {
-            (function(item) {
-                item && item.category === 'WITHDRAW' && element.click(function() {
+        link: function (scope, element, attrs, ctrl) {
+            (function (item) {
+                item && item.category === 'WITHDRAW' && element.click(function () {
                     item.popup = true;
                     $api.business.ordernodetail({
                         id: item.id
-                    }, function(data) {
+                    }, function (data) {
                         $uibModal.open({
                             size: 'lg',
                             windowClass: 'no-border',
-                            templateUrl: 'assets/html/admin/property/withdraw-detail.html?rev=aaedc20996',
+                            templateUrl: 'assets/html/admin/property/withdraw-detail.html?rev=ebc916683f',
                             controllerAs: 'self',
-                            controller: ["$uibModalInstance", function($uibModalInstance) {
+                            controller: ["$uibModalInstance", function ($uibModalInstance) {
 
                                 var self = this;
 
@@ -84,9 +84,9 @@ angular.module('app').directive('withdrawDetail', ["$api", "$uibModal", function
                                 self.Cancel = $uibModalInstance.dismiss;
 
                             }]
-                        }).result.then(function() {
+                        }).result.then(function () {
                             delete item.popup;
-                        }, function() {
+                        }, function () {
                             delete item.popup;
                         });
                     });

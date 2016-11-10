@@ -1,4 +1,4 @@
-angular.module('app').factory('BillingService', ["$resource", "Config", function($resource, Config) {
+angular.module('app').factory('BillingService', ["$resource", "Config", function ($resource, Config) {
     return $resource(Config.API + '/billingservice', {}, {
         info: {
             method: 'POST',
@@ -16,5 +16,5 @@ angular.module('app').factory('BillingService', ["$resource", "Config", function
             method: 'POST',
             url: Config.API + '/billingservice/delete'
         }
-    })
+    });
 }]);

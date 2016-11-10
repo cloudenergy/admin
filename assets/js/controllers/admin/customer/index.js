@@ -1,10 +1,10 @@
-angular.module('app').controller('CustomerIndex', ["$scope", "$q", "$api", "$uibModal", "Auth", "UI", function($scope, $q, $api, $uibModal, Auth, UI) {
-    Auth.Check(function() {
+angular.module('app').controller('CustomerIndex', ["$scope", "$q", "$api", "$uibModal", "Auth", "UI", function ($scope, $q, $api, $uibModal, Auth, UI) {
+    Auth.Check(function () {
 
         function InitialCustomerForPage(parent, customer, level) {
             var customerArray = [];
             if (customer) {
-                angular.forEach(customer, function(v) {
+                angular.forEach(customer, function (v) {
                     v.originid = v.id;
                     v.origintitle = v.title;
                     v.id = v.id;
@@ -15,7 +15,7 @@ angular.module('app').controller('CustomerIndex', ["$scope", "$q", "$api", "$uib
                     v.parent = parent;
                     customerArray.push(v);
                 });
-                customerArray.sort(function(a, b) {
+                customerArray.sort(function (a, b) {
                     return a.index > b.index ? 1 : -1;
                 });
             }
@@ -25,7 +25,7 @@ angular.module('app').controller('CustomerIndex', ["$scope", "$q", "$api", "$uib
         function GetCustomer() {
             $api.customer.info({
                 project: $scope.Project.selected._id
-            }, function(data) {
+            }, function (data) {
                 if (data.result) {
                     $scope.viewOfCustomer = [{
                         level: 0,
@@ -48,7 +48,7 @@ angular.module('app').controller('CustomerIndex', ["$scope", "$q", "$api", "$uib
 
         $scope.$watch('Project.selected', GetCustomer);
 
-        $scope.newNode = function(node) {
+        $scope.newNode = function (node) {
             node.nodes.push({
                 // id: '',
                 enable: true,
@@ -63,7 +63,7 @@ angular.module('app').controller('CustomerIndex', ["$scope", "$q", "$api", "$uib
             });
         };
 
-        $scope.saveNode = function(node) {
+        $scope.saveNode = function (node) {
 
             if (!node.title) {
                 UI.AlertWarning('请输入名称');
@@ -82,7 +82,7 @@ angular.module('app').controller('CustomerIndex', ["$scope", "$q", "$api", "$uib
                 },
                 method: node.id ? 'UPDATE' : 'ADD',
                 project: $scope.Project.selected._id
-            }, function(data) {
+            }, function (data) {
                 UI.AlertSuccess(node.id ? '更新成功' : '添加成功');
                 if (!node.id) {
                     node.id = node.originid = data.result.id;
@@ -92,16 +92,16 @@ angular.module('app').controller('CustomerIndex', ["$scope", "$q", "$api", "$uib
 
         };
 
-        $scope.editNode = function(node) {
+        $scope.editNode = function (node) {
             node.origintitle = node.title;
             node.editing = true;
         };
 
-        $scope.cancelEdit = function(node) {
+        $scope.cancelEdit = function (node) {
             if (node.id) {
                 node.title = node.origintitle;
             } else {
-                angular.forEach(node.parent.nodes, function(item) {
+                angular.forEach(node.parent.nodes, function (item) {
                     if (item.$$hashKey !== node.$$hashKey) {
                         this.push(item);
                     }
@@ -110,31 +110,31 @@ angular.module('app').controller('CustomerIndex', ["$scope", "$q", "$api", "$uib
             delete node.editing;
         };
 
-        $scope.deleteNode = function(node, target) {
+        $scope.deleteNode = function (node, target) {
             $api.customer.update({
                 node: {
                     id: node.id
                 },
                 method: 'REMOVE',
                 project: $scope.Project.selected._id
-            }, function(data) {
+            }, function (data) {
                 UI.AlertSuccess('删除成功');
                 target.remove();
             });
         };
 
-        $scope.sensor = function(node) {
+        $scope.sensor = function (node) {
             //将当前属性添加到选中的传感器
             $uibModal.open({
                 templateUrl: 'sensorSelect.html',
                 controller: 'SensorSelect',
                 resolve: {
-                    ProjectID: function() {
+                    ProjectID: function () {
                         return $scope.Project.selected._id;
                     },
-                    SelectKEY: function() {
+                    SelectKEY: function () {
                         return (function each(nodes, selected) {
-                            angular.forEach(nodes, function(item) {
+                            angular.forEach(nodes, function (item) {
                                 if (item.type === 'DEV') {
                                     selected[item.key] = 1;
                                 } else {
@@ -145,13 +145,13 @@ angular.module('app').controller('CustomerIndex', ["$scope", "$q", "$api", "$uib
                         }(node.nodes, {}));
                     }
                 }
-            }).result.then(function(Selected) {
+            }).result.then(function (Selected) {
 
                 var promiseList = [],
                     removeNode = {};
 
                 (function each(nodes) {
-                    angular.forEach(nodes, function(item) {
+                    angular.forEach(nodes, function (item) {
                         if (item.type === 'DEV') {
                             Selected[item.key] === 0 && promiseList.push($api.customer.update({
                                 node: {
@@ -159,7 +159,7 @@ angular.module('app').controller('CustomerIndex', ["$scope", "$q", "$api", "$uib
                                 },
                                 method: 'REMOVE',
                                 project: $scope.Project.selected._id
-                            }, function() {
+                            }, function () {
                                 removeNode[item.id] = true;
                             }).$promise);
                         } else {
@@ -168,7 +168,7 @@ angular.module('app').controller('CustomerIndex', ["$scope", "$q", "$api", "$uib
                     });
                 }(node.nodes));
 
-                angular.forEach(Selected, function(val, key) {
+                angular.forEach(Selected, function (val, key) {
                     val && angular.isString(val) && promiseList.push($api.customer.update({
                         node: {
                             type: 'DEV',
@@ -178,7 +178,7 @@ angular.module('app').controller('CustomerIndex', ["$scope", "$q", "$api", "$uib
                         },
                         method: 'ADD',
                         project: $scope.Project.selected._id
-                    }, function(data) {
+                    }, function (data) {
                         node.nodes.push({
                             originid: data.result.id,
                             origintitle: data.result.title,
@@ -194,9 +194,9 @@ angular.module('app').controller('CustomerIndex', ["$scope", "$q", "$api", "$uib
                     }).$promise);
                 });
 
-                $q.all(promiseList).then(function() {
+                $q.all(promiseList).then(function () {
                     (function each(node) {
-                        angular.forEach(node.nodes, function(item) {
+                        angular.forEach(node.nodes, function (item) {
                             !removeNode[item.id] && this.push(item);
                             item.nodes.length && each(item);
                         }, node.nodes = []);

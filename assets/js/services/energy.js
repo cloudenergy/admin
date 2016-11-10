@@ -1,4 +1,4 @@
-angular.module('app').factory('Energy', ["$resource", "Config", function($resource, Config) {
+angular.module('app').factory('Energy', ["$resource", "Config", function ($resource, Config) {
     return $resource(Config.apiBase + 'energy', {}, {
         //            multi: { method: 'GET', isArray: true },
         //            create: { method: 'POST' },
@@ -21,5 +21,5 @@ angular.module('app').factory('Energy', ["$resource", "Config", function($resour
             method: 'POST',
             url: Config.API + '/energy/delete'
         }
-    })
+    });
 }]);

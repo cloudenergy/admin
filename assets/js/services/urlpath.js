@@ -1,4 +1,4 @@
-angular.module('app').factory('UrlPath', ["$resource", "Config", function($resource, Config) {
+angular.module('app').factory('UrlPath', ["$resource", "Config", function ($resource, Config) {
     return $resource(Config.API + '/urlpath', {}, {
         //            multi: { method: 'GET', isArray: true },
         //            create: { method: 'POST' },
@@ -21,5 +21,5 @@ angular.module('app').factory('UrlPath', ["$resource", "Config", function($resou
             method: 'POST',
             url: Config.API + '/urlpath/delete'
         }
-    })
+    });
 }]);

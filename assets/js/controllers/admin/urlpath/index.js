@@ -1,11 +1,11 @@
-angular.module('app').controller('urlpathInfo', ["$scope", "$q", "UrlPath", "API", "Auth", "UI", function($scope, $q, UrlPath, API, Auth, UI) {
+angular.module('app').controller('urlpathInfo', ["$scope", "$q", "UrlPath", "API", "Auth", "UI", function ($scope, $q, UrlPath, API, Auth, UI) {
 
     var removeNodes = new Array();
     var pastUrlPath;
 
-    Auth.Check(function() {
+    Auth.Check(function () {
 
-        $scope.doSave = function(e) {
+        $scope.doSave = function (e) {
             e.preventDefault();
 
             var nodes = new Array();
@@ -30,7 +30,7 @@ angular.module('app').controller('urlpathInfo', ["$scope", "$q", "UrlPath", "API
                 }
                 if (node.nodes != undefined && node.nodes.length > 0) {
                     //path
-                    _.each(node.nodes, function(subNode) {
+                    _.each(node.nodes, function (subNode) {
                         TraverseNode(subNode, path + '/');
                     });
                 }
@@ -39,12 +39,12 @@ angular.module('app').controller('urlpathInfo', ["$scope", "$q", "UrlPath", "API
             TraverseNode($scope.urlpath[0], '');
             console.log(removeNodes);
             var removeNodeIDs = new Array();
-            _.each(removeNodes, function(node) {
+            _.each(removeNodes, function (node) {
                 removeNodeIDs.push(node.url._id);
             });
             API.QueryPromise(UrlPath.delete, {
                 id: removeNodeIDs
-            })
+            });
 
             $q.all([
                 API.QueryPromise(UrlPath.delete, {
@@ -52,7 +52,7 @@ angular.module('app').controller('urlpathInfo', ["$scope", "$q", "UrlPath", "API
                 }).promise,
                 API.QueryPromise(UrlPath.update, nodes).promise
             ]).then(
-                function(result) {
+                function (result) {
                     console.log(result);
                 }
             );
@@ -64,29 +64,29 @@ angular.module('app').controller('urlpathInfo', ["$scope", "$q", "UrlPath", "API
             //        });
         };
 
-        $scope.insert = function(event) {
+        $scope.insert = function (event) {
             //
         };
 
         //        UrlPath.info(function(data) {
-        API.Query(UrlPath.info, {}, function(data) {
+        API.Query(UrlPath.info, {}, function (data) {
             if (data.err) {} else {
                 pastUrlPath = data.result;
                 var urlPath = {
                     _id: '/',
                     nodes: new Array()
                 };
-                _.each(pastUrlPath, function(url) {
+                _.each(pastUrlPath, function (url) {
                     var pathNode = url._id.split('/');
                     var traverseNode = urlPath;
-                    _.each(pathNode, function(node, index) {
+                    _.each(pathNode, function (node, index) {
                         if (node == '') {
                             return;
                         }
 
                         //是否最后一个节点
                         var isFinalNode = (pathNode.length == index + 1);
-                        var existsNode = _.find(traverseNode.nodes, function(v) {
+                        var existsNode = _.find(traverseNode.nodes, function (v) {
                             return v._id == node;
                         });
                         if (existsNode == undefined) {
@@ -100,39 +100,39 @@ angular.module('app').controller('urlpathInfo', ["$scope", "$q", "UrlPath", "API
                                     needlogin: url.needlogin,
                                     authtype: url.authtype,
                                     nodes: new Array()
-                                }
+                                };
                             } else {
                                 existsNode = {
                                     _id: node,
                                     desc: url.desc || '',
                                     nodes: new Array()
-                                }
+                                };
                             }
                             traverseNode.nodes.push(existsNode);
                         }
                         traverseNode = existsNode;
-                    })
+                    });
                 });
                 console.log(urlPath);
                 $scope.urlpath = [urlPath];
             }
-        }, responseError)
+        }, responseError);
 
         //Action
-        $scope.RemoveNode = function(scope, node) {
+        $scope.RemoveNode = function (scope, node) {
             scope.remove();
             removeNodes.push(node);
         };
 
-        $scope.enable = function(node) {
+        $scope.enable = function (node) {
             node.enable = !node.enable;
         };
 
-        $scope.toggle = function(scope) {
+        $scope.toggle = function (scope) {
             scope.toggle();
         };
 
-        $scope.newSubItem = function(scope) {
+        $scope.newSubItem = function (scope) {
             var nodeData = scope.node;
             nodeData.nodes.push({
                 _id: '',
@@ -145,19 +145,19 @@ angular.module('app').controller('urlpathInfo', ["$scope", "$q", "UrlPath", "API
             });
         };
 
-        $scope.edit = function(node) {
+        $scope.edit = function (node) {
             node.editing = true;
         };
 
-        $scope.needLogin = function(node) {
+        $scope.needLogin = function (node) {
             node.needlogin = !node.needlogin;
         };
 
-        $scope.SetAuthType = function(node, type) {
+        $scope.SetAuthType = function (node, type) {
             node.authtype = type;
         };
 
-        $scope.cancelEditing = function(scope, node) {
+        $scope.cancelEditing = function (scope, node) {
             if (!node._id.length) {
                 $scope.RemoveNode(scope, node);
             } else {
@@ -165,13 +165,13 @@ angular.module('app').controller('urlpathInfo', ["$scope", "$q", "UrlPath", "API
             }
         };
 
-        $scope.save = function(node) {
+        $scope.save = function (node) {
             node.editing = false;
             node.isnew = false;
         };
 
         function responseError(result) {
-            UI.AlertError(result.data.message)
+            UI.AlertError(result.data.message);
         }
     });
 }]);
