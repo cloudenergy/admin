@@ -1,15 +1,15 @@
-<script type="text/ng-template" id="energySelect.html"><div  class="container-fluid">
-        <div  align="center" style="padding: 30; border-bottom: 1px solid #E5E5E5; min-height: 16; ">
+<script type="text/ng-template" id="energySelect.html"><div class="container-fluid">
+        <div align="center" style="padding: 30; border-bottom: 1px solid #E5E5E5; min-height: 16; ">
             <h3>子策略所应用的能耗类型</h3>
         </div>
-        <div  align="center" style="position: relative; padding: 20px;">
-            <div  class="row-fluid list-group">
+        <div align="center" style="position: relative; padding: 20px;">
+            <div class="row-fluid list-group">
                 <a href="javascript:void(0)" class="list-group-item" ng-class="sec.isEnable ? 'active':''" ng-click="SwitchServiceEnergycategories($event, sec)" ng-repeat="sec in ServiceEnergycategories">
                     {{sec.title}}
                 </a>
             </div>
         </div>
-        <div  style="margin-top: 15px; padding: 19px 20px 20px; text-align: center; border-top: 1px solid #e5e5e5;">
+        <div style="margin-top: 15px; padding: 19px 20px 20px; text-align: center; border-top: 1px solid #e5e5e5;">
             <button class="btn btn-primary" ng-click="Ok()">确定</button>
             <button class="btn btn-warning" ng-click="Cancel()">取消</button>
         </div>

@@ -115,16 +115,16 @@ angular.module('app').controller('Finance.card', ["$scope", "$filter", "$timeout
             enableColumnMenu: false,
             exporterSuppressExport: true,
             headerCellClass: 'text-center',
-            headerCellTemplate: '<div  class="ui-grid-cell-contents">序号</div>',
+            headerCellTemplate: '<div class="ui-grid-cell-contents">序号</div>',
             cellClass: 'text-center',
-            cellTemplate: '<div  class="ui-grid-cell-contents" ng-bind="grid.renderContainers.body.visibleRowCache.indexOf(row)+1"></div>'
+            cellTemplate: '<div class="ui-grid-cell-contents" ng-bind="grid.renderContainers.body.visibleRowCache.indexOf(row)+1"></div>'
         }, {
             displayName: '项目名称',
             name: 'project',
             width: '*',
             minWidth: 120,
             enableColumnMenu: false //,
-                // cellTemplate: '<div  class="ui-grid-cell-contents text-primary"><a ui-sref="admin.finance.card({projectid:row.entity.project})" ng-bind="COL_FIELD"></a></div>'
+                // cellTemplate: '<div class="ui-grid-cell-contents text-primary"><a ui-sref="admin.finance.card({projectid:row.entity.project})" ng-bind="COL_FIELD"></a></div>'
         }, {
             displayName: '银行卡号',
             name: 'account',
@@ -155,7 +155,7 @@ angular.module('app').controller('Finance.card', ["$scope", "$filter", "$timeout
             width: '*',
             minWidth: 120,
             enableColumnMenu: false,
-            cellTemplate: '<div  class="ui-grid-cell-contents" ng-class="{\'text-primary\':COL_FIELD===\'CHECKING\',\'text-success\':COL_FIELD===\'SUCCESS\',\'text-danger\':COL_FIELD===\'FAILED\'}" ng-bind="grid.appScope.self.status[COL_FIELD]"></div>'
+            cellTemplate: '<div class="ui-grid-cell-contents" ng-class="{\'text-primary\':COL_FIELD===\'CHECKING\',\'text-success\':COL_FIELD===\'SUCCESS\',\'text-danger\':COL_FIELD===\'FAILED\'}" ng-bind="grid.appScope.self.status[COL_FIELD]"></div>'
         }, {
             displayName: '申请时间',
             name: 'timecreate',
@@ -168,7 +168,7 @@ angular.module('app').controller('Finance.card', ["$scope", "$filter", "$timeout
             minWidth: 80,
             enableColumnMenu: false,
             exporterSuppressExport: true,
-            cellTemplate: '<div  class="ui-grid-cell-contents text-primary"><a ui-sref="admin.finance.card.detail({id:row.entity.id})">{{{true:\'审核\',false:\'查看详情\'}[row.entity.status===\'CHECKING\']}}</a></div>'
+            cellTemplate: '<div class="ui-grid-cell-contents text-primary"><a ui-sref="admin.finance.card.detail({id:row.entity.id})">{{{true:\'审核\',false:\'查看详情\'}[row.entity.status===\'CHECKING\']}}</a></div>'
         }]
     };
 

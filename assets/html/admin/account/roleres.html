@@ -1,81 +1,81 @@
-<script type="text/ng-template" id="projectSelect.html"><div  class="container-fluid">
-        <div  align="center" style="padding: 30; border-bottom: 1px solid #E5E5E5; min-height: 16; ">
+<script type="text/ng-template" id="projectSelect.html"><div class="container-fluid">
+        <div align="center" style="padding: 30; border-bottom: 1px solid #E5E5E5; min-height: 16; ">
             <h3>选择添加的项目</h3>
         </div>
-        <div  style="margin: 10px 0 40px 0; ">
-            <div  class="col-lg-2"></div>
-            <div  class="col-lg-6">
+        <div style="margin: 10px 0 40px 0; ">
+            <div class="col-lg-2"></div>
+            <div class="col-lg-6">
                 <input type="text" class="form-control" id="input-customer-freq" placeholder="输入项目名称进行查询" ng-model="projectSearchKey">
             </div>
-            <div  class="col-lg-4">
+            <div class="col-lg-4">
                 <a class="btn btn-info" href="javascript:void(0)" ng-click="onSearchProject($event)">
                     <span class="glyphicon glyphicon-search"></span> 查询
                 </a>
             </div>
         </div>
-        <div  align="center" style="position: relative; padding: 15px 30px 0px 30px;">
-            <div  class="row-fluid list-group">
+        <div align="center" style="position: relative; padding: 15px 30px 0px 30px;">
+            <div class="row-fluid list-group">
                 <a href="javascript:void(0)" class="list-group-item" ng-class="project.isEnable ? 'active':''" ng-click="SwitchProject($event, project)" ng-repeat="project in viewOfProjects">
                     {{project.title}}
                 </a>
             </div>
         </div>
-        <div  style="margin-top: 15px; padding: 0px 20px 20px; text-align: center;">
+        <div style="margin-top: 15px; padding: 0px 20px 20px; text-align: center;">
             <button class="btn btn-primary" ng-click="Ok()">确定</button>
             <button class="btn btn-warning" ng-click="Cancel()">取消</button>
         </div>
-    </div></script><script type="text/ng-template" id="buildingSelect.html"><div  class="container-fluid">
-        <div  align="center" style="padding: 30; border-bottom: 1px solid #E5E5E5; min-height: 16; ">
+    </div></script><script type="text/ng-template" id="buildingSelect.html"><div class="container-fluid">
+        <div align="center" style="padding: 30; border-bottom: 1px solid #E5E5E5; min-height: 16; ">
             <h3>选择添加的建筑</h3>
         </div>
-        <div  style="margin: 10px 0 40px 0; ">
-            <div  class="col-lg-2"></div>
-            <div  class="col-lg-6">
+        <div style="margin: 10px 0 40px 0; ">
+            <div class="col-lg-2"></div>
+            <div class="col-lg-6">
                 <input type="text" class="form-control" id="input-customer-freq" placeholder="输入建筑名称进行查询" ng-model="buildingSearchKey">
             </div>
-            <div  class="col-lg-4">
+            <div class="col-lg-4">
                 <a class="btn btn-info" href="javascript:void(0)" ng-click="onSearchBuilding($event)">
                     <span class="glyphicon glyphicon-search"></span> 查询
                 </a>
             </div>
         </div>
-        <div  align="center" style="position: relative; padding: 15px 30px 0px 30px;">
-            <div  class="row-fluid list-group">
+        <div align="center" style="position: relative; padding: 15px 30px 0px 30px;">
+            <div class="row-fluid list-group">
                 <a href="javascript:void(0)" class="list-group-item" ng-class="building.isEnable ? 'active':''" ng-click="SwitchBuilding($event, building)" ng-repeat="building in viewOfBuildings">
                     {{building.title}}
                 </a>
             </div>
         </div>
-        <div  style="margin-top: 15px; padding: 0px 20px 20px; text-align: center;">
+        <div style="margin-top: 15px; padding: 0px 20px 20px; text-align: center;">
             <button class="btn btn-primary" ng-click="Ok()">确定</button>
             <button class="btn btn-warning" ng-click="Cancel()">取消</button>
         </div>
-    </div></script><script type="text/ng-template" id="sensorSelect.html"><div  class="container-fluid">
-        <div  align="center" style="padding: 30; border-bottom: 1px solid #E5E5E5; min-height: 16; ">
+    </div></script><script type="text/ng-template" id="sensorSelect.html"><div class="container-fluid">
+        <div align="center" style="padding: 30; border-bottom: 1px solid #E5E5E5; min-height: 16; ">
             <h3>选择添加的传感器</h3>
         </div>
-        <div  style="margin: 10px 0 40px 0; ">
-            <div  class="col-lg-2"></div>
-            <div  class="col-lg-6">
+        <div style="margin: 10px 0 40px 0; ">
+            <div class="col-lg-2"></div>
+            <div class="col-lg-6">
                 <input type="text" class="form-control" id="input-customer-freq" placeholder="输入传感器ID或名称进行查询" ng-model="sensorSearchKey">
             </div>
-            <div  class="col-lg-4">
+            <div class="col-lg-4">
                 <a class="btn btn-info" href="javascript:void(0)" ng-click="onSearchSensor($event)">
                     <span class="glyphicon glyphicon-search"></span> 查询
                 </a>
             </div>
         </div>
-        <div  align="center" style="position: relative; padding: 15px 30px 0px 30px;">
-            <div  class="row-fluid list-group">
+        <div align="center" style="position: relative; padding: 15px 30px 0px 30px;">
+            <div class="row-fluid list-group">
                 <a href="javascript:void(0)" class="list-group-item" ng-class="sensor.isEnable ? 'active':''" ng-click="SwitchSensor($event, sensor)" ng-repeat="sensor in viewOfSensors | startFrom: (currentPage-1) * popPageSize | limitTo: popPageSize">
                     {{sensor.title}}
                 </a>
             </div>
         </div>
-        <div  align="center">
+        <div align="center">
             <pagination class="pagination-sm" total-items="viewOfSensors.length" ng-model="currentPage" items-per-page="popPageSize" max-size="9" boundary-links="true" rotate="false" num-pages="numPages" previous-text="<" next-text=">"></pagination>
         </div>
-        <div  style="margin-top: 15px; padding: 0px 20px 20px; text-align: center;">
+        <div style="margin-top: 15px; padding: 0px 20px 20px; text-align: center;">
             <button class="btn btn-primary" ng-click="Ok()">确定</button>
             <button class="btn btn-warning" ng-click="Cancel()">取消</button>
         </div>

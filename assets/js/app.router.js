@@ -61,7 +61,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }]
     }).state('admin', {
         abstract: true,
-        templateUrl: 'assets/html/common/layout.html?rev=9251e07b4c',
+        templateUrl: 'assets/html/common/layout.html?rev=eea01f2c0b',
         url: '/admin',
         controller: 'admin',
         controllerAs: 'self',
@@ -99,7 +99,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             title: '技术支持: 0571-85374789'
         }
     }).state('admin.character', {
-        template: '<div  ui-view></div>',
+        template: '<div ui-view></div>',
         abstract: true,
         url: '/character',
         data: {
@@ -130,7 +130,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             title: '角色编辑'
         },
         controller: 'characterManage',
-        templateUrl: 'assets/html/admin/character/manage.html?rev=56ce807e45',
+        templateUrl: 'assets/html/admin/character/manage.html?rev=170d9a8382',
         resolve: {
             deps: ["$ocLazyLoad", function ($ocLazyLoad) {
                 return $ocLazyLoad.load([{
@@ -153,7 +153,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             }]
         }
     }).state('admin.project', {
-        template: '<div  ui-view></div>',
+        template: '<div ui-view></div>',
         abstract: true,
         url: '/project',
         data: {
@@ -209,7 +209,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             }]
         }
     }).state('admin.account', {
-        template: '<div  ui-view></div>',
+        template: '<div ui-view></div>',
         abstract: true,
         url: '/account',
         data: {
@@ -270,7 +270,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
     }).state('admin.account.roleres', {
         url: '/roleres/:id',
         controller: 'accountroleres',
-        templateUrl: 'assets/html/admin/account/roleres.html?rev=36812d59d2',
+        templateUrl: 'assets/html/admin/account/roleres.html?rev=128e24d53d',
         data: {
             projectHide: true,
             title: '帐号权限'
@@ -291,7 +291,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             }]
         }
     }).state('admin.billingservice', {
-        template: '<div  ui-view></div>',
+        template: '<div ui-view></div>',
         abstract: true,
         url: '/billingservice',
         data: {
@@ -321,7 +321,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.billingservice.manage', {
         url: '/manage/:id',
-        templateUrl: 'assets/html/admin/billingservice/manage.html?rev=bd5d9c4667',
+        templateUrl: 'assets/html/admin/billingservice/manage.html?rev=9c906b9ce8',
         data: {
             projectDisabled: true,
             title: '编辑策略'
@@ -353,7 +353,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             }]
         }
     }).state('admin.urlpath', {
-        template: '<div  ui-view></div>',
+        template: '<div ui-view></div>',
         abstract: true,
         url: '/urlpath',
         data: {
@@ -369,7 +369,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
     }).state('admin.urlpath.info', {
         url: '/info',
         controller: 'urlpathInfo',
-        templateUrl: 'assets/html/admin/urlpath/index.html?rev=8f62e9a0db',
+        templateUrl: 'assets/html/admin/urlpath/index.html?rev=2bb1e0ec08',
         data: {
             projectHide: true,
             title: '地址管理'
@@ -390,7 +390,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             }]
         }
     }).state('admin.building', {
-        template: '<div  ui-view></div>',
+        template: '<div ui-view></div>',
         abstract: true,
         url: '/building',
         data: {
@@ -443,7 +443,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             }]
         }
     }).state('admin.department', {
-        templateUrl: 'assets/html/admin/department/base.html?rev=c064dc6c47',
+        templateUrl: 'assets/html/admin/department/base.html?rev=d8fe8f2ad2',
         abstract: true,
         url: '/department',
         data: {
@@ -461,26 +461,20 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.department.info', {
         url: '/info',
-        templateUrl: 'assets/html/admin/department/info.html?rev=a5d291f8a5',
+        templateUrl: 'assets/html/admin/department/info.html?rev=ca8752dd2e',
         data: {
             title: '户管理'
         },
         controller: 'departmentInfo',
         resolve: {
             deps: ["$ocLazyLoad", function ($ocLazyLoad) {
-                return $ocLazyLoad.load([{
-                    name: 'ngUpload',
-                    files: [
-                        static + 'libs/ngUpload-0.5.18/ng-upload.min.js',
-                        static + 'libs/angular-ui-grid-3.2.1/ui-grid.min.css'
-                    ]
-                }]).then(function () {
-                    return $ocLazyLoad.load([
-                        static + 'libs/angular-ui-grid-3.2.1/ui-grid.min.js',
-                        'assets/js/services/sensor.min.js?rev=7102ffba10',
-                        'assets/js/controllers/admin/department/info.min.js?rev=5452fe1a5a'
-                    ]);
-                });
+                return $ocLazyLoad.load([
+                    static + 'libs/angular-ui-grid-3.2.1/ui-grid.min.css',
+                    static + 'libs/angular-ui-grid-3.2.1/ui-grid.min.js',
+                    static + 'libs/ngUpload-0.5.18/ng-upload.min.js',
+                    'assets/js/services/sensor.min.js?rev=7102ffba10',
+                    'assets/js/controllers/admin/department/info.min.js?rev=c63ae5e0ba'
+                ]);
             }]
         }
     }).state('admin.department.create', {
@@ -535,7 +529,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             }]
         }
     }).state('admin.customer', {
-        template: '<div  ui-view></div>',
+        template: '<div ui-view></div>',
         abstract: true,
         url: '/customer',
         data: {
@@ -553,7 +547,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.customer.index', {
         url: '/index',
-        templateUrl: 'assets/html/admin/customer/index.html?rev=c52f69726f',
+        templateUrl: 'assets/html/admin/customer/index.html?rev=227f1066a6',
         data: {
             title: '社会属性'
         },
@@ -576,7 +570,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             }]
         }
     }).state('admin.collector', {
-        template: '<div  ui-view></div>',
+        template: '<div ui-view></div>',
         abstract: true,
         url: '/collector',
         data: {
@@ -635,7 +629,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             }]
         }
     }).state('admin.energy', {
-        template: '<div  ui-view></div>',
+        template: '<div ui-view></div>',
         abstract: true,
         url: '/energy',
         data: {
@@ -653,7 +647,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.energy.index', {
         url: '/index',
-        templateUrl: 'assets/html/admin/energy/index.html?rev=35bde3dda2',
+        templateUrl: 'assets/html/admin/energy/index.html?rev=d5714b09b8',
         data: {
             title: '能耗分类'
         },
@@ -676,7 +670,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             }]
         }
     }).state('admin.energycategory', {
-        template: '<div  ui-view></div>',
+        template: '<div ui-view></div>',
         abstract: true,
         url: '/energycategory',
         data: {
@@ -741,7 +735,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             }]
         }
     }).state('admin.sensor', {
-        template: '<div  ui-view></div>',
+        template: '<div ui-view></div>',
         abstract: true,
         url: '/sensor',
         data: {
@@ -768,7 +762,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.sensor.info', {
         url: '/info',
-        templateUrl: 'assets/html/admin/sensor/info.html?rev=b861910749',
+        templateUrl: 'assets/html/admin/sensor/info.html?rev=5cab94d344',
         data: {
             title: '传感器管理'
         },
@@ -788,7 +782,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.sensor.create', {
         url: '/create/:building',
-        templateUrl: 'assets/html/admin/sensor/create.html?rev=920f682b21',
+        templateUrl: 'assets/html/admin/sensor/create.html?rev=59e5a2fa6c',
         data: {
             projectDisabled: true,
             title: '添加传感器'
@@ -806,7 +800,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.sensor.edit', {
         url: '/edit/:id',
-        templateUrl: 'assets/html/admin/sensor/edit.html?rev=57d2a118c4',
+        templateUrl: 'assets/html/admin/sensor/edit.html?rev=6b014a8dd6',
         data: {
             projectDisabled: true,
             title: '编辑传感器'
@@ -823,7 +817,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             }]
         }
     }).state('admin.eventcategory', {
-        template: '<div  ui-view></div>',
+        template: '<div ui-view></div>',
         abstract: true,
         url: '/eventcategory',
         data: {
@@ -839,7 +833,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.eventcategory.info', {
         url: '/info',
-        templateUrl: 'assets/html/admin/eventcategory/info.html?rev=d2155b6165',
+        templateUrl: 'assets/html/admin/eventcategory/info.html?rev=40ab69453b',
         data: {
             title: '事件配置'
         },
@@ -884,7 +878,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
     }).state('admin.finance', {
         abstract: true,
         url: '/finance',
-        template: '<div  ui-view></div>',
+        template: '<div ui-view></div>',
         data: {
             redirect: 'admin.finance.index'
         },
@@ -921,7 +915,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
             }]
         }
     }).state('admin.finance.record', {
-        template: '<div  ui-view></div>',
+        template: '<div ui-view></div>',
         abstract: true,
         url: '/record'
     }).state('admin.finance.record.in', {
@@ -936,7 +930,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function ($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'assets/js/controllers/admin/finance/record-in.min.js?rev=cb53d2bea7'
+                    'assets/js/controllers/admin/finance/record-in.min.js?rev=b017f3f374'
                 ]);
             }]
         }
@@ -965,7 +959,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function ($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'assets/js/controllers/admin/finance/record-out.min.js?rev=731dfa71a3'
+                    'assets/js/controllers/admin/finance/record-out.min.js?rev=eeb2ff6656'
                 ]);
             }]
         }
@@ -990,7 +984,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         },
         views: {
             '@admin.finance.record': {
-                templateUrl: 'assets/html/admin/finance/record-detail.html?rev=a4b3d2e3d7',
+                templateUrl: 'assets/html/admin/finance/record-detail.html?rev=50ebfacb3e',
                 controller: 'Finance.record.out.detail',
                 controllerAs: 'self'
             }
@@ -1014,7 +1008,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function ($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'assets/js/controllers/admin/finance/card.min.js?rev=4cd3ab1f2c'
+                    'assets/js/controllers/admin/finance/card.min.js?rev=581b98ad88'
                 ]);
             }]
         }
@@ -1026,7 +1020,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         },
         views: {
             '@admin.finance': {
-                templateUrl: 'assets/html/admin/finance/card-detail.html?rev=21e5d5164c',
+                templateUrl: 'assets/html/admin/finance/card-detail.html?rev=1d94458d19',
                 controller: 'Finance.card.detail',
                 controllerAs: 'self'
             }
@@ -1050,7 +1044,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function ($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'assets/js/controllers/admin/finance/project/list.min.js?rev=c0cac1de6e'
+                    'assets/js/controllers/admin/finance/project/list.min.js?rev=956c697fde'
                 ]);
             }]
         }
@@ -1062,7 +1056,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         },
         views: {
             '@admin.finance': {
-                templateUrl: 'assets/html/admin/finance/project/index.html?rev=b0c6198953',
+                templateUrl: 'assets/html/admin/finance/project/index.html?rev=9c5bdf0cb4',
                 controller: 'Finance.project.index',
                 controllerAs: 'self'
             }
@@ -1091,7 +1085,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         resolve: {
             deps: ["$ocLazyLoad", function ($ocLazyLoad) {
                 return $ocLazyLoad.load([
-                    'assets/js/controllers/admin/finance/project/record.min.js?rev=f6119c0caa'
+                    'assets/js/controllers/admin/finance/project/record.min.js?rev=5001cfd1a8'
                 ]);
             }]
         }
@@ -1103,7 +1097,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         },
         views: {
             '@admin.finance': {
-                templateUrl: 'assets/html/admin/finance/project/withdraw.html?rev=28f742270b',
+                templateUrl: 'assets/html/admin/finance/project/withdraw.html?rev=a678b6330b',
                 controller: 'Finance.project.withdraw',
                 controllerAs: 'self'
             }
@@ -1118,7 +1112,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
     }).state('admin.property', {
         abstract: true,
         url: '/property',
-        template: '<div  ui-view></div>',
+        template: '<div ui-view></div>',
         data: {
             redirect: 'admin.property.index'
         },
@@ -1133,7 +1127,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
                     files: [
                         'assets/js/directives/datetimepicker.min.js?rev=ab0351da14',
                         'assets/js/directives/auto-height.min.js?rev=b13007069a',
-                        'assets/js/directives/modal-download.min.js?rev=d5d5f95e1a',
+                        'assets/js/directives/modal-download.min.js?rev=c526f60567',
                         'assets/js/controllers/admin/property/withdraw-detail.min.js?rev=0ab407fc05',
                         'assets/js/controllers/admin/property/record-success.min.js?rev=fabf6e9e1e'
                     ]
@@ -1142,7 +1136,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.property.index', {
         url: '/index',
-        templateUrl: 'assets/html/admin/property/index.html?rev=af93dc877f',
+        templateUrl: 'assets/html/admin/property/index.html?rev=bc48bb11c4',
         data: {
             title: '物业财务'
         },
@@ -1158,7 +1152,7 @@ angular.module('app').config(["$locationProvider", "$stateProvider", "$urlRouter
         }
     }).state('admin.property.withdraw', {
         url: '/withdraw',
-        templateUrl: 'assets/html/admin/property/withdraw.html?rev=3c752eb64a',
+        templateUrl: 'assets/html/admin/property/withdraw.html?rev=b047d33fb9',
         data: {
             title: '申请提现'
         },

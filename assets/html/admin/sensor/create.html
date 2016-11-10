@@ -30,7 +30,7 @@
         color: #FFFFFF;
     }</style><script type="text/ng-template" id="energyNodesRenderer.html"><div data-nodrag class="tree-node" ng-class="node.isSelect?'socitySelect':'socityUnSelect'">
         <div data-nodrag class="tree-node-content">
-            <div  data-nodrag style="cursor: pointer;" ng-click="!node.nodes&&onEnergyChoice(node)">
+            <div data-nodrag style="cursor: pointer;" ng-click="!node.nodes&&onEnergyChoice(node)">
                 <a data-nodrag class="btn btn-success btn-xs" ng-click="this.toggle()" ng-show="node.nodes">
                     <i class="glyphicon" ng-class="{'glyphicon-chevron-right': collapsed, 'glyphicon-chevron-down': !collapsed}"></i>
                 </a>

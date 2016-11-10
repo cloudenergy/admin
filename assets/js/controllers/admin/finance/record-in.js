@@ -148,9 +148,9 @@ angular.module('app').controller('Finance.record.in', ["$scope", "$filter", "$te
             enableColumnMenu: false,
             exporterSuppressExport: true,
             headerCellClass: 'text-center',
-            headerCellTemplate: '<div  class="ui-grid-cell-contents">序号</div>',
+            headerCellTemplate: '<div class="ui-grid-cell-contents">序号</div>',
             cellClass: 'text-center',
-            cellTemplate: '<div  class="ui-grid-cell-contents" ng-bind="grid.renderContainers.body.visibleRowCache.indexOf(row)+1"></div>'
+            cellTemplate: '<div class="ui-grid-cell-contents" ng-bind="grid.renderContainers.body.visibleRowCache.indexOf(row)+1"></div>'
         }, {
             displayName: '项目名称',
             name: 'projectname',
@@ -158,7 +158,7 @@ angular.module('app').controller('Finance.record.in', ["$scope", "$filter", "$te
             minWidth: 120,
             visible: !self.projectid,
             enableColumnMenu: false,
-            cellTemplate: '<div  class="ui-grid-cell-contents text-primary"><a ui-sref="admin.finance.record.in.project({projectid:row.entity.project})" ng-bind="COL_FIELD"></a></div>'
+            cellTemplate: '<div class="ui-grid-cell-contents text-primary"><a ui-sref="admin.finance.record.in.project({projectid:row.entity.project})" ng-bind="COL_FIELD"></a></div>'
         }, {
             displayName: '充值商户',
             name: 'from',
@@ -172,7 +172,7 @@ angular.module('app').controller('Finance.record.in', ["$scope", "$filter", "$te
             minWidth: 120,
             headerCellTemplate: function () {
                 return $templateCache.get('ui-grid/uiGridHeaderCell')
-                    .replace('</sub></span></div><div  role="button" tabindex="0"', '</sub></span><div  class="text-info">合计：{{grid.appScope.self.sum.amount}}</div></div><div  role="button" tabindex="0"');
+                    .replace('</sub></span></div><div role="button" tabindex="0"', '</sub></span><div class="text-info">合计：{{grid.appScope.self.sum.amount}}</div></div><div role="button" tabindex="0"');
             }
         }, {
             displayName: '充值后余额 ¥',

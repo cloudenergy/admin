@@ -135,15 +135,15 @@ angular.module('app').controller('Finance.project.record', ["$scope", "$api", "$
             enableColumnMenu: false,
             exporterSuppressExport: true,
             headerCellClass: 'text-center',
-            headerCellTemplate: '<div  class="ui-grid-cell-contents">序号</div>',
+            headerCellTemplate: '<div class="ui-grid-cell-contents">序号</div>',
             cellClass: 'text-center',
-            cellTemplate: '<div  class="ui-grid-cell-contents" ng-bind="grid.renderContainers.body.visibleRowCache.indexOf(row)+1"></div>'
+            cellTemplate: '<div class="ui-grid-cell-contents" ng-bind="grid.renderContainers.body.visibleRowCache.indexOf(row)+1"></div>'
         }, {
             displayName: '交易金额 ¥',
             name: 'amount',
             width: '*',
             minWidth: 120,
-            cellTemplate: '<div  class="ui-grid-cell-contents" ng-class="{\'text-danger\': COL_FIELD>0, \'text-success\': COL_FIELD<0}" ng-if="COL_FIELD" ng-bind="COL_FIELD"></div>'
+            cellTemplate: '<div class="ui-grid-cell-contents" ng-class="{\'text-danger\': COL_FIELD>0, \'text-success\': COL_FIELD<0}" ng-if="COL_FIELD" ng-bind="COL_FIELD"></div>'
         }, {
             displayName: '交易类型',
             name: 'category',
@@ -156,7 +156,7 @@ angular.module('app').controller('Finance.project.record', ["$scope", "$api", "$
             width: '*',
             minWidth: 100,
             enableColumnMenu: false,
-            cellTemplate: '<div  class="ui-grid-cell-contents text-{{grid.appScope.self.status[COL_FIELD].class}}" ng-bind="grid.appScope.self.status[COL_FIELD].title"></div>'
+            cellTemplate: '<div class="ui-grid-cell-contents text-{{grid.appScope.self.status[COL_FIELD].class}}" ng-bind="grid.appScope.self.status[COL_FIELD].title"></div>'
         }, {
             displayName: '到账时间',
             name: 'timepaid',
@@ -180,7 +180,7 @@ angular.module('app').controller('Finance.project.record', ["$scope", "$api", "$
             displayName: '跟踪',
             name: 'operation',
             minWidth: 80,
-            cellTemplate: '<div  class="ui-grid-cell-contents text-primary"><a class="text-primary" href="javascript:void(0)">查看详情</a></div>'
+            cellTemplate: '<div class="ui-grid-cell-contents text-primary"><a class="text-primary" href="javascript:void(0)">查看详情</a></div>'
         }],
         inColumn = [{
             displayName: '',
@@ -191,15 +191,15 @@ angular.module('app').controller('Finance.project.record', ["$scope", "$api", "$
             enableColumnMenu: false,
             exporterSuppressExport: true,
             headerCellClass: 'text-center',
-            headerCellTemplate: '<div  class="ui-grid-cell-contents">序号</div>',
+            headerCellTemplate: '<div class="ui-grid-cell-contents">序号</div>',
             cellClass: 'text-center',
-            cellTemplate: '<div  class="ui-grid-cell-contents" ng-bind="grid.renderContainers.body.visibleRowCache.indexOf(row)+1"></div>'
+            cellTemplate: '<div class="ui-grid-cell-contents" ng-bind="grid.renderContainers.body.visibleRowCache.indexOf(row)+1"></div>'
         }, {
             displayName: '交易金额 ¥',
             name: 'amount',
             width: '*',
             minWidth: 120,
-            cellTemplate: '<div  class="ui-grid-cell-contents" ng-class="{\'text-danger\': COL_FIELD<0, \'text-success\': COL_FIELD>0}" ng-if="COL_FIELD" ng-bind="COL_FIELD"></div>'
+            cellTemplate: '<div class="ui-grid-cell-contents" ng-class="{\'text-danger\': COL_FIELD<0, \'text-success\': COL_FIELD>0}" ng-if="COL_FIELD" ng-bind="COL_FIELD"></div>'
         }, {
             displayName: '交易类型',
             name: 'category',
@@ -212,7 +212,7 @@ angular.module('app').controller('Finance.project.record', ["$scope", "$api", "$
             width: '*',
             minWidth: 100,
             enableColumnMenu: false,
-            cellTemplate: '<div  class="ui-grid-cell-contents text-{{grid.appScope.self.status[COL_FIELD].class}}" ng-bind="grid.appScope.self.status[COL_FIELD].title"></div>'
+            cellTemplate: '<div class="ui-grid-cell-contents text-{{grid.appScope.self.status[COL_FIELD].class}}" ng-bind="grid.appScope.self.status[COL_FIELD].title"></div>'
         }, {
             displayName: '操作后余额',
             name: 'balance',

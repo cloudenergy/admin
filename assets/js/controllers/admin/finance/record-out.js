@@ -203,9 +203,9 @@ angular.module('app').controller('Finance.record.out', ["$scope", "$filter", "$t
             enableColumnMenu: false,
             exporterSuppressExport: true,
             headerCellClass: 'text-center',
-            headerCellTemplate: '<div  class="ui-grid-cell-contents">序号</div>',
+            headerCellTemplate: '<div class="ui-grid-cell-contents">序号</div>',
             cellClass: 'text-center',
-            cellTemplate: '<div  class="ui-grid-cell-contents" ng-bind="grid.renderContainers.body.visibleRowCache.indexOf(row)+1"></div>'
+            cellTemplate: '<div class="ui-grid-cell-contents" ng-bind="grid.renderContainers.body.visibleRowCache.indexOf(row)+1"></div>'
         }, {
             displayName: '项目名称',
             name: 'projectname',
@@ -213,7 +213,7 @@ angular.module('app').controller('Finance.record.out', ["$scope", "$filter", "$t
             minWidth: 120,
             visible: !self.projectid,
             enableColumnMenu: false,
-            cellTemplate: '<div  class="ui-grid-cell-contents text-primary"><a ui-sref="admin.finance.record.out.project({projectid:row.entity.project})" ng-bind="COL_FIELD"></a></div>'
+            cellTemplate: '<div class="ui-grid-cell-contents text-primary"><a ui-sref="admin.finance.record.out.project({projectid:row.entity.project})" ng-bind="COL_FIELD"></a></div>'
         }, {
             displayName: '交易帐户',
             name: 'channelaccount',
@@ -243,7 +243,7 @@ angular.module('app').controller('Finance.record.out', ["$scope", "$filter", "$t
             width: '*',
             minWidth: 100,
             enableColumnMenu: false,
-            cellTemplate: '<div  class="ui-grid-cell-contents" ng-class="grid.appScope.self.operation.color[row.entity.status]" ng-bind="grid.appScope.self.status[COL_FIELD]"></div>'
+            cellTemplate: '<div class="ui-grid-cell-contents" ng-class="grid.appScope.self.operation.color[row.entity.status]" ng-bind="grid.appScope.self.status[COL_FIELD]"></div>'
         }, {
             displayName: '提交时间',
             name: 'timecreate',
@@ -256,7 +256,7 @@ angular.module('app').controller('Finance.record.out', ["$scope", "$filter", "$t
             minWidth: 80,
             enableColumnMenu: false,
             exporterSuppressExport: true,
-            cellTemplate: '<div  class="ui-grid-cell-contents text-primary"><a class="text-primary" ui-sref="admin.finance.record.out.project.detail({projectid:row.entity.project,orderno:row.entity.orderno})" ng-bind="grid.appScope.self.operation.text[row.entity.status]"></a></div>'
+            cellTemplate: '<div class="ui-grid-cell-contents text-primary"><a class="text-primary" ui-sref="admin.finance.record.out.project.detail({projectid:row.entity.project,orderno:row.entity.orderno})" ng-bind="grid.appScope.self.operation.text[row.entity.status]"></a></div>'
         }]
     };
 

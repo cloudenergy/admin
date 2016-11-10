@@ -1,10 +1,10 @@
 angular.module('app').directive('modalDownload', ["$templateCache", "$uibModal", function ($templateCache, $uibModal) {
     $templateCache.put('template-modal-download.html', [
-        '<div  class="modal-header">',
+        '<div class="modal-header">',
         '<button type="button" class="close" ng-click="self.cancel()"><span>&times;</span></button>',
         '<h4 class="modal-title" ng-bind="self.downloadTitle"></h4>',
         '</div>',
-        '<div  class="modal-body text-primary text-center">',
+        '<div class="modal-body text-primary text-center">',
         '<a class="text-primary h4 no-margin" target="_blank" ng-click="self.cancel()" ng-href="{{self.downloadLink}}" download="{{self.downloadName}}"><i class="glyphicon glyphicon-download-alt"></i> 点击下载</a>',
         '</div>'
     ].join(''));

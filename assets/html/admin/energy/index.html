@@ -23,42 +23,42 @@
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
-    }</style><script type="text/ng-template" id="sensorSelect.html"><div  class="container-fluid">
-        <div  align="center" style="padding: 30; border-bottom: 1px solid #E5E5E5; min-height: 16; ">
+    }</style><script type="text/ng-template" id="sensorSelect.html"><div class="container-fluid">
+        <div align="center" style="padding: 30; border-bottom: 1px solid #E5E5E5; min-height: 16; ">
             <h3>选择添加的传感器</h3>
         </div>
-        <div  class="row mt20">
-            <div  class="col-lg-6">
+        <div class="row mt20">
+            <div class="col-lg-6">
                 <input type="text" class="form-control" id="input-customer-freq" placeholder="输入传感器ID或名称进行查询" ng-model="sensorSearchKey">
             </div>
-            <div  class="col-lg-4">
+            <div class="col-lg-4">
                 <a class="btn btn-info" href="javascript:void(0)" ng-click="onSearchSensor($event)">
                     <span class="glyphicon glyphicon-search"></span> 查询
                 </a>
             </div>
-            <div  class="col-lg-2 text-right">
+            <div class="col-lg-2 text-right">
                 <a class="btn btn-success" href="javascript:void(0)" ng-click="OnSelectAll($event)">
                     <span class="glyphicon glyphicon-asterisk"></span>全选
                 </a>
             </div>
         </div>
-        <div  align="center" style="position: relative; padding: 15px 30px 0px 30px;">
-            <div  class="row-fluid list-group">
+        <div align="center" style="position: relative; padding: 15px 30px 0px 30px;">
+            <div class="row-fluid list-group">
                 <a href="javascript:void(0)" class="list-group-item" ng-class="sensor.isEnable ? 'active':''" ng-click="SwitchSensor($event, sensor)" ng-repeat="sensor in viewOfSensors | startFrom: (currentPage-1) * popPageSize | limitTo: popPageSize">
                     {{sensor.title}}&nbsp;{{sensor.channel}}
                 </a>
             </div>
         </div>
-        <div  align="center">
+        <div align="center">
             <pagination class="pagination-sm" total-items="viewOfSensors.length" ng-model="currentPage" items-per-page="popPageSize" max-size="9" boundary-links="true" rotate="false" num-pages="numPages" previous-text="上页" next-text="下页" first-text="首页" last-text="末页"></pagination>
         </div>
-        <div  style="margin-top: 15px; padding: 0px 20px 20px; text-align: center;">
+        <div style="margin-top: 15px; padding: 0px 20px 20px; text-align: center;">
             <button class="btn btn-primary" ng-click="Ok()">确定</button>
             <button class="btn btn-warning" ng-click="Cancel()">取消</button>
         </div>
-    </div></script><script type="text/ng-template" id="energyNodesRenderer.html"><div  ui-tree-handle data-nodrag class="tree-node">
-        <div  data-nodrag class="tree-node-content">
-            <div  data-nodrag ng-show="!node.editing">
+    </div></script><script type="text/ng-template" id="energyNodesRenderer.html"><div ui-tree-handle data-nodrag class="tree-node">
+        <div data-nodrag class="tree-node-content">
+            <div data-nodrag ng-show="!node.editing">
                 <a class="btn btn-success btn-xs" data-nodrag ng-click="toggle(this)" ng-show="node.level<=1">
                     <span class="glyphicon" ng-class="{'glyphicon-chevron-right': collapsed, 'glyphicon-chevron-down': !collapsed}"></span>
                 </a>
@@ -86,9 +86,9 @@
                 </a>
             </div>
 
-            <div  class="group-title angular-ui-tree-handle" data-nodrag ng-show="node.editing">
+            <div class="group-title angular-ui-tree-handle" data-nodrag ng-show="node.editing">
                 <form class="form-inline" role="form">
-                    <div  class="form-group">
+                    <div class="form-group">
                         <!--<label class="sr-only" for="groupName">Group name</label>-->
                         <input type="text" class="form-control" placeholder="能耗类型名称" ng-model="node.title">
                     </div>

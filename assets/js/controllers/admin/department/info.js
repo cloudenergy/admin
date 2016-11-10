@@ -1,6 +1,4 @@
-angular.module('app').controller('departmentInfo', ["$scope", "$timeout", "$uibModal", "$api", "Account", "API", "Auth", "uiGridConstants", "$q", "UI", "$rootScope", "$filter", function ($scope, $timeout, $uibModal, $api, Account, API, Auth, uiGridConstants, $q, UI, $rootScope, $filter) {
-    var self = this,
-        nowDate = new Date();
+angular.module('app').controller('departmentInfo', ["$scope", "$timeout", "$uibModal", "$api", "Auth", "uiGridConstants", "$q", "UI", "$rootScope", "$filter", function ($scope, $timeout, $uibModal, $api, Auth, uiGridConstants, $q, UI, $rootScope, $filter) {
     Auth.Check($scope.operateStatus = {
         create: {
             isEnable: false,
@@ -96,7 +94,7 @@ angular.module('app').controller('departmentInfo', ["$scope", "$timeout", "$uibM
                         sensor.status.switch = {
                             EMC_ON: true,
                             EMC_OFF: false
-                        }[sensor.status.switch] || true;
+                        }[sensor.status.switch] || false;
                     });
                     item.sensorAll = item.sensorAll.join('');
 
@@ -152,7 +150,7 @@ angular.module('app').controller('departmentInfo', ["$scope", "$timeout", "$uibM
                             ctrlcode: md5.createHash($scope.password).toUpperCase(),
                             command: 'EMC_SWITCH', //开关机控制控制命令
                             param: {
-                                mode: 'EMC_OFF' || 'EMC_ON'
+                                mode: sensor.status.switch ? 'EMC_ON' : 'EMC_OFF'
                             }
                         }, function (data) {
                             if (data.code) {
@@ -169,32 +167,23 @@ angular.module('app').controller('departmentInfo', ["$scope", "$timeout", "$uibM
             });
         };
         //消费清单
-        $scope.OnConsumeList = function (id) {
-            self.id = id;
+        $scope.OnConsumeList = function (ConsumeId) {
             $uibModal.open({
                 size: 'lg',
                 templateUrl: 'consume_list.html',
-                controller: ["$scope", function ($scope) {
-                    $scope.startDate = $filter('date')(nowDate, 'yyyy-MM-01');
-                    $scope.endDate = $filter('date')(nowDate, 'yyyy-MM-dd');
-                    Auth.Check(function () {
-                        LoadBillingAccount();
+                controller: ["$scope", "$uibModalInstance", function ($scope, $uibModalInstance) {
 
-                        function LoadBillingAccount() {
-                            API.Query(Account.info, {
-                                id: self.id
-                            }, function (result) {
-                                $scope.listTitle = result.result.title;
-                                if (result.err) {
-                                    //error
-                                } else {
-                                    self.list();
-                                }
-                            });
-                        }
+                    $scope.startDate = $filter('date')(new Date(), 'yyyy-MM-01');
+                    $scope.endDate = $filter('date')(new Date(), 'yyyy-MM-dd');
+
+                    $api.account.info({
+                        id: ConsumeId
+                    }, function (result) {
+                        $scope.listTitle = result.result.title;
+                        $scope.list();
                     });
 
-                    self.list = function (loadMore) {
+                    $scope.list = function (loadMore) {
                         if (loadMore && $scope.gridOptions.paging && $scope.gridOptions.paging.count <= ($scope.gridOptions.paging.pageindex * $scope.gridOptions.paging.pagesize)) {
                             return;
                         }
@@ -205,7 +194,7 @@ angular.module('app').controller('departmentInfo', ["$scope", "$timeout", "$uibM
                             pagesize: 50,
                             project: [{
                                 id: $rootScope.Project.selected._id,
-                                account: self.id
+                                account: ConsumeId
                             }]
                         }, function (data) {
                             data = data.result[$rootScope.Project.selected._id] || {};
@@ -225,7 +214,7 @@ angular.module('app').controller('departmentInfo', ["$scope", "$timeout", "$uibM
                             return data;
                         }).$promise;
                     };
-                    $scope.list = self.list;
+
                     //筛选
                     $scope.filter = function () {
                         $scope.gridOptions.enableFiltering = !$scope.gridOptions.enableFiltering;
@@ -234,10 +223,10 @@ angular.module('app').controller('departmentInfo', ["$scope", "$timeout", "$uibM
 
                     //导出
                     $scope.export = function () {
-                        var name = $filter('date')(new Date(), 'yyyyMMdd_HHmmss');
-                        $scope.gridOptions.exporterCsvFilename = $rootScope.Project.selected.title + '_财务_' + $scope.listTitle + '_' + '消费清单' + name + '.csv';
-                        $scope.gridApi.exporter.csvExport('visible', 'visible', angular.element(document.querySelectorAll('.subContent')));
+                        $scope.gridOptions.exporterCsvFilename = $rootScope.Project.selected.title + '_户管理_消费清单_' + $scope.listTitle + '_' + $filter('date')(new Date(), 'yyyyMMdd_HHmmss') + '.csv';
+                        $scope.gridApi.exporter.csvExport('visible', 'visible', angular.element(document.querySelectorAll('.modal-body')));
                     };
+
                     $scope.gridOptions = {
                         onRegisterApi: function (gridApi) {
                             gridApi.infiniteScroll.on.needLoadMoreData($scope, function () {
@@ -258,7 +247,7 @@ angular.module('app').controller('departmentInfo', ["$scope", "$timeout", "$uibM
                                     } else {
                                         reject();
                                     }
-                                }(self.list(true)));
+                                }($scope.list(true)));
                                 return defer.promise;
                             });
 
@@ -279,9 +268,9 @@ angular.module('app').controller('departmentInfo', ["$scope", "$timeout", "$uibM
                             enableColumnMenu: false,
                             exporterSuppressExport: true,
                             headerCellClass: 'text-center',
-                            headerCellTemplate: '<div  class="ui-grid-cell-contents">序号</div>',
+                            headerCellTemplate: '<div class="ui-grid-cell-contents">序号</div>',
                             cellClass: 'text-center',
-                            cellTemplate: '<div  class="ui-grid-cell-contents" ng-bind="grid.renderContainers.body.visibleRowCache.indexOf(row)+1"></div>'
+                            cellTemplate: '<div class="ui-grid-cell-contents" ng-bind="grid.renderContainers.body.visibleRowCache.indexOf(row)+1"></div>'
                         }, {
                             displayName: '消费项目',
                             name: 'consists',
@@ -315,6 +304,11 @@ angular.module('app').controller('departmentInfo', ["$scope", "$timeout", "$uibM
                             }[col.field] ? '="' + (value || '') + '"' : value;
                         }
                     };
+
+                    $scope.cancel = function () {
+                        $uibModalInstance.dismiss('cancel');
+                    };
+
                 }],
                 resolve: {
                     ProjectID: function () {
