@@ -1,7 +1,7 @@
-<div class="row"><div class="col-md-12"><div class="panel panel-default"><div class="panel-body"><form class="form-inline" ng-submit="GetDepartment()"><label class="form-group pb10 mr5">余额小于</label><div class="form-group pb10 mr15"><input type="text" class="form-control" placeholder="输入账户余额数值" ng-model="filterAmount"></div><label class="form-group pb10 mr5">关键字</label><div class="form-group pb10 mr5"><input type="text" class="form-control" placeholder="商户,账户,传感器名称" ng-model="departmentKey"></div><div class="form-group pb10 mr15"><button type="submit" class="btn btn-sm btn-info"><span class="glyphicon glyphicon-search"></span> 查询</button></div><div class="form-group pb10 pull-right"><a class="btn btn-sm btn-primary" ui-sref="admin.department.create" ng-show="operateStatus.create.isEnable"><i class="glyphicon glyphicon-plus"></i> 添加户 </a><a class="btn btn-sm btn-info ml5" href="javascript:void(0)" ng-click="OnImportDepartment()"><i class="glyphicon glyphicon-import"></i> 导入商户 </a><a class="btn btn-sm btn-success ml5" href="javascript:void(0)" ng-click="OnBatchRecharge()"><i class="glyphicon glyphicon-usd"></i> 批量充值</a></div></form><table class="table table-hover table-bordered departmentTable"><thead><tr><th style="width:60px;text-align:center">全选<checkbox checked="multiCheck.all" on-check="multiCheck('all')"></checkbox></th><th class="text-center" style="width:60px">序号</th><th>商户名称</th><th>商户账户</th><th>传感器<span class="pull-right">开/关</span></th><th>面积</th><th>房间编号</th><th class="text-center" style="width:150px">余额</th><th class="text-center" style="width:170px"><span class="col-sm-4 text-center">状态</span><div class="col-sm-6" style="width:90px;height:25px;margin-top:-5px" ng-if="statusenum.length"><ui-select ng-model="statusenum.selected" remove-selected="false"><ui-select-match placeholder="--状态--">{{$select.selected.title}}</ui-select-match><ui-select-choices repeat="item.id as item in statusenum | filter: $select.search"><div ng-bind-html="item.title | highlight: $select.search"></div></ui-select-choices></ui-select></div></th></tr></thead><tbody><tr ng-repeat="department in listData"><td style="width:60px;text-align:center"><checkbox checked="department.isSelected" on-check="multiCheck()"></checkbox></td><td class="text-center" ng-bind="(listData.index-1)*paging.size+$index+1"></td><td class="nowrap"><span class="btn text-blue" ui-sref="admin.department.edit({id:department._id,uid:department.account._id})">{{department.title}}</span></td><td><span class="btn text-blue" ui-sref="admin.department.edit({id:department._id,uid:department.account._id})">{{department.account._id}}</span></td><td data-hint="{{department.sensorAll}}" style="line-height: 24px"><div class="clearfix" ng-repeat="sensor in department.sensors" ng-class="{'bb': !$last, pt2: !$first}">ID：{{sensor.addrid}}&nbsp;&nbsp; 名称：{{sensor.title}}<label class="switch switch-sm pull-right mb0"><input type="checkbox" ng-model="sensor.status.switch" ng-click="switchControl(sensor)"> <span><i class="handle"></i></span></label></div></td><td class="nowrap">{{department.area}} <small>m<sup>2</sup></small></td><td>{{department.tag}}</td><td><span class="col-md-6 col-sm-12 pl0" ng-class="{'text-danger':department.account.billingAccount.cash<0}">{{department.account.billingAccount.cash}}</span> <a class="col-md-6 col-sm-12" ng-click="amount(department.title,department.account._id,department.account.billingAccount.cash)" ng-show="operateStatus.edit.isEnable"><button type="button" class="btn-default text-green" style="width:40px;border:1px solid #7cc17c">充值</button></a></td><td class="text-center" ng-class="{'text-danger':department.account.billingAccount.cash<0}"><span class="col-md-5 col-sm-12 pl0">{{department.status}}</span> <a ng-if="department.account.billingAccount.cash<0" class="col-md-5 col-sm-12" ng-click="remindrecharge(department)" ng-show="operateStatus.edit.isEnable"><button type="button" class="btn-default text-warning" style="width:40px;border:1px solid #fdc565">催缴</button> </a><span ng-if="department.account.billingAccount.cash<0" class="col-md-2 col-sm-12 text-warning">{{department.remindercount}}</span></td></tr></tbody></table><div class="form-group" ng-show="showButton"><a class="btn btn-sm btn-warning ml5" href="javascript:void(0)" ng-click="remindrecharge()"><i class="glyphicon glyphicon-envelope"></i> 催缴 </a><a class="btn btn-sm btn-danger ml5" href="javascript:void(0)" ng-click="DoRemove()"><i class="glyphicon glyphicon-minus"></i> 删除</a></div><ui-select class="pull-left" style="width:110px" ng-model="paging.size" search-enabled="false" remove-selected="false"><ui-select-match placeholder="每页条目">{{$select.selected.title}}</ui-select-match><ui-select-choices position="up" repeat="item.key as item in paging.items"><div ng-bind-html="item.title"></div></ui-select-choices></ui-select><uib-pagination class="pull-right mt0 mb0" total-items="listData.total" ng-model="paging.index" items-per-page="paging.size" max-size="10" rotate="false" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination></div></div></div></div><script type="text/ng-template" id="consume_list.html"><div class="modal-content">
+<div class="row"><div class="col-md-12"><div class="panel panel-default"><div class="panel-body"><form class="form-inline" ng-submit="GetDepartment()"><div class="form-group pb10 mr15" style="width:72px" ng-if="statusenum.length"><ui-select ng-model="statusenum.selected" remove-selected="false"><ui-select-match placeholder="--状态--">{{$select.selected.title}}</ui-select-match><ui-select-choices repeat="item.id as item in statusenum | filter: $select.search"><div ng-bind-html="item.title | highlight: $select.search"></div></ui-select-choices></ui-select></div><label class="form-group pb10 mr5">余额小于</label><div class="form-group pb10 mr15"><input type="text" class="form-control" placeholder="输入账户余额数值" ng-model="filterAmount"></div><label class="form-group pb10 mr5">关键字</label><div class="form-group pb10 mr5"><input type="text" class="form-control" placeholder="商户,账户,传感器名称" ng-model="departmentKey"></div><div class="form-group pb10 mr15"><button type="submit" class="btn btn-sm btn-info"><span class="glyphicon glyphicon-search"></span> 查询</button></div><div class="form-group pb10 pull-right"><a class="btn btn-sm btn-primary" ui-sref="admin.department.create" ng-show="operateStatus.create.isEnable"><i class="glyphicon glyphicon-plus"></i> 添加户 </a><a class="btn btn-sm btn-info ml5" href="javascript:void(0)" ng-click="OnImportDepartment()"><i class="glyphicon glyphicon-import"></i> 导入商户 </a><a class="btn btn-sm btn-warning ml5" href="javascript:void(0)" ng-click="OnBatchRecharge()"><i class="glyphicon glyphicon-usd"></i> 批量充值</a></div></form><table class="table table-hover table-bordered"><thead><tr><th class="text-center" style="width:60px">序号</th><th>商户名称</th><th>商户账户</th><th>面积</th><th>传感器<span class="pull-right">开/关</span></th><th>余额</th><th class="text-center" style="width:60px">状态</th><th class="text-center" style="width:220px">操作</th></tr></thead><tbody><tr ng-repeat="department in listData"><td class="text-center" ng-bind="(listData.index-1)*paging.size+$index+1"></td><td class="nowrap">{{department.title}}</td><td>{{department.account._id}}</td><td class="nowrap">{{department.area}} <small>m2</small></td><td data-hint="{{department.sensorAll}}" style="line-height: 24px"><div class="clearfix" ng-repeat="sensor in department.sensors" ng-class="{'bb': !$last, pt2: !$first}">ID：{{sensor.addrid}}&nbsp;&nbsp; 名称：{{sensor.title}}<label class="switch switch-sm pull-right mb0"><input type="checkbox" ng-model="sensor.status.switch" ng-click="switchControl(sensor)"> <span><i class="handle"></i></span></label></div></td><td ng-class="{'text-danger':department.account.billingAccount.cash<0}">{{department.account.billingAccount.cash}}</td><th class="text-center" ng-class="{'text-danger':department.account.billingAccount.cash<0}">{{department.status}}</th><td class="text-center nowrap" style="font-size:12px"><a class="mr10" ui-sref="admin.department.amount({account:department.account._id})" ng-show="operateStatus.edit.isEnable"><i class="glyphicon glyphicon-usd"></i>充值 </a><a class="mr10" href="javascript:void(0)" ng-click="OnConsumeList(department.account._id)" ng-show="operateStatus.edit.isEnable"><i class="glyphicon glyphicon-list"></i>清单 </a><a class="mr10" ui-sref="admin.department.edit({id:department._id})" ng-show="operateStatus.edit.isEnable"><i class="glyphicon glyphicon-edit"></i>编辑 </a><a href="javascript:void(0)" ng-click="askingRemoveID=department._id" ng-show="department._id!==askingRemoveID && operateStatus.edit.isEnable"><span><i class="glyphicon glyphicon-trash"></i>删除</span> </a><a class="text-warning mr5" href="javascript:void(0)" ng-show="department._id===askingRemoveID" ng-click="askingRemoveID=0"><i class="glyphicon glyphicon-remove"></i>取消</a> <a class="text-danger" href="javascript:void(0)" ng-show="department._id===askingRemoveID" ng-click="DoRemove(department._id)"><i class="glyphicon glyphicon-ok"></i>确定</a></td></tr></tbody></table><ui-select class="pull-left" style="width:110px" ng-model="paging.size" search-enabled="false" remove-selected="false"><ui-select-match placeholder="每页条目">{{$select.selected.title}}</ui-select-match><ui-select-choices position="up" repeat="item.key as item in paging.items"><div ng-bind-html="item.title"></div></ui-select-choices></ui-select><uib-pagination class="pull-right mt0 mb0" total-items="listData.total" ng-model="paging.index" items-per-page="paging.size" max-size="10" rotate="false" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination></div></div></div></div><script type="text/ng-template" id="consume_list.html"><div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" ng-click="cancel()"><span>&times;</span></button>
-            <h4 class="modal-title">消耗清单：<span ng-bind="listTitle"></span></h4>
+            <h4 class="modal-title">消费清单：<span ng-bind="listTitle"></span></h4>
         </div>
         <div class="modal-body" ui-i18n="'zh-cn'">
             <div class="form-inline text-right mb10">
@@ -17,27 +17,11 @@
                 <div class="btn-group btn-group-sm ml10">
                     <button type="button" class="btn btn-primary ml10" ng-click="list()"><span class="glyphicon glyphicon-search"></span> 查询</button>
                 </div>
-            </div>
-            <div ui-grid="gridOptions" ui-grid-auto-resize ui-grid-exporter ui-grid-move-columns ui-grid-resize-columns ui-grid-infinite-scroll></div>
-        </div>
-    </div></script><script type="text/ng-template" id="amount_list.html"><div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" ng-click="cancel()"><span>&times;</span></button>
-            <h4 class="modal-title">充值清单：<span ng-bind="listTitle"></span></h4>
-        </div>
-        <div class="modal-body" ui-i18n="'zh-cn'">
-            <div class="form-inline text-right mb10">
-                <div class="form-group has-feedback date w150 toggle-active">
-                    <input type="text" class="form-control" ng-model="startDate" datetimepicker="{maxRangeTo:'#end_date',rangeDay:30}" id="start_date">
-                    <span class="form-control-feedback"><i class="fa fa-calendar"></i></span>
-                </div>
-                <div class="form-group"><i class="glyphicon glyphicon-minus"></i></div>
-                <div class="form-group has-feedback date w150 toggle-active ml10">
-                    <input type="text" class="form-control" ng-model="endDate" datetimepicker="{minRangeTo:'#start_date',rangeDay:30}" id="end_date">
-                    <span class="form-control-feedback"><i class="fa fa-calendar"></i></span>
+                <div class="btn-group btn-group-sm ml10">
+                    <button type="button" class="btn btn-primary" ng-click="filter()"><i class="fa fa-filter"></i>筛选</button>
                 </div>
                 <div class="btn-group btn-group-sm ml10">
-                    <button type="button" class="btn btn-primary ml10" ng-click="list()"><span class="glyphicon glyphicon-search"></span> 查询</button>
+                    <button type="button" class="btn btn-primary" ng-click="export()"><i class="glyphicon glyphicon-export"></i>导出</button>
                 </div>
             </div>
             <div ui-grid="gridOptions" ui-grid-auto-resize ui-grid-exporter ui-grid-move-columns ui-grid-resize-columns ui-grid-infinite-scroll></div>
@@ -85,70 +69,5 @@
         <div class="text-right pb15">
             <button class="btn btn-sm btn-primary mr5" ng-click="OnSubmit()">验证</button>
             <button class="btn btn-sm btn-warning" ng-click="OnCancel()">取消</button>
-        </div>
-    </div></script><script type="text/ng-template" id="amount.html"><div class="modal-content">
-        <div class="modal-header">
-            <h4 class="modal-title col-sm-6">账户充值<span ng-bind="listTitle"></span></h4>
-            <div class="col-sm-6">
-                <button type="button" class="close" ng-click="cancel()"><span>&times;</span></button>
-                <h5 class="pull-right text-blue mr10"><a href="javascript:void(0)" ng-click="OnConsumeList(account)">消耗记录</a></h5>
-                <h5 class="pull-right text-blue mr10"><a href="javascript:void(0)" ng-click="OnChargeLog(account)">充值记录</a></h5>
-            </div>
-        </div>
-        <div class="modal-body text-center" ui-i18n="'zh-cn'">
-            <div class="input-group" style="margin:0 auto">
-                <div class="col-sm-12">
-                    <label class="col-sm-4 col-sm-offset-2 control-label ml5" style="line-height:34px;">商户名称</label>
-                    <div class="col-sm-6 text-right" style="line-height:34px;">
-                        {{title}}
-                    </div>
-                </div>
-                <div class="col-sm-12">
-                    <label class="col-sm-4 col-sm-offset-2 control-label ml5" style="line-height:34px;">商户账号</label>
-                    <div class="col-sm-6 text-right" style="line-height:34px;">
-                        {{account}}
-                    </div>
-                </div>
-                <div class="col-sm-12">
-                    <label class="col-sm-4 col-sm-offset-2 control-label ml5" style="line-height:34px;">当前余额</label>
-                    <div class="col-sm-6 text-right" ng-class="{'text-danger':amount<0}" style="line-height:34px;">
-                        ¥ {{amount}}
-                    </div>
-                </div>
-                <div class="col-sm-12 mt10 mb10">
-                    <label class="col-sm-4 col-sm-offset-2 control-label ml5 mr10" style="line-height:34px;">充值方式</label>
-                    <ui-select class=" col-sm-offset-3 col-sm-3" ng-model="channels.selected" search-enabled="false" remove-selected="false">
-                        <ui-select-match placeholder="充值方式">{{$select.selected.origin}}</ui-select-match>
-                        <ui-select-choices repeat="item.id as item in channels">
-                            <div ng-bind-html="item.origin"></div>
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
-                <div class="col-sm-12">
-                    <label class="col-sm-4 col-sm-offset-2 control-label ml5" style="line-height:34px;">充值金额</label>
-                    <div class="col-sm-offset-3 col-sm-3">
-                        <input class="form-control ml10" type="number" required step="0.01" ng-model="cash" placeholder="请输入金额">
-                    </div>
-                    <lable class="pull-left" style="line-height:34px;">元</lable>
-                </div>
-            </div>
-        </div>
-        <div class="modal-footer text-center" ui-i18n="'zh-cn'">
-            <div class="input-group" style="margin:0 auto">
-                <div class="input-group" style="margin:0 auto">
-                    <button type="submit" class="btn btn-success" ng-click="OnCharge()"><span class="glyphicon glyphicon-ok"></span>&nbsp;充值</button>
-                </div>
-            </div>
-        </div>
-    </div></script><script type="text/ng-template" id="departmentDelete.html"><div class="container-fluid">
-        <div class="text-center bb no-margin p10 h3">
-            删除户
-        </div>
-        <div class="pt15 pb15 text-center">
-            确认删除勾选的户？
-        </div>
-        <div class="modal-footer text-center" ui-i18n="'zh-cn'">
-            <button class="btn btn-sm btn-danger mr5" ng-click="ok()">删除</button>
-            <button class="btn btn-sm btn-warning" ng-click="cancel()">取消</button>
         </div>
     </div></script>
