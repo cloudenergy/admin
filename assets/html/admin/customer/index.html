@@ -21,6 +21,7 @@
         <form class="form-inline" ng-submit="searchSensor(true)">
             <input type="text" class="form-control" placeholder="关键字：ID或名称" ng-model="sensorSearchKey" ng-blur="searchSensor()">
             <button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-search"></span> 查询</button>
+            <button type="button" class="btn btn-success pull-right" ng-click="invertSelect()"><span class="glyphicon glyphicon-asterisk"></span>反选</button>
             <button type="button" class="btn btn-success pull-right" ng-click="selectAll()"><span class="glyphicon glyphicon-asterisk"></span>全选</button>
         </form>
         <div class="list-group mt15">
