@@ -17,6 +17,12 @@
                 <div class="btn-group btn-group-sm ml10">
                     <button type="button" class="btn btn-primary ml10" ng-click="list()"><span class="glyphicon glyphicon-search"></span> 查询</button>
                 </div>
+                <div class="btn-group btn-group-sm ml10">
+                    <button type="button" class="btn btn-primary" ng-click="filter()"><i class="fa fa-filter"></i>筛选</button>
+                </div>
+                <div class="btn-group btn-group-sm ml10">
+                    <button type="button" class="btn btn-primary" ng-click="export()"><i class="glyphicon glyphicon-export"></i>导出</button>
+                </div>
             </div>
             <div ui-grid="gridOptions" ui-grid-auto-resize ui-grid-exporter ui-grid-move-columns ui-grid-resize-columns ui-grid-infinite-scroll></div>
         </div>
@@ -149,6 +155,18 @@
         </div>
         <div class="modal-footer text-center" ui-i18n="'zh-cn'">
             <button class="btn btn-sm btn-danger mr5" ng-click="ok()">删除</button>
+            <button class="btn btn-sm btn-warning" ng-click="cancel()">取消</button>
+        </div>
+    </div></script><script type="text/ng-template" id="downloadLink.html"><div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title col-sm-6">充值回单下载<span ng-bind="listTitle"></span></h4>
+        </div>
+        <div class="modal-body text-center" ui-i18n="'zh-cn'">
+            <div class="input-group ml15" ng-if="downloadLink">
+                (点击下载<a target="_blank" ng-href="{{downloadLink}}" class="text-primary">充值回单<i class="glyphicon glyphicon-download-alt"></i></a>)
+            </div>
+        </div>
+        <div class="modal-footer text-center" ui-i18n="'zh-cn'">
             <button class="btn btn-sm btn-warning" ng-click="cancel()">取消</button>
         </div>
     </div></script>
