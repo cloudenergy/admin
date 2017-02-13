@@ -66,38 +66,55 @@
         <div align="center" style="padding: 30; border-bottom: 1px solid #E5E5E5; min-height: 16; ">
             <h3>传感器属性</h3>
         </div>
-        <div class="row sensorItem">
-            <div class="col-lg-2"></div>
-            <div class="col-lg-3" align="right">传感器驱动：</div>
-            <div class="col-lg-4">
-                <select class="form-control" ng-options="drivercompany.id as drivercompany.id for drivercompany in DriverCompany" ng-model="drivercompanySelected">
-                </select>
+        <div class="row sensorItem ml20">
+            <div class="btn-group">
+                <a class="btn" ng-class="{'btn-primary':!else,'btn-default':else}" ng-click="else=false">
+                            驱动
+                        </a>
+                <a class="btn" ng-class="{'btn-primary':else,'btn-default':!else}" ng-click="else=true">
+                            其他
+                        </a>
             </div>
-            <div class="col-lg-2"></div>
         </div>
-        <div class="row sensorItem">
-            <div class="col-lg-2"></div>
-            <div class="col-lg-3" align="right"></div>
-            <div class="col-lg-4">
-                <select class="form-control" ng-options="drivername.id as drivername.id for drivername in DriverName" ng-model="driverNameSelected"></select>
+        <div class="row" ng-if="!else">
+            <div class="row sensorItem">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-3" align="right">传感器驱动：</div>
+                <div class="col-lg-4">
+                    <select class="form-control" ng-options="drivercompany.id as drivercompany.id for drivercompany in DriverCompany" ng-model="drivercompanySelected">
+                    </select>
+                </div>
+                <div class="col-lg-2"></div>
             </div>
-            <div class="col-lg-2"></div>
+            <div class="row sensorItem">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-3" align="right"></div>
+                <div class="col-lg-4">
+                    <select class="form-control" ng-options="drivername.id as drivername.id for drivername in DriverName" ng-model="driverNameSelected"></select>
+                </div>
+                <div class="col-lg-2"></div>
+            </div>
+            <div class="row sensorItem">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-3" align="right"></div>
+                <div class="col-lg-4">
+                    <select class="form-control" ng-options="driverversion.id as driverversion.id for driverversion in DriverVersion" ng-model="driverVersionSelected"></select>
+                </div>
+                <div class="col-lg-2"></div>
+            </div>
+            <div class="row sensorItem">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-3" align="right">传感器型号：</div>
+                <div class="col-lg-4">
+                    <select class="form-control" ng-options="adaptdevice.code as adaptdevice.desc for adaptdevice in AdaptDevice" ng-model="adaptDeviceSelected"></select>
+                </div>
+                <div class="col-lg-2"></div>
+            </div>
         </div>
-        <div class="row sensorItem">
-            <div class="col-lg-2"></div>
-            <div class="col-lg-3" align="right"></div>
-            <div class="col-lg-4">
-                <select class="form-control" ng-options="driverversion.id as driverversion.id for driverversion in DriverVersion" ng-model="driverVersionSelected"></select>
+        <div class="row" ng-if="else">
+            <div class="row sensorItem">
+                <div class="col-lg-4 col-lg-offset-4">仪表总表 <input type="checkbox"></div>
             </div>
-            <div class="col-lg-2"></div>
-        </div>
-        <div class="row sensorItem">
-            <div class="col-lg-2"></div>
-            <div class="col-lg-3" align="right">传感器型号：</div>
-            <div class="col-lg-4">
-                <select class="form-control" ng-options="adaptdevice.code as adaptdevice.desc for adaptdevice in AdaptDevice" ng-model="adaptDeviceSelected"></select>
-            </div>
-            <div class="col-lg-2"></div>
         </div>
         <div style="margin-top: 15px; padding: 0px 20px 20px; text-align: center;">
             <button class="btn btn-primary" ng-click="Ok()">确定</button>
