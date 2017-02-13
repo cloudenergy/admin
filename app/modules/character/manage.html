@@ -1,0 +1,53 @@
+<style>.tree-node {
+        border: 1px solid #dae2ea;
+        background: #f8faff;
+        color: #7c9eb2;
+    }
+    
+    .tree-node-content {
+        margin: 10px;
+    }
+    
+    .tree-handle {
+        padding: 10px;
+        background: #428bca;
+        color: #FFF;
+        margin-right: 10px;
+    }
+    
+    .angular-ui-tree-placeholder {
+        background: #f0f9ff;
+        border: 2px dashed #bed2db;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }</style><script type="text/ng-template" id="nodes_renderer1.html"><div class="tree-node">
+        <div class="tree-node-content">
+            <div data-nodrag ng-show="!node.editing">
+                <a class="btn btn-success btn-xs" data-nodrag>
+                    <span class="glyphicon" ng-class="{'glyphicon-chevron-right': collapsed, 'glyphicon-chevron-down': !collapsed}" ng-click="this.toggle()"></span>
+                </a>
+                <!--{{node._id}} {{node.desc ? ' - ':''}} {{node.desc}}-->
+                <b ng-bind="node._id+(node.desc&&(' - '+node.desc)||'')"></b>
+                <span ng-show="!node.nodes.length">
+                    <a class="pull-right btn btn-success btn-xs hint hint--bottom hint--success" data-nodrag ng-click="node.select = !node.select" ng-show="!node.select" style="margin-right: 8px;" data-hint="启用节点">
+                        <i class="glyphicon glyphicon-ok-circle"></i>
+                    </a>
+                    <a class="pull-right btn btn-danger btn-xs hint hint--bottom hint--error" data-nodrag ng-click="node.select = !node.select" ng-show="node.select" style="margin-right: 8px;" data-hint="停用节点">
+                        <i class="glyphicon glyphicon-ban-circle"></i>
+                    </a>
+                </span>
+                <span ng-show="node.nodes.length">
+                    <a class="pull-right btn btn-success btn-xs hint hint--bottom hint--success" data-nodrag ng-click="$ctrl.EnableSubNode(node, true)" style="margin-right: 8px;" data-hint="启用所有子节点">
+                        <i class="glyphicon glyphicon-ok-circle"></i>
+                    </a>
+                    <a class="pull-right btn btn-danger btn-xs hint hint--bottom hint--error" data-nodrag ng-click="$ctrl.EnableSubNode(node, false)" style="margin-right: 8px;" data-hint="停用所有子节点">
+                        <i class="glyphicon glyphicon-ban-circle"></i>
+                    </a>
+                </span>
+            </div>
+        </div>
+    </div>
+    <ol ui-tree-nodes ng-model="node.nodes" ng-class="{hidden: collapsed}">
+        <li ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer1.html'" collapsed="true" ng-if="!collapsed"></li>
+    </ol></script><div class="row"><div class="col-xs-12 col-sm-12 adminBody"><div class="panel panel-default"><div class="panel-body"><form class="form-horizontal" role="form" name="form" ng-submit="$ctrl.OnSave()"><div class="form-group container-fluid pb15" style="border-bottom: 1px solid #eee"><a class="btn btn-warning" ui-sref="admin.character.info"><span class="glyphicon glyphicon-chevron-left"></span> 角色列表</a></div><div class="form-group"><label class="col-sm-2 control-label">角色名</label><div class="col-sm-8"><input type="text" class="form-control" ng-model="$ctrl.character.title" required></div></div><div class="form-group"><label class="col-sm-2 control-label">权限列表</label><div class="col-sm-8"><div ui-tree id="urlpath-root"><ol ui-tree-nodes ng-model="$ctrl.urlpath"><li ng-repeat="node in $ctrl.urlpath" ui-tree-node ng-include="'nodes_renderer1.html'"></li></ol></div></div></div><div class="form-group container-fluid pb15"><div class="text-center"><button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span>&nbsp;保存</button></div></div></form></div></div></div></div>
