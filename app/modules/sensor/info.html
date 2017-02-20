@@ -81,8 +81,12 @@
                 <div class="col-lg-2"></div>
                 <div class="col-lg-3" align="right">传感器驱动：</div>
                 <div class="col-lg-4">
-                    <select class="form-control" ng-options="drivercompany.id as drivercompany.id for drivercompany in DriverCompany" ng-model="drivercompanySelected">
-                    </select>
+                    <ui-select ng-model="DriverCompany.selected" remove-selected="false">
+                        <ui-select-match placeholder="--选择传感器厂商--">{{$select.selected.id}}</ui-select-match>
+                        <ui-select-choices repeat="item in DriverCompany | filter: $select.search">
+                            <div ng-bind-html="item.id | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
                 <div class="col-lg-2"></div>
             </div>
@@ -90,7 +94,13 @@
                 <div class="col-lg-2"></div>
                 <div class="col-lg-3" align="right"></div>
                 <div class="col-lg-4">
-                    <select class="form-control" ng-options="drivername.id as drivername.id for drivername in DriverName" ng-model="driverNameSelected"></select>
+                    <!--<select class="form-control" ng-options="drivername.id as drivername.id for drivername in DriverName" ng-model="driverNameSelected"></select>-->
+                    <ui-select ng-model="DriverName.selected" remove-selected="false">
+                        <ui-select-match placeholder="--选择传感器驱动名称--">{{$select.selected.id}}</ui-select-match>
+                        <ui-select-choices repeat="item in DriverName | filter: $select.search">
+                            <div ng-bind-html="item.id | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
                 <div class="col-lg-2"></div>
             </div>
@@ -98,22 +108,34 @@
                 <div class="col-lg-2"></div>
                 <div class="col-lg-3" align="right"></div>
                 <div class="col-lg-4">
-                    <select class="form-control" ng-options="driverversion.id as driverversion.id for driverversion in DriverVersion" ng-model="driverVersionSelected"></select>
+                    <!--<select class="form-control" ng-options="driverversion.id as driverversion.id for driverversion in DriverVersion" ng-model="driverVersionSelected"></select>-->
+                    <ui-select ng-model="DriverVersion.selected" remove-selected="false">
+                        <ui-select-match placeholder="--选择传感器驱动版本--">{{$select.selected.id}}</ui-select-match>
+                        <ui-select-choices repeat="item in DriverVersion | filter: $select.search">
+                            <div ng-bind-html="item.id | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
                 <div class="col-lg-2"></div>
             </div>
-            <div class="row sensorItem">
+            <div class="row sensorItem" ng-show="devicedrive">
                 <div class="col-lg-2"></div>
                 <div class="col-lg-3" align="right">传感器型号：</div>
                 <div class="col-lg-4">
-                    <select class="form-control" ng-options="adaptdevice.code as adaptdevice.desc for adaptdevice in AdaptDevice" ng-model="adaptDeviceSelected"></select>
+                    <!--<select class="form-control" ng-options="adaptdevice.code as adaptdevice.desc for adaptdevice in AdaptDevice" ng-model="adaptDeviceSelected"></select>-->
+                    <ui-select ng-model="AdaptDevice.selected" remove-selected="false">
+                        <ui-select-match placeholder="--选择传感器型号--">{{$select.selected.desc}}</ui-select-match>
+                        <ui-select-choices repeat="item in AdaptDevice | filter: $select.search track by item.code">
+                            <div ng-bind-html="item.desc | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
                 <div class="col-lg-2"></div>
             </div>
         </div>
         <div class="row" ng-if="else">
             <div class="row sensorItem">
-                <div class="col-lg-4 col-lg-offset-4">仪表总表 <input type="checkbox"></div>
+                <div class="col-lg-4 col-lg-offset-4">仪表总表<input type="checkbox"></div>
             </div>
         </div>
         <div style="margin-top: 15px; padding: 0px 20px 20px; text-align: center;">
