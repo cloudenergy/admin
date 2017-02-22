@@ -25,11 +25,11 @@
         box-sizing: border-box;
     }</style><script type="text/ng-template" id="sensorSelect.html"><div class="container-fluid">
         <div align="center" style="padding: 30; border-bottom: 1px solid #E5E5E5; min-height: 16; ">
-            <h3>选择添加的传感器</h3>
+            <h3>选择添加的智能仪表</h3>
         </div>
         <div class="row mt20">
             <div class="col-lg-6">
-                <input type="text" class="form-control" id="input-customer-freq" placeholder="输入传感器ID或名称进行查询" ng-model="sensorSearchKey">
+                <input type="text" class="form-control" id="input-customer-freq" placeholder="输入智能仪表ID或名称进行查询" ng-model="sensorSearchKey">
             </div>
             <div class="col-lg-4">
                 <a class="btn btn-info" href="javascript:void(0)" ng-click="onSearchSensor($event)">
@@ -71,7 +71,6 @@
                 <!--<span ng-show="{{node.level>0}}">单位: {{node.unit}}</span>-->
                 <!--<span ng-show="{{node.level>0}}">标准煤: {{node.standcol}}</span>-->
                 <!--</span>-->
-
                 <a ng-show="{{node.level>1}}" class="pull-right btn btn-danger btn-xs hint hint--right hint--error" data-nodrag ng-click="deleteNode(this, node)" data-hint="删除">
                     <span class="glyphicon glyphicon-trash"></span>
                 </a>
@@ -81,11 +80,10 @@
                 <a ng-show="{{node.level>1}}" ng-show="{{node.level>=0}}" class="pull-right btn btn-primary btn-xs hint hint--bottom hint--info" data-nodrag ng-click="edit(node)" style="margin-right: 8px;" data-hint="编辑能耗分类">
                     <span class="glyphicon glyphicon-pencil"></span>
                 </a>
-                <a ng-show="node.level>1 && node.id" class="pull-right btn btn-warning btn-xs hint hint--bottom hint--warning" data-nodrag ng-click="sensor(node, $index)" style="margin-right: 8px;" data-hint="添加传感器">
+                <a ng-show="node.level>1 && node.id" class="pull-right btn btn-warning btn-xs hint hint--bottom hint--warning" data-nodrag ng-click="sensor(node, $index)" style="margin-right: 8px;" data-hint="添加智能仪表">
                     <span class="glyphicon glyphicon-th"></span>
                 </a>
             </div>
-
             <div class="group-title angular-ui-tree-handle" data-nodrag ng-show="node.editing">
                 <form class="form-inline" role="form">
                     <div class="form-group">
