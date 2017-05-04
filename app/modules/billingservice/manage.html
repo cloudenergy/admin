@@ -31,4 +31,15 @@
             <button class="btn btn-primary" ng-click="Ok()">保存</button>
             <button class="btn btn-warning" ng-click="Cancel()">取消</button>
         </div>
+    </div></script><script type="text/ng-template" id="UpdateAffirm.html"><div class="container-fluid">
+        <div align="center" style="padding: 30; border-bottom: 1px solid #E5E5E5; min-height: 16; ">
+            <h3>确认修改计费仪表？</h3>
+        </div>
+        <div align="center" style="position: relative; padding: 15px 30px 0px 30px;">
+            本次操作将新增{{SelectedSensorsIDS.length}}个智能仪表，删除{{DeleteIDS.length}}个智能仪表，是否确认操作？
+        </div>
+        <div style="margin-top: 15px; padding: 0px 20px 20px; text-align: center;">
+            <button class="btn btn-primary" ng-click="Ok()">保存</button>
+            <button class="btn btn-warning" ng-click="Cancel()">取消</button>
+        </div>
     </div></script>
