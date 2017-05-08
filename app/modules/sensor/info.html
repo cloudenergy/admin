@@ -70,6 +70,14 @@
                         </a>
             </div>
         </div>
+        <div class="row" ng-if="else==2">
+            <div class="row sensorItem col-sm-8 col-sm-offset-2">
+                设备标识<input class="form-control mb15" type="text" ng-model="sensorInfo.tag"> 设备名称
+                <input class="form-control mb15" type="text" ng-model="sensorInfo.title"> 更新频率
+                <input class="form-control mb15" type="text" ng-model="sensorInfo.frep"> 倍率
+                <input class="form-control mb15" type="text" ng-model="sensorInfo.comi">
+            </div>
+        </div>
         <div class="row" ng-if="else==1">
             <div class="row sensorItem">
                 <div class="col-lg-2"></div>
@@ -111,14 +119,6 @@
                     </ui-select>
                 </div>
                 <div class="col-lg-2"></div>
-            </div>
-            <div class="row" ng-if="else==2">
-                <div class="row sensorItem col-sm-8 col-sm-offset-2">
-                    设备标识<input class="form-control mb15" type="text" ng-model="sensorInfo.tag"> 设备名称
-                    <input class="form-control mb15" type="text" ng-model="sensorInfo.title"> 更新频率
-                    <input class="form-control mb15" type="text" ng-model="sensorInfo.frep"> 倍率
-                    <input class="form-control mb15" type="text" ng-model="sensorInfo.comi">
-                </div>
             </div>
             <div class="row sensorItem" ng-show="devicedrive">
                 <div class="col-lg-2"></div>
