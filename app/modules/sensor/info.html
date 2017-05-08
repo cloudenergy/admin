@@ -59,11 +59,11 @@
         </div>
         <div class="row sensorItem ml20">
             <div class="btn-group">
-                <a class="btn" ng-class="{1:'btn-primary',2:'btn-default',3:'btn-default'}[else]" ng-click="else=1">
-                            驱动
-                        </a>
                 <a class="btn" ng-class="{2:'btn-primary',1:'btn-default',3:'btn-default'}[else]" ng-click="else=2">
                             信息
+                        </a>
+                <a class="btn" ng-class="{1:'btn-primary',2:'btn-default',3:'btn-default'}[else]" ng-click="else=1">
+                            驱动
                         </a>
                 <a class="btn" ng-class="{3:'btn-primary',1:'btn-default',2:'btn-default'}[else]" ng-click="else=3">
                             其他
@@ -112,6 +112,14 @@
                 </div>
                 <div class="col-lg-2"></div>
             </div>
+            <div class="row" ng-if="else==2">
+                <div class="row sensorItem col-sm-8 col-sm-offset-2">
+                    设备标识<input class="form-control mb15" type="text" ng-model="sensorInfo.tag"> 设备名称
+                    <input class="form-control mb15" type="text" ng-model="sensorInfo.title"> 更新频率
+                    <input class="form-control mb15" type="text" ng-model="sensorInfo.frep"> 倍率
+                    <input class="form-control mb15" type="text" ng-model="sensorInfo.comi">
+                </div>
+            </div>
             <div class="row sensorItem" ng-show="devicedrive">
                 <div class="col-lg-2"></div>
                 <div class="col-lg-3" align="right">智能仪表型号：</div>
@@ -125,14 +133,6 @@
                     </ui-select>
                 </div>
                 <div class="col-lg-2"></div>
-            </div>
-        </div>
-        <div class="row" ng-if="else==2">
-            <div class="row sensorItem col-sm-8 col-sm-offset-2">
-                设备标识<input class="form-control mb15" type="text" ng-model="sensorInfo.tag"> 设备名称
-                <input class="form-control mb15" type="text" ng-model="sensorInfo.title"> 更新频率
-                <input class="form-control mb15" type="text" ng-model="sensorInfo.frep"> 倍率
-                <input class="form-control mb15" type="text" ng-model="sensorInfo.comi">
             </div>
         </div>
         <div class="row" ng-if="else==3">
