@@ -15,12 +15,34 @@
             <button class="btn btn-sm btn-danger mr5" ng-click="ok()">修改</button>
             <button class="btn btn-sm btn-warning" ng-click="cancel()">取消</button>
         </div>
+    </div></script><script type="text/ng-template" id="mobileChange.html"><div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">{{title}}手机号修改</h4>
+        </div>
+        <div class="modal-body text-center">
+            <input type="text" class="form-control" ng-model="account.mobile">
+        </div>
+        <div class="modal-footer text-center">
+            <button class="btn btn-sm btn-danger mr5" ng-click="ok()">修改</button>
+            <button class="btn btn-sm btn-warning" ng-click="cancel()">取消</button>
+        </div>
+    </div></script><script type="text/ng-template" id="emailChange.html"><div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">{{title}}手机号修改</h4>
+        </div>
+        <div class="modal-body text-center">
+            <input type="text" class="form-control" ng-model="account.email">
+        </div>
+        <div class="modal-footer text-center">
+            <button class="btn btn-sm btn-danger mr5" ng-click="ok()">修改</button>
+            <button class="btn btn-sm btn-warning" ng-click="cancel()">取消</button>
+        </div>
     </div></script><script type="text/ng-template" id="characterChange.html"><div class="modal-content">
         <div class="modal-header">
             <h4 class="modal-title">{{title}}权限级别修改</h4>
         </div>
         <div class="modal-body text-center">
-            <ui-select ng-model="account.characters.level" remove-selected="false">
+            <ui-select ng-model="characters.selected" remove-selected="false">
                 <ui-select-match placeholder="--选择级别--">{{$select.selected.title}}</ui-select-match>
                 <ui-select-choices repeat="item in characters | filter: $select.search">
                     <div ng-bind-html="item.title | highlight: $select.search"></div>
