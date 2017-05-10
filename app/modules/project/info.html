@@ -1,4 +1,4 @@
-<div class="row"><div class="col-xs-12 col-sm-12 adminBody"><div class="panel panel-default"><div class="panel-body"><div class="col-sm-3 mb10" style="vertical-align: middle"><input type="text" class="form-control" id="input-search-key" placeholder="输入项目ID/名称进行查询" ng-model="searchKey"></div><div class="col-sm-1 pt7"><a class="text-blue" href="javascript:void(0)" ng-click="onSearch($event)">查询</a></div><div class="pull-right pt7 pb10 mr15"><span class="text-blue pointer pt7" ui-sref="admin.project.create" ng-show="$root.Rule.admin.project.create">新建</span></div><table class="table table-bordered table-hover"><thead><tr><th>名称</th><th>上下班</th><th>描述</th><th>项目状态</th><th style="width:280px">操作</th></tr></thead><tbody><tr ng-repeat="project in Project | startFrom: (currentPage-1) * pageSize | limitTo: pageSize"><td><span>{{project.title}}<span></span></span></td><td>{{project.onduty}} -- {{project.offduty}}</td><td>{{project.description}}</td><td><span ng-show="project.status=='ONLINE'">正式运行</span> <span ng-show="project.status=='DEBUG'">调试运行</span> <a ng-click="statusSwitch(project._id, $event)" class="ml10 text-blue" ng-show="project.status=='DEBUG'">切换</a></td><td><span ui-sref="admin.project.auth({id:project._id})" class="mr10 text-blue pointer">权限 </span><span ui-sref="admin.project.edit({id:project._id})" class="mr10 text-blue pointer" ng-show="$root.Rule.admin.project.edit">编辑 </span><a href="javascript:void(0)" ng-click="AskForRemove(project._id)" class="text-blue" ng-show="project._id != askingRemoveID && $root.Rule.admin.project.delete">删除 </a><a href="javascript:void(0)" class="text-blue" ng-show="project._id == askingRemoveID" ng-click="CancelRemove()">取消 </a><a href="javascript:void(0)" class="text-blue" ng-show="project._id == askingRemoveID" ng-click="DoRemove(project._id, $index)">确定</a></td></tr></tbody></table><uib-pagination class="pull-right mt0 mb0" total-items="$root.Project.length" ng-model="currentPage" items-per-page="pageSize" max-size="$root.Project.length/pageSize+1" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination></div></div></div></div><script type="text/ng-template" id="modal-projectStatus.html"><div class="container-fluid">
+<div class="row"><div class="col-xs-12 col-sm-12 adminBody"><div class="panel panel-default"><div class="panel-body"><div class="col-sm-3 mb10" style="vertical-align: middle"><input type="text" class="form-control" id="input-search-key" placeholder="输入项目ID/名称进行查询" ng-model="searchKey"></div><div class="col-sm-1 pt7"><a class="text-blue" href="javascript:void(0)" ng-click="onSearch($event)">查询</a></div><div class="pull-right pt7 pb10 mr15"><span class="text-blue pointer pt7" ui-sref="admin.project.create" ng-show="$root.Rule.admin.project.create">新建</span></div><table class="table table-bordered table-hover"><thead><tr><th>名称</th><th>上下班</th><th>描述</th><th>项目状态</th><th style="width:280px">操作</th></tr></thead><tbody><tr ng-repeat="project in Project | startFrom: (currentPage-1) * pageSize | limitTo: pageSize"><td ng-mouseover="titleHover = true" ng-mouseleave="titleHover = false"><span>{{project.title}}<span><i class="glyphicon glyphicon-pencil" ng-show="titleHover" ng-click="projectChange(project,'title')"></i></span></span></td><td ng-mouseover="timeHover = true" ng-mouseleave="timeHover = false">{{project.onduty}} -- {{project.offduty}}<i class="glyphicon glyphicon-pencil" ng-show="timeHover" ng-click="projectChange(project,'time')"></i></td><td ng-mouseover="descriptionHover = true" ng-mouseleave="descriptionHover = false">{{project.description}}<i class="glyphicon glyphicon-pencil" ng-show="descriptionHover" ng-click="projectChange(project,'description')"></i></td><td><span ng-show="project.status=='ONLINE'">正式运行</span> <span ng-show="project.status=='DEBUG'">调试运行</span> <a ng-click="statusSwitch(project._id, $event)" class="ml10 text-blue" ng-show="project.status=='DEBUG'">切换</a></td><td><span ui-sref="admin.project.auth({id:project._id})" class="mr10 text-blue pointer">权限 </span><span ui-sref="admin.project.edit({id:project._id})" class="mr10 text-blue pointer" ng-show="$root.Rule.admin.project.edit">详情 </span><a href="javascript:void(0)" ng-click="AskForRemove(project._id)" class="text-blue" ng-show="project._id != askingRemoveID && $root.Rule.admin.project.delete">删除 </a><a href="javascript:void(0)" class="text-blue" ng-show="project._id == askingRemoveID" ng-click="CancelRemove()">取消 </a><a href="javascript:void(0)" class="text-blue" ng-show="project._id == askingRemoveID" ng-click="DoRemove(project._id, $index)">确定</a></td></tr></tbody></table><uib-pagination class="pull-right mt0 mb0" total-items="$root.Project.length" ng-model="currentPage" items-per-page="pageSize" max-size="$root.Project.length/pageSize+1" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination></div></div></div></div><script type="text/ng-template" id="modal-projectStatus.html"><div class="container-fluid">
         <div align="center" style="padding: 30;border-bottom: 1px solid #E5E5E5;min-height: 16;">
             <h3>是否确认切换该项目状态</h3>
         </div>
@@ -8,5 +8,77 @@
         <div style="margin-top: 15px; padding: 0px 20px 20px; text-align: center;">
             <button class="btn btn-primary" ng-click="ok()">确定</button>
             <button class="btn btn-warning" ng-click="cancel()">取消</button>
+        </div>
+    </div></script><script type="text/ng-template" id="titleChange.html"><div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">{{title}}项目名称更改</h4>
+        </div>
+        <div class="modal-body text-center">
+            <input type="text" class="form-control" ng-model="project.title">
+        </div>
+        <div class="modal-footer text-center">
+            <button class="btn btn-sm btn-danger mr5" ng-click="ok()">修改</button>
+            <button class="btn btn-sm btn-warning" ng-click="cancel()">取消</button>
+        </div>
+    </div></script><script type="text/ng-template" id="timeChange.html"><div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">{{title}}上下班时间更改</h4>
+        </div>
+        <div class="modal-body text-center">
+            <div class="form-inline">
+                <div class="row">
+                    上班时间：
+                    <div class="form-group no-margin">
+                        <ui-select class="w100" ng-model="ondutyHour.selected" remove-selected="false">
+                            <ui-select-match>{{$select.selected}}</ui-select-match>
+                            <ui-select-choices repeat="item in ondutyHour | filter: $select.search">
+                                <div ng-bind-html="ondutyHour[$index] | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div> :
+                    <div class="form-group no-margin">
+                        <ui-select class="w100" ng-model="ondutyMinute.selected" remove-selected="false">
+                            <ui-select-match>{{$select.selected}}</ui-select-match>
+                            <ui-select-choices repeat="item in ondutyMinute | filter: $select.search">
+                                <div ng-bind-html="ondutyMinute[$index] | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+                <div class="row mt10">
+                    下班时间：
+                    <div class="form-group no-margin">
+                        <ui-select class="w100" ng-model="offdutyHour.selected" remove-selected="false">
+                            <ui-select-match>{{$select.selected}}</ui-select-match>
+                            <ui-select-choices repeat="item in offdutyHour | filter: $select.search">
+                                <div ng-bind-html="offdutyHour[$index] | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div> :
+                    <div class="form-group no-margin">
+                        <ui-select class="w100" ng-model="offdutyMinute.selected" remove-selected="false">
+                            <ui-select-match>{{$select.selected}}</ui-select-match>
+                            <ui-select-choices repeat="item in offdutyMinute | filter: $select.search">
+                                <div ng-bind-html="offdutyMinute[$index] | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer text-center">
+            <button class="btn btn-sm btn-danger mr5" ng-click="ok()">修改</button>
+            <button class="btn btn-sm btn-warning" ng-click="cancel()">取消</button>
+        </div>
+    </div></script><script type="text/ng-template" id="descriptionChange.html"><div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">{{title}}描述更改</h4>
+        </div>
+        <div class="modal-body text-center">
+            <textarea class="form-control" rows="3" name="description" ng-model="project.description"></textarea>
+        </div>
+        <div class="modal-footer text-center">
+            <button class="btn btn-sm btn-danger mr5" ng-click="ok()">修改</button>
+            <button class="btn btn-sm btn-warning" ng-click="cancel()">取消</button>
         </div>
     </div></script>
