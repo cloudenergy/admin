@@ -17,7 +17,7 @@
                 </a>
                 <div class="col-lg-8 pull-right">
                     <ui-select ng-model="devicetype.selected" remove-selected="false">
-                        <ui-select-match placeholder="--选择项目--">{{$select.selected.name}}</ui-select-match>
+                        <ui-select-match placeholder="--仪表类型--">{{$select.selected.name}}</ui-select-match>
                         <ui-select-choices repeat="item in devicetype | filter: $select.search">
                             <div ng-bind-html="item.name | highlight: $select.search"></div>
                         </ui-select-choices>
