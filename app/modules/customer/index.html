@@ -20,9 +20,9 @@
     <div class="modal-body">
         <form class="form-inline" ng-submit="searchSensor(true)">
             <input type="text" class="form-control" placeholder="关键字：ID或名称" ng-model="sensorSearchKey" ng-blur="searchSensor()">
-            <button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-search"></span> 查询</button>
-            <button type="button" class="btn btn-success pull-right" ng-click="invertSelect()"><span class="glyphicon glyphicon-asterisk"></span>反选</button>
-            <button type="button" class="btn btn-success pull-right" ng-click="selectAll()"><span class="glyphicon glyphicon-asterisk"></span>全选</button>
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> 查询</button>
+            <button type="button" class="btn btn-primary pull-right" ng-click="invertSelect()"><span class="glyphicon glyphicon-asterisk"></span>反选</button>
+            <button type="button" class="btn btn-primary pull-right" ng-click="selectAll()"><span class="glyphicon glyphicon-asterisk"></span>全选</button>
         </form>
         <div class="list-group mt15">
             <a href="javascript:void(0)" class="list-group-item" ng-class="{active:item.isEnable}" ng-click="switchSensor(item)" ng-repeat="item in viewOfSensors">
@@ -33,7 +33,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-primary" ng-click="Submit()">确定</button>
-        <button type="button" class="btn btn-warning" ng-click="Cancel()">取消</button>
+        <button type="button" class="btn btn-primary" ng-click="Cancel()">取消</button>
     </div></script><script type="text/ng-template" id="customerNodesRenderer.html"><div class="tree-node">
         <div class="tree-node-content">
             <div ng-show="!node.editing">

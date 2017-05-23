@@ -30,12 +30,12 @@
                 <input type="text" class="form-control" id="input-customer-freq" placeholder="输入智能仪表ID或名称进行查询" ng-model="sensorSearchKey">
             </div>
             <div class="col-lg-4">
-                <a class="btn btn-info" href="javascript:void(0)" ng-click="onSearchSensor($event)">
+                <a class="btn btn-primary" href="javascript:void(0)" ng-click="onSearchSensor($event)">
                     <span class="glyphicon glyphicon-search"></span> 查询
                 </a>
             </div>
             <div class="col-lg-2 text-right">
-                <a class="btn btn-success" href="javascript:void(0)" ng-click="OnSelectAll($event)">
+                <a class="btn btn-primary" href="javascript:void(0)" ng-click="OnSelectAll($event)">
                     <span class="glyphicon glyphicon-asterisk"></span>全选
                 </a>
             </div>
@@ -52,15 +52,15 @@
         </div>
         <div style="margin-top: 15px; padding: 0px 20px 20px; text-align: center;">
             <button class="btn btn-primary" ng-click="Ok()">确定</button>
-            <button class="btn btn-warning" ng-click="Cancel()">取消</button>
+            <button class="btn btn-primary" ng-click="Cancel()">取消</button>
         </div>
     </div></script><script type="text/ng-template" id="energyNodesRenderer.html"><div ui-tree-handle data-nodrag class="tree-node">
         <div data-nodrag class="tree-node-content">
             <div data-nodrag ng-show="!node.editing">
-                <a class="btn btn-success btn-xs" data-nodrag ng-click="toggle(this)" ng-show="node.level<=1">
+                <a class="btn btn-primary btn-xs" data-nodrag ng-click="toggle(this)" ng-show="node.level<=1">
                     <span class="glyphicon" ng-class="{'glyphicon-chevron-right': collapsed, 'glyphicon-chevron-down': !collapsed}"></span>
                 </a>
-                <a class="btn btn-success btn-xs" data-nodrag ng-show="node.level>1">
+                <a class="btn btn-primary btn-xs" data-nodrag ng-show="node.level>1">
                     <span class="glyphicon glyphicon-chevron-right"></span>
                 </a>
                 <span>{{node.title}}<span ng-show="node.level==1">  单位: {{node.unit}}  千克煤: {{node.standcol}}</span></span>
@@ -97,4 +97,4 @@
     <ol ui-tree-nodes ng-model="node.nodes" ng-class="{hidden: collapsed}">
         <li ng-repeat="node in node.nodes" ui-tree-node ng-include="'energyNodesRenderer.html'">
         </li>
-    </ol></script><div class="panel panel-default mb0 layout-column"><div class="panel-body flex-initial"><form class="form-inline pb10 bb text-right"><a class="btn" ng-class="{'btn-success': !energyModified, 'btn-warning': energyModified}" ng-click="doSaveEnergy($event)">保存</a></form></div><div class="panel-body flex overflow-auto pt0 pb0"><div ui-tree id="energy-root"><ol ui-tree-nodes ng-model="viewOfEnergy"><li ng-repeat="node in viewOfEnergy" ui-tree-node ng-include="'energyNodesRenderer.html'"></li></ol></div></div><div class="panel-body flex-initial pt0"></div></div>
+    </ol></script><div class="panel panel-default mb0 layout-column"><div class="panel-body flex-initial"><form class="form-inline pb10 bb text-right"><a class="btn" ng-class="{'btn-primary': !energyModified, 'btn-primary': energyModified}" ng-click="doSaveEnergy($event)">保存</a></form></div><div class="panel-body flex overflow-auto pt0 pb0"><div ui-tree id="energy-root"><ol ui-tree-nodes ng-model="viewOfEnergy"><li ng-repeat="node in viewOfEnergy" ui-tree-node ng-include="'energyNodesRenderer.html'"></li></ol></div></div><div class="panel-body flex-initial pt0"></div></div>
