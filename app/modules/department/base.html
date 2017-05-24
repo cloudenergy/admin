@@ -25,11 +25,11 @@
             </div>
         </div>
         <div align="center">
-            <ul uib-pagination class="pagination-sm" total-items="viewOfSensors.length" ng-model="currentPage" items-per-page="popPageSize" max-size="9" boundary-links="true" rotate="false" num-pages="numPages" previous-text="上页" next-text="下页" first-text="首页" last-text="末页"></ul>
+            <uib-pagination class="pagination-sm" total-items="viewOfSensors.length" ng-model="currentPage" items-per-page="popPageSize" max-size="9" boundary-links="true" rotate="false" num-pages="numPages" previous-text="上页" next-text="下页" first-text="首页" last-text="末页"></uib-pagination>
         </div>
         <div style="margin-top: 15px; padding: 0px 20px 20px; text-align: center;">
             <button class="btn btn-primary" ng-click="Ok()">确定</button>
-            <button class="btn btn-primary" ng-click="Cancel()">取消</button>
+            <button class="btn btn-default" ng-click="Cancel()">取消</button>
         </div>
     </div></script><script type="text/ng-template" id="modal-packageplan.html"><div class="container-fluid">
         <div align="center" style="padding: 30; border-bottom: 1px solid #E5E5E5; min-height: 16; ">
@@ -50,7 +50,7 @@
             </div>
         </div>
         <div align="center">
-            <ul uib-pagination total-items="count" ng-model="pageindex" items-per-page="pagesize" max-size="10" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
+            <uib-pagination total-items="count" ng-model="pageindex" items-per-page="pagesize" max-size="10" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination>
         </div>
         <div style="margin-top: 15px; padding: 0px 20px 20px; text-align: center;">
             <!--<button class="btn btn-primary" ng-click="Ok()">确定</button>-->
