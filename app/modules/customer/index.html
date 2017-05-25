@@ -29,7 +29,7 @@
                 <i class="glyphicon mt2" ng-class="{true:'text-white glyphicon-check',false:'text-muted glyphicon-unchecked'}[item.isEnable]"></i> {{item.title}}
             </a>
         </div>
-        <uib-pagination class="pagination-sm no-margin" total-items="pagingCount" ng-model="currentPage" items-per-page="popPageSize" max-size="9" boundary-links="true" rotate="false" num-pages="numPages" previous-text="上页" next-text="下页" first-text="首页" last-text="末页"></uib-pagination>
+        <ul uib-pagination class="pagination-sm no-margin" total-items="pagingCount" ng-model="currentPage" items-per-page="popPageSize" max-size="9" boundary-links="true" rotate="false" num-pages="numPages" previous-text="上页" next-text="下页" first-text="首页" last-text="末页"></ul>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-primary" ng-click="Submit()">确定</button>
