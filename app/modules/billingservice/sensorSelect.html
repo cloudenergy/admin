@@ -1,0 +1,65 @@
+<div ui-view></div><script type="text/ng-template" id="modal-channelselectUpdate.html"><div class="container-fluid">
+        <div align="center" style="padding: 30; border-bottom: 1px solid #E5E5E5; min-height: 16; ">
+            <h3>管理智能仪表</h3>
+        </div>
+        <div class="row" style="margin: 10px 0 0 0; ">
+            <div class="col-lg-5">
+                <input type="text" class="form-control" id="input-customer-freq" placeholder="输入智能仪表名称进行查询" ng-model="sensorSearchKey">
+            </div>
+            <div class="col-lg-2">
+                <a class="btn btn-primary" href="javascript:void(0)" ng-click="onSearchSensor($event)">
+                    <span class="glyphicon glyphicon-search"></span> 查询
+                </a>
+            </div>
+            <div class="col-lg-5 pull-right">
+                <a class="btn btn-primary col-lg-4 pull-right" href="javascript:void(0)" ng-click="OnSelectAll($event)">
+                    <span class="glyphicon glyphicon-asterisk"></span>全选
+                </a>
+                <div class="col-lg-8 pull-right">
+                    <ui-select ng-model="devicetype.selected" remove-selected="false">
+                        <ui-select-match placeholder="--仪表类型--">{{$select.selected.name}}</ui-select-match>
+                        <ui-select-choices repeat="item in devicetype | filter: $select.search">
+                            <div ng-bind-html="item.name | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+        </div>
+        <div align="center" style="position: relative; padding: 15px 30px 0px 30px;">
+            <div class="row-fluid list-group">
+                <a href="javascript:void(0)" class="list-group-item" ng-class="sensor.isEnable ? 'active':''" ng-click="SwitchSensor($event, sensor)" ng-repeat="sensor in viewOfSensors | startFrom: (currentPage-1) * popPageSize | limitTo: popPageSize">
+                    <span ng-show="sensor.title">名称:</span>{{sensor.title}}&nbsp;{{sensor.channel}}&nbsp;<span ng-show="sensor.addrid">ID:</span>{{sensor.addrid}}<span ng-show="sensor.channelname">&nbsp通道名称:</span>{{sensor.channelname}}
+                </a>
+            </div>
+        </div>
+        <div align="center">
+            <ul uib-pagination class="pagination-sm" total-items="viewOfSensors.length" ng-model="currentPage" items-per-page="popPageSize" max-size="9" boundary-links="true" rotate="false" num-pages="numPages" previous-text="上页" next-text="下页" first-text="首页" last-text="末页"></ul>
+        </div>
+        <div style="margin-top: 15px; padding: 0px 20px 20px; text-align: center;">
+            <button class="btn btn-primary" ng-click="Ok()">保存</button>
+            <button class="btn btn-default" ng-click="Cancel()">取消</button>
+        </div>
+    </div></script><script type="text/ng-template" id="UpdateAffirm.html"><div class="container-fluid" style="font-size: 14px">
+        <div align="center" style="padding: 30;border-bottom: 1px solid #E5E5E5; min-height: 16;">
+            <h3>确认修改计费仪表？</h3>
+        </div>
+        <div style="position: relative; padding: 15px 30px 0px 30px;" ng-if="addSensor.length">
+            本次操作新增：
+        </div>
+        <div align="center" style="position: relative; padding: 15px 30px 0px 30px;">
+            <div ng-repeat="s in addSensor">{{s.title}} ID:{{s.addrid}}</div>
+        </div>
+        <div style="position: relative; padding: 15px 30px 0px 30px;" ng-if="removeSensor.length">
+            本次操作删除：
+        </div>
+        <div align="center" style="position: relative; padding: 15px 30px 0px 30px;">
+            <div ng-repeat="s in removeSensor">名称:{{s.title}} ID:{{s.addrid}}</div>
+        </div>
+        <div align="center" style="position: relative; padding: 15px 30px 0px 30px;" class="mt30">
+            <span ng-if="addSensor.length">共新增{{SelectedSensorsIDS.length}}个智能仪表,</span><span ng-if="removeSensor.length">共删除{{DeleteIDS.length}}个智能仪表，</span>是否确认操作？
+        </div>
+        <div style="margin-top: 15px; padding: 0px 20px 20px; text-align: center;border-bottom: 1px solid #E5E5E5; min-height: 16;">
+            <button class="btn btn-primary" ng-click="Ok()">保存</button>
+            <button class="btn btn-default" ng-click="Cancel()">取消</button>
+        </div>
+    </div></script>
