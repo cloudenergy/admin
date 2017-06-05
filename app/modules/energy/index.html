@@ -52,7 +52,7 @@
         </div>
         <div style="margin-top: 15px; padding: 0px 20px 20px; text-align: center;">
             <button class="btn btn-primary" ng-click="Ok()">确定</button>
-            <button class="btn btn-default" ng-click="Cancel()">取消</button>
+            <button class="btn btn-primary" ng-click="Cancel()">取消</button>
         </div>
     </div></script><script type="text/ng-template" id="energyNodesRenderer.html"><div ui-tree-handle data-nodrag class="tree-node">
         <div data-nodrag class="tree-node-content">
@@ -88,7 +88,7 @@
                         <!--<label class="sr-only" for="groupName">Group name</label>-->
                         <input type="text" class="form-control" placeholder="能耗类型名称" ng-model="node.title">
                     </div>
-                    <button type="submit" class="btn btn-primary" ng-click="save(node)">保存</button>
+                    <button type="submit" class="btn btn-default" ng-click="save(node)">保存</button>
                     <button type="submit" class="btn btn-default" ng-click="cancelEditing(this, node)">取消</button>
                 </form>
             </div>

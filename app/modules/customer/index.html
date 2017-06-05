@@ -33,7 +33,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-primary" ng-click="Submit()">确定</button>
-        <button type="button" class="btn btn-default" ng-click="Cancel()">取消</button>
+        <button type="button" class="btn btn-primary" ng-click="Cancel()">取消</button>
     </div></script><script type="text/ng-template" id="customerNodesRenderer.html"><div class="tree-node">
         <div class="tree-node-content">
             <div ng-show="!node.editing">
@@ -64,7 +64,7 @@
                     <div class="form-group">
                         <input type="text" class="form-control" placeholder="社会属性名称" ng-model="node.title">
                     </div>
-                    <button type="submit" class="btn btn-primary" ng-click="saveNode(node)">保存</button>
+                    <button type="submit" class="btn btn-default" ng-click="saveNode(node)">保存</button>
                     <button type="submit" class="btn btn-default" ng-click="cancelEdit(node)">取消</button>
                 </form>
             </div>
