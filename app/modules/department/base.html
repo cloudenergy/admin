@@ -20,7 +20,7 @@
         <div align="center" style="position: relative; padding: 15px 30px 0px 30px;">
             <div class="row-fluid list-group">
                 <a href="javascript:void(0)" class="list-group-item" ng-class="sensor.isEnable ? 'active':''" ng-click="SwitchSensor($event, sensor)" ng-repeat="sensor in viewOfSensors | startFrom: (currentPage-1) * popPageSize | limitTo: popPageSize">
-                    <span ng-show="sensor.title">名称:</span>{{sensor.title}}&nbsp;{{sensor.channel}}&nbsp;<span ng-show="sensor.addrid">ID:</span>{{sensor.addrid}}
+                    <span ng-show="sensor.title">名称:</span>{{sensor.title}}&nbsp;{{sensor.channel}}&nbsp;&nbsp;&nbsp;<span ng-show="sensor.addrid">ID:</span>{{sensor.addrid}}
                 </a>
             </div>
         </div>
