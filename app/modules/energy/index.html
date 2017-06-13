@@ -31,12 +31,12 @@
             </div>
             <div class="col-lg-4">
                 <a class="btn btn-primary" href="javascript:void(0)" ng-click="onSearchSensor($event)">
-                    <span class="glyphicon glyphicon-search"></span> 查询
+                    <i class="glyphicon glyphicon-search"></i> 查询
                 </a>
             </div>
             <div class="col-lg-2 text-right">
                 <a class="btn btn-primary" href="javascript:void(0)" ng-click="OnSelectAll($event)">
-                    <span class="glyphicon glyphicon-asterisk"></span>全选
+                    <i class="glyphicon glyphicon-asterisk"></i>全选
                 </a>
             </div>
         </div>
@@ -61,7 +61,7 @@
                     <span class="glyphicon" ng-class="{'glyphicon-chevron-right': collapsed, 'glyphicon-chevron-down': !collapsed}"></span>
                 </a>
                 <a class="btn btn-primary btn-xs" data-nodrag ng-show="node.level>1">
-                    <span class="glyphicon glyphicon-chevron-right"></span>
+                    <i class="glyphicon glyphicon-chevron-right"></i>
                 </a>
                 <span>{{node.title}}<span ng-show="node.level==1">  单位: {{node.unit}}  千克煤: {{node.standcol}}</span></span>
                 <!--<span ng-show="{{node.level>=0}}">-->
@@ -70,16 +70,16 @@
                 <!--<span ng-show="{{node.level>0}}">标准煤: {{node.standcol}}</span>-->
                 <!--</span>-->
                 <a ng-show="{{node.level>1}}" class="pull-right btn btn-danger btn-xs hint hint--right hint--error" data-nodrag ng-click="deleteNode(this, node)" data-hint="删除">
-                    <span class="glyphicon glyphicon-trash"></span>
+                    <i class="glyphicon glyphicon-trash"></i>
                 </a>
                 <a ng-show="{{node.level==1}}" class="pull-right btn btn-primary btn-xs hint hint--bottom hint--info" data-nodrag ng-click="newSubItem(this, node)" style="margin-right: 8px;" data-hint="添加子能耗分类">
-                    <span class="glyphicon glyphicon-plus"></span>
+                    <i class="glyphicon glyphicon-plus"></i>
                 </a>
                 <a ng-show="{{node.level>1}}" ng-show="{{node.level>=0}}" class="pull-right btn btn-primary btn-xs hint hint--bottom hint--info" data-nodrag ng-click="edit(node)" style="margin-right: 8px;" data-hint="编辑能耗分类">
-                    <span class="glyphicon glyphicon-pencil"></span>
+                    <i class="glyphicon glyphicon-pencil"></i>
                 </a>
                 <a ng-show="node.level>1 && node.id" class="pull-right btn btn-warning btn-xs hint hint--bottom hint--warning" data-nodrag ng-click="sensor(node, $index)" style="margin-right: 8px;" data-hint="添加智能仪表">
-                    <span class="glyphicon glyphicon-th"></span>
+                    <i class="glyphicon glyphicon-th"></i>
                 </a>
             </div>
             <div class="group-title angular-ui-tree-handle" data-nodrag ng-show="node.editing">
