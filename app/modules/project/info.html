@@ -1,62 +1,74 @@
-<div class="panel panel-default mb0 layout-column single-edit"><div class="panel-body flex-initial"><form class="form-inline pb10 bb"><div class="input-group w300"><input type="text" class="form-control" placeholder="项目名称" ng-model="$ctrl.searchKey"> <span class="input-group-btn"><button type="submit" class="btn"><i class="glyphicon glyphicon-search"></i></button></span></div><div class="pull-right pt7 pr15"><div class="form-group"><a class="btn-link" ui-sref="admin.project.create" ng-show="$root.Rule.admin.project.create">新建</a></div></div></form></div><div class="panel-body flex overflow-auto pt0 pb0"><table class="table table-bordered table-hover mb0"><thead><tr><th>名称</th><th class="text-center w150">上下班</th><th>描述</th><th>项目状态</th><th class="w150">操作</th></tr></thead><tbody><tr ng-repeat="item in $ctrl.filterData = ($root.Project | filter: {title: $ctrl.searchKey}) | startFrom: ($ctrl.currentPage-1) * $ctrl.pageSize | limitTo: $ctrl.pageSize"><td class="row-title"><nobr>{{item.title || '-'}} <a class="glyphicon glyphicon-pencil td-row-edit" popover-is-open="$ctrl.popover.target._id == item._id && $ctrl.popover.field == 'title'" uib-popover-template="'project-info-change-target.html'" popover-title="编辑名称" popover-placement="bottom" ng-click="$ctrl.popover.openChange(item,'title')"></a></nobr></td><td class="text-center">{{item.onduty}} -- {{item.offduty}} <i class="glyphicon glyphicon-pencil td-row-edit" ng-click="$ctrl.changeTime(item)"></i></td><td>{{item.description || '-'}} <a class="glyphicon glyphicon-pencil td-row-edit" popover-is-open="$ctrl.popover.target._id == item._id && $ctrl.popover.field == 'description'" uib-popover-template="'project-info-change-target.html'" popover-title="编辑描述" popover-placement="bottom" ng-click="$ctrl.popover.openChange(item,'description');"></a></td><td>{{{ONLINE:'运行中',DEBUG:'调试中'}[item.status]}} <a class="btn-link ml10" ng-click="$ctrl.statusSwitch(item)" ng-show="item.status=='DEBUG'">切换</a></td><td><a class="btn-link mr10" ui-sref="admin.project.auth({id:item._id})" ng-show="$root.Rule.admin.project.auth">权限</a> <a class="btn-link mr10" ui-sref="admin.project.edit({id:item._id})" ng-show="$root.Rule.admin.project.edit">详情</a> <a class="btn-link" ng-click="$ctrl.askingRemoveID = item._id" ng-show="item._id != $ctrl.askingRemoveID && $root.Rule.admin.project.delete">删除</a> <a class="btn-link mr10" ng-show="item._id == $ctrl.askingRemoveID" ng-click="$ctrl.askingRemoveID = undefined">取消</a> <a class="btn-link" ng-show="item._id == $ctrl.askingRemoveID" ng-click="$ctrl.DoRemove(item._id, $index)">确定</a></td></tr></tbody></table></div><div class="panel-body flex-initial"><div class="pt15 bt"><div class="pull-right"><span class="inline fs34" style="vertical-align:top">总共{{$ctrl.filterData.length || 0}}条</span><ul uib-pagination class="mt0 mb0 ml10" ng-model="$ctrl.currentPage" total-items="$ctrl.filterData.length || 0" items-per-page="$ctrl.pageSize" max-size="10" boundary-links="true" rotate="false" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul></div></div></div></div><script type="text/ng-template" id="project-info-switch-status.html"><div class="modal-header">
-        <h3>是否确认切换该项目状态</h3>
-    </div>
-    <div class="modal-body">
-        <h4>操作后项目将由调试状态切换为正式运行，自动识别仪表功能将停止，且此操作不可逆转，请慎重操作！是否继续操作？</h4>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-primary" ng-click="$ctrl.ok()">确定</button>
-        <button class="btn btn-default" ng-click="$ctrl.cancel()">取消</button>
-    </div></script><script type="text/ng-template" id="project-info-change-target.html"><div class="modal-body text-center w300">
-        <input type="text" class="form-control" ng-model="$ctrl.popover.target[$ctrl.popover.field]" auto-focus>
+<div class="panel panel-default mb0 layout-column single-edit"><div class="panel-body flex-initial"><form class="form-inline pb10 bb"><div class="form-group w300"><input type="text" class="form-control" placeholder="输入项目ID/名称进行查询" ng-model="searchKey"></div><div class="form-group ml30"><a class="btn-link" ng-click="onSearch($event)">查询</a></div><div class="pull-right pt7 pr15"><div class="form-group"><a class="btn-link" ui-sref="admin.project.create" ng-show="$root.Rule.admin.project.create">新建</a></div></div></form></div><div class="panel-body flex overflow-auto pt0 pb0"><table class="table table-bordered table-hover mb0"><thead><tr><th>名称</th><th><p class="text-right" style="width: 95px;margin: 0">上下班</p></th><th>描述</th><th>项目状态</th><th style="width:170px">操作</th></tr></thead><tbody><tr ng-repeat="project in Project | startFrom: (currentPage-1) * pageSize | limitTo: pageSize"><td class="row-title"><nobr><span>{{project.title || '-'}}<span> <a class="glyphicon glyphicon-pencil td-row-edit" popover-is-open="project.titleIsOpen" uib-popover-template="popover.url.title" popover-title="{{popover.title.title}}" popover-placement="bottom" ng-click="Change.title = project.title;popIsOpen()" class="btn btn-default"></a></span></span></nobr></td><td><p class="text-right" style="width: 95px;margin: 0;display: inline-block">{{project.onduty}} -- {{project.offduty}}</p><i class="glyphicon glyphicon-pencil td-row-edit" ng-click="projectChange(project,'time')"></i></td><td>{{project.description || '-'}} <a class="glyphicon glyphicon-pencil td-row-edit" popover-is-open="project.descriptionIsOpen" uib-popover-template="popover.url.description" popover-title="{{popover.title.description}}" popover-placement="bottom" ng-click="Change.description=project.description;popIsOpen()" class="btn btn-default"></a></td><td><span ng-show="project.status=='ONLINE'">运行中</span> <span ng-show="project.status=='DEBUG'">调试中</span> <a class="btn-link ml10" ng-click="statusSwitch(project._id, $event)" ng-show="project.status=='DEBUG'">切换</a></td><td><a class="btn-link mr10" ui-sref="admin.project.auth({id:project._id})">权限</a> <a class="btn-link mr10" ng-click="projectInfo(project)" ng-show="$root.Rule.admin.project.edit">详情</a> <a class="btn-link" ng-click="AskForRemove(project._id)" ng-show="project._id != askingRemoveID && $root.Rule.admin.project.delete">删除</a> <a class="btn-link mr10" ng-show="project._id == askingRemoveID" ng-click="CancelRemove()">取消</a> <a class="btn-link" ng-show="project._id == askingRemoveID" ng-click="DoRemove(project._id, $index)">确定</a></td></tr></tbody></table></div><div class="panel-body flex-initial"><div class="pt15 bt"><div class="pull-right"><span class="inline fs34" style="vertical-align:top">项目总数{{Project.length || 0}}条</span><ul uib-pagination class="mt0 mb0 ml10" total-items="$root.Project.length" ng-model="currentPage" items-per-page="pageSize" max-size="$root.Project.length/pageSize+1" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul></div></div></div></div><script type="text/ng-template" id="modal-projectStatus.html"><div class="container-fluid">
+        <div align="center" style="padding: 30;border-bottom: 1px solid #E5E5E5;min-height: 16;">
+            <h3>是否确认切换该项目状态</h3>
+        </div>
+        <div align="center" class="mt15 mb15">
+            <h4>操作后项目将由调试状态切换为正式运行，自动识别仪表功能将停止，且此操作不可逆转，请慎重操作！是否继续操作？</h4>
+        </div>
+        <div style="margin-top: 15px; padding: 0px 20px 20px; text-align: center;">
+            <button class="btn btn-primary" ng-click="ok()">确定</button>
+            <button class="btn btn-default" ng-click="cancel()">取消</button>
+        </div>
+    </div></script><script type="text/ng-template" id="titleChange.html"><div class="modal-body text-center">
+        <input type="text" class="form-control" ng-model="Change.title" focused>
     </div>
     <div class="modal-footer text-center">
-        <button class="btn btn-sm btn-primary mr5" ng-click="$ctrl.popover.ok()">修改</button>
-        <button class="btn btn-sm btn-default" ng-click="$ctrl.popover.close()">取消</button>
-    </div></script><script type="text/ng-template" id="project-info-change-time.html"><div class="modal-header">
-        <h4 class="modal-title">{{$ctrl.title}} - 上下班时间</h4>
-    </div>
-    <div class="modal-body text-center">
-        <div class="form-inline">
-            上班时间：
-            <div class="form-group no-margin">
-                <ui-select class="w100" ng-model="$ctrl.ondutyHour.selected" remove-selected="false">
-                    <ui-select-match>{{$select.selected}}</ui-select-match>
-                    <ui-select-choices repeat="item in $ctrl.ondutyHour | filter: $select.search">
-                        <div ng-bind-html="$ctrl.ondutyHour[$index] | highlight: $select.search"></div>
-                    </ui-select-choices>
-                </ui-select>
-            </div> ：
-            <div class="form-group no-margin">
-                <ui-select class="w100" ng-model="$ctrl.ondutyMinute.selected" remove-selected="false">
-                    <ui-select-match>{{$select.selected}}</ui-select-match>
-                    <ui-select-choices repeat="item in $ctrl.ondutyMinute | filter: $select.search">
-                        <div ng-bind-html="$ctrl.ondutyMinute[$index] | highlight: $select.search"></div>
-                    </ui-select-choices>
-                </ui-select>
+        <button class="btn btn-sm btn-primary mr5" ng-click="popover.ok(project,'title',Change)">修改</button>
+        <button class="btn btn-sm btn-default" ng-click="popover.cancel(project,'title')">取消</button>
+    </div></script><script type="text/ng-template" id="timeChange.html"><div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">{{title}}上下班时间更改</h4>
+        </div>
+        <div class="modal-body text-center">
+            <div class="form-inline">
+                <div class="row">
+                    上班时间：
+                    <div class="form-group no-margin">
+                        <ui-select class="w100" ng-model="ondutyHour.selected" remove-selected="false">
+                            <ui-select-match>{{$select.selected}}</ui-select-match>
+                            <ui-select-choices repeat="item in ondutyHour | filter: $select.search">
+                                <div ng-bind-html="ondutyHour[$index] | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div> :
+                    <div class="form-group no-margin">
+                        <ui-select class="w100" ng-model="ondutyMinute.selected" remove-selected="false">
+                            <ui-select-match>{{$select.selected}}</ui-select-match>
+                            <ui-select-choices repeat="item in ondutyMinute | filter: $select.search">
+                                <div ng-bind-html="ondutyMinute[$index] | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+                <div class="row mt10">
+                    下班时间：
+                    <div class="form-group no-margin">
+                        <ui-select class="w100" ng-model="offdutyHour.selected" remove-selected="false">
+                            <ui-select-match>{{$select.selected}}</ui-select-match>
+                            <ui-select-choices repeat="item in offdutyHour | filter: $select.search">
+                                <div ng-bind-html="offdutyHour[$index] | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div> :
+                    <div class="form-group no-margin">
+                        <ui-select class="w100" ng-model="offdutyMinute.selected" remove-selected="false">
+                            <ui-select-match>{{$select.selected}}</ui-select-match>
+                            <ui-select-choices repeat="item in offdutyMinute | filter: $select.search">
+                                <div ng-bind-html="offdutyMinute[$index] | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="form-inline mt10">
-            下班时间：
-            <div class="form-group no-margin">
-                <ui-select class="w100" ng-model="$ctrl.offdutyHour.selected" remove-selected="false">
-                    <ui-select-match>{{$select.selected}}</ui-select-match>
-                    <ui-select-choices repeat="item in $ctrl.offdutyHour | filter: $select.search">
-                        <div ng-bind-html="$ctrl.offdutyHour[$index] | highlight: $select.search"></div>
-                    </ui-select-choices>
-                </ui-select>
-            </div> ：
-            <div class="form-group no-margin">
-                <ui-select class="w100" ng-model="$ctrl.offdutyMinute.selected" remove-selected="false">
-                    <ui-select-match>{{$select.selected}}</ui-select-match>
-                    <ui-select-choices repeat="item in $ctrl.offdutyMinute | filter: $select.search">
-                        <div ng-bind-html="$ctrl.offdutyMinute[$index] | highlight: $select.search"></div>
-                    </ui-select-choices>
-                </ui-select>
-            </div>
+        <div class="modal-footer text-center">
+            <button class="btn btn-sm btn-primary mr5" ng-click="ok()">修改</button>
+            <button class="btn btn-sm btn-default" ng-click="cancel()">取消</button>
         </div>
+    </div></script><script type="text/ng-template" id="descriptionChange.html"><div class="modal-body text-center">
+        <input type="text" class="form-control" ng-model="Change.description" focused>
     </div>
     <div class="modal-footer text-center">
-        <button class="btn btn-sm btn-primary mr5" ng-click="$ctrl.ok()">修改</button>
-        <button class="btn btn-sm btn-default" ng-click="$ctrl.cancel()">取消</button>
+        <button class="btn btn-sm btn-primary mr5" ng-click="popover.ok(project,'description',Change)">修改</button>
+        <button class="btn btn-sm btn-default" ng-click="popover.cancel(project,'description')">取消</button>
     </div></script>
