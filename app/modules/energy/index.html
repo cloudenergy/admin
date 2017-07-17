@@ -48,7 +48,7 @@
             </div>
         </div>
         <div align="center">
-            <ul uib-pagination class="mt0 mb0 ml10" total-items="viewOfSensors.length" ng-model="currentPage" items-per-page="popPageSize" max-size="10" rotate="false" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
+            <pagination class="pagination-sm" total-items="viewOfSensors.length" ng-model="currentPage" items-per-page="popPageSize" max-size="9" boundary-links="true" rotate="false" previous-text="上页" next-text="下页" first-text="首页" last-text="末页"></pagination>
         </div>
         <div style="margin-top: 15px; padding: 0px 20px 20px; text-align: center;">
             <button class="btn btn-primary" ng-click="Ok()">确定</button>
