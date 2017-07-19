@@ -65,10 +65,22 @@
                 </a>
             </div>
         </div>
-        <div align="center" style="position: relative; padding: 15px 30px 0px 30px;">
+        <!-- <div align="center" style="position: relative; padding: 15px 30px 0px 30px;">
             <div class="row-fluid list-group">
                 <a href="javascript:void(0)" class="list-group-item" ng-class="sensor.isEnable ? 'active':''" ng-click="SwitchSensor($event, sensor)" ng-repeat="sensor in viewOfSensors | startFrom: (currentPage-1) * popPageSize | limitTo: popPageSize">
                     {{sensor.title}}
+                </a>
+            </div>
+        </div> -->
+        <div class="modal-body pb0">
+            <div class="list-group mb0">
+                <a href="javascript:void(0)" class="list-group-item" ng-click="SwitchSensor($event, sensor)" ng-repeat="sensor in filterData = (viewOfSensors | filter: filterItem) | startFrom: (currentPage-1) * popPageSize | limitTo: popPageSize">
+                    <i class="glyphicon mt2" ng-class="{true:'text-primary glyphicon-check',false:'text-muted glyphicon-unchecked'}[sensor.isEnable]"></i>
+                    <span ng-class="{'text-primary':sensor.isEnable}" ng-show="devicetype">「{{devicetype[sensor.devicetype].name}}」</span>
+                    <span ng-class="{'text-primary':sensor.isEnable}">{{sensor.title}}</span>
+                    <span class="pull-right" ng-class="{'text-primary':sensor.isEnable}">
+                        ID：{{sensor.addrid}}
+                    </span>
                 </a>
             </div>
         </div>
