@@ -28,9 +28,10 @@
             <div class="list-group mb0">
                 <a href="javascript:void(0)" class="list-group-item" ng-click="SwitchSensor($event, sensor)" ng-repeat="sensor in filterData = (viewOfSensors | filter: filterItem) | startFrom: (currentPage-1) * popPageSize | limitTo: popPageSize">
                     <i class="glyphicon mt2" ng-class="{true:'text-primary glyphicon-check',false:'text-muted glyphicon-unchecked'}[sensor.isEnable]"></i>
-                    <span ng-class="{'text-primary':sensor.isEnable}" ng-show="devicetype">「{{devicetype[sensor.devicetype].name}}」</span>
+                    <span ng-class="{'text-primary':sensor.isEnable}">「{{sensor.devicetype | deviceType}}」</span>
                     <span ng-class="{'text-primary':sensor.isEnable}">{{sensor.title}}</span>
                     <span class="pull-right" ng-class="{'text-primary':sensor.isEnable}">
+                        <span class="mr15" ng-show="sensor.channelname">通道类型：{{sensor.channelname}}</span>
                         ID：{{sensor.addrid}}
                     </span>
                 </a>
