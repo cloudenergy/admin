@@ -65,15 +65,28 @@
                 </a>
             </div>
         </div>
-        <div align="center" style="position: relative; padding: 15px 30px 0px 30px;">
+        <!-- <div align="center" style="position: relative; padding: 15px 30px 0px 30px;">
             <div class="row-fluid list-group">
                 <a href="javascript:void(0)" class="list-group-item" ng-class="sensor.isEnable ? 'active':''" ng-click="SwitchSensor($event, sensor)" ng-repeat="sensor in viewOfSensors | startFrom: (currentPage-1) * popPageSize | limitTo: popPageSize">
                     {{sensor.title}}
                 </a>
             </div>
+        </div> -->
+        <div class="modal-body pb0">
+            <div class="list-group mb0">
+                <a href="javascript:void(0)" class="list-group-item" ng-click="SwitchSensor($event, sensor)" ng-repeat="sensor in filterData = (viewOfSensors | filter: filterItem) | startFrom: (currentPage-1) * popPageSize | limitTo: popPageSize">
+                    <i class="glyphicon mt2" ng-class="{true:'text-primary glyphicon-check',false:'text-muted glyphicon-unchecked'}[sensor.isEnable]"></i>
+                    <span ng-class="{'text-primary':sensor.isEnable}">「{{sensor.devicetype | deviceType}}」</span>
+                    <span ng-class="{'text-primary':sensor.isEnable}">{{sensor.title}}</span>
+                    <span class="pull-right" ng-class="{'text-primary':sensor.isEnable}">
+                        <span class="mr15" ng-show="sensor.channel">通道类型：{{sensor.channel}}</span>
+                        ID：{{sensor.addrid}}
+                    </span>
+                </a>
+            </div>
         </div>
         <div align="center">
-            <pagination class="pagination-sm" total-items="viewOfSensors.length" ng-model="currentPage" items-per-page="popPageSize" max-size="9" boundary-links="true" rotate="false" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+            <ul uib-pagination class="mt0 mb0 ml10" total-items="viewOfSensors.length" ng-model="currentPage" items-per-page="popPageSize" max-size="10" rotate="false" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
         </div>
         <div style="margin-top: 15px; padding: 0px 20px 20px; text-align: center;">
             <button class="btn btn-primary" ng-click="Ok()">确定</button>
