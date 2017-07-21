@@ -178,7 +178,8 @@
     </div></script><script type="text/ng-template" id="department-info-row-title.html"><div>面积：{{department.area}}m2</div>
     <div>创建：{{department.timecreate*1000 | date:'yyyy-M-dd H:mm:ss'}}</div></script><script type="text/ng-template" id="changePercent.html"><div class="modal-content">
         <div class="modal-header">
-            <h4 class="modal-title">{{apportionmentPercent.title}}&nbsp;分摊比例修改&nbsp;<span class="pull-right">仪表ID：{{apportionmentPercent.addrid}}</span><span ng-bind="listTitle"></span></h4>
+            <h4 class="modal-title">&nbsp;分摊修改&nbsp;</h4>
+            <h5><span>表名：{{apportionmentPercent.title}}&nbsp;&nbsp;类型：「{{apportionmentPercent.devicetype | deviceType}}」&nbsp;&nbsp;仪表ID：{{apportionmentPercent.addrid}}</span><span ng-bind="listTitle"></span></h5>
         </div>
         <div class="modal-body" ui-i18n="'zh-cn'">
             <div>
