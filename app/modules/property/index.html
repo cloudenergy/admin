@@ -75,7 +75,7 @@
                     <label class="col-sm-2 control-label">开户银行</label>
                     <div class="col-sm-10">
                         <ui-select ng-model="self.card.origin" remove-selected="false" name="origin" required>
-                            <ui-select-match placeholder="--选择银行--">{{$select.selected.title}}</ui-select-match>
+                            <ui-select-match placeholder="--选择银行(输入关键字筛选)--">{{$select.selected.title}}</ui-select-match>
                             <ui-select-choices repeat="item.id as item in self.bankData | filter: $select.search">
                                 <div ng-bind-html="item.title | highlight: $select.search"></div>
                             </ui-select-choices>
