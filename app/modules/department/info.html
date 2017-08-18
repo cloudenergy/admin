@@ -116,7 +116,7 @@
                 <div class="col-sm-12">
                     <label class="col-sm-4 col-sm-offset-2 control-label ml5" style="line-height:34px;">充值金额</label>
                     <div class="col-sm-offset-3 col-sm-3">
-                        <input class="form-control ml10" type="number" required step="0.001" ng-model="cash" placeholder="请输入金额">
+                        <input class="form-control ml10" type="number" required step="0.001" ng-model="cash" placeholder="请输入金额" onkeyup="this.value=this.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3')">
                     </div>
                     <lable class="pull-left" style="line-height:34px;">元</lable>
                 </div>
@@ -176,7 +176,7 @@
         <button class="btn btn-sm btn-primary mr5" ng-click="popover.ok(department,'mobile',Change)">修改</button>
         <button class="btn btn-sm btn-default" ng-click="popover.cancel(department,'mobile')">取消</button>
     </div></script><script type="text/ng-template" id="alerthresholdChange.html"><div class="modal-body text-center">
-        <input type="number" class="form-control" ng-model="Change.alerthreshold" auto-focus>
+        <input type="number" class="form-control" ng-model="Change.alerthreshold" auto-focus onkeyup="this.value=this.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3')">
     </div>
     <div class="modal-footer text-center">
         <button class="btn btn-sm btn-primary mr5" ng-click="popover.ok(department,'alerthreshold',Change)">修改</button>
