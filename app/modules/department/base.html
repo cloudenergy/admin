@@ -50,16 +50,16 @@
         </div>
         <div class="row" style="margin: 10px 0 0 0; ">
             <!--<div class="col-lg-2 text-right pull-right">
-            <a class="btn btn-primary" href="javascript:void(0)" ng-click="OnSelectAll($event)">
-                <i class="glyphicon glyphicon-asterisk"></i>全选
-            </a>
-        </div>-->
+                <a class="btn btn-primary" href="javascript:void(0)" ng-click="OnSelectAll($event)">
+                    <i class="glyphicon glyphicon-asterisk"></i>全选
+                </a>
+            </div>-->
         </div>
         <div align="center" style="position: relative; padding: 15px 30px 0px 30px;">
             <div class="row-fluid list-group">
                 <a href="javascript:void(0)" class="list-group-item" ng-class="plan.isSelected ? 'active':''" ng-click="planSelect($event, plan)" ng-repeat="plan in dailyInfo">
                     {{plan.title}} - {{plan.type | feeType}}
-                    </a>
+                </a>
             </div>
         </div>
         <div align="center">
@@ -69,7 +69,66 @@
             <!--<button class="btn btn-primary" ng-click="Ok()">确定</button>-->
             <button class="btn btn-primary" ng-click="Cancel()">关闭</button>
         </div>
-    </div></script><script type="text/ng-template" id="rent.html"><div class="container-fluid">
+    </div></script><script type="text/ng-template" id="surrender.html"><div class="container-fluid ng-scope">
+        <div align="center" style="padding: 30; border-bottom: 1px solid #E5E5E5; min-height: 16; ">
+            <h3>退租结算</h3>
+        </div>
+        <div class="row" style="margin: 10px 0 0 0;"></div>
+        <div>
+            <div class="col-sm-12">
+                <label class="col-sm-4 col-sm-offset-2 control-label ml5" style="line-height:34px;">商铺名称</label>
+                <div class="col-sm-6 text-right ng-binding" style="line-height:34px;">
+                    {{department.title}}
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <label class="col-sm-4 col-sm-offset-2 control-label ml5" style="line-height:34px;">商户账号</label>
+                <div class="col-sm-6 text-right ng-binding" style="line-height:34px;">
+                    {{department.account}}}
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <label class="col-sm-4 col-sm-offset-2 control-label ml5" style="line-height:34px;">当前余额</label>
+                <div class="col-sm-6 text-right ng-binding text-danger" ng-class="{'text-danger':department.cash<0}" style="line-height:34px;">
+                    ￥{{department.cash}}
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <label class="col-sm-4 col-sm-offset-2 control-label ml5" style="line-height:34px;">结算金额</label>
+                <div class="col-sm-6 text-right ng-binding" style="line-height:34px;" ng-bind="'￥'+(-department.cash | number:2)"></div>
+            </div>
+            <div class="row">
+                <p class="col-sm-5 col-sm-offset-6" style="color:#aaa;">（说明：余额为0时才能退租）</p>
+            </div>
+            <div class="col-sm-12">
+                <label class="col-sm-4 col-sm-offset-2 control-label ml5 ng-binding" style="line-height:34px;">收费金额</label>
+                <div class="col-sm-3 col-sm-offset-3">
+                    <input class="form-control ml10 ng-pristine ng-untouched ng-valid ng-isolate-scope ng-empty" type="text" ng-model="premium" amount="">
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <label class="col-sm-4 col-sm-offset-2 control-label ml5 mr10 ng-binding" style="line-height:34px;">收费渠道:</label>
+                <div class="col-sm-offset-3 col-sm-3">
+                    <ui-select ng-model="channels.selected" remove-selected="false">
+                        <ui-select-match placeholder="--充值方式--">{{$select.selected.origin}}</ui-select-match>
+                        <ui-select-choices repeat="item.id as item in channels | filter: $select.search">
+                            <div ng-bind-html="item.origin | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+            <div class="col-sm-12 mb10">
+                <label class="col-sm-4 col-sm-offset-2 control-label ml5 mr10" style="line-height:34px;">结算备注:</label>
+                <div class="col-sm-offset-1 col-sm-5">
+                    <textarea class="form-control ng-pristine ng-untouched ng-valid ng-empty" type="text" ng-model="description"></textarea>
+                </div>
+            </div>
+        </div>
+        <div style="margin-top: 15px; padding: 0px 20px 20px; text-align: center;">
+            <button class="btn btn-primary" ng-click="ok()">确定</button>
+            <button class="btn btn-primary" ng-click="cancel()">关闭</button>
+        </div>
+    </div></script><script type="text/ng-template" id="rent.html" class="ng-scope"><div class="container-fluid">
         <div align="center" style="padding: 30; border-bottom: 1px solid #E5E5E5; min-height: 16; ">
             <h3>商铺承租</h3>
         </div>
@@ -105,66 +164,6 @@
                 <label class="col-sm-4 col-sm-offset-2 control-label ml5" style="line-height:34px;">邮箱：</label>
                 <div class="col-sm-6 text-right" style="line-height:34px;">
                     <input class="form-control" type="text" ng-model="email" />
-                </div>
-            </div>
-        </div>
-        <div style="margin-top: 15px; padding: 0px 20px 20px; text-align: center;">
-            <button class="btn btn-primary" ng-click="ok()">确定</button>
-            <button class="btn btn-primary" ng-click="cancel()">关闭</button>
-        </div>
-    </div></script><script type="text/ng-template" id="surrender.html"><div class="container-fluid">
-        <div align="center" style="padding: 30; border-bottom: 1px solid #E5E5E5; min-height: 16; ">
-            <h3>退租结算</h3>
-        </div>
-        <div class="row" style="margin: 10px 0 0 0;"></div>
-        <div>
-            <div class="col-sm-12">
-                <label class="col-sm-4 col-sm-offset-2 control-label ml5" style="line-height:34px;">商铺名称</label>
-                <div class="col-sm-6 text-right" style="line-height:34px;">
-                    {{department.title}}
-                </div>
-            </div>
-            <div class="col-sm-12">
-                <label class="col-sm-4 col-sm-offset-2 control-label ml5" style="line-height:34px;">商户账号</label>
-                <div class="col-sm-6 text-right" style="line-height:34px;">
-                    {{department.account}}
-                </div>
-            </div>
-            <div class="col-sm-12">
-                <label class="col-sm-4 col-sm-offset-2 control-label ml5" style="line-height:34px;">当前余额</label>
-                <div class="col-sm-6 text-right" ng-class="{'text-danger':department.cash<0}" style="line-height:34px;">
-                    ￥{{department.cash}}
-                </div>
-            </div>
-            <div class="col-sm-12">
-                <label class="col-sm-4 col-sm-offset-2 control-label ml5" style="line-height:34px;">结算金额</label>
-                <div class="col-sm-6 text-right" style="line-height:34px;" ng-bind="'￥'+(-department.cash | number:2)">
-                </div>
-            </div>
-            <div class="row">
-                <p class="col-sm-5 col-sm-offset-6" style="color:#aaa;">（说明：余额为0时才能退租）</p>
-            </div>
-            <div class="col-sm-12">
-                <label class="col-sm-4 col-sm-offset-2 control-label ml5" style="line-height:34px;">{{amountName}}金额</label>
-                <div class="col-sm-3 col-sm-offset-3">
-                    <input class="form-control ml10" type="text" ng-model="premium" amount />
-                </div>
-            </div>
-            <div class="col-sm-12 mt10 mb10">
-                <label class="col-sm-4 col-sm-offset-2 control-label ml5 mr10" style="line-height:34px;">{{amountName}}渠道:</label>
-                <div class="col-sm-offset-3 col-sm-3">
-                    <ui-select ng-model="channels.selected" remove-selected="false">
-                        <ui-select-match placeholder="--状态--">{{$select.selected.origin}}</ui-select-match>
-                        <ui-select-choices repeat="item.id as item in channels | filter: $select.search">
-                            <div ng-bind-html="item.origin | highlight: $select.search"></div>
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
-            </div>
-            <div class="col-sm-12 mt10 mb10">
-                <label class="col-sm-4 col-sm-offset-2 control-label ml5 mr10" style="line-height:34px;">结算备注:</label>
-                <div class="col-sm-offset-1 col-sm-5">
-                    <textarea class="form-control" type="text" ng-model="description"></textarea>
                 </div>
             </div>
         </div>
