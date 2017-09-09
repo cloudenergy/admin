@@ -153,9 +153,12 @@
             <div class="col-sm-12 mt10 mb10">
                 <label class="col-sm-4 col-sm-offset-2 control-label ml5 mr10" style="line-height:34px;">{{amountName}}渠道:</label>
                 <div class="col-sm-offset-3 col-sm-3">
-                    <select class="form-control" ng-model="channels.selected">
-                    <option ng-repeat="c in channels" value="{{c.id}}">{{c.origin}}</option>
-                </select>
+                    <ui-select ng-model="channels.selected" remove-selected="false">
+                        <ui-select-match placeholder="--状态--">{{$select.selected.origin}}</ui-select-match>
+                        <ui-select-choices repeat="item.id as item in channels | filter: $select.search">
+                            <div ng-bind-html="item.origin | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
             </div>
             <div class="col-sm-12 mt10 mb10">
