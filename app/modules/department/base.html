@@ -75,21 +75,37 @@
         </div>
         <div class="row" style="margin: 10px 0 0 0;"></div>
         <div>
-            <div class="form-group">
-                登录帐号：
-                <input class="form-control" type="text" ng-model="user" />
+            <div class="col-sm-12">
+                <label class="col-sm-4 col-sm-offset-2 control-label ml5" style="line-height:34px;">商铺名称</label>
+                <div class="col-sm-6 text-right" style="line-height:34px;">
+                    {{department.title}}
+                </div>
             </div>
-            <div class="form-group">
-                登录密码：
-                <input class="form-control" type="text" ng-model="passwd" />
+            <div class="col-sm-12">
+                <label class="col-sm-4 col-sm-offset-2 control-label ml5" style="line-height:34px;">登录帐号：</label>
+                <div class="col-sm-6 text-right" style="line-height:34px;">
+                    <input class="form-control" type="text" ng-model="user" />
+                    <span class="text-primary bold">账号不能少于6位的数字字母组合</span>
+                </div>
             </div>
-            <div class="form-group">
-                联系手机：
-                <input class="form-control" type="text" ng-model="mobile" />
+            <div class="col-sm-12">
+                <label class="col-sm-4 col-sm-offset-2 control-label ml5" style="line-height:34px;">登录密码：</label>
+                <div class="col-sm-6 text-right" style="line-height:34px;">
+                    <input class="form-control" type="text" ng-model="passwd" />
+                    <span class="text-primary bold">密码不能少于6位的数字字母组合</span>
+                </div>
             </div>
-            <div class="form-group">
-                邮箱：
-                <input class="form-control" type="text" ng-model="email" />
+            <div class="col-sm-12">
+                <label class="col-sm-4 col-sm-offset-2 control-label ml5" style="line-height:34px;">联系手机：</label>
+                <div class="col-sm-6 text-right" style="line-height:34px;">
+                    <input class="form-control" type="text" ng-model="mobile" />
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <label class="col-sm-4 col-sm-offset-2 control-label ml5" style="line-height:34px;">邮箱：</label>
+                <div class="col-sm-6 text-right" style="line-height:34px;">
+                    <input class="form-control" type="text" ng-model="email" />
+                </div>
             </div>
         </div>
         <div style="margin-top: 15px; padding: 0px 20px 20px; text-align: center;">
@@ -98,17 +114,55 @@
         </div>
     </div></script><script type="text/ng-template" id="surrender.html"><div class="container-fluid">
         <div align="center" style="padding: 30; border-bottom: 1px solid #E5E5E5; min-height: 16; ">
-            <h3>商铺承租</h3>
+            <h3>退租结算</h3>
         </div>
         <div class="row" style="margin: 10px 0 0 0;"></div>
         <div>
-            <div class="form-group">
-                充正渠道ID:
-                <input class="form-control" type="text" ng-model="channelaccount" />
+            <div class="col-sm-12">
+                <label class="col-sm-4 col-sm-offset-2 control-label ml5" style="line-height:34px;">商铺名称</label>
+                <div class="col-sm-6 text-right" style="line-height:34px;">
+                    {{department.title}}
+                </div>
             </div>
-            <div class="form-group">
-                冲正说明:
-                <input class="form-control" type="text" ng-model="description" />
+            <div class="col-sm-12">
+                <label class="col-sm-4 col-sm-offset-2 control-label ml5" style="line-height:34px;">商户账号</label>
+                <div class="col-sm-6 text-right" style="line-height:34px;">
+                    {{department.account}}
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <label class="col-sm-4 col-sm-offset-2 control-label ml5" style="line-height:34px;">当前余额</label>
+                <div class="col-sm-6 text-right" ng-class="{'text-danger':department.cash<0}" style="line-height:34px;">
+                    ￥{{department.cash}}
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <label class="col-sm-4 col-sm-offset-2 control-label ml5" style="line-height:34px;">结算金额</label>
+                <div class="col-sm-6 text-right" style="line-height:34px;" ng-bind="'￥'+(-department.cash | number:2)">
+                </div>
+            </div>
+            <div class="row">
+                <p class="col-sm-5 col-sm-offset-6" style="color:#aaa;">（说明：余额为0时才能退租）</p>
+            </div>
+            <div class="col-sm-12">
+                <label class="col-sm-4 col-sm-offset-2 control-label ml5" style="line-height:34px;">{{amountName}}金额</label>
+                <div class="col-sm-3 col-sm-offset-3">
+                    <input class="form-control ml10" type="text" ng-model="premium" amount />
+                </div>
+            </div>
+            <div class="col-sm-12 mt10 mb10">
+                <label class="col-sm-4 col-sm-offset-2 control-label ml5 mr10" style="line-height:34px;">{{amountName}}渠道:</label>
+                <div class="col-sm-offset-3 col-sm-3">
+                    <select class="form-control" ng-model="channels.selected">
+                    <option ng-repeat="c in channels" value="{{c.id}}">{{c.origin}}</option>
+                </select>
+                </div>
+            </div>
+            <div class="col-sm-12 mt10 mb10">
+                <label class="col-sm-4 col-sm-offset-2 control-label ml5 mr10" style="line-height:34px;">结算备注:</label>
+                <div class="col-sm-offset-1 col-sm-5">
+                    <textarea class="form-control" type="text" ng-model="description"></textarea>
+                </div>
             </div>
         </div>
         <div style="margin-top: 15px; padding: 0px 20px 20px; text-align: center;">
