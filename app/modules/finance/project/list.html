@@ -1,1 +1,401 @@
-<div class="box-tab no-margin"><ul class="nav nav-tabs"><li class="pull-right form-inline pb5"><form ng-submit="self.list()"><div class="input-group ml5" ng-if="!self.projectid"><input class="form-control" type="text" placeholder="项目名称" ng-model="self.searchText"> <span class="input-group-btn"><button class="btn btn-primary" type="submit"><i class="fa fa-search"></i>查询</button></span></div><div class="btn-group ml5"><button class="btn btn-primary" type="button" ng-click="self.filter()"><i class="fa fa-filter"></i>筛选</button></div><div class="btn-group ml5"><button class="btn btn-primary" type="button" ng-click="self.export()"><i class="fa fa-file-text-o"></i>导出</button></div></form></li></ul><div class="tab-content"><div class="tab-pane active relative" auto-height="self.paneHeight" ui-i18n="'zh-cn'"><div ui-grid="self.gridOptions" class="absolute lt rt bt tp" ui-grid-auto-resize ui-grid-exporter ui-grid-move-columns ui-grid-resize-columns></div></div></div></div>
+<div class="box-tab no-margin"><ul class="nav nav-tabs"><li class="pull-right form-inline pb5"><form ng-submit="self.list()"><div class="input-group ml5" ng-if="!self.projectid"><input class="form-control" type="text" placeholder="项目名称" ng-model="self.searchText"> <span class="input-group-btn"><button class="btn btn-primary" type="submit"><i class="fa fa-search"></i>查询</button></span></div><div class="btn-group ml5"><button class="btn btn-primary" type="button" ng-click="self.filter()"><i class="fa fa-filter"></i>筛选</button></div><div class="btn-group ml5"><button class="btn btn-primary" type="button" ng-click="self.export()"><i class="fa fa-file-text-o"></i>导出</button></div></form></li></ul><div class="tab-content"><div class="tab-pane active relative" auto-height="self.paneHeight" ui-i18n="'zh-cn'"><div ui-grid="self.gridOptions" class="absolute lt rt bt tp" ui-grid-auto-resize ui-grid-exporter ui-grid-move-columns ui-grid-resize-columns></div></div></div></div><script type="text/ng-template" id="payproperty.html"><form name="cardForm" novalidate>
+        <div class="modal-header">
+            <h4 class="modal-title text-center">配置支付属性</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-horizontal pay-content" style="position:relative">
+                <div class="col-sm-2 setPaymentMenu" style="position:absolute;">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li role="presentation" ng-class="{active:self.showSet=='baseinfo'}"><a ng-click="self.showSet='baseinfo'">基本信息</a></li>
+                        <li role="presentation" ng-class="{active:self.showSet=='epay'}"><a ng-click="self.showSet='epay'">电子支付</a></li>
+                        <li role="presentation" ng-class="{active:self.showSet=='cards'}"><a ng-click="self.showSet='cards'">银行卡</a></li>
+                        <li role="presentation" ng-class="{active:self.showSet=='mobile'}"><a ng-click="self.showSet='mobile'">移动端</a></li>
+                        <li role="presentation" ng-class="{active:self.showSet=='alipayparam'}"><a ng-click="self.showSet='alipayparam'">支付宝支付参数</a></li>
+                        <li role="presentation" ng-class="{active:self.showSet=='wxpayparam'}"><a ng-click="self.showSet='wxpayparam'">微信支付参数</a></li>
+                        <li role="presentation" ng-class="{active:self.showSet=='wx_pubparam'}"><a ng-click="self.showSet='wx_pubparam'">公众号支付参数</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-10" ng-if="self.showSet=='baseinfo'" style="position:absolute;left:124px;">
+                    <div class="row mt15">
+                        <label class="col-sm-2 control-label">支付属性</label>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default" ng-class="{'active':1}">工建</button>
+                            <button type="button" class="btn btn-default" ng-class="{'active':0}">支付</button>
+                        </div>
+                    </div>
+                    <div class="row mt15">
+                        <label class="col-sm-2 control-label">平台账单</label>
+                        <div class="btn-group col-sm-3" role="group">
+                            <button type="button" class="btn btn-default">预付费</button>
+                            <button type="button" class="btn btn-default">后付费</button>
+                        </div>
+                        <label class="col-sm-2 control-label">第三方账单</label>
+                        <div class="btn-group col-sm-4" role="group">
+                            <button type="button" class="btn btn-default">关闭</button>
+                            <button type="button" class="btn btn-default">预付费</button>
+                            <button type="button" class="btn btn-default">后付费</button>
+                        </div>
+                    </div>
+                    <div class="row mt15">
+                        <label class="col-sm-2 control-label">电子支付</label>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default">开启</button>
+                            <button type="button" class="btn btn-default">关闭</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-10" ng-if="self.showSet=='epay'" style="position:absolute;left:124px;">
+                    <div class="row mt15">
+                        <label class="col-sm-2 control-label">资金流向</label>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default" ng-class="{'active':1}">平台</button>
+                            <button type="button" class="btn btn-default" ng-class="{'active':0}">项目</button>
+                        </div>
+                    </div>
+                    <div class="row mt15">
+                        <label class="col-sm-2 control-label">最低提现金额</label>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default">1000</button>
+                            <button type="button" class="btn btn-default">2000</button>
+                            <button type="button" class="btn btn-default">5000</button>
+                            <button type="button" class="btn btn-default">自定义</button>
+                        </div>
+                    </div>
+                    <div class="row mt15">
+                        <label class="col-sm-2 control-label">冻结天数</label>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default">1</button>
+                            <button type="button" class="btn btn-default">3</button>
+                            <button type="button" class="btn btn-default">7</button>
+                            <button type="button" class="btn btn-default">31</button>
+                        </div>
+                    </div>
+                    <div class="row mt15">
+                        <label class="col-sm-2 control-label">服务费</label>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default">0</button>
+                            <button type="button" class="btn btn-default">10</button>
+                            <button type="button" class="btn btn-default">15</button>
+                            <button type="button" class="btn btn-default">20</button>
+                            <button type="button" class="btn btn-default">30</button>
+                            <button type="button" class="btn btn-default">50</button>
+                            <button type="button" class="btn btn-default">自定义</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-10" ng-if="self.showSet=='cards'" style="position:absolute;left:124px;">
+                    <div class="row mt15">
+                        <label class="col-sm-2 control-label">账户名称</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row mt15">
+                        <label class="col-sm-2 control-label">银行卡号</label>
+                        <div class="col-sm-7">
+                            <input type="number" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row mt15">
+                        <label class="col-sm-2 control-label">开户银行</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row mt15">
+                        <label class="col-sm-2 control-label">支行名称</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row mt15">
+                        <label class="col-sm-2 control-label">账户归属</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-10" ng-if="self.showSet=='mobile'" style="position:absolute;left:124px;">
+                    <div class="row mt15">
+                        <label class="col-sm-2 control-label">收费渠道</label>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default" ng-class="{'active':1}">租付通APP</button>
+                            <button type="button" class="btn btn-default" ng-class="{'active':0}">微信公众号</button>
+                            <button type="button" class="btn btn-default" ng-class="{'active':0}">支付宝生活号</button>
+                            <button type="button" class="btn btn-default" ng-class="{'active':0}">支付宝物业缴费</button>
+                        </div>
+                    </div>
+                    <div class="row mt15">
+                        <label class="col-sm-2 control-label">支付渠道</label>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default">支付宝</button>
+                            <button type="button" class="btn btn-default">微信</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-10" ng-if="self.showSet=='alipayparam'" style="position:absolute;left:124px;">
+                    <div class="row mt15">
+                        <label class="col-sm-3 control-label">合作者身份（PID）</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" type="text" placeholder="合作者身份（PID）" />
+                        </div>
+                    </div>
+                    <div class="row mt15">
+                        <label class="col-sm-3 control-label">支付宝帐号</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" type="text" placeholder="手机号/邮箱" />
+                        </div>
+                    </div>
+                    <div class="row mt15">
+                        <label class="col-sm-3 control-label">安全校验码（Key）</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" type="text" placeholder="安全校验码" />
+                        </div>
+                    </div>
+                    <div class="row mt15">
+                        <label class="col-sm-3 control-label">支付宝公钥</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" type="text" placeholder="支付宝公钥" />
+                        </div>
+                    </div>
+                    <div class="row mt15">
+                        <label class="col-sm-3 control-label">商户私钥</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" type="text" placeholder="商户私钥" />
+                        </div>
+                    </div>
+                    <div class="row mt15">
+                        <label class="col-sm-3 control-label">配置费率</label>
+                        <span class="col-sm-1 mt8">费率</span>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default" ng-class="{'active':1}">0.6</button>
+                            <button type="button" class="btn btn-default" ng-class="{'active':0}">1</button>
+                        </div>
+                        <span class="mt8">%</span>
+                    </div>
+                    <div class="row mt15">
+                        <label class="col-sm-3 control-label">费率承担</label>
+                        <span class="mt8">物业：</span>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default" ng-class="{'active':1}">0</button>
+                            <button type="button" class="btn btn-default" ng-class="{'active':0}">50</button>
+                            <button type="button" class="btn btn-default" ng-class="{'active':0}">100</button>
+                        </div>
+                        <span class="mt8">%</span>
+                        <span class="mt8">商户：</span>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default" ng-class="{'active':1}">0</button>
+                            <button type="button" class="btn btn-default" ng-class="{'active':0}">50</button>
+                            <button type="button" class="btn btn-default" ng-class="{'active':0}">100</button>
+                        </div>
+                        <span class="mt8">%</span>
+                    </div>
+                </div>
+                <div class="col-sm-10" ng-if="self.showSet=='wxpayparam'" style="position:absolute;left:124px;">
+                    <div class="row mt15 ml5">
+                        <label class="col-sm-3 control-label">微信APPID</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" type="text" placeholder="微信APPID" />
+                        </div>
+                    </div>
+                    <div class="row mt15 ml5">
+                        <label class="col-sm-3 control-label">应用密钥（APPSecret）</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" type="text" placeholder="应用密钥（APPSecret）" />
+                        </div>
+                    </div>
+                    <div class="row mt15 ml5">
+                        <label class="col-sm-3 control-label">商户ID</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" type="text" placeholder="商户ID" />
+                        </div>
+                    </div>
+                    <div class="row mt15 ml5">
+                        <label class="col-sm-3 control-label">商户支付密钥（API密钥）</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" type="text" placeholder="商户支付密钥（API密钥）" />
+                        </div>
+                    </div>
+                    <div class="row mt15 ml5">
+                        <label class="col-sm-3 control-label">商户添加员工登录帐号ID</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" type="text" placeholder="商户添加员工登录帐号ID" />
+                        </div>
+                    </div>
+                    <div class="row mt15 ml5">
+                        <label class="col-sm-3 control-label">微信客户端证书</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" type="text" placeholder="微信客户端证书" />
+                        </div>
+                    </div>
+                    <div class="row mt15 ml5">
+                        <label class="col-sm-3 control-label">微信客户端证书密钥</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" type="text" placeholder="微信客户端证书密钥" />
+                        </div>
+                    </div>
+                    <div class="row mt15 ml5">
+                        <label class="col-sm-3 control-label">配置费率</label>
+                        <span class="col-sm-1 mt8">费率</span>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default" ng-class="{'active':1}">0.6</button>
+                            <button type="button" class="btn btn-default" ng-class="{'active':0}">1</button>
+                        </div>
+                        <span class="mt8">%</span>
+                    </div>
+                    <div class="row mt15 ml5">
+                        <label class="col-sm-3 control-label">费率承担</label>
+                        <span class="mt8">物业：</span>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default" ng-class="{'active':1}">0</button>
+                            <button type="button" class="btn btn-default" ng-class="{'active':0}">50</button>
+                            <button type="button" class="btn btn-default" ng-class="{'active':0}">100</button>
+                        </div>
+                        <span class="mt8">%</span>
+                        <span class="mt8">商户：</span>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default" ng-class="{'active':1}">0</button>
+                            <button type="button" class="btn btn-default" ng-class="{'active':0}">50</button>
+                            <button type="button" class="btn btn-default" ng-class="{'active':0}">100</button>
+                        </div>
+                        <span class="mt8">%</span>
+                    </div>
+                </div>
+                <div class="col-sm-10" ng-if="self.showSet=='wx_pubparam'" style="position:absolute;left:124px;">
+                    <div class="row mt15 ml5">
+                        <label class="col-sm-3 control-label">微信APPID</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" type="text" placeholder="微信APPID" />
+                        </div>
+                    </div>
+                    <div class="row mt15 ml5">
+                        <label class="col-sm-3 control-label">应用密钥（APPSecret）</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" type="text" placeholder="应用密钥（APPSecret）" />
+                        </div>
+                    </div>
+                    <div class="row mt15 ml5">
+                        <label class="col-sm-3 control-label">商户ID</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" type="text" placeholder="商户ID" />
+                        </div>
+                    </div>
+                    <div class="row mt15 ml5">
+                        <label class="col-sm-3 control-label">商户支付密钥（API密钥）</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" type="text" placeholder="商户支付密钥（API密钥）" />
+                        </div>
+                    </div>
+                    <div class="row mt15 ml5">
+                        <label class="col-sm-3 control-label">商户添加员工登录帐号ID</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" type="text" placeholder="商户添加员工登录帐号ID" />
+                        </div>
+                    </div>
+                    <div class="row mt15 ml5">
+                        <label class="col-sm-3 control-label">微信客户端证书</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" type="text" placeholder="微信客户端证书" />
+                        </div>
+                    </div>
+                    <div class="row mt15 ml5">
+                        <label class="col-sm-3 control-label">微信客户端证书密钥</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" type="text" placeholder="微信客户端证书密钥" />
+                        </div>
+                    </div>
+                    <div class="row mt15 ml5">
+                        <label class="col-sm-3 control-label">配置费率</label>
+                        <span class="col-sm-1 mt8">费率</span>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default" ng-class="{'active':1}">0.6</button>
+                            <button type="button" class="btn btn-default" ng-class="{'active':0}">1</button>
+                        </div>
+                        <span class="mt8">%</span>
+                    </div>
+                    <div class="row mt15 ml5">
+                        <label class="col-sm-3 control-label">费率承担</label>
+                        <span class="mt8">物业：</span>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default" ng-class="{'active':1}">0</button>
+                            <button type="button" class="btn btn-default" ng-class="{'active':0}">50</button>
+                            <button type="button" class="btn btn-default" ng-class="{'active':0}">100</button>
+                        </div>
+                        <span class="mt8">%</span>
+                        <span class="mt8">商户：</span>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default" ng-class="{'active':1}">0</button>
+                            <button type="button" class="btn btn-default" ng-class="{'active':0}">50</button>
+                            <button type="button" class="btn btn-default" ng-class="{'active':0}">100</button>
+                        </div>
+                        <span class="mt8">%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer mt30" style="text-align:center;">
+            <button class="btn btn-primary" type="" ng-click="self.ok()">确定</button>
+            <button class="btn btn-default" type="reset" ng-click="self.cancel()">取消</button>
+        </div>
+    </form></script><script type="text/ng-template" id="modal-finance-project-card.html"><form name="cardForm" novalidate ng-submit="cardForm.$valid&&self.submit()">
+        <div class="modal-header bg-primary">
+            <h4 class="modal-title text-center">{{ {true:'编辑银行卡',false:'添加银行卡'}[!!self.card.id] }}</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-horizontal">
+                <div class="form-group has-feedback" ng-class="{'has-warning':(cardForm.$submitted||cardForm.name.$dirty)&&cardForm.name.$error.required,'has-success':(cardForm.$submitted||cardForm.name.$dirty)&&cardForm.name.$valid}">
+                    <label class="col-sm-2 control-label">账户名称</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="name" ng-model="self.card.name" maxlength="50" required>
+                        <span ng-if="(cardForm.$submitted||cardForm.name.$dirty)&&cardForm.name.$error.required" class="glyphicon glyphicon-warning-sign form-control-feedback"></span>
+                        <span ng-if="(cardForm.$submitted||cardForm.name.$dirty)&&cardForm.name.$valid" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                    </div>
+                </div>
+                <div class="form-group has-feedback" ng-class="{'has-warning':(cardForm.$submitted||cardForm.account.$dirty)&&cardForm.account.$error.required,'has-success':(cardForm.$submitted||cardForm.account.$dirty)&&cardForm.account.$valid}">
+                    <label class="col-sm-2 control-label">银行卡号</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="account" ng-model="self.card.account" maxlength="50" required>
+                        <span ng-if="(cardForm.$submitted||cardForm.account.$dirty)&&cardForm.account.$error.required" class="glyphicon glyphicon-warning-sign form-control-feedback"></span>
+                        <span ng-if="(cardForm.$submitted||cardForm.account.$dirty)&&cardForm.account.$valid" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                    </div>
+                </div>
+                <div class="form-group has-feedback" ng-class="{'has-warning':(cardForm.$submitted||cardForm.origin.$dirty)&&cardForm.origin.$error.required,'has-success':(cardForm.$submitted||cardForm.origin.$dirty)&&cardForm.origin.$valid}">
+                    <label class="col-sm-2 control-label">开户银行</label>
+                    <div class="col-sm-10">
+                        <ui-select ng-model="self.card.origin" remove-selected="false" name="origin" required>
+                            <ui-select-match placeholder="--选择银行(输入关键字筛选)--">{{$select.selected.title}}</ui-select-match>
+                            <ui-select-choices repeat="item.id as item in self.bankData | filter: $select.search">
+                                <div ng-bind-html="item.title | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                        <!-- <input type="text" class="form-control" name="origin" ng-model="self.card.origin" maxlength="50" required> -->
+                        <span ng-if="(cardForm.$submitted||cardForm.origin.$dirty)&&cardForm.origin.$error.required" class="glyphicon glyphicon-warning-sign form-control-feedback"></span>
+                        <span ng-if="(cardForm.$submitted||cardForm.origin.$dirty)&&cardForm.origin.$valid" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                    </div>
+                </div>
+                <div class="form-group has-feedback" ng-class="{'has-warning':(cardForm.$submitted||cardForm.subbranch.$dirty)&&cardForm.subbranch.$error.required,'has-success':(cardForm.$submitted||cardForm.subbranch.$dirty)&&cardForm.subbranch.$valid}">
+                    <label class="col-sm-2 control-label">支行名称</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="subbranch" ng-model="self.card.subbranch" maxlength="50" required>
+                        <span ng-if="(cardForm.$submitted||cardForm.subbranch.$dirty)&&cardForm.subbranch.$error.required" class="glyphicon glyphicon-warning-sign form-control-feedback"></span>
+                        <span ng-if="(cardForm.$submitted||cardForm.subbranch.$dirty)&&cardForm.subbranch.$valid" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <label class="col-sm-2 control-label">账户归属</label>
+                    <div class="col-sm-10">
+                        <div class="form-inline" distpicker="self.card.locate">
+                            <select class="form-control" ng-model="self.card.locate.province" distpicker-province></select>
+                            <select class="form-control" ng-model="self.card.locate.city" distpicker-city></select>
+                            <select class="form-control" ng-model="self.card.locate.district" distpicker-district></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer mt30">
+            <span class="text-danger mr15 ng-hide" ng-show="self.bankData.length===0">无可用开户银行，请维护开户银行信息！</span>
+            <button class="btn btn-primary" type="submit" ng-disabled="self.bankData.length===0">确定</button>
+            <button class="btn btn-default" type="reset" ng-click="self.cancel()">取消</button>
+        </div>
+    </form></script>
