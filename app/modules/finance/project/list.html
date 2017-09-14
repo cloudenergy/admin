@@ -201,35 +201,44 @@
                     </div>
                     <div class="row mt15" ng-if="self.setPaymentParams.alipay.flow=='PLT'">
                         <label class="col-sm-3 control-label">配置费率</label>
-                        <span class="mt10">费率：</span>
-                        <div class="btn-group" role="group">
+                        <div class="btn-group ml10" role="group">
                             <button type="button" ng-click="self.setPaymentParams.alipay.rate=0.6" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.alipay.rate==0.6}">0.6</button>
                             <button type="button" ng-click="self.setPaymentParams.alipay.rate=1" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.alipay.rate==1}">1</button>
                         </div>
-                        <span class="mt10">%</span>
+                        <span class="input-group-btn" style="display: inline-block;margin-left: -4px;">
+                            <button class="btn btn-default" style="background: #ccc;" type="button">%</button>
+                        </span>
                     </div>
                     <div class="row mt15" ng-if="self.setPaymentParams.alipay.flow=='PLT'">
                         <label class="col-sm-3 control-label">费率承担</label>
-                        <span class="mt10">物业：</span>
-                        <div class="btn-group" role="group">
-                            <button type="button" ng-click="self.setPaymentParams.alipay.share.PRJ=0" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.alipay.share.PRJ==0}">0</button>
-                            <button type="button" ng-click="self.setPaymentParams.alipay.share.PRJ=50" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.alipay.share.PRJ==50}">50</button>
-                            <button type="button" ng-click="self.setPaymentParams.alipay.share.PRJ=100" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.alipay.share.PRJ==100}">100</button>
+                        <div class="col-sm-12" style="padding:0">
+                            <label class="col-sm-3 control-label">物业</label>
+                            <div class="btn-group ml10" role="group">
+                                <button type="button" ng-click="self.setPaymentParams.alipay.share.PRJ=0" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.alipay.share.PRJ==0}">0</button>
+                                <button type="button" ng-click="self.setPaymentParams.alipay.share.PRJ=50" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.alipay.share.PRJ==50}">50</button>
+                                <button type="button" ng-click="self.setPaymentParams.alipay.share.PRJ=100" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.alipay.share.PRJ==100}">100</button>
+                            </div>
+                            <span class="input-group-btn" style="display: inline-block;margin-left: -4px;">
+                                <button class="btn btn-default" style="background: #ccc;" type="button">%</button>
+                            </span>
                         </div>
-                        <span class="mt10">%</span>
-                        <span class="mt10">商户：</span>
-                        <div class="btn-group" role="group">
-                            <button type="button" ng-click="self.setPaymentParams.alipay.share.USR=0" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.alipay.share.USR==0}">0</button>
-                            <button type="button" ng-click="self.setPaymentParams.alipay.share.USR=50" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.alipay.share.USR==50}">50</button>
-                            <button type="button" ng-click="self.setPaymentParams.alipay.share.USR=100" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.alipay.share.USR==100}">100</button>
+                        <div class="col-sm-12 mt10" style="padding:0">
+                            <label class="col-sm-3 control-label">商户</label>
+                            <div class="btn-group ml10" role="group">
+                                <button type="button" ng-click="self.setPaymentParams.alipay.share.USR=0" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.alipay.share.USR==0}">0</button>
+                                <button type="button" ng-click="self.setPaymentParams.alipay.share.USR=50" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.alipay.share.USR==50}">50</button>
+                                <button type="button" ng-click="self.setPaymentParams.alipay.share.USR=100" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.alipay.share.USR==100}">100</button>
+                            </div>
+                            <span class="input-group-btn" style="display: inline-block;margin-left: -4px;">
+                                <button class="btn btn-default" style="background: #ccc;" type="button">%</button>
+                            </span>
                         </div>
-                        <span class="mt10">%</span>
                     </div>
                 </div>
                 <div class="col-sm-10" ng-if="self.showSet=='wxpayparam'" style="position:absolute;left:124px;">
                     <div class="row mt15">
                         <label class="col-sm-3 control-label">资金流向</label>
-                        <div class="btn-group ml25" role="group">
+                        <div class="btn-group ml10" role="group">
                             <button type="button" class="btn btn-default w72px" ng-click="self.setPaymentParams.wx.flow='PLT'" ng-class="{'active':self.setPaymentParams.wx.flow=='PLT'}">平台</button>
                             <button type="button" class="btn btn-default w72px" ng-click="self.setPaymentParams.wx.flow='PRJ'" ng-class="{'active':self.setPaymentParams.wx.flow=='PRJ'}">项目</button>
                         </div>
@@ -290,35 +299,44 @@
                     </div>
                     <div class="row mt15" ng-if="self.setPaymentParams.wx.flow=='PLT'">
                         <label class="col-sm-3 control-label">配置费率</label>
-                        <span class="mt10">费率：</span>
-                        <div class="btn-group" role="group">
+                        <div class="btn-group ml10" role="group">
                             <button type="button" ng-click="self.setPaymentParams.wx.rate=0.6" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx.rate==0.6}">0.6</button>
                             <button type="button" ng-click="self.setPaymentParams.wx.rate=1" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx.rate==1}">1</button>
                         </div>
-                        <span class="mt10">%</span>
+                        <span class="input-group-btn" style="display: inline-block;margin-left: -4px;">
+                            <button class="btn btn-default" style="background: #ccc;" type="button">%</button>
+                        </span>
                     </div>
                     <div class="row mt15" ng-if="self.setPaymentParams.wx.flow=='PLT'">
                         <label class="col-sm-3 control-label">费率承担</label>
-                        <span class="mt10">物业：</span>
-                        <div class="btn-group" role="group">
-                            <button type="button" ng-click="self.setPaymentParams.wx.share.PRJ=0" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx.share.PRJ==0}">0</button>
-                            <button type="button" ng-click="self.setPaymentParams.wx.share.PRJ=50" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx.share.PRJ==50}">50</button>
-                            <button type="button" ng-click="self.setPaymentParams.wx.share.PRJ=100" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx.share.PRJ==100}">100</button>
+                        <div class="col-sm-12" style="padding:0">
+                            <label class="col-sm-3 control-label">物业</label>
+                            <div class="btn-group ml10" role="group">
+                                <button type="button" ng-click="self.setPaymentParams.wx.share.PRJ=0" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx.share.PRJ==0}">0</button>
+                                <button type="button" ng-click="self.setPaymentParams.wx.share.PRJ=50" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx.share.PRJ==50}">50</button>
+                                <button type="button" ng-click="self.setPaymentParams.wx.share.PRJ=100" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx.share.PRJ==100}">100</button>
+                            </div>
+                            <span class="input-group-btn" style="display: inline-block;margin-left: -4px;">
+                                <button class="btn btn-default" style="background: #ccc;" type="button">%</button>
+                            </span>
                         </div>
-                        <span class="mt10">%</span>
-                        <span class="mt10">商户：</span>
-                        <div class="btn-group" role="group">
-                            <button type="button" ng-click="self.setPaymentParams.wx.share.PLT=0" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx.share.PLT==0}">0</button>
-                            <button type="button" ng-click="self.setPaymentParams.wx.share.PLT=50" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx.share.PLT==50}">50</button>
-                            <button type="button" ng-click="self.setPaymentParams.wx.share.PLT=100" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx.share.PLT==100}">100</button>
+                        <div class="col-sm-12 mt10" style="padding:0">
+                            <label class="col-sm-3 control-label">商户</label>
+                            <div class="btn-group ml10" role="group">
+                                <button type="button" ng-click="self.setPaymentParams.wx.share.PLT=0" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx.share.PLT==0}">0</button>
+                                <button type="button" ng-click="self.setPaymentParams.wx.share.PLT=50" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx.share.PLT==50}">50</button>
+                                <button type="button" ng-click="self.setPaymentParams.wx.share.PLT=100" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx.share.PLT==100}">100</button>
+                            </div>
+                            <span class="input-group-btn" style="display: inline-block;margin-left: -4px;">
+                                <button class="btn btn-default" style="background: #ccc;" type="button">%</button>
+                            </span>
                         </div>
-                        <span class="mt10">%</span>
                     </div>
                 </div>
                 <div class="col-sm-10" ng-if="self.showSet=='wx_pubparam'" style="position:absolute;left:124px;">
                     <div class="row mt15">
                         <label class="col-sm-3 control-label">资金流向</label>
-                        <div class="btn-group ml25" role="group">
+                        <div class="btn-group ml10" role="group">
                             <button type="button" class="btn btn-default w72px" ng-click="self.setPaymentParams.wx_pub.flow='PLT'" ng-class="{'active':self.setPaymentParams.wx_pub.flow=='PLT'}">平台</button>
                             <button type="button" class="btn btn-default w72px" ng-click="self.setPaymentParams.wx_pub.flow='PRJ'" ng-class="{'active':self.setPaymentParams.wx_pub.flow=='PRJ'}">项目</button>
                         </div>
@@ -326,13 +344,13 @@
                     <div class="row mt15 ml5" ng-if="self.setPaymentParams.wx_pub.flow=='PRJ'">
                         <label class="col-sm-3 control-label">微信APPID</label>
                         <div class="col-sm-7">
-                            <input class="form-control" ng-model="self.setPaymentParams.wx_pub.wx_appid" type="text" placeholder="微信APPID" />
+                            <input class="form-control" ng-model="self.setPaymentParams.wx_pub.wxp_appid" type="text" placeholder="微信APPID" />
                         </div>
                     </div>
                     <div class="row mt15 ml5" ng-if="self.setPaymentParams.wx_pub.flow=='PRJ'">
                         <label class="col-sm-3 control-label">应用密钥（APPSecret）</label>
                         <div class="col-sm-7">
-                            <input class="form-control" ng-model="self.setPaymentParams.wx_pub.wx_appsecret" type="text" placeholder="应用密钥（APPSecret）" />
+                            <input class="form-control" ng-model="self.setPaymentParams.wx_pub.wxp_appsecret" type="text" placeholder="应用密钥（APPSecret）" />
                         </div>
                     </div>
                     <div class="row mt15 ml5" ng-if="self.setPaymentParams.wx_pub.flow=='PRJ'">
@@ -379,29 +397,38 @@
                     </div>
                     <div class="row mt15" ng-if="self.setPaymentParams.wx_pub.flow=='PLT'">
                         <label class="col-sm-3 control-label">配置费率</label>
-                        <span class="mt10">费率：</span>
-                        <div class="btn-group" role="group">
+                        <div class="btn-group ml10" role="group">
                             <button type="button" ng-click="self.setPaymentParams.wx_pub.rate=0.6" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx_pub.rate==0.6}">0.6</button>
                             <button type="button" ng-click="self.setPaymentParams.wx_pub.rate=1" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx_pub.rate==1}">1</button>
                         </div>
-                        <span class="mt10">%</span>
+                        <span class="input-group-btn" style="display: inline-block;margin-left: -4px;">
+                            <button class="btn btn-default" style="background: #ccc;" type="button">%</button>
+                        </span>
                     </div>
                     <div class="row mt15" ng-if="self.setPaymentParams.wx_pub.flow=='PLT'">
                         <label class="col-sm-3 control-label">费率承担</label>
-                        <span class="mt10">物业：</span>
-                        <div class="btn-group" role="group">
-                            <button type="button" ng-click="self.setPaymentParams.wx_pub.share.PRJ=0" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx_pub.share.PRJ==0}">0</button>
-                            <button type="button" ng-click="self.setPaymentParams.wx_pub.share.PRJ=50" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx_pub.share.PRJ==50}">50</button>
-                            <button type="button" ng-click="self.setPaymentParams.wx_pub.share.PRJ=100" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx_pub.share.PRJ==100}">100</button>
+                        <div class="col-sm-12" style="padding:0">
+                            <label class="col-sm-3 control-label">物业</label>
+                            <div class="btn-group ml10" role="group">
+                                <button type="button" ng-click="self.setPaymentParams.wx_pub.share.PRJ=0" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx_pub.share.PRJ==0}">0</button>
+                                <button type="button" ng-click="self.setPaymentParams.wx_pub.share.PRJ=50" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx_pub.share.PRJ==50}">50</button>
+                                <button type="button" ng-click="self.setPaymentParams.wx_pub.share.PRJ=100" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx_pub.share.PRJ==100}">100</button>
+                            </div>
+                            <span class="input-group-btn" style="display: inline-block;margin-left: -4px;">
+                                <button class="btn btn-default" style="background: #ccc;" type="button">%</button>
+                            </span>
                         </div>
-                        <span class="mt10">%</span>
-                        <span class="mt10">商户：</span>
-                        <div class="btn-group" role="group">
-                            <button type="button" ng-click="self.setPaymentParams.wx_pub.share.PLT=0" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx_pub.share.PLT==0}">0</button>
-                            <button type="button" ng-click="self.setPaymentParams.wx_pub.share.PLT=50" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx_pub.share.PLT==50}">50</button>
-                            <button type="button" ng-click="self.setPaymentParams.wx_pub.share.PLT=100" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx_pub.share.PLT==100}">100</button>
+                        <div class="col-sm-12 mt10" style="padding:0">
+                            <label class="col-sm-3 control-label">商户</label>
+                            <div class="btn-group ml10" role="group">
+                                <button type="button" ng-click="self.setPaymentParams.wx_pub.share.PLT=0" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx_pub.share.PLT==0}">0</button>
+                                <button type="button" ng-click="self.setPaymentParams.wx_pub.share.PLT=50" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx_pub.share.PLT==50}">50</button>
+                                <button type="button" ng-click="self.setPaymentParams.wx_pub.share.PLT=100" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx_pub.share.PLT==100}">100</button>
+                            </div>
+                            <span class="input-group-btn" style="display: inline-block;margin-left: -4px;">
+                                <button class="btn btn-default" style="background: #ccc;" type="button">%</button>
+                            </span>
                         </div>
-                        <span class="mt10">%</span>
                     </div>
                 </div>
             </div>
