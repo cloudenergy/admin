@@ -67,8 +67,7 @@
                             <button type="button" ng-click="self.setPaymentParams.withdraw.frozenday=31;self.frozendaydef=false" ng-class="{'active':self.setPaymentParams.withdraw.frozenday==31}" class="btn btn-default w72px">31</button>
                             <button type="button" ng-click="self.setPaymentParams.withdraw.frozenday='';self.frozendaydef=true" ng-class="{'active':self.frozendaydef}" class="btn btn-default w72px">自定义</button>
                         </div>
-                        <span class="mt10" ng-if="self.frozendaydef">￥</span>
-                        <div style="display:inline-block;width:80px;" ng-if="self.frozendaydef"><input class="form-control" ng-model="self.setPaymentParams.withdraw.frozenday" type="text" amount></div>
+                        <div style="display:inline-block;width:80px;" ng-if="self.frozendaydef"><input class="form-control" type="number" ng-model="self.setPaymentParams.withdraw.frozenday" type="text"></div>
                     </div>
                     <div class="row mt15">
                         <label class="col-sm-2 control-label">服务费</label>
