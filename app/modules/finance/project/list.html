@@ -8,7 +8,7 @@
                     <ul class="nav nav-pills nav-stacked">
                         <li role="presentation" ng-class="{active:self.showSet=='baseinfo'}"><a ng-click="self.showSet='baseinfo'">基本信息</a></li>
                         <li role="presentation" ng-class="{active:self.showSet=='epay'}"><a ng-click="self.showSet='epay'">电子支付</a></li>
-                        <li role="presentation" ng-class="{active:self.showSet=='cards'}"><a ng-click="self.showSet='cards'">银行卡</a></li>
+                        <li role="presentation" ng-class="{active:self.showSet=='cards'}"><a ng-click="self.showSet='cards'">提现账户</a></li>
                         <li role="presentation" ng-class="{active:self.showSet=='mobile'}"><a ng-click="self.showSet='mobile'">移动端</a></li>
                         <li role="presentation" ng-class="{active:self.showSet=='alipayparam'}"><a ng-click="self.showSet='alipayparam'">支付宝支付参数</a></li>
                         <li role="presentation" ng-class="{active:self.showSet=='wxpayparam'}"><a ng-click="self.showSet='wxpayparam'">微信支付参数</a></li>
@@ -19,314 +19,386 @@
                     <div class="row mt15">
                         <label class="col-sm-2 control-label">支付属性</label>
                         <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default" ng-class="{'active':1}">工建</button>
-                            <button type="button" class="btn btn-default" ng-class="{'active':0}">支付</button>
+                            <button type="button" class="btn btn-default" ng-click="self.setPaymentParams.payment=false" ng-class="{'active':!self.setPaymentParams.payment}">工建</button>
+                            <button type="button" class="btn btn-default" ng-click="self.setPaymentParams.payment=true" ng-class="{'active':self.setPaymentParams.payment}">支付</button>
                         </div>
                     </div>
                     <div class="row mt15">
                         <label class="col-sm-2 control-label">平台账单</label>
                         <div class="btn-group col-sm-3" role="group">
-                            <button type="button" class="btn btn-default">预付费</button>
-                            <button type="button" class="btn btn-default">后付费</button>
+                            <button type="button" ng-click="self.setPaymentParams.prepayment=true" ng-class="{'active':self.setPaymentParams.prepayment}" class="btn btn-default">预付费</button>
+                            <button type="button" ng-click="self.setPaymentParams.prepayment=false" ng-class="{'active':!self.setPaymentParams.prepayment}" class="btn btn-default">后付费</button>
                         </div>
                         <label class="col-sm-2 control-label">第三方账单</label>
                         <div class="btn-group col-sm-4" role="group">
-                            <button type="button" class="btn btn-default">关闭</button>
-                            <button type="button" class="btn btn-default">预付费</button>
-                            <button type="button" class="btn btn-default">后付费</button>
+                            <button type="button" ng-click="self.setPaymentParams.thirdpartbill='CLOSE'" ng-class="{'active':self.setPaymentParams.thirdpartbill=='CLOSE'}" class="btn btn-default">关闭</button>
+                            <button type="button" ng-click="self.setPaymentParams.thirdpartbill='PRE'" ng-class="{'active':self.setPaymentParams.thirdpartbill=='PRE'}" class="btn btn-default">预付费</button>
+                            <button type="button" ng-click="self.setPaymentParams.thirdpartbill='BILL'" ng-class="{'active':self.setPaymentParams.thirdpartbill=='BILL'}" class="btn btn-default">后付费</button>
                         </div>
                     </div>
                     <div class="row mt15">
                         <label class="col-sm-2 control-label">电子支付</label>
                         <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default">开启</button>
-                            <button type="button" class="btn btn-default">关闭</button>
+                            <button type="button" ng-click="self.setPaymentParams.epayment=true" ng-class="{'active':self.setPaymentParams.epayment}" class="btn btn-default">开启</button>
+                            <button type="button" ng-click="self.setPaymentParams.epayment=false" ng-class="{'active':!self.setPaymentParams.epayment}" class="btn btn-default">关闭</button>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-10" ng-if="self.showSet=='epay'" style="position:absolute;left:124px;">
                     <div class="row mt15">
-                        <label class="col-sm-2 control-label">资金流向</label>
-                        <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default" ng-class="{'active':1}">平台</button>
-                            <button type="button" class="btn btn-default" ng-class="{'active':0}">项目</button>
-                        </div>
-                    </div>
-                    <div class="row mt15">
                         <label class="col-sm-2 control-label">最低提现金额</label>
                         <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default">1000</button>
-                            <button type="button" class="btn btn-default">2000</button>
-                            <button type="button" class="btn btn-default">5000</button>
-                            <button type="button" class="btn btn-default">自定义</button>
+                            <button type="button" ng-click="self.setPaymentParams.withdraw.minwithdraw=1000;self.withdrawdef=false" ng-class="{'active':self.setPaymentParams.withdraw.minwithdraw==1000}" class="btn btn-default">1000</button>
+                            <button type="button" ng-click="self.setPaymentParams.withdraw.minwithdraw=2000;self.withdrawdef=false" ng-class="{'active':self.setPaymentParams.withdraw.minwithdraw==2000}" class="btn btn-default">2000</button>
+                            <button type="button" ng-click="self.setPaymentParams.withdraw.minwithdraw=5000;self.withdrawdef=false" ng-class="{'active':self.setPaymentParams.withdraw.minwithdraw==5000}" class="btn btn-default">5000</button>
+                            <button type="button" ng-click="self.setPaymentParams.withdraw.minwithdraw='';self.withdrawdef=true" ng-class="{'active':self.withdrawdef==true" class="btn btn-default">自定义</button>
                         </div>
+                        <span class="mt8" ng-if="self.withdrawdef">￥</span>
+                        <div style="display:inline-block;width:100px;" ng-if="self.withdrawdef"><input class="form-control" type="text" ng-model="self.setPaymentParams.withdraw..minwithdraw" amount></div>
                     </div>
                     <div class="row mt15">
                         <label class="col-sm-2 control-label">冻结天数</label>
                         <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default">1</button>
-                            <button type="button" class="btn btn-default">3</button>
-                            <button type="button" class="btn btn-default">7</button>
-                            <button type="button" class="btn btn-default">31</button>
+                            <button type="button" ng-click="self.setPaymentParams.withdraw.frozenday=1;" ng-class="{'active':self.setPaymentParams.withdraw.frozenday==1}" class="btn btn-default">1</button>
+                            <button type="button" ng-click="self.setPaymentParams.withdraw.frozenday=3;" ng-class="{'active':self.setPaymentParams.withdraw.frozenday==3}" class="btn btn-default">3</button>
+                            <button type="button" ng-click="self.setPaymentParams.withdraw.frozenday=7;" ng-class="{'active':self.setPaymentParams.withdraw.frozenday==7}" class="btn btn-default">7</button>
+                            <button type="button" ng-click="self.setPaymentParams.withdraw.frozenday=31;" ng-class="{'active':self.setPaymentParams.withdraw.frozenday==31}" class="btn btn-default">31</button>
                         </div>
                     </div>
                     <div class="row mt15">
                         <label class="col-sm-2 control-label">服务费</label>
                         <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default">0</button>
-                            <button type="button" class="btn btn-default">10</button>
-                            <button type="button" class="btn btn-default">15</button>
-                            <button type="button" class="btn btn-default">20</button>
-                            <button type="button" class="btn btn-default">30</button>
-                            <button type="button" class="btn btn-default">50</button>
-                            <button type="button" class="btn btn-default">自定义</button>
+                            <button type="button" ng-click="self.setPaymentParams.withdraw.servicecharge=0;self.servicechargedef=false" ng-class="{'active':self.setPaymentParams.withdraw.servicecharge==0}" class="btn btn-default">0</button>
+                            <button type="button" ng-click="self.setPaymentParams.withdraw.servicecharge=10;self.servicechargedef=false" ng-class="{'active':self.setPaymentParams.withdraw.servicecharge==10}" class="btn btn-default">10</button>
+                            <button type="button" ng-click="self.setPaymentParams.withdraw.servicecharge=15;self.servicechargedef=false" ng-class="{'active':self.setPaymentParams.withdraw.servicecharge==15}" class="btn btn-default">15</button>
+                            <button type="button" ng-click="self.setPaymentParams.withdraw.servicecharge=20;self.servicechargedef=false" ng-class="{'active':self.setPaymentParams.withdraw.servicecharge==20}" class="btn btn-default">20</button>
+                            <button type="button" ng-click="self.setPaymentParams.withdraw.servicecharge=30;self.servicechargedef=false" ng-class="{'active':self.setPaymentParams.withdraw.servicecharge==30}" class="btn btn-default">30</button>
+                            <button type="button" ng-click="self.setPaymentParams.withdraw.servicecharge=50;self.servicechargedef=false" ng-class="{'active':self.setPaymentParams.withdraw.servicecharge==50}" class="btn btn-default">50</button>
+                            <button type="button" ng-click="self.setPaymentParams.withdraw.servicecharge='';self.servicechargedef=true" ng-class="{'active':self.servicechargedef==true}" class="btn btn-default">自定义</button>
                         </div>
+                        <span class="mt8" ng-if="self.servicechargedebf">￥</span>
+                        <div style="display:inline-block;width:100px;" ng-if="self.servicechargedef"><input class="form-control" ng-model="self.setPaymentParams.withdraw.servicecharge" type="text" amount></div>
                     </div>
                 </div>
                 <div class="col-sm-10" ng-if="self.showSet=='cards'" style="position:absolute;left:124px;">
-                    <div class="row mt15">
-                        <label class="col-sm-2 control-label">账户名称</label>
-                        <div class="col-sm-7">
-                            <input type="text" class="form-control" />
+                    <a style="position: absolute;right: 100px;" class="text-blue" ng-click="self.addCard(self.setPaymentParams.withdraw.cards)">添加新银行卡</a>
+                    <div ng-repeat="card in self.setPaymentParams.withdraw.cards">
+                        <div class="row mt15">
+                            <label class="col-sm-2 control-label" ng-bind="'卡'+($index+1)+':'"></label>
                         </div>
-                    </div>
-                    <div class="row mt15">
-                        <label class="col-sm-2 control-label">银行卡号</label>
-                        <div class="col-sm-7">
-                            <input type="number" class="form-control" />
+                        <div class="row mt15">
+                            <label class="col-sm-2 control-label">账户名称</label>
+                            <div class="col-sm-7">
+                                <input type="text" ng-model="card.name" class="form-control" />
+                            </div>
                         </div>
-                    </div>
-                    <div class="row mt15">
-                        <label class="col-sm-2 control-label">开户银行</label>
-                        <div class="col-sm-7">
-                            <input type="text" class="form-control" />
+                        <div class="row mt15">
+                            <label class="col-sm-2 control-label">银行卡号</label>
+                            <div class="col-sm-7">
+                                <input type="text" ng-model="card.idcard" class="form-control" />
+                            </div>
                         </div>
-                    </div>
-                    <div class="row mt15">
-                        <label class="col-sm-2 control-label">支行名称</label>
-                        <div class="col-sm-7">
-                            <input type="text" class="form-control" />
+                        <div class="row mt15">
+                            <label class="col-sm-2 control-label">开户银行</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="card.origin" remove-selected="false" name="origin" required>
+                                    <ui-select-match placeholder="--选择银行(输入关键字筛选)--">{{$select.selected.title}}</ui-select-match>
+                                    <ui-select-choices repeat="item.id as item in self.bankData | filter: $select.search">
+                                        <div ng-bind-html="item.title | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row mt15">
-                        <label class="col-sm-2 control-label">账户归属</label>
-                        <div class="col-sm-7">
-                            <input type="text" class="form-control" />
+                        <div class="row mt15">
+                            <label class="col-sm-2 control-label">支行名称</label>
+                            <div class="col-sm-7">
+                                <input type="text" ng-model="card.subbranch" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row mt15">
+                            <label class="col-sm-2 control-label">账户归属</label>
+                            <div class="col-sm-7">
+                                <div class="form-inline" distpicker="card.locate">
+                                    <select class="form-control" ng-model="card.locate.province" distpicker-province></select>
+                                    <select class="form-control" ng-model="card.locate.city" distpicker-city></select>
+                                    <select class="form-control" ng-model="card.locate.district" distpicker-district></select>
+                                </div>
+                            </div>
+                            <a class="mt8 text-blue pull-left" ng-click="self.deleteCard($index)">删除</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-10" ng-if="self.showSet=='mobile'" style="position:absolute;left:124px;">
                     <div class="row mt15">
-                        <label class="col-sm-2 control-label">收费渠道</label>
-                        <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default" ng-class="{'active':1}">租付通APP</button>
-                            <button type="button" class="btn btn-default" ng-class="{'active':0}">微信公众号</button>
-                            <button type="button" class="btn btn-default" ng-class="{'active':0}">支付宝生活号</button>
-                            <button type="button" class="btn btn-default" ng-class="{'active':0}">支付宝物业缴费</button>
+                        <label class="col-sm-2 control-label">移动端</label>
+                        <div class="col-sm-3 mt8"><a class="text-blue" ng-click="self.setPaymentParams.app.enable=self.setPaymentParams.app.wx_pub=self.setPaymentParams.alipay_life.enable=self.setPaymentParams.alipay_tenement.enable=true">全选</a>&nbsp/&nbsp<a class="text-blue" ng-click="self.setPaymentParams.app.enable=self.setPaymentParams.app.wx_pub=self.setPaymentParams.alipay_life.enable=self.setPaymentParams.alipay_tenement.enable=false">取消</a></div>
+                        <div class="btn-group col-sm-8 col-sm-offset-1 mt8">
+                            <input type="checkbox" ng-model="self.setPaymentParams.app.enable" style="margin-left:10px;margin-right:3px;" />租付通APP
+                            <input type="checkbox" ng-model="self.setPaymentParams.app.wx_pub" style="margin-left:10px;margin-right:3px;" />微信公众号
+                            <input type="checkbox" ng-model="self.setPaymentParams.alipay_life.enable" style="margin-left:10px;margin-right:3px;" />支付宝生活号
+                            <input type="checkbox" ng-model="self.setPaymentParams.alipay_tenement.enable" style="margin-left:10px;margin-right:3px;" />支付宝物业缴费
                         </div>
                     </div>
                     <div class="row mt15">
-                        <label class="col-sm-2 control-label">支付渠道</label>
-                        <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default">支付宝</button>
-                            <button type="button" class="btn btn-default">微信</button>
+                        <label class="col-sm-2 control-label">APP收费渠道</label>
+                        <div class="col-sm-3 mt8"><a class="text-blue" ng-click="self.setPaymentParams.app.alipay=self.setPaymentParams.app.wx=true">全选</a>&nbsp/&nbsp<a class="text-blue" ng-click="self.setPaymentParams.app.alipay=self.setPaymentParams.app.wx=false">取消</a></div>
+                        <div class="btn-group col-sm-8 col-sm-offset-1 mt8">
+                            <input type="checkbox" ng-model="self.setPaymentParams.app.alipay" style="margin-left:10px;margin-right:3px;" />支付宝
+                            <input type="checkbox" ng-model="self.setPaymentParams.app.wx" style="margin-left:10px;margin-right:3px;" />微信
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-10" ng-if="self.showSet=='alipayparam'" style="position:absolute;left:124px;">
                     <div class="row mt15">
+                        <label class="col-sm-2 control-label">资金流向</label>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default" ng-click="self.setPaymentParams.alipay.flow='PLT'" ng-class="{'active':self.setPaymentParams.alipay.flow=='PLT'}">平台</button>
+                            <button type="button" class="btn btn-default" ng-click="self.setPaymentParams.alipay.flow='PRJ'" ng-class="{'active':self.setPaymentParams.alipay.flow=='PRJ'}">项目</button>
+                        </div>
+                    </div>
+                    <div class="row mt15" ng-if="self.setPaymentParams.alipay.flow=='PRJ'">
                         <label class="col-sm-3 control-label">合作者身份（PID）</label>
                         <div class="col-sm-7">
-                            <input class="form-control" type="text" placeholder="合作者身份（PID）" />
+                            <input class="form-control" ng-model="self.setPaymentParams.alipay.pid" type="text" placeholder="合作者身份（PID）" />
                         </div>
                     </div>
-                    <div class="row mt15">
+                    <div class="row mt15" ng-if="self.setPaymentParams.alipay.flow=='PRJ'">
                         <label class="col-sm-3 control-label">支付宝帐号</label>
                         <div class="col-sm-7">
-                            <input class="form-control" type="text" placeholder="手机号/邮箱" />
+                            <input class="form-control" ng-model="self.setPaymentParams.alipay.account" type="text" placeholder="手机号/邮箱" />
                         </div>
                     </div>
-                    <div class="row mt15">
+                    <div class="row mt15" ng-if="self.setPaymentParams.alipay.flow=='PRJ'">
                         <label class="col-sm-3 control-label">安全校验码（Key）</label>
                         <div class="col-sm-7">
-                            <input class="form-control" type="text" placeholder="安全校验码" />
+                            <input class="form-control" ng-model="self.setPaymentParams.alipay.secretkey" type="text" placeholder="安全校验码" />
                         </div>
                     </div>
-                    <div class="row mt15">
+                    <div class="row mt15" ng-if="self.setPaymentParams.alipay.flow=='PRJ'">
                         <label class="col-sm-3 control-label">支付宝公钥</label>
                         <div class="col-sm-7">
-                            <input class="form-control" type="text" placeholder="支付宝公钥" />
+                            <input class="form-control" ng-model="self.setPaymentParams.alipay.alipay_public" type="text" placeholder="支付宝公钥" />
                         </div>
                     </div>
-                    <div class="row mt15">
+                    <div class="row mt15" ng-if="self.setPaymentParams.alipay.flow=='PRJ'">
                         <label class="col-sm-3 control-label">商户私钥</label>
                         <div class="col-sm-7">
-                            <input class="form-control" type="text" placeholder="商户私钥" />
+                            <input class="form-control" ng-model="self.setPaymentParams.alipay.department_private" type="text" placeholder="商户私钥" />
                         </div>
                     </div>
-                    <div class="row mt15">
+                    <div class="row mt15" ng-if="self.setPaymentParams.alipay.flow=='PRJ'">
+                        <label class="col-sm-3 control-label">appid</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" ng-model="self.setPaymentParams.alipay.appid" type="text" placeholder="pingxx appid" />
+                        </div>
+                    </div>
+                    <div class="row mt15" ng-if="self.setPaymentParams.alipay.flow=='PRJ'">
+                        <label class="col-sm-3 control-label">key</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" ng-model="self.setPaymentParams.alipay.key" type="text" placeholder="pingxx key" />
+                        </div>
+                    </div>
+                    <div class="row mt15" ng-if="self.setPaymentParams.alipay.flow=='PLT'">
                         <label class="col-sm-3 control-label">配置费率</label>
                         <span class="col-sm-1 mt8">费率</span>
                         <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default" ng-class="{'active':1}">0.6</button>
-                            <button type="button" class="btn btn-default" ng-class="{'active':0}">1</button>
+                            <button type="button" ng-click="self.setPaymentParams.alipay.rate=0.6" class="btn btn-default" ng-class="{'active':self.setPaymentParams.alipay.rate==0.6}">0.6</button>
+                            <button type="button" ng-click="self.setPaymentParams.alipay.rate=1" class="btn btn-default" ng-class="{'active':self.setPaymentParams.alipay.rate==1}">1</button>
                         </div>
                         <span class="mt8">%</span>
                     </div>
-                    <div class="row mt15">
+                    <div class="row mt15" ng-if="self.setPaymentParams.alipay.flow=='PLT'">
                         <label class="col-sm-3 control-label">费率承担</label>
                         <span class="mt8">物业：</span>
                         <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default" ng-class="{'active':1}">0</button>
-                            <button type="button" class="btn btn-default" ng-class="{'active':0}">50</button>
-                            <button type="button" class="btn btn-default" ng-class="{'active':0}">100</button>
+                            <button type="button" ng-click="self.setPaymentParams.alipay.share.PRJ=0" class="btn btn-default" ng-class="{'active':self.setPaymentParams.alipay.share.PRJ==0}">0</button>
+                            <button type="button" ng-click="self.setPaymentParams.alipay.share.PRJ=50" class="btn btn-default" ng-class="{'active':self.setPaymentParams.alipay.share.PRJ==50}">50</button>
+                            <button type="button" ng-click="self.setPaymentParams.alipay.share.PRJ=100" class="btn btn-default" ng-class="{'active':self.setPaymentParams.alipay.share.PRJ==100}">100</button>
                         </div>
                         <span class="mt8">%</span>
                         <span class="mt8">商户：</span>
                         <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default" ng-class="{'active':1}">0</button>
-                            <button type="button" class="btn btn-default" ng-class="{'active':0}">50</button>
-                            <button type="button" class="btn btn-default" ng-class="{'active':0}">100</button>
+                            <button type="button" ng-click="self.setPaymentParams.alipay.share.USR=0" class="btn btn-default" ng-class="{'active':self.setPaymentParams.alipay.share.USR==0}">0</button>
+                            <button type="button" ng-click="self.setPaymentParams.alipay.share.USR=50" class="btn btn-default" ng-class="{'active':self.setPaymentParams.alipay.share.USR==50}">50</button>
+                            <button type="button" ng-click="self.setPaymentParams.alipay.share.USR=100" class="btn btn-default" ng-class="{'active':self.setPaymentParams.alipay.share.USR==100}">100</button>
                         </div>
                         <span class="mt8">%</span>
                     </div>
                 </div>
                 <div class="col-sm-10" ng-if="self.showSet=='wxpayparam'" style="position:absolute;left:124px;">
-                    <div class="row mt15 ml5">
+                    <div class="row mt15">
+                        <label class="col-sm-2 control-label">资金流向</label>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default" ng-click="self.setPaymentParams.wx.flow='PLT'" ng-class="{'active':self.setPaymentParams.wx.flow=='PLT'}">平台</button>
+                            <button type="button" class="btn btn-default" ng-click="self.setPaymentParams.wx.flow='PRJ'" ng-class="{'active':self.setPaymentParams.wx.flow=='PRJ'}">项目</button>
+                        </div>
+                    </div>
+                    <div class="row mt15 ml5" ng-if="self.setPaymentParams.wx.flow=='PRJ'">
                         <label class="col-sm-3 control-label">微信APPID</label>
                         <div class="col-sm-7">
-                            <input class="form-control" type="text" placeholder="微信APPID" />
+                            <input class="form-control" ng-model="self.setPaymentParams.wx.wx_appid" type="text" placeholder="微信APPID" />
                         </div>
                     </div>
-                    <div class="row mt15 ml5">
+                    <div class="row mt15 ml5" ng-if="self.setPaymentParams.wx.flow=='PRJ'">
                         <label class="col-sm-3 control-label">应用密钥（APPSecret）</label>
                         <div class="col-sm-7">
-                            <input class="form-control" type="text" placeholder="应用密钥（APPSecret）" />
+                            <input class="form-control" ng-model="self.setPaymentParams.wx.wx_appsecret" type="text" placeholder="应用密钥（APPSecret）" />
                         </div>
                     </div>
-                    <div class="row mt15 ml5">
+                    <div class="row mt15 ml5" ng-if="self.setPaymentParams.wx.flow=='PRJ'">
                         <label class="col-sm-3 control-label">商户ID</label>
                         <div class="col-sm-7">
-                            <input class="form-control" type="text" placeholder="商户ID" />
+                            <input class="form-control" ng-model="self.setPaymentParams.wx.merchant" type="text" placeholder="商户ID" />
                         </div>
                     </div>
-                    <div class="row mt15 ml5">
+                    <div class="row mt15 ml5" ng-if="self.setPaymentParams.wx.flow=='PRJ'">
                         <label class="col-sm-3 control-label">商户支付密钥（API密钥）</label>
                         <div class="col-sm-7">
-                            <input class="form-control" type="text" placeholder="商户支付密钥（API密钥）" />
+                            <input class="form-control" ng-model="self.setPaymentParams.wx.api_secretkey" type="text" placeholder="商户支付密钥（API密钥）" />
                         </div>
                     </div>
-                    <div class="row mt15 ml5">
+                    <div class="row mt15 ml5" ng-if="self.setPaymentParams.wx.flow=='PRJ'">
                         <label class="col-sm-3 control-label">商户添加员工登录帐号ID</label>
                         <div class="col-sm-7">
-                            <input class="form-control" type="text" placeholder="商户添加员工登录帐号ID" />
+                            <input class="form-control" ng-model="self.setPaymentParams.wx.staff_account" type="text" placeholder="商户添加员工登录帐号ID" />
                         </div>
                     </div>
-                    <div class="row mt15 ml5">
+                    <div class="row mt15 ml5" ng-if="self.setPaymentParams.wx.flow=='PRJ'">
                         <label class="col-sm-3 control-label">微信客户端证书</label>
                         <div class="col-sm-7">
-                            <input class="form-control" type="text" placeholder="微信客户端证书" />
+                            <input class="form-control" ng-model="self.setPaymentParams.wx.apiclient_cert" type="text" placeholder="微信客户端证书" />
                         </div>
                     </div>
-                    <div class="row mt15 ml5">
+                    <div class="row mt15 ml5" ng-if="self.setPaymentParams.wx.flow=='PRJ'">
                         <label class="col-sm-3 control-label">微信客户端证书密钥</label>
                         <div class="col-sm-7">
-                            <input class="form-control" type="text" placeholder="微信客户端证书密钥" />
+                            <input class="form-control" type="text" ng-model="self.setPaymentParams.wx.apiclient_key" placeholder="微信客户端证书密钥" />
                         </div>
                     </div>
-                    <div class="row mt15 ml5">
+                    <div class="row mt15 ml5" ng-if="self.setPaymentParams.wx.flow=='PRJ'">
+                        <label class="col-sm-3 control-label">appid</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" ng-model="self.setPaymentParams.wx.appid" type="text" placeholder="pingxx appid" />
+                        </div>
+                    </div>
+                    <div class="row mt15 ml5" ng-if="self.setPaymentParams.wx.flow=='PRJ'">
+                        <label class="col-sm-3 control-label">key</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" ng-model="self.setPaymentParams.wx.key" type="text" placeholder="pingxx key" />
+                        </div>
+                    </div>
+                    <div class="row mt15 ml5" ng-if="self.setPaymentParams.wx.flow=='PLT'">
                         <label class="col-sm-3 control-label">配置费率</label>
                         <span class="col-sm-1 mt8">费率</span>
                         <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default" ng-class="{'active':1}">0.6</button>
-                            <button type="button" class="btn btn-default" ng-class="{'active':0}">1</button>
+                            <button type="button" ng-click="self.setPaymentParams.wx.rate=0.6" class="btn btn-default" ng-class="{'active':self.setPaymentParams.wx.rate==0.6}">0.6</button>
+                            <button type="button" ng-click="self.setPaymentParams.wx.rate=1" class="btn btn-default" ng-class="{'active':self.setPaymentParams.wx.rate==1}">1</button>
                         </div>
                         <span class="mt8">%</span>
                     </div>
-                    <div class="row mt15 ml5">
+                    <div class="row mt15 ml5" ng-if="self.setPaymentParams.wx.flow=='PLT'">
                         <label class="col-sm-3 control-label">费率承担</label>
                         <span class="mt8">物业：</span>
                         <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default" ng-class="{'active':1}">0</button>
-                            <button type="button" class="btn btn-default" ng-class="{'active':0}">50</button>
-                            <button type="button" class="btn btn-default" ng-class="{'active':0}">100</button>
+                            <button type="button" ng-click="self.setPaymentParams.wx.share.PRJ=0" class="btn btn-default" ng-class="{'active':self.setPaymentParams.wx.share.PRJ==0}">0</button>
+                            <button type="button" ng-click="self.setPaymentParams.wx.share.PRJ=50" class="btn btn-default" ng-class="{'active':self.setPaymentParams.wx.share.PRJ==50}">50</button>
+                            <button type="button" ng-click="self.setPaymentParams.wx.share.PRJ=100" class="btn btn-default" ng-class="{'active':self.setPaymentParams.wx.share.PRJ==100}">100</button>
                         </div>
                         <span class="mt8">%</span>
                         <span class="mt8">商户：</span>
                         <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default" ng-class="{'active':1}">0</button>
-                            <button type="button" class="btn btn-default" ng-class="{'active':0}">50</button>
-                            <button type="button" class="btn btn-default" ng-class="{'active':0}">100</button>
+                            <button type="button" ng-click="self.setPaymentParams.wx.share.PLT=0" class="btn btn-default" ng-class="{'active':self.setPaymentParams.wx.share.PLT==0}">0</button>
+                            <button type="button" ng-click="self.setPaymentParams.wx.share.PLT=50" class="btn btn-default" ng-class="{'active':self.setPaymentParams.wx.share.PLT==50}">50</button>
+                            <button type="button" ng-click="self.setPaymentParams.wx.share.PLT=100" class="btn btn-default" ng-class="{'active':self.setPaymentParams.wx.share.PLT==100}">100</button>
                         </div>
                         <span class="mt8">%</span>
                     </div>
                 </div>
                 <div class="col-sm-10" ng-if="self.showSet=='wx_pubparam'" style="position:absolute;left:124px;">
-                    <div class="row mt15 ml5">
+                    <div class="row mt15">
+                        <label class="col-sm-2 control-label">资金流向</label>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default" ng-click="self.setPaymentParams.wx_pub.flow='PLT'" ng-class="{'active':self.setPaymentParams.wx_pub.flow=='PLT'}">平台</button>
+                            <button type="button" class="btn btn-default" ng-click="self.setPaymentParams.wx_pub.flow='PRJ'" ng-class="{'active':self.setPaymentParams.wx_pub.flow=='PRJ'}">项目</button>
+                        </div>
+                    </div>
+                    <div class="row mt15 ml5" ng-if="self.setPaymentParams.wx_pub.flow=='PRJ'">
                         <label class="col-sm-3 control-label">微信APPID</label>
                         <div class="col-sm-7">
-                            <input class="form-control" type="text" placeholder="微信APPID" />
+                            <input class="form-control" ng-model="self.setPaymentParams.wx_pub.wx_appid" type="text" placeholder="微信APPID" />
                         </div>
                     </div>
-                    <div class="row mt15 ml5">
+                    <div class="row mt15 ml5" ng-if="self.setPaymentParams.wx_pub.flow=='PRJ'">
                         <label class="col-sm-3 control-label">应用密钥（APPSecret）</label>
                         <div class="col-sm-7">
-                            <input class="form-control" type="text" placeholder="应用密钥（APPSecret）" />
+                            <input class="form-control" ng-model="self.setPaymentParams.wx_pub.wx_appsecret" type="text" placeholder="应用密钥（APPSecret）" />
                         </div>
                     </div>
-                    <div class="row mt15 ml5">
+                    <div class="row mt15 ml5" ng-if="self.setPaymentParams.wx_pub.flow=='PRJ'">
                         <label class="col-sm-3 control-label">商户ID</label>
                         <div class="col-sm-7">
-                            <input class="form-control" type="text" placeholder="商户ID" />
+                            <input class="form-control" ng-model="self.setPaymentParams.wx_pub.merchant" type="text" placeholder="商户ID" />
                         </div>
                     </div>
-                    <div class="row mt15 ml5">
+                    <div class="row mt15 ml5" ng-if="self.setPaymentParams.wx_pub.flow=='PRJ'">
                         <label class="col-sm-3 control-label">商户支付密钥（API密钥）</label>
                         <div class="col-sm-7">
-                            <input class="form-control" type="text" placeholder="商户支付密钥（API密钥）" />
+                            <input class="form-control" ng-model="self.setPaymentParams.wx_pub.api_secretkey" type="text" placeholder="商户支付密钥（API密钥）" />
                         </div>
                     </div>
-                    <div class="row mt15 ml5">
+                    <div class="row mt15 ml5" ng-if="self.setPaymentParams.wx_pub.flow=='PRJ'">
                         <label class="col-sm-3 control-label">商户添加员工登录帐号ID</label>
                         <div class="col-sm-7">
-                            <input class="form-control" type="text" placeholder="商户添加员工登录帐号ID" />
+                            <input class="form-control" ng-model="self.setPaymentParams.wx_pub.staff_account" type="text" placeholder="商户添加员工登录帐号ID" />
                         </div>
                     </div>
-                    <div class="row mt15 ml5">
+                    <div class="row mt15 ml5" ng-if="self.setPaymentParams.wx_pub.flow=='PRJ'">
                         <label class="col-sm-3 control-label">微信客户端证书</label>
                         <div class="col-sm-7">
-                            <input class="form-control" type="text" placeholder="微信客户端证书" />
+                            <input class="form-control" ng-model="self.setPaymentParams.wx_pub.apiclient_cert" type="text" placeholder="微信客户端证书" />
                         </div>
                     </div>
-                    <div class="row mt15 ml5">
+                    <div class="row mt15 ml5" ng-if="self.setPaymentParams.wx_pub.flow=='PRJ'">
                         <label class="col-sm-3 control-label">微信客户端证书密钥</label>
                         <div class="col-sm-7">
-                            <input class="form-control" type="text" placeholder="微信客户端证书密钥" />
+                            <input class="form-control" type="text" ng-model="self.setPaymentParams.wx_pub.apiclient_key" placeholder="微信客户端证书密钥" />
                         </div>
                     </div>
-                    <div class="row mt15 ml5">
+                    <div class="row mt15 ml5" ng-if="self.setPaymentParams.wx_pub.flow=='PRJ'">
+                        <label class="col-sm-3 control-label">appid</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" ng-model="self.setPaymentParams.wx_pub.appid" type="text" placeholder="pingxx appid" />
+                        </div>
+                    </div>
+                    <div class="row mt15 ml5" ng-if="self.setPaymentParams.wx_pub.flow=='PRJ'">
+                        <label class="col-sm-3 control-label">key</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" ng-model="self.setPaymentParams.wx_pub.key" type="text" placeholder="pingxx key" />
+                        </div>
+                    </div>
+                    <div class="row mt15 ml5" ng-if="self.setPaymentParams.wx_pub.flow=='PLT'">
                         <label class="col-sm-3 control-label">配置费率</label>
                         <span class="col-sm-1 mt8">费率</span>
                         <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default" ng-class="{'active':1}">0.6</button>
-                            <button type="button" class="btn btn-default" ng-class="{'active':0}">1</button>
+                            <button type="button" ng-click="self.setPaymentParams.wx_pub.rate=0.6" class="btn btn-default" ng-class="{'active':self.setPaymentParams.wx_pub.rate==0.6}">0.6</button>
+                            <button type="button" ng-click="self.setPaymentParams.wx_pub.rate=1" class="btn btn-default" ng-class="{'active':self.setPaymentParams.wx_pub.rate==1}">1</button>
                         </div>
                         <span class="mt8">%</span>
                     </div>
-                    <div class="row mt15 ml5">
+                    <div class="row mt15 ml5" ng-if="self.setPaymentParams.wx_pub.flow=='PLT'">
                         <label class="col-sm-3 control-label">费率承担</label>
                         <span class="mt8">物业：</span>
                         <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default" ng-class="{'active':1}">0</button>
-                            <button type="button" class="btn btn-default" ng-class="{'active':0}">50</button>
-                            <button type="button" class="btn btn-default" ng-class="{'active':0}">100</button>
+                            <button type="button" ng-click="self.setPaymentParams.wx_pub.share.PRJ=0" class="btn btn-default" ng-class="{'active':self.setPaymentParams.wx_pub.share.PRJ==0}">0</button>
+                            <button type="button" ng-click="self.setPaymentParams.wx_pub.share.PRJ=50" class="btn btn-default" ng-class="{'active':self.setPaymentParams.wx_pub.share.PRJ==50}">50</button>
+                            <button type="button" ng-click="self.setPaymentParams.wx_pub.share.PRJ=100" class="btn btn-default" ng-class="{'active':self.setPaymentParams.wx_pub.share.PRJ==100}">100</button>
                         </div>
                         <span class="mt8">%</span>
                         <span class="mt8">商户：</span>
                         <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default" ng-class="{'active':1}">0</button>
-                            <button type="button" class="btn btn-default" ng-class="{'active':0}">50</button>
-                            <button type="button" class="btn btn-default" ng-class="{'active':0}">100</button>
+                            <button type="button" ng-click="self.setPaymentParams.wx_pub.share.PLT=0" class="btn btn-default" ng-class="{'active':self.setPaymentParams.wx_pub.share.PLT==0}">0</button>
+                            <button type="button" ng-click="self.setPaymentParams.wx_pub.share.PLT=50" class="btn btn-default" ng-class="{'active':self.setPaymentParams.wx_pub.share.PLT==50}">50</button>
+                            <button type="button" ng-click="self.setPaymentParams.wx_pub.share.PLT=100" class="btn btn-default" ng-class="{'active':self.setPaymentParams.wx_pub.share.PLT==100}">100</button>
                         </div>
                         <span class="mt8">%</span>
                     </div>
