@@ -48,13 +48,13 @@
                     <div class="row mt15">
                         <label class="col-sm-2 control-label">最低提现金额</label>
                         <div class="btn-group" role="group">
-                            <button type="button" ng-click="self.setPaymentParams.withdraw.minwithdraw=1000;self.withdrawdef=false" ng-class="{'active':self.setPaymentParams.withdraw.minwithdraw==1000}" class="btn btn-default">1000</button>
-                            <button type="button" ng-click="self.setPaymentParams.withdraw.minwithdraw=2000;self.withdrawdef=false" ng-class="{'active':self.setPaymentParams.withdraw.minwithdraw==2000}" class="btn btn-default">2000</button>
-                            <button type="button" ng-click="self.setPaymentParams.withdraw.minwithdraw=5000;self.withdrawdef=false" ng-class="{'active':self.setPaymentParams.withdraw.minwithdraw==5000}" class="btn btn-default">5000</button>
-                            <button type="button" ng-click="self.setPaymentParams.withdraw.minwithdraw='';self.withdrawdef=true" ng-class="{'active':self.withdrawdef==true" class="btn btn-default">自定义</button>
+                            <button type="button" ng-click="self.setPaymentParams.withdraw.minwithdraw=1000;self.minwithdrawdef=false" ng-class="{'active':self.setPaymentParams.withdraw.minwithdraw==1000}" class="btn btn-default">1000</button>
+                            <button type="button" ng-click="self.setPaymentParams.withdraw.minwithdraw=2000;self.minwithdrawdef=false" ng-class="{'active':self.setPaymentParams.withdraw.minwithdraw==2000}" class="btn btn-default">2000</button>
+                            <button type="button" ng-click="self.setPaymentParams.withdraw.minwithdraw=5000;self.minwithdrawdef=false" ng-class="{'active':self.setPaymentParams.withdraw.minwithdraw==5000}" class="btn btn-default">5000</button>
+                            <button type="button" ng-click="self.setPaymentParams.withdraw.minwithdraw='';self.minwithdrawdef=true" ng-class="{'active':self.minwithdrawdef}" class="btn btn-default">自定义</button>
                         </div>
-                        <span class="mt8" ng-if="self.withdrawdef">￥</span>
-                        <div style="display:inline-block;width:100px;" ng-if="self.withdrawdef"><input class="form-control" type="text" ng-model="self.setPaymentParams.withdraw..minwithdraw" amount></div>
+                        <span class="mt8" ng-if="self.minwithdrawdef">￥</span>
+                        <div style="display:inline-block;width:100px;" ng-if="self.minwithdrawdef"><input class="form-control" ng-model="self.setPaymentParams.withdraw.minwithdraw" type="text" amount></div>
                     </div>
                     <div class="row mt15">
                         <label class="col-sm-2 control-label">冻结天数</label>
@@ -74,9 +74,9 @@
                             <button type="button" ng-click="self.setPaymentParams.withdraw.servicecharge=20;self.servicechargedef=false" ng-class="{'active':self.setPaymentParams.withdraw.servicecharge==20}" class="btn btn-default">20</button>
                             <button type="button" ng-click="self.setPaymentParams.withdraw.servicecharge=30;self.servicechargedef=false" ng-class="{'active':self.setPaymentParams.withdraw.servicecharge==30}" class="btn btn-default">30</button>
                             <button type="button" ng-click="self.setPaymentParams.withdraw.servicecharge=50;self.servicechargedef=false" ng-class="{'active':self.setPaymentParams.withdraw.servicecharge==50}" class="btn btn-default">50</button>
-                            <button type="button" ng-click="self.setPaymentParams.withdraw.servicecharge='';self.servicechargedef=true" ng-class="{'active':self.servicechargedef==true}" class="btn btn-default">自定义</button>
+                            <button type="button" ng-click="self.setPaymentParams.withdraw.servicecharge='';self.servicechargedef=true" ng-class="{'active':self.servicechargedef}" class="btn btn-default">自定义</button>
                         </div>
-                        <span class="mt8" ng-if="self.servicechargedebf">￥</span>
+                        <span class="mt8" ng-if="self.servicechargedef">￥</span>
                         <div style="display:inline-block;width:100px;" ng-if="self.servicechargedef"><input class="form-control" ng-model="self.setPaymentParams.withdraw.servicecharge" type="text" amount></div>
                     </div>
                 </div>
