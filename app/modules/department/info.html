@@ -187,7 +187,8 @@
     <div class="modal-footer text-center">
         <button class="btn btn-sm btn-primary mr5" ng-click="popover.ok(department,'alerthreshold',Change)">修改</button>
         <button class="btn btn-sm btn-default" ng-click="popover.cancel(department,'alerthreshold')">取消</button>
-    </div></script><script type="text/ng-template" id="department-info-row-title.html"><div>面积：{{department.area}}m2</div>
+    </div></script><script type="text/ng-template" id="department-info-row-title.html"><div>商铺名称：{{department.title}}</div>
+    <div>面积：{{department.area}}m2</div>
     <div>创建：{{department.timecreate*1000 | date:'yyyy-M-dd H:mm:ss'}}</div></script><script type="text/ng-template" id="changePercent.html"><div class="modal-content">
         <div class="modal-header">
             <h4 class="modal-title">&nbsp;分摊修改&nbsp;</h4>
