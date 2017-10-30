@@ -125,7 +125,7 @@
                     <!--<select class="form-control" ng-options="adaptdevice.code as adaptdevice.desc for adaptdevice in AdaptDevice" ng-model="adaptDeviceSelected"></select>-->
                     <ui-select ng-model="AdaptDevice.selected" remove-selected="false">
                         <ui-select-match placeholder="--选择智能仪表型号--">{{$select.selected.desc}}</ui-select-match>
-                        <ui-select-choices repeat="item in AdaptDevice | filter: $select.search track by item.code">
+                        <ui-select-choices repeat="item in AdaptDevice | filter: $select.search">
                             <div ng-bind-html="item.desc | highlight: $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
