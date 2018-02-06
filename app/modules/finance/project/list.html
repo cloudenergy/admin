@@ -6,13 +6,27 @@
             <div class="form-horizontal pay-content" style="position:relative">
                 <div class="col-sm-2 setPaymentMenu" style="position:absolute;">
                     <ul class="nav nav-pills nav-stacked">
-                        <li role="presentation" ng-class="{active:self.showSet=='baseinfo'}"><a ng-click="self.showSet='baseinfo'">基本信息</a></li>
-                        <li role="presentation" ng-class="{active:self.showSet=='epay'}"><a ng-click="self.showSet='epay'">电子支付</a></li>
-                        <li role="presentation" ng-class="{active:self.showSet=='cards'}"><a ng-click="self.showSet='cards'">提现账户</a></li>
-                        <li role="presentation" ng-class="{active:self.showSet=='mobile'}"><a ng-click="self.showSet='mobile'">移动端</a></li>
-                        <li role="presentation" ng-class="{active:self.showSet=='alipayparam'}"><a ng-click="self.showSet='alipayparam'">支付宝支付参数</a></li>
-                        <li role="presentation" ng-class="{active:self.showSet=='wxpayparam'}"><a ng-click="self.showSet='wxpayparam'">微信支付参数</a></li>
-                        <li role="presentation" ng-class="{active:self.showSet=='wx_pubparam'}"><a ng-click="self.showSet='wx_pubparam'">公众号支付参数</a></li>
+                        <li role="presentation" ng-class="{active:self.showSet=='baseinfo'}">
+                            <a ng-click="self.showSet='baseinfo'">基本信息</a>
+                        </li>
+                        <li role="presentation" ng-class="{active:self.showSet=='epay'}">
+                            <a ng-click="self.showSet='epay'">电子支付</a>
+                        </li>
+                        <li role="presentation" ng-class="{active:self.showSet=='cards'}">
+                            <a ng-click="self.showSet='cards'">提现账户</a>
+                        </li>
+                        <li role="presentation" ng-class="{active:self.showSet=='mobile'}">
+                            <a ng-click="self.showSet='mobile'">移动端</a>
+                        </li>
+                        <li role="presentation" ng-class="{active:self.showSet=='alipayparam'}">
+                            <a ng-click="self.showSet='alipayparam'">支付宝支付参数</a>
+                        </li>
+                        <li role="presentation" ng-class="{active:self.showSet=='wxpayparam'}">
+                            <a ng-click="self.showSet='wxpayparam'">微信支付参数</a>
+                        </li>
+                        <li role="presentation" ng-class="{active:self.showSet=='wx_pubparam'}">
+                            <a ng-click="self.showSet='wx_pubparam'">公众号支付参数</a>
+                        </li>
                     </ul>
                 </div>
                 <div class="col-sm-10" ng-if="self.showSet=='baseinfo'" style="position:absolute;left:124px;">
@@ -58,7 +72,9 @@
                             <button type="button" ng-click="self.setPaymentParams.withdraw.minwithdraw=5000;self.minwithdrawdef=false" ng-class="{'active':self.setPaymentParams.withdraw.minwithdraw==5000}" class="btn btn-default w72px">5000</button>
                             <button type="button" ng-click="self.setPaymentParams.withdraw.minwithdraw='';self.minwithdrawdef=true" ng-class="{'active':self.minwithdrawdef}" class="btn btn-default w72px">自定义</button>
                         </div>
-                        <div style="display:inline-block;width:80px;" ng-if="self.minwithdrawdef"><input class="form-control" style="margin-left:-5px;" ng-model="self.setPaymentParams.withdraw.minwithdraw" type="text" amount></div>
+                        <div style="display:inline-block;width:80px;" ng-if="self.minwithdrawdef">
+                            <input class="form-control" style="margin-left:-5px;" ng-model="self.setPaymentParams.withdraw.minwithdraw" type="text" amount>
+                        </div>
                     </div>
                     <div class="row mt15">
                         <label class="col-sm-2 control-label">冻结天数</label>
@@ -69,7 +85,9 @@
                             <button type="button" ng-click="self.setPaymentParams.withdraw.frozenday=31;self.frozendaydef=false" ng-class="{'active':self.setPaymentParams.withdraw.frozenday==31}" class="btn btn-default w72px">31</button>
                             <button type="button" ng-click="self.setPaymentParams.withdraw.frozenday='';self.frozendaydef=true" ng-class="{'active':self.frozendaydef}" class="btn btn-default w72px">自定义</button>
                         </div>
-                        <div style="display:inline-block;width:80px;" ng-if="self.frozendaydef"><input class="form-control" style="margin-left:-4px;" type="number" ng-model="self.setPaymentParams.withdraw.frozenday" type="text"></div>
+                        <div style="display:inline-block;width:80px;" ng-if="self.frozendaydef">
+                            <input class="form-control" style="margin-left:-4px;" type="number" ng-model="self.setPaymentParams.withdraw.frozenday" type="text">
+                        </div>
                     </div>
                     <div class="row mt15">
                         <label class="col-sm-2 control-label">服务费</label>
@@ -85,7 +103,9 @@
                             <button type="button" ng-click="self.setPaymentParams.withdraw.servicecharge=50;self.servicechargedef=false" ng-class="{'active':self.setPaymentParams.withdraw.servicecharge==50}" class="btn btn-default w72px">50</button>
                             <button type="button" ng-click="self.setPaymentParams.withdraw.servicecharge='';self.servicechargedef=true" ng-class="{'active':self.servicechargedef}" class="btn btn-default w72px">自定义</button>
                         </div>
-                        <div style="display:inline-block;width:80px;" ng-if="self.servicechargedef"><input style="margin-left:-5px;" class="form-control" ng-model="self.setPaymentParams.withdraw.servicecharge" type="text" amount></div>
+                        <div style="display:inline-block;width:80px;" ng-if="self.servicechargedef">
+                            <input style="margin-left:-5px;" class="form-control" ng-model="self.setPaymentParams.withdraw.servicecharge" type="text" amount>
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-10" ng-if="self.showSet=='cards'" style="position:absolute;left:124px;">
@@ -99,7 +119,7 @@
                         <div class="row mt15">
                             <label class="col-sm-2 control-label">银行卡号</label>
                             <div class="col-sm-7">
-                                <input type="text" ng-model="card.idcard" class="form-control" />
+                                <input type="text" ng-model="card.account" class="form-control" />
                             </div>
                         </div>
                         <div class="row mt15">
@@ -128,15 +148,18 @@
                                     <select class="form-control" ng-model="card.locate.district" distpicker-district></select>
                                 </div>
                             </div>
-                            <a class="mt10 text-blue pull-left" ng-if="card.name||card.idcard||card.origin||card.subbranch" ng-click="self.deleteCard(self.setPaymentParams.withdraw.cards,$index)">删除</a>
-                            <a class="ml10 mt10 text-blue pull-left" ng-if="((card.name||card.idcard||card.origin||card.subbranch)&&$last)||self.setPaymentParams.withdraw.cards.length==0" ng-click="self.addCard(self.setPaymentParams.withdraw.cards)">添加新银行卡</a>
+                            <a class="mt10 text-blue pull-left" ng-if="card.name||card.account||card.origin||card.subbranch" ng-click="self.deleteCard(self.setPaymentParams.withdraw.cards,$index)">删除</a>
+                            <a class="ml10 mt10 text-blue pull-left" ng-if="((card.name||card.account||card.origin||card.subbranch)&&$last)||self.setPaymentParams.withdraw.cards.length==0" ng-click="self.addCard(self.setPaymentParams.withdraw.cards)">添加新银行卡</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-10" ng-if="self.showSet=='mobile'" style="position:absolute;left:124px;">
                     <div class="row mt15">
                         <label class="col-sm-2 control-label">移动端</label>
-                        <div class="col-sm-3 mt10"><a class="text-blue" ng-click="self.setPaymentParams.app.enable=self.setPaymentParams.app.wx_pub=self.setPaymentParams.alipay_life.enable=self.setPaymentParams.alipay_tenement.enable=true">全选</a>&nbsp/&nbsp<a class="text-blue" ng-click="self.setPaymentParams.app.enable=self.setPaymentParams.app.wx_pub=self.setPaymentParams.alipay_life.enable=self.setPaymentParams.alipay_tenement.enable=false">取消</a></div>
+                        <div class="col-sm-3 mt10">
+                            <a class="text-blue" ng-click="self.setPaymentParams.app.enable=self.setPaymentParams.app.wx_pub=self.setPaymentParams.alipay_life.enable=self.setPaymentParams.alipay_tenement.enable=true">全选</a>&nbsp/&nbsp
+                            <a class="text-blue" ng-click="self.setPaymentParams.app.enable=self.setPaymentParams.app.wx_pub=self.setPaymentParams.alipay_life.enable=self.setPaymentParams.alipay_tenement.enable=false">取消</a>
+                        </div>
                         <div class="btn-group col-sm-8 col-sm-offset-1 mt10">
                             <input type="checkbox" ng-model="self.setPaymentParams.app.enable" style="margin-left:10px;margin-right:3px;" />租付通APP
                             <input type="checkbox" ng-model="self.setPaymentParams.app.wx_pub" style="margin-left:10px;margin-right:3px;" />微信公众号
@@ -146,7 +169,10 @@
                     </div>
                     <div class="row mt15">
                         <label class="col-sm-2 control-label">APP收费渠道</label>
-                        <div class="col-sm-3 mt10"><a class="text-blue" ng-click="self.setPaymentParams.app.alipay=self.setPaymentParams.app.wx=true">全选</a>&nbsp/&nbsp<a class="text-blue" ng-click="self.setPaymentParams.app.alipay=self.setPaymentParams.app.wx=false">取消</a></div>
+                        <div class="col-sm-3 mt10">
+                            <a class="text-blue" ng-click="self.setPaymentParams.app.alipay=self.setPaymentParams.app.wx=true">全选</a>&nbsp/&nbsp
+                            <a class="text-blue" ng-click="self.setPaymentParams.app.alipay=self.setPaymentParams.app.wx=false">取消</a>
+                        </div>
                         <div class="btn-group col-sm-8 col-sm-offset-1 mt10">
                             <input type="checkbox" ng-model="self.setPaymentParams.app.alipay" style="margin-left:10px;margin-right:3px;" />支付宝
                             <input type="checkbox" ng-model="self.setPaymentParams.app.wx" style="margin-left:10px;margin-right:3px;" />微信
@@ -210,7 +236,9 @@
                             <button type="button" ng-click="self.setPaymentParams.alipay.rate=1;self.alipayratedef=false" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.alipay.rate==1}">1</button>
                             <button type="button" ng-click="self.setPaymentParams.alipay.rate='';self.alipayratedef=true" ng-class="{'active':self.alipayratedef}" class="btn btn-default w72px">自定义</button>
                         </div>
-                        <div style="display:inline-block;width:80px;" ng-if="self.alipayratedef"><input style="margin-left:-6px;padding-top:1px;" class="form-control" type="number" ng-model="self.setPaymentParams.alipay.rate" type="text"></div>
+                        <div style="display:inline-block;width:80px;" ng-if="self.alipayratedef">
+                            <input style="margin-left:-6px;padding-top:1px;" class="form-control" type="number" ng-model="self.setPaymentParams.alipay.rate" type="text">
+                        </div>
                         <span class="input-group-btn" style="display: inline-block;margin-left: -9px;">
                             <button class="btn btn-default" style="background: #ccc;" type="button">%</button>
                         </span>
@@ -310,7 +338,9 @@
                             <button type="button" ng-click="self.setPaymentParams.wx.rate=1;self.wxratedef=false" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx.rate==1}">1</button>
                             <button type="button" ng-click="self.setPaymentParams.wx.rate='';self.wxratedef=true" ng-class="{'active':self.wxratedef}" class="btn btn-default w72px">自定义</button>
                         </div>
-                        <div style="display:inline-block;width:80px;" ng-if="self.wxratedef"><input style="margin-left:-6px;padding-top:1px;" class="form-control" type="number" ng-model="self.setPaymentParams.wx.rate" type="text"></div>
+                        <div style="display:inline-block;width:80px;" ng-if="self.wxratedef">
+                            <input style="margin-left:-6px;padding-top:1px;" class="form-control" type="number" ng-model="self.setPaymentParams.wx.rate" type="text">
+                        </div>
                         <span class="input-group-btn" style="display: inline-block;margin-left: -9px;">
                             <button class="btn btn-default" style="background: #ccc;" type="button">%</button>
                         </span>
@@ -410,7 +440,9 @@
                             <button type="button" ng-click="self.setPaymentParams.wx_pub.rate=1;self.wx_pubratedef=false" class="btn btn-default w72px" ng-class="{'active':self.setPaymentParams.wx_pub.rate==1}">1</button>
                             <button type="button" ng-click="self.setPaymentParams.wx_pub.rate='';self.wx_pubratedef=true" ng-class="{'active':self.wx_pubratedef}" class="btn btn-default w72px">自定义</button>
                         </div>
-                        <div style="display:inline-block;width:80px;" ng-if="self.wx_pubratedef"><input style="margin-left:-6px;padding-top:1px;" class="form-control" type="number" ng-model="self.setPaymentParams.wx_pub.rate" type="text"></div>
+                        <div style="display:inline-block;width:80px;" ng-if="self.wx_pubratedef">
+                            <input style="margin-left:-6px;padding-top:1px;" class="form-control" type="number" ng-model="self.setPaymentParams.wx_pub.rate" type="text">
+                        </div>
                         <span class="input-group-btn" style="display: inline-block;margin-left: -9px;">
                             <button class="btn btn-default" style="background: #ccc;" type="button">%</button>
                         </span>
