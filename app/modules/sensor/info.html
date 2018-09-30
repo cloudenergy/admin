@@ -182,8 +182,11 @@
         <div class="text-center bb no-margin p10 h3">
             仪表删除
         </div>
+        <div class="text-center no-margin p10 h4 text-warning">
+            删除仪表将清空该表历史数据请谨慎操作！
+        </div>
         <div class="pt15 pb15 text-center">
-            <input class="form-control" type="text" ng-model="ctrlcode" placeholder="请输入删除密码" />
+            <input class="form-control" type="password" ng-model="ctrlcode" placeholder="请输入删除密码" />
         </div>
         <div class="modal-footer text-center" ui-i18n="'zh-cn'">
             <button class="btn btn-sm btn-danger mr5" ng-disabled="!ctrlcode" ng-click="ok()">删除</button>
