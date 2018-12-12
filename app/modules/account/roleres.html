@@ -15,12 +15,21 @@
         </div>
         <div align="center" style="position: relative; padding: 15px 30px 0px 30px;">
             <div class="row-fluid list-group">
-                <a href="javascript:void(0)" class="list-group-item" ng-class="project.isEnable ? 'active':''" ng-click="SwitchProject($event, project)" ng-repeat="project in viewOfProjects">
-                    {{project.title}}
-                </a>
+                <div class="col-sm-5">
+                    <h5>已选中项目</h5>
+                    <a href="javascript:void(0)" class="list-group-item" ng-class="project.isEnable ? 'active':''" ng-click="SwitchProject($event, project)" ng-repeat="project in viewOfProjects" ng-show="project.isEnable">
+                        {{project.title}}
+                    </a>
+                </div>
+                <div class="col-sm-6 col-sm-offset-1 b-l pl60">
+                    <h5>待添加项目</h5>
+                    <a href="javascript:void(0)" class="list-group-item" ng-class="project.isEnable ? 'active':''" ng-click="SwitchProject($event, project)" ng-repeat="project in viewOfProjects" ng-show="!project.isEnable">
+                        {{project.title}}
+                    </a>
+                </div>
             </div>
         </div>
-        <div style="margin-top: 15px; padding: 0px 20px 20px; text-align: center;">
+        <div style="margin-top: 15px; padding: 0px 20px 20px; text-align: center;width:100%" class="pull-left">
             <button class="btn btn-primary" ng-click="Ok()">确定</button>
             <button class="btn btn-default" ng-click="Cancel()">取消</button>
         </div>
