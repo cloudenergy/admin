@@ -7,9 +7,14 @@ before_install:
 - openssl aes-256-cbc -K $encrypted_c9aad630194d_key -iv $encrypted_c9aad630194d_iv
   -in id_rsa.enc -out deployKey -d
 - echo -e "Host "$DEPLOY_HOST"\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
-after_success:
+before_deploy:
 - mv deployKey ~/.ssh/id_rsa
 - chmod 600 ~/.ssh/id_rsa
-- git remote add deploy ssh://$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PORT$DEPLOY_PATH/production/admin.git
-- git push deploy
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: ssh -o StrictHostKeyChecking=no -i $KEY_PATH $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
+      "git checkout . && git pull -f origin master"
+    on:
+      branch: master
 script: npm test
