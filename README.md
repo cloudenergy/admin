@@ -1,4 +1,5 @@
 ### admin
 
-[prod environment](https://admin.cloudenergy.me)
-[test environment](https://preadmin.cloudenergy.me)
+[manyuenergy](https://admin.manyuenergy.com)
+
+[cloudmanyu](https://admin.cloudmanyu.com)
